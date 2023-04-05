@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 
-from .enums.vision_enums import ObjectDetectionReturnTypes
+from .enums import ObjectDetectionReturnTypes
 from .utils import download_file
 
 initialize = True

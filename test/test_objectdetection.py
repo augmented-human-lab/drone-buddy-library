@@ -2,8 +2,8 @@ import unittest
 
 import cv2
 
-from dblib.enums.vision_enums import ObjectDetectionReturnTypes
-from dblib.objectdetection import detect_common_objects, detect_common_object_labels
+from dronebuddylib.enums import ObjectDetectionReturnTypes
+from dronebuddylib.objectdetection import detect_common_objects, detect_common_object_labels
 
 
 # read input image
