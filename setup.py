@@ -7,7 +7,7 @@ setup(
     description='Everything to control and customize Tello',
     author='Me',
     license='MIT',
-    install_requires=['numpy', 'progressbar', 'requests', 'pillow', 'imageio', 'imutils'],
+    install_requires=['numpy', 'progressbar', 'requests', 'pillow', 'imageio', 'imutils', 'opencv-python'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests',
