@@ -1,12 +1,15 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 setup(
     name='dronebuddylib',
-    packages=find_packages(include=['dronebuddylib']),
-    version='0.1.1',
+    packages=['dronebuddylib'],
+    version='0.1.2',
     description='Everything to control and customize Tello',
-    author='Me',
+    author='Malsha de Zoysa',
+    author_email='malsha@ahlab.org',
     license='MIT',
+    include_package_data=True,
+    zip_safe=False,
     install_requires=['numpy', 'progressbar', 'requests', 'pillow', 'imageio', 'imutils', 'opencv-python'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
