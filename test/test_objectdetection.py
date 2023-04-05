@@ -6,8 +6,6 @@ from dblib.enums.vision_enums import ObjectDetectionReturnTypes
 from dblib.objectdetection import detect_common_objects, detect_common_object_labels
 
 
-# read input image
-
 
 class TestObjectDetection(unittest.TestCase):
 
