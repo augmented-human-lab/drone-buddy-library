@@ -11,4 +11,3 @@ class ObjectDetectionReturnTypes(enum.Enum):
     CONF = 2
 
     ALL = 3
-
