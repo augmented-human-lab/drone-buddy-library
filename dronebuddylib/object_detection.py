@@ -4,7 +4,11 @@ import cv2
 import numpy as np
 
 from .enums import ObjectDetectionReturnTypes
+from .logging_config import get_logger
 from .utils import download_file
+
+# Get an instance of a logger
+logger = get_logger()
 
 initialize = True
 net = None
@@ -196,7 +200,7 @@ class YOLO:
 
     def __init__(self, weights, config, labels, version='yolov3'):
 
-        print('[INFO] Initializing YOLO ..')
+        logger.info("Object detection: YOLO :  Init")
 
         self.config = config
         self.weights = weights
@@ -215,6 +219,8 @@ class YOLO:
 
     def detect_objects(self, image, confidence=0.5, nms_thresh=0.3,
                        enable_gpu=False):
+
+        logger.info("Object detection: YOLO :  detecting objects")
 
         if enable_gpu:
             net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
@@ -266,8 +272,9 @@ class YOLO:
             label.append(str(self.labels[class_ids[i]]))
             conf.append(confidences[i])
 
-        return bbox, label, conf
+        logger.info("Object detection: YOLO :  detection complete")
 
+        return bbox, label, conf
 
     def draw_bbox(self, img, bbox, labels, confidence, colors=None, write_conf=False):
 

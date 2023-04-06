@@ -1,3 +1,4 @@
+import logging
 import os
 
 import cv2
@@ -6,6 +7,10 @@ import numpy as np
 import progressbar as pb
 import requests
 from imutils import paths
+
+
+def configure_logging():
+    logging.basicConfig(level=logging.INFO)
 
 
 def download_file(url, file_name, dest_dir):
@@ -91,7 +96,6 @@ def animate(src, gif_name, reshape=None, fps=25):
 
             for idx, image in enumerate(src):
                 src[idx] = cv2.imread(image)
-
 
     if reshape:
 

@@ -10,8 +10,5 @@ setup(
     license='MIT',
     include_package_data=True,
     zip_safe=False,
-    install_requires=['numpy', 'progressbar', 'requests', 'pillow', 'imageio', 'imutils', 'opencv-python'],
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest==4.4.1'],
-    test_suite='tests',
+    install_requires=['numpy', 'progressbar', 'requests', 'pillow', 'imageio', 'imutils', 'opencv-python', 'pyttsx3'],
 )

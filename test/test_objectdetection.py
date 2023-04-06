@@ -2,8 +2,7 @@ import unittest
 
 import cv2
 
-from dronebuddylib.enums import ObjectDetectionReturnTypes
-from dronebuddylib.objectdetection import detect_common_objects, detect_common_object_labels
+import dronebuddylib as dbl
 
 
 # read input image
@@ -14,7 +13,7 @@ class TestObjectDetection(unittest.TestCase):
     def test_upload_image(self):
         image = cv2.imread('test_image.jpg')
 
-        labels = detect_common_objects(image)
+        labels = dbl.detect_common_objects(image)
         assert len(labels) > 0 and 'chair' in labels
 
         print(labels)
@@ -22,5 +21,12 @@ class TestObjectDetection(unittest.TestCase):
     def test_upload_image(self):
         image = cv2.imread('test_image.jpg')
 
-        labels = detect_common_object_labels(image, detection_type=ObjectDetectionReturnTypes.LABELS)
+        labels = dbl.detect_common_object_labels(image, detection_type=dbl.ObjectDetectionReturnTypes.LABELS)
         print(labels)
+
+    def test_me(self):
+        print('test_me')
+
+
+if __name__ == '__main__':
+    unittest.main()
