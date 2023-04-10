@@ -11,7 +11,7 @@ class TestSpeech2Text(unittest.TestCase):
 
     def test_speech_to_text(self):
         print('its running')
-        model = dbl.init_model()
+        model = dbl.init_model('en-us')
         try:
             time.sleep(5)
             pa = pyaudio.PyAudio()
@@ -37,7 +37,7 @@ class TestSpeech2Text(unittest.TestCase):
 
     def test_speech_to_text_spotting_words(self):
         print('its running')
-        model = dbl.init_model()
+        model = dbl.init_model('en-us')
         try:
             time.sleep(5)
             pa = pyaudio.PyAudio()
@@ -50,7 +50,7 @@ class TestSpeech2Text(unittest.TestCase):
             print("Microphone Ready.")
 
             while True:
-                recognized = dbl.spot_words(model, audio_feed=audio_stream, words=['takeoff', 'take off', 'land'])
+                recognized = dbl.spot_words(model, audio_feed=audio_stream)
                 print(recognized)
 
         finally:

@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='dronebuddylib',
     packages=['dronebuddylib'],
-    version='0.1.6',
+    version='0.1.7',
     description='Everything to control and customize Tello',
     author='Malsha de Zoysa',
     author_email='malsha@ahlab.org',
