@@ -1,11 +1,25 @@
 import pyttsx3
 
+from dronebuddylib.logging_config import get_logger
+
+# Get an instance of a logger
+logger = get_logger()
 ''''This is a wrapper for ttx. '''
+
+
+def generate_speech_and_play(self, text):
+    logger.info("Text to speech: " + text)
+    self.engine.say(text)
+    logger.info("Text to speech: Done")
+    self.engine.runAndWait()
+    self.engine.stop()
+    return
 
 
 class Voice:
 
     def __init__(self, r, v):
+        logger.info("Text to speech: Init")
         self.engine = pyttsx3.init()
         self.rate = self.engine.setProperty('rate', r)
         self.volume = self.engine.setProperty("volume", v)
@@ -33,9 +47,9 @@ class Voice:
 
     # The input is the text. The output is the audio.
     def play_audio(self, text):
-        print(text)
+        logger.info("Text to speech: " + text)
         self.engine.say(text)
-        print("Done")
+        logger.info("Text to speech: Done")
         self.engine.runAndWait()
         self.engine.stop()
         return
