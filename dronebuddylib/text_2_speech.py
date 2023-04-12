@@ -7,13 +7,21 @@ logger = get_logger()
 ''''This is a wrapper for ttx. '''
 
 
-def generate_speech_and_play(self, text):
+def generate_speech_and_play(engine, text):
     logger.info("Text to speech: " + text)
-    self.engine.say(text)
+    engine.say(text)
     logger.info("Text to speech: Done")
-    self.engine.runAndWait()
-    self.engine.stop()
+    engine.runAndWait()
+    engine.stop()
     return
+
+
+def init_voice_engine(rate=150, volume=1,voice_id='TTS_MS_EN-US_ZIRA_11.0'):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', rate)
+    engine.setProperty("volume", volume)
+    engine.setProperty('voice', voice_id)
+    return engine
 
 
 class Voice:
