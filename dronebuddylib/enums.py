@@ -13,6 +13,7 @@ class ObjectDetectionReturnTypes(enum.Enum):
     ALL = 3
 
 
+
 class DroneCommands(enum.Enum):
     NONE = None
     TAKEOFF = 0,

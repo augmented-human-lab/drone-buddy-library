@@ -1,5 +1,6 @@
 import json
 
+import pkg_resources
 from vosk import Model, KaldiRecognizer
 
 from dronebuddylib.enums import DroneCommands
@@ -10,9 +11,10 @@ logger = get_logger()
 
 
 def init_model(language):
-    model = Model(lang=language)
-    rec = KaldiRecognizer(model,
-                          44100)
+    model_path = pkg_resources.resource_filename(__name__, "resources/speechrecognition/vosk-model-small-en-us-0.15")
+
+    model = Model(model_path)
+    rec = KaldiRecognizer(model, 44100)
     logger.info('Initialized speech recognition model')
     return rec
 

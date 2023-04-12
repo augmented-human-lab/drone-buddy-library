@@ -1,0 +1,2 @@
+recursive-include dronebuddylib/resources/speechrecognition/vosk-model-small-en-us-0.15 *
+recursive-include dronebuddylib/resources/objectdetection/yolov3 *
