@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import pkg_resources
 
 
 # Please put the three files in the same working directory.
@@ -15,9 +16,10 @@ def get_output_layers(net):
 
 
 def get_label_yolo(image):
-    config = "./resources/objectdetection/yolov3.cfg"
-    labels = "./resources/objectdetection/yolov3.txt"
-    weights = "./resources/objectdetection/yolov3.weights"
+
+    config = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.cfg")
+    labels = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.txt")
+    weights = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.weights")
 
     classes = None
     with open(labels, 'r') as f:
