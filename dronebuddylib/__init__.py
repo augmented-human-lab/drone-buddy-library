@@ -1,4 +1,4 @@
-__version__ = "0.1.15"
+__version__ = "0.1.18"
 
 from .enums import ObjectDetectionReturnTypes
 from .enums import DroneCommands
