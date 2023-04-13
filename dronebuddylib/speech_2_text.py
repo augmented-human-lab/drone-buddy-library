@@ -19,8 +19,8 @@ def init_model(language):
     return rec
 
 
-def recognize_speech(model, audio_feed):
-    pcm = audio_feed.read(8192)
+def recognize_speech(model, audio_feed, chunk_size=8192):
+    pcm = audio_feed.read(chunk_size, exception_on_overflow=False)
     if model.AcceptWaveform(pcm):
         r = model.Result()
         logger.debug('recognized word', r)
@@ -49,4 +49,17 @@ def classify(raw_text):
         return DroneCommands.UP
     if text == 'down':
         return DroneCommands.DOWN
+    if text == 'stop':
+        return DroneCommands.STOP
+    if text == 'left':
+        return DroneCommands.LEFT
+    if text == 'right':
+        return DroneCommands.RIGHT
+    if text == 'forward':
+        return DroneCommands.FORWARD
+    if text == 'backward':
+        return DroneCommands.BACKWARD
+    if text == 'battery':
+        return DroneCommands.BATTERY
+
     return DroneCommands.NONE
