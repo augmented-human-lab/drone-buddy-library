@@ -8,9 +8,10 @@ from dronebuddylib.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()
+queue = []
 
 
-def init_model(language):
+def init_speech_to_text_engine(language):
     model_path = pkg_resources.resource_filename(__name__, "resources/speechrecognition/vosk-model-small-en-us-0.15")
 
     model = Model(model_path)
@@ -28,8 +29,7 @@ def recognize_speech(model, audio_feed, chunk_size=8192):
     return None
 
 
-def recognize_command(model, audio_feed):
-    pcm = audio_feed.read(8192)
+def recognize_command(model, pcm):
     if model.AcceptWaveform(pcm):
         r = model.Result()
         return classify(r)

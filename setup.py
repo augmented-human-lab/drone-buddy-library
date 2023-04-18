@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='dronebuddylib',
-    version='0.1.18',
+    version='0.2.00',
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        'dronebuddylib': ['resources/*'],
+        'dronebuddylib': ['atoms/resources/*'],
     },
     zip_safe=False,
     setup_requires=[

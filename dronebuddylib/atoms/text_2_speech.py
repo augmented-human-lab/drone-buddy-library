@@ -16,7 +16,7 @@ def generate_speech_and_play(engine, text):
     return
 
 
-def init_voice_engine(rate=150, volume=1,voice_id='TTS_MS_EN-US_ZIRA_11.0'):
+def init_text_to_speech_engine(rate=150, volume=1, voice_id='TTS_MS_EN-US_ZIRA_11.0'):
     engine = pyttsx3.init()
     engine.setProperty('rate', rate)
     engine.setProperty("volume", volume)

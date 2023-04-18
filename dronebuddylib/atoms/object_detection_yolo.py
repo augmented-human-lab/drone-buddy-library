@@ -4,6 +4,19 @@ import pkg_resources
 
 
 # Please put the three files in the same working directory.
+class YoloEngine:
+    def __init__(self, weights_path: str):
+        config = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.cfg")
+        labels = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.txt")
+        weights = weights_path
+        self.net = cv2.dnn.readNet(weights, config)
+        with open(labels, 'r') as f:
+            self.classes = [line.strip() for line in f.readlines()]
+
+
+def init_yolo_engine(weights_path: str):
+    yolo_engine = YoloEngine(weights_path)
+    return yolo_engine
 
 
 def get_output_layers(net):
@@ -15,15 +28,8 @@ def get_output_layers(net):
     return output_layers
 
 
-def get_label_yolo(image):
-
-    config = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.cfg")
-    labels = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.txt")
-    weights = pkg_resources.resource_filename(__name__, "resources/objectdetection/yolov3.weights")
-
-    classes = None
-    with open(labels, 'r') as f:
-        classes = [line.strip() for line in f.readlines()]
+def get_label_yolo(yolo_engine: YoloEngine, image):
+    classes = yolo_engine.classes
 
     width = image.shape[1]
     height = image.shape[0]
@@ -35,7 +41,7 @@ def get_label_yolo(image):
     nms_threshold = 0.4
     conf_threshold = 0.5
 
-    net = cv2.dnn.readNet(weights, config)
+    net = yolo_engine.net
     blob = cv2.dnn.blobFromImage(image, 0.004, (416, 416), (0, 0, 0), True, crop=False)
     net.setInput(blob)
     outs = net.forward(get_output_layers(net))

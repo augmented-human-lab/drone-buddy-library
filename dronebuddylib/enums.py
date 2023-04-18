@@ -34,3 +34,10 @@ class DroneCommands(enum.Enum):
 class Language(enum.Enum):
     ENGLISH = 'en-gb',
     FRENCH = 'FR',
+
+
+class DroneBuddyEngineTypes(enum.Enum):
+    SPEECH_TO_TEXT = 0,
+    TEXT_TO_SPEECH = 1,
+    OBJECT_DETECTION = 2,
+    DRONE_ENGINE = 3,

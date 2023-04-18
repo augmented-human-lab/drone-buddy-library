@@ -13,8 +13,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_integration(self):
         print('test_integration')
-        voice_engine = dbl.init_voice_engine()
-        speech_to_text_engine = dbl.init_model('en-us')
+        voice_engine = dbl.init_text_to_speech_engine()
+        speech_to_text_engine = dbl.init_speech_engine('en-us')
 
         try:
             time.sleep(5)

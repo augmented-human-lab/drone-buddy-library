@@ -5,7 +5,7 @@ import dronebuddylib as dbl
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
-        engine = dbl.init_voice_engine()
+        engine = dbl.init_text_to_speech_engine()
         dbl.generate_speech_and_play(engine, "sorry for the loud noises")
         self.assertEqual(True, False)  # add assertion here
 
