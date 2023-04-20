@@ -17,7 +17,10 @@ This library packs a bunch of functionalities, like:
 1. Python 3.10 or higher
 2. opencv-python 4.7.0.72 or higher
 3. pyttsx3 2.9 or higher
-4. 
+
 The installation is pretty simple, just run the following command in your terminal:
 ```pip install -i https://test.pypi.org/simple/ dronebuddylib==0.1.15
 ```
+#### Voice Recognition
+
+If you need control the drone with voice commands you can use the following methods.

@@ -50,7 +50,8 @@ class TestSpeech2Text(unittest.TestCase):
             print("Microphone Ready.")
 
             while True:
-                recognized = dbl.recognize_command(model, audio_feed=audio_stream)
+                audio_feed = audio_stream.read(8192)
+                recognized = dbl.recognize_command(model, audio_feed=audio_feed)
                 print(recognized)
 
         finally:
