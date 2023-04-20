@@ -6,6 +6,13 @@ from dronebuddylib.logging_config import get_logger
 logger = get_logger()
 ''''This is a wrapper for ttx. '''
 
+'''
+:param engine: The pyttsx engine that was returned by the init_text_to_speech_engine().
+:param text: The text to be converted to speech.
+
+this method will convert the text to speech and play it.
+'''
+
 
 def generate_speech_and_play(engine, text):
     logger.info("Text to speech: " + text)
@@ -16,11 +23,24 @@ def generate_speech_and_play(engine, text):
     return
 
 
-def init_voice_engine(rate=150, volume=1,voice_id='TTS_MS_EN-US_ZIRA_11.0'):
+# initiates the speech to text engine
+'''
+Required to initialize the pyttsx engine before using the text to voice engine.
+:param rate: The rate of the voice. The default is 150.
+:param volume: The volume of the voice. The default is 1.
+:param voice_id: The voice id. The default is 'TTS_MS_EN-US_ZIRA_11.0'. 
+( since this is the offline model, can only support this voice for the moment)
+:return: The pytts engine.
+
+'''
+
+
+def init_text_to_speech_engine(rate=150, volume=1, voice_id='TTS_MS_EN-US_ZIRA_11.0'):
     engine = pyttsx3.init()
     engine.setProperty('rate', rate)
     engine.setProperty("volume", volume)
     engine.setProperty('voice', voice_id)
+    logger.debug("Text to speech: Initialized Text to Speech Engine")
     return engine
 
 
@@ -55,9 +75,9 @@ class Voice:
 
     # The input is the text. The output is the audio.
     def play_audio(self, text):
-        logger.info("Text to speech: " + text)
+        logger.debug("Text to speech: text to convert :" + text)
         self.engine.say(text)
-        logger.info("Text to speech: Done")
+        logger.debug("Text to speech: Audio playback completed")
         self.engine.runAndWait()
         self.engine.stop()
         return

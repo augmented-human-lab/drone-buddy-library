@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+with open("requirements.txt", "r") as fh:
+    requirements = fh.read().splitlines()
+
 setup(
     name='dronebuddylib',
-    version='0.1.18',
+    version='0.1.25',
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -12,7 +18,8 @@ setup(
     setup_requires=[
         'setuptools>=50.3.0',
     ],
-    install_requires=['numpy', 'requests', 'pillow', 'opencv-python', 'pyttsx3'],
+    install_requires=[requirements],
+    python_requires='>=3.9',
     description='Everything to control and customize Tello',
     author='Malsha de Zoysa',
     author_email='malsha@ahlab.org',
