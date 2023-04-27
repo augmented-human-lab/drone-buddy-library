@@ -13,3 +13,6 @@ from .speech_2_text import recognize_command
 
 from .text_2_speech import generate_speech_and_play
 from .text_2_speech import init_text_to_speech_engine
+
+from .face_recognition_dbl import find_all_the_faces
+from .face_recognition_dbl import add_people_to_memory

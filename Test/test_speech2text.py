@@ -11,7 +11,7 @@ class TestSpeech2Text(unittest.TestCase):
 
     def test_speech_to_text(self):
         print('its running')
-        model = dbl.init_model('en-us')
+        model = dbl.init_speech_to_text_engine('en-us')
         try:
             time.sleep(5)
             pa = pyaudio.PyAudio()
@@ -37,7 +37,7 @@ class TestSpeech2Text(unittest.TestCase):
 
     def test_speech_to_text_spotting_words(self):
         print('its running')
-        model = dbl.init_model('en-us')
+        model = dbl.init_speech_to_text_engine('en-us')
         try:
             time.sleep(5)
             pa = pyaudio.PyAudio()
