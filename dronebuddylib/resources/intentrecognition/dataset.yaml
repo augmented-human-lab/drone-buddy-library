@@ -1,0 +1,22 @@
+# takeoff intent
+---
+type: intent
+name: takeoff
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Take off the [droneName](quadcopter) from the ground.
+  - Launch the [droneName](hexacopter) and make it fly.
+  - Start the [droneName](drone) and get it in the air.
+  - Lift off the [droneName](UAV) from the launchpad.
+  - go up
+  - take off
+  - launch
+  - fly
+  - can you please go up
+  - can you please take off
+  - can you please launch
+  - can you please fly
+  - can you please take off [droneName](this)
+
