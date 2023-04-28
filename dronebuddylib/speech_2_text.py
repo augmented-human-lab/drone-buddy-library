@@ -57,7 +57,7 @@ def recognize_speech(model, audio_feed):
           """
     if model.AcceptWaveform(audio_feed):
         r = model.Result()
-        logger.debug('Speech Recognition : Recognized word : ', r)
+        logger.debug('Speech Recognition : Recognized utterance : ', r)
         return r
     return None
 
