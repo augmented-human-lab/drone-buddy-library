@@ -1,0 +1,2032 @@
+{
+  "entities": {
+    "distance": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "droneName": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "movement": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    }
+  },
+  "intents": {
+    "BACKWARD": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "come back"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "go back"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " fly backwards "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " move backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " fly back "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Descend "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " back "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    "BATTERY": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "What's "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "your"
+            },
+            {
+              "text": " battery level?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you tell me how much battery "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you have"
+            },
+            {
+              "text": " left?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's the battery status on "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "it"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "How much battery does "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "it"
+            },
+            {
+              "text": " have left?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's the current battery level on "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "it"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you give me an update on "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "your"
+            },
+            {
+              "text": " battery life?"
+            }
+          ]
+        }
+      ]
+    },
+    "DOWN": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " down by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " descend by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " downwards by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " go down "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " down by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " descend "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " downwards by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Shift "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " downward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " down "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " lower "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    "FORWARD": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " forward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " fly forward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " forward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " move forward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " forward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " fly ahead "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " forward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Advance "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " forward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " ahead "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    "HEIGHT": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "How fast are you going?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what is you r speed"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "How fast can you fly?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's your maximum speed?"
+            }
+          ]
+        }
+      ]
+    },
+    "LAND": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Land the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " on the ground."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Bring down the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " and make it land."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Bring the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " back to the ground and land it."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " descend and land on the landing pad."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you please bring the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " down and land it safely?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you please make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " descend and land on the landing pad?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you please land the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 2"
+            },
+            {
+              "text": " and shut it down?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you please bring the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " back down to the ground and land it?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you please descend the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 3"
+            },
+            {
+              "text": " and land it on the designated area?"
+            }
+          ]
+        }
+      ]
+    },
+    "LEFT": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " fly backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " move backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " backward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " fly back "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Retreat "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " backward "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " back "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "move to the left"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "please go to your left"
+            }
+          ]
+        }
+      ]
+    },
+    "RIGHT": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " to the right by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " fly to the right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " to the right by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " move to the right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " to the right by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " fly right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " to the right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Shift "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " to the right by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " to the right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " right "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "move right"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "please go to your right"
+            }
+          ]
+        }
+      ]
+    },
+    "SPEED": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "What is your speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "How fast can you fly?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's your maximum speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you tell me your top speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "How quickly can you move?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's your speed while "
+            },
+            {
+              "entity": "movement",
+              "slot_name": "movement",
+              "text": "moving"
+            },
+            {
+              "text": " ?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "How fast can you go when "
+            },
+            {
+              "entity": "movement",
+              "slot_name": "movement",
+              "text": "flying"
+            },
+            {
+              "text": " ?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "What's your maximum speed while "
+            },
+            {
+              "entity": "movement",
+              "slot_name": "movement",
+              "text": "hovering"
+            },
+            {
+              "text": " ?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you tell me how quickly you move when "
+            },
+            {
+              "entity": "movement",
+              "slot_name": "movement",
+              "text": "ascending"
+            },
+            {
+              "text": " ?"
+            }
+          ]
+        }
+      ]
+    },
+    "STOP": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Stop "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "the drone"
+            },
+            {
+              "text": " now"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Halt "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "it"
+            },
+            {
+              "text": " immediately"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Cease "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "its"
+            },
+            {
+              "text": " movement"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Bring "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "it"
+            },
+            {
+              "text": " to a stop"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Stop "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "the drone"
+            },
+            {
+              "text": " in its tracks"
+            }
+          ]
+        }
+      ]
+    },
+    "TAKE_OFF": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Take off the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " from the ground."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Launch the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " and make it fly."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Start the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " and get it in the air."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Lift off the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " from the launchpad."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "take off"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "launch"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "fly"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please take off"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please launch"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please fly"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please take off "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "this"
+            }
+          ]
+        }
+      ]
+    },
+    "UP": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Move the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "quadcopter"
+            },
+            {
+              "text": " up by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "hexacopter"
+            },
+            {
+              "text": " ascend by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": " upwards by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "UAV"
+            },
+            {
+              "text": " go up "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic 2"
+            },
+            {
+              "text": " up by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "2 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Make "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Phantom 4"
+            },
+            {
+              "text": " ascend "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "5 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Send "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Inspire 1"
+            },
+            {
+              "text": " upwards by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "10 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Shift "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Mavic Air"
+            },
+            {
+              "text": " upward by "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "3 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Move "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "DJI Mini 2"
+            },
+            {
+              "text": " up "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "8 meters"
+            },
+            {
+              "text": "."
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Fly "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "Spark"
+            },
+            {
+              "text": " higher "
+            },
+            {
+              "entity": "distance",
+              "slot_name": "distance",
+              "text": "6 feet"
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "language": "en"
+}
