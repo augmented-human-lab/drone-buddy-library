@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pkg_resources
 
-from dronebuddylib.logging_config import get_logger
+from utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()

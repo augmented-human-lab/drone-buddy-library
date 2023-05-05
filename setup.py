@@ -8,8 +8,8 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name='dronebuddylib',
-    version='0.1.28',
-    packages=find_packages(),
+    version='0.2.1',
+    packages=find_packages() ,
     include_package_data=True,
     package_data={
         'dronebuddylib': ['resources/*'],
