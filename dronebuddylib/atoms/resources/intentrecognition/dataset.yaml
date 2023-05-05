@@ -1,0 +1,224 @@
+# takeoff intent
+---
+type: intent
+name: TAKE_OFF
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Take off the [droneName](quadcopter) from the ground.
+  - Launch the [droneName](hexacopter) and make it fly.
+  - Start the [droneName](drone) and get it in the air.
+  - Lift off the [droneName](UAV) from the launchpad.
+  - take off
+  - launch
+  - fly
+  - can you please take off
+  - can you please launch
+  - can you please fly
+  - can you please take off [droneName](this)
+
+  # land intent
+---
+type: intent
+name: LAND
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Land the [droneName](quadcopter) on the ground.
+  - Bring down the [droneName](hexacopter) and make it land.
+  - Bring the [droneName](drone) back to the ground and land it.
+  - Make the [droneName](UAV) descend and land on the landing pad.
+  - Can you please bring the [droneName](Phantom 4) down and land it safely?
+  - Can you please make the [droneName](Mavic Air) descend and land on the landing pad?
+  - Can you please land the [droneName](Inspire 2) and shut it down?
+  - Can you please bring the [droneName](Spark) back down to the ground and land it?
+  - Can you please descend the [droneName](Phantom 3) and land it on the designated area?
+
+# land intent
+---
+type: intent
+name: FORWARD
+slots:
+  - name: droneName
+    entity: droneName
+  - name: distance
+    entity: distance
+utterances:
+  - Move the [droneName](quadcopter) forward by [distance](10 feet).
+  - Make the [droneName](hexacopter) fly forward [distance](5 meters).
+  - Send the [droneName](drone) forward by [distance](3 feet).
+  - Make the [droneName](UAV) move forward [distance](2 meters).
+  - Move [droneName](Mavic 2) forward by [distance](2 meters).
+  - Make [droneName](Phantom 4) fly ahead [distance](5 feet).
+  - Send [droneName](Inspire 1) forward [distance](10 meters).
+  - Advance [droneName](Mavic Air) by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) forward [distance](8 meters).
+  - Fly [droneName](Spark) ahead [distance](6 feet).
+
+
+# land intent
+---
+type: intent
+name: BACKWARD
+slots:
+  - name: droneName
+    entity: droneName
+  - name: distance
+    entity: distance
+utterances:
+  - come back
+  - go back
+  - Move the [droneName](quadcopter) backward by [distance](10 feet).
+  - Make the [droneName](hexacopter) fly backwards [distance](5 meters).
+  - Send the [droneName](drone) backward by [distance](3 feet).
+  - Make the [droneName](UAV) move backward [distance](2 meters).
+  - Move [droneName](Mavic 2) backward by [distance](2 meters).
+  - Make [droneName](Phantom 4) fly back [distance](5 feet).
+  - Send [droneName](Inspire 1) backward [distance](10 meters).
+  - Descend [droneName](Mavic Air) by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) backward [distance](8 meters).
+  - Fly [droneName](Spark) back [distance](6 feet).
+
+
+# land intent
+---
+type: intent
+name: LEFT
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Move the [droneName](quadcopter) backward by [distance](10 feet).
+  - Make the [droneName](hexacopter) fly backward [distance](5 meters).
+  - Send the [droneName](drone) backward by [distance](3 feet).
+  - Make the [droneName](UAV) move backward [distance](2 meters).
+  - Move [droneName](Mavic 2) backward by [distance](2 meters).
+  - Make [droneName](Phantom 4) fly back [distance](5 feet).
+  - Send [droneName](Inspire 1) backward [distance](10 meters).
+  - Retreat [droneName](Mavic Air) by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) backward [distance](8 meters).
+  - Fly [droneName](Spark) back [distance](6 feet).
+  - move to the left
+  - please go to your left
+
+# land intent
+---
+type: intent
+name: RIGHT
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Move the [droneName](quadcopter) to the right by [distance](10 feet).
+  - Make the [droneName](hexacopter) fly to the right [distance](5 meters).
+  - Send the [droneName](drone) to the right by [distance](3 feet).
+  - Make the [droneName](UAV) move to the right [distance](2 meters).
+  - Move [droneName](Mavic 2) to the right by [distance](2 meters).
+  - Make [droneName](Phantom 4) fly right [distance](5 feet).
+  - Send [droneName](Inspire 1) to the right [distance](10 meters).
+  - Shift [droneName](Mavic Air) to the right by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) to the right [distance](8 meters).
+  - Fly [droneName](Spark) right [distance](6 feet).
+  - move right
+  - please go to your right
+
+# land intent
+---
+type: intent
+name: UP
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Move the [droneName](quadcopter) up by [distance](10 feet).
+  - Make the [droneName](hexacopter) ascend by [distance](5 meters).
+  - Send the [droneName](drone) upwards by [distance](3 feet).
+  - Make the [droneName](UAV) go up [distance](2 meters).
+  - Move [droneName](Mavic 2) up by [distance](2 meters).
+  - Make [droneName](Phantom 4) ascend [distance](5 feet).
+  - Send [droneName](Inspire 1) upwards by [distance](10 meters).
+  - Shift [droneName](Mavic Air) upward by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) up [distance](8 meters).
+  - Fly [droneName](Spark) higher [distance](6 feet).
+
+# land intent
+---
+type: intent
+name: DOWN
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Move the [droneName](quadcopter) down by [distance](10 feet).
+  - Make the [droneName](hexacopter) descend by [distance](5 meters).
+  - Send the [droneName](drone) downwards by [distance](3 feet).
+  - Make the [droneName](UAV) go down [distance](2 meters).
+  - Move [droneName](Mavic 2) down by [distance](2 meters).
+  - Make [droneName](Phantom 4) descend [distance](5 feet).
+  - Send [droneName](Inspire 1) downwards by [distance](10 meters).
+  - Shift [droneName](Mavic Air) downward by [distance](3 feet).
+  - Move [droneName](DJI Mini 2) down [distance](8 meters).
+  - Fly [droneName](Spark) lower [distance](6 feet).
+
+# land intent
+---
+type: intent
+name: SPEED
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - What is your speed?
+  - How fast can you fly?
+  - What's your maximum speed?
+  - Can you tell me your top speed?
+  - How quickly can you move?
+  - What's your speed while [movement](moving) ?
+  - How fast can you go when [movement](flying) ?
+  - What's your maximum speed while [movement](hovering) ?
+  - Can you tell me how quickly you move when [movement](ascending) ?
+# land intent
+---
+type: intent
+name: HEIGHT
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - How fast are you going?
+  - what is you r speed
+  - How fast can you fly?
+  - What's your maximum speed?
+
+
+
+# land intent
+---
+type: intent
+name: STOP
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Stop [droneName](the drone) now
+  - Halt [droneName](it) immediately
+  - Cease [droneName](its) movement
+  - Bring [droneName](it) to a stop
+  - Stop [droneName](the drone) in its tracks
+# land intent
+---
+type: intent
+name: BATTERY
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - What's [droneName](your) battery level?
+  - Can you tell me how much battery [droneName](you have) left?
+  - What's the battery status on [droneName](it)?
+  - How much battery does [droneName](it) have left?
+  - What's the current battery level on [droneName](it)?
+  - Can you give me an update on [droneName](your) battery life?
+

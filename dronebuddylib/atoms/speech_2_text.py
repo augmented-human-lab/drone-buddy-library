@@ -3,8 +3,8 @@ import json
 import pkg_resources
 from vosk import Model, KaldiRecognizer
 
-from dronebuddylib.enums import DroneCommands
-from dronebuddylib.logging_config import get_logger
+from utils.enums import DroneCommands
+from utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()

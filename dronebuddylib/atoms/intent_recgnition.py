@@ -4,7 +4,7 @@ import pkg_resources
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.default_configs import CONFIG_EN
 
-from logging_config import get_logger
+from utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()
@@ -35,9 +35,12 @@ def init_intent_recognition_engine(dataset_path: str = None, config: str = CONFI
     engine = SnipsNLUEngine(config=config)
 
     # Load the dataset file in JSON format
+    # with open(
+    #         dataset_path,
+    #         encoding='utf-16') as fh:
+
     with open(
-            dataset_path,
-            encoding='utf-16') as fh:
+            dataset_path) as fh:
         dataset = json.load(fh)
         logger.debug('Intent Recognition : Training set loaded from the json file')
 
@@ -66,3 +69,9 @@ def recognize_intent(engine: SnipsNLUEngine, text: str):
                - slots: A dictionary containing key-value pairs of detected slots
        """
     return engine.parse(text)
+
+
+if __name__ == '__main__':
+    engine = init_intent_recognition_engine()
+    recognized_intent = recognize_intent(engine, "can you please go up")
+    print(recognized_intent)
