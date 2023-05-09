@@ -23,7 +23,7 @@ def process_frame_for_recognition(frame):
 
 def load_known_face_names():
     # load the user list from known_faces.txt
-    path = pkg_resources.resource_filename(__name__, "resources/facerecognition/know_names.txt")
+    path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
     known_face_names = read_file_into_list(path)
     return known_face_names
 
@@ -44,14 +44,13 @@ def read_file_into_list(filename):
     try:
         with open(filename, "r") as file:
             # Read the contents of the file line by line
-            for line in file:
-                # Split the line into fields based on a delimiter (e.g., comma)
-                if line.strip() and len(line.strip().split(",")) != 0:
-                    field_list.append(line.strip().split(","))
+            lines = file.readlines()
+            lines_without_newline = [line.rstrip('\n') for line in lines]
+            return lines_without_newline
+
     except FileNotFoundError as e:
         raise FileNotFoundError("The specified file is not found.", e) from e
     # Return the list of fields
-    return field_list
 
 
 def find_all_the_faces(frame):
@@ -88,23 +87,22 @@ def find_all_the_faces(frame):
     return recognized_faces
 
 
-def add_people_to_memory(file_name, folder_path, name, image):
+def add_people_to_memory(file_name, name, image):
     # add name to the known_names.txt
     try:
-        with open(file_name, 'a') as file:
-            file.write(name + ",")
+        text_file_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
+        with open(text_file_path, 'a') as file:
+            file.write(name + '\n')
     except IOError:
         logger.error("Error while writing to the file : ", file_name)
         raise FileWritingException("Error while writing to the file : ", file_name)
     # add file to the images folder
 
     try:
-        with open(image, 'rb') as f:
-            file_data = f.read()
         new_file_name = pkg_resources.resource_filename(__name__, "resources/facerecognition/images/" + name + ".jpg")
+        loaded_image = cv2.imread(image)
+        cv2.imwrite(new_file_name, loaded_image)
 
-        with open(new_file_name, 'wb') as f:
-            f.write(file_data)
     except IOError:
         raise FileWritingException("Error while writing to the file : ", new_file_name)
     return True

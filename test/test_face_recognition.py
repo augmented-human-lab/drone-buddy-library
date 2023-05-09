@@ -8,8 +8,12 @@ import dronebuddylib.atoms as dbl
 class TestFaceRecognition(unittest.TestCase):
 
     def test_add_to_the_memory(self):
-        dbl.add_people_to_memory('malsha.jpg', 'malsha')
-        self.assertEqual(True, False)  # add assertion here
+        image = cv2.imread('test_image.jpg')
+        file_path = r"D:\projects\drone-buddy-library\test\123.png"
+        # with open(file_path, 'r') as file:
+        #     image_file = file.read()
+        result = dbl.add_people_to_memory('yasith.png', 'yasith', file_path)
+        self.assertEqual(True, result)  # add assertion here
 
     def test_video_capture(self):
         video_capture = cv2.VideoCapture(0)

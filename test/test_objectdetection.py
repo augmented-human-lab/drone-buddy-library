@@ -2,7 +2,7 @@ import unittest
 
 import cv2
 
-import dronebuddylib as dbl
+import dronebuddylib.atoms as dbl
 
 
 # read input image
