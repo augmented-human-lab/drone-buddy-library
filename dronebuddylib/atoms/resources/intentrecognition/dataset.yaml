@@ -222,3 +222,20 @@ utterances:
   - What's the current battery level on [droneName](it)?
   - Can you give me an update on [droneName](your) battery life?
 
+---
+type: intent
+name: DESCRIBE
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Can you tell me what's in front of  [droneName](you)?
+  - what do  [droneName](you) see?
+  - whats in front of the [droneName](drone)?
+  - what can you see?
+  - describe what you see
+  - what's in front of me
+  - what do you see
+  - describe it
+  - can you please describe what is around  [droneName](you)?
+

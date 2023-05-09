@@ -362,6 +362,105 @@
         }
       ]
     },
+    "DESCRIBE": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Can you tell me what's in front of  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what do  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": " see?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "whats in front of the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what can you see?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "describe what you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what's in front of me"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what do you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "describe it"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please describe what is around  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        }
+      ]
+    },
     "DOWN": {
       "utterances": [
         {

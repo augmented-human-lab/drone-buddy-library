@@ -4,7 +4,7 @@ import pkg_resources
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.default_configs import CONFIG_EN
 
-from utils.logging_config import get_logger
+from dronebuddylib.utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()

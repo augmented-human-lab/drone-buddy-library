@@ -6,10 +6,12 @@ with open("README.md", "r") as fh:
 with open("requirements.txt", "r") as fh:
     requirements = fh.read().splitlines()
 
+
+
 setup(
     name='dronebuddylib',
-    version='0.2.1',
-    packages=find_packages() ,
+    version='0.2.6',
+    packages=find_packages(),
     include_package_data=True,
     package_data={
         'dronebuddylib': ['resources/*'],
