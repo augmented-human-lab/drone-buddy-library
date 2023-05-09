@@ -46,7 +46,7 @@ def read_file_into_list(filename):
             # Read the contents of the file line by line
             lines = file.readlines()
             lines_without_newline = [line.rstrip('\n') for line in lines]
-            return lines_without_newline
+            return [line for line in lines_without_newline if line]
 
     except FileNotFoundError as e:
         raise FileNotFoundError("The specified file is not found.", e) from e
