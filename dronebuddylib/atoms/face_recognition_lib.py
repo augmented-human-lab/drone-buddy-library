@@ -62,17 +62,18 @@ def get_video_feed(frame, face_locations, face_names):
         left *= 4
 
     # Draw a box around the face
-    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
-    # Draw a label with a name below the face
-    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-    font = cv2.FONT_HERSHEY_DUPLEX
-    cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
     # Display the resulting image
     cv2.imshow('Video', frame)
 
 
 def find_all_the_faces(frame, show_feed=False):
+
     processed_frame = process_frame_for_recognition(frame)
     # Find all the faces and face encodings in the current frame of video
     face_locations = face_recognition.face_locations(processed_frame)
@@ -104,7 +105,7 @@ def find_all_the_faces(frame, show_feed=False):
         recognized_faces.append(name)
 
     if show_feed:
-        get_video_feed(frame, face_locations, face_names)
+        get_video_feed(frame, face_locations, recognized_faces)
 
     return recognized_faces
 

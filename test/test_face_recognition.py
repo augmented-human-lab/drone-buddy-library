@@ -21,7 +21,7 @@ class TestFaceRecognition(unittest.TestCase):
         while True:
             # Grab a single frame of video
             ret, frame = video_capture.read()
-            people_names = dbl.find_all_the_faces(frame)
+            people_names = dbl.find_all_the_faces(frame, True)
             print(people_names)
 
     def test_face_rec_with_image(self):
