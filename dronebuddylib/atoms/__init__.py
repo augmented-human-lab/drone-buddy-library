@@ -1,4 +1,4 @@
-__version__ = '0.2.6'
+__version__ = "0.2.10"
 
 from .object_detection_yolo import get_label_yolo
 from .object_detection_yolo import init_yolo_engine

@@ -13,7 +13,7 @@ def change_init_version(new_version):
     for file_path in init_file_paths:
         with open(file_path, 'r') as file:
             content = file.read()
-        modified_content = re.sub(r"__version__ = \"\d+\.\d+\.\d+\"", '__version__ = \'' + new_version + '\'', content)
+        modified_content = re.sub(r"__version__ = \"\d+\.\d+\.\d+\"", '__version__ = \"' + new_version + '\"', content)
         with open(file_path, 'w') as file:
             file.write(modified_content)
 
@@ -27,6 +27,6 @@ def change_setup_version(new_version):
 
 
 if __name__ == '__main__':
-    new_version = '0.2.6'
+    new_version = '0.2.11'
     change_init_version(new_version)
     change_setup_version(new_version)

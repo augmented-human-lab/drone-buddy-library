@@ -239,3 +239,19 @@ utterances:
   - describe it
   - can you please describe what is around  [droneName](you)?
 
+---
+type: intent
+name: RECOGNIZE_PEOPLE
+slots:
+  - name: droneName
+    entity: droneName
+utterances:
+  - Can you tell me who's in front of  [droneName](you)?
+  - Who do  [droneName](you) see?
+  - Who's in front of the [droneName](drone)?
+  - who can you see?
+  - describe who you see
+  - Who's in front of me
+  - who do you see
+  - can you please describe who are around  [droneName](you)?
+

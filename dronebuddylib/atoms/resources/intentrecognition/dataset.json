@@ -1348,6 +1348,98 @@
         }
       ]
     },
+    "RECOGNIZE_PEOPLE": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Can you tell me who's in front of  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Who do  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": " see?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Who's in front of the "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "drone"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "who can you see?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "describe who you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Who's in front of me"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "who do you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you please describe who are around  "
+            },
+            {
+              "entity": "droneName",
+              "slot_name": "droneName",
+              "text": "you"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        }
+      ]
+    },
     "RIGHT": {
       "utterances": [
         {
