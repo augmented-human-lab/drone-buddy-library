@@ -30,6 +30,8 @@ class DroneCommands(enum.Enum):
     HEIGHT = "HEIGHT",
     STOP = "STOP",
     DESCRIBE = "DESCRIBE",
+    RECOGNIZE_PEOPLE = "RECOGNIZE_PEOPLE",
+    FLIP = "FLIP",
 
 
 class Language(enum.Enum):

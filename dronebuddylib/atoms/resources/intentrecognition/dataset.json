@@ -1,20 +1,99 @@
 {
   "entities": {
+    "DroneName": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "address": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "address_entity": {
+      "automatically_extensible": true,
+      "data": [
+        {
+          "synonyms": [
+            "semi",
+            "semmi",
+            "sami",
+            "sammi",
+            "semmi"
+          ],
+          "value": "sammy"
+        }
+      ],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "direction": {
+      "automatically_extensible": true,
+      "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
     "distance": {
       "automatically_extensible": true,
       "data": [],
       "matching_strictness": 1.0,
       "use_synonyms": true
     },
-    "droneName": {
+    "distance_entity": {
       "automatically_extensible": true,
-      "data": [],
+      "data": [
+        {
+          "synonyms": [],
+          "value": "10 cm"
+        },
+        {
+          "synonyms": [],
+          "value": "1 m"
+        },
+        {
+          "synonyms": [],
+          "value": "1m"
+        }
+      ],
       "matching_strictness": 1.0,
       "use_synonyms": true
     },
     "movement": {
       "automatically_extensible": true,
       "data": [],
+      "matching_strictness": 1.0,
+      "use_synonyms": true
+    },
+    "position_entity": {
+      "automatically_extensible": true,
+      "data": [
+        {
+          "synonyms": [],
+          "value": "left"
+        },
+        {
+          "synonyms": [],
+          "value": "right"
+        },
+        {
+          "synonyms": [],
+          "value": "front"
+        },
+        {
+          "synonyms": [],
+          "value": "back"
+        },
+        {
+          "synonyms": [],
+          "value": "up"
+        },
+        {
+          "synonyms": [],
+          "value": "down"
+        }
+      ],
       "matching_strictness": 1.0,
       "use_synonyms": true
     }
@@ -32,7 +111,15 @@
         {
           "data": [
             {
-              "text": "go back"
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", go back"
             }
           ]
         },
@@ -42,15 +129,15 @@
               "text": "Move the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
               "text": " backward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 feet"
             },
@@ -62,18 +149,15 @@
         {
           "data": [
             {
-              "text": "Make the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "hexacopter"
+              "text": ", fly backwards "
             },
             {
-              "text": " fly backwards "
-            },
-            {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 meters"
             },
@@ -88,15 +172,15 @@
               "text": "Send the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "this"
             },
             {
               "text": " backward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -108,18 +192,26 @@
         {
           "data": [
             {
-              "text": "Make the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Make the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
               "text": " move backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -131,18 +223,10 @@
         {
           "data": [
             {
-              "text": "Move "
+              "text": "Move backward by "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "Mavic 2"
-            },
-            {
-              "text": " backward by "
-            },
-            {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -157,15 +241,15 @@
               "text": "Make "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
               "text": " fly back "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 feet"
             },
@@ -177,18 +261,26 @@
         {
           "data": [
             {
-              "text": "Send "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Send "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
               "text": " backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 meters"
             },
@@ -203,15 +295,15 @@
               "text": "Descend "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
               "text": " by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -226,15 +318,15 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
               "text": " backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "8 meters"
             },
@@ -246,23 +338,25 @@
         {
           "data": [
             {
-              "text": "Fly "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ",Fly "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
               "text": " back "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "6 feet"
-            },
-            {
-              "text": "."
             }
           ]
         }
@@ -273,11 +367,19 @@
         {
           "data": [
             {
-              "text": "What's "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "your"
             },
             {
@@ -288,11 +390,19 @@
         {
           "data": [
             {
-              "text": "Can you tell me how much battery "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you tell me how much battery "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "you have"
             },
             {
@@ -303,11 +413,16 @@
         {
           "data": [
             {
-              "text": "What's the battery status on "
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ", What's the battery status on "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "it"
             },
             {
@@ -318,11 +433,19 @@
         {
           "data": [
             {
-              "text": "How much battery does "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", How much battery does "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "it"
             },
             {
@@ -333,11 +456,19 @@
         {
           "data": [
             {
-              "text": "What's the current battery level on "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's the current battery level on "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "it"
             },
             {
@@ -348,11 +479,19 @@
         {
           "data": [
             {
-              "text": "Can you give me an update on "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you give me an update on "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "your"
             },
             {
@@ -367,26 +506,31 @@
         {
           "data": [
             {
-              "text": "Can you tell me what's in front of  "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "you"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": "?"
+              "text": ", Can you tell me what's in front of you?"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "what do  "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ", what do  "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "you"
             },
             {
@@ -397,12 +541,20 @@
         {
           "data": [
             {
-              "text": "whats in front of the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", what do you see on your "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "left"
             },
             {
               "text": "?"
@@ -412,50 +564,188 @@
         {
           "data": [
             {
-              "text": "what can you see?"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "describe what you see"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "what's in front of me"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "what do you see"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "describe it"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "can you please describe what is around  "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", what do you see on your "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "right"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", whats in "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "front"
+            },
+            {
+              "text": " of the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "Spark"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", whats  "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "behind"
+            },
+            {
+              "text": " you?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", what can you see?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", describe what you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what's in front of me "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", what do you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", describe it"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you please describe what is around  "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "you"
             },
             {
               "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what is around you "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "describe"
             }
           ]
         }
@@ -466,11 +756,34 @@
         {
           "data": [
             {
-              "text": "Move the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " Move the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
@@ -489,11 +802,19 @@
         {
           "data": [
             {
-              "text": "Make the "
+              "text": "hi "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " Make the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
@@ -512,12 +833,17 @@
         {
           "data": [
             {
-              "text": "Send the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "text": ",Send the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "Inspire 2"
             },
             {
               "text": " downwards by "
@@ -538,8 +864,8 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
@@ -558,11 +884,19 @@
         {
           "data": [
             {
-              "text": "Move "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic 2"
             },
             {
@@ -581,11 +915,19 @@
         {
           "data": [
             {
-              "text": "Make "
+              "text": "hello "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " Make "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
@@ -604,11 +946,19 @@
         {
           "data": [
             {
-              "text": "Send "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Send "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
@@ -630,8 +980,8 @@
               "text": "Shift "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
@@ -650,11 +1000,16 @@
         {
           "data": [
             {
-              "text": "Move "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ",Move "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
@@ -676,8 +1031,8 @@
               "text": "Fly "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
@@ -695,28 +1050,99 @@
         }
       ]
     },
+    "FLIP": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you do a flip?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",  can you turn over?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Can you flip to your "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",  Can you flip to your "
+            },
+            {
+              "entity": "position_entity",
+              "slot_name": "position",
+              "text": "right"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        }
+      ]
+    },
     "FORWARD": {
       "utterances": [
         {
           "data": [
             {
-              "text": "Move the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ", Move the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
               "text": " forward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 feet"
-            },
-            {
-              "text": "."
             }
           ]
         },
@@ -726,15 +1152,15 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
               "text": " fly forward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 meters"
             },
@@ -746,18 +1172,26 @@
         {
           "data": [
             {
-              "text": "Send the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Send the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "hexacopter"
             },
             {
               "text": " forward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -772,15 +1206,15 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
               "text": " move forward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -792,18 +1226,26 @@
         {
           "data": [
             {
-              "text": "Move "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Move "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic 2"
             },
             {
               "text": " forward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -818,15 +1260,15 @@
               "text": "Make "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
               "text": " fly ahead "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 feet"
             },
@@ -841,15 +1283,15 @@
               "text": "Send "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
               "text": " forward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 meters"
             },
@@ -861,18 +1303,18 @@
         {
           "data": [
             {
-              "text": "Advance "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "Mavic Air"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": " by "
+              "text": ", Advance by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -887,15 +1329,15 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
               "text": " forward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "8 meters"
             },
@@ -907,18 +1349,26 @@
         {
           "data": [
             {
-              "text": "Fly "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Fly "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
               "text": " ahead "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "6 feet"
             },
@@ -934,28 +1384,85 @@
         {
           "data": [
             {
-              "text": "How fast are you going?"
+              "text": "what is your location "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "what is you r speed"
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " what is your altitude"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "How fast can you fly?"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " where are you"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "What's your maximum speed?"
+              "text": "what is your height"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what is your distance from the ground "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " what is your distance from the floor"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "what is your distance from the ceiling hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             }
           ]
         }
@@ -966,11 +1473,19 @@
         {
           "data": [
             {
-              "text": "Land the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Land the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
@@ -984,8 +1499,8 @@
               "text": "Bring down the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
@@ -996,12 +1511,20 @@
         {
           "data": [
             {
-              "text": "Bring the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Bring the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "quadcopter"
             },
             {
               "text": " back to the ground and land it."
@@ -1014,8 +1537,8 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
@@ -1026,11 +1549,16 @@
         {
           "data": [
             {
-              "text": "Can you please bring the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": "(sammy), Can you please bring the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
@@ -1044,8 +1572,8 @@
               "text": "Can you please make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
@@ -1056,11 +1584,19 @@
         {
           "data": [
             {
-              "text": "Can you please land the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you please land the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 2"
             },
             {
@@ -1074,8 +1610,8 @@
               "text": "Can you please bring the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
@@ -1086,15 +1622,32 @@
         {
           "data": [
             {
-              "text": "Can you please descend the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ", Can you please descend the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 3"
             },
             {
               "text": " and land it on the designated area?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " land"
             }
           ]
         }
@@ -1105,18 +1658,26 @@
         {
           "data": [
             {
-              "text": "Move the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
               "text": " backward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 feet"
             },
@@ -1131,15 +1692,15 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
               "text": " fly backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 meters"
             },
@@ -1154,15 +1715,15 @@
               "text": "Send the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "UAV"
             },
             {
               "text": " backward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -1174,18 +1735,26 @@
         {
           "data": [
             {
-              "text": "Make the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Make the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
               "text": " move backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -1200,15 +1769,15 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic 2"
             },
             {
               "text": " backward by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -1220,18 +1789,26 @@
         {
           "data": [
             {
-              "text": "Make "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Make "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
               "text": " fly back "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 feet"
             },
@@ -1246,15 +1823,15 @@
               "text": "Send "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
               "text": " backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 meters"
             },
@@ -1266,18 +1843,26 @@
         {
           "data": [
             {
-              "text": "Retreat "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Retreat "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
               "text": " by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -1292,15 +1877,15 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
               "text": " backward "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "8 meters"
             },
@@ -1312,18 +1897,26 @@
         {
           "data": [
             {
-              "text": "Fly "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Fly "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
               "text": " back "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "6 feet"
             },
@@ -1342,7 +1935,41 @@
         {
           "data": [
             {
-              "text": "please go to your left"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",please go to your left"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "go to your left"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "move to your left"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you move "
+            },
+            {
+              "entity": "distance_entity",
+              "slot_name": "distance",
+              "text": "10m"
+            },
+            {
+              "text": " to your left"
             }
           ]
         }
@@ -1353,26 +1980,31 @@
         {
           "data": [
             {
-              "text": "Can you tell me who's in front of  "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "you"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": "?"
+              "text": ", Can you tell me who's in front of you?"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "Who do  "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": ", Who do  "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "you"
             },
             {
@@ -1383,12 +2015,20 @@
         {
           "data": [
             {
-              "text": "Who's in front of the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Who's in front of the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "Phantom 3"
             },
             {
               "text": "?"
@@ -1398,43 +2038,208 @@
         {
           "data": [
             {
-              "text": "who can you see?"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "describe who you see"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "Who's in front of me"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "who do you see"
-            }
-          ]
-        },
-        {
-          "data": [
-            {
-              "text": "can you please describe who are around  "
+              "text": "who can you see "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", describe who you see"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Who's in "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "front"
+            },
+            {
+              "text": " of me"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Who's on your "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "left"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Who's on your "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "right"
+            },
+            {
+              "text": " "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Who's  "
+            },
+            {
+              "entity": "direction",
+              "slot_name": "direction",
+              "text": "behind"
+            },
+            {
+              "text": " you?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "who do you see "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you please describe who are around  "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "you"
             },
             {
               "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", look for people around you"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "look for people "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "who are around you "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " who are here?"
             }
           ]
         }
@@ -1445,18 +2250,26 @@
         {
           "data": [
             {
-              "text": "Move the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
               "text": " to the right by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 feet"
             },
@@ -1471,15 +2284,15 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
               "text": " fly to the right "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 meters"
             },
@@ -1491,18 +2304,26 @@
         {
           "data": [
             {
-              "text": "Send the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Send the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "Phantom 4"
             },
             {
               "text": " to the right by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -1517,15 +2338,15 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
               "text": " move to the right "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -1540,15 +2361,15 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic 2"
             },
             {
               "text": " to the right by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "2 meters"
             },
@@ -1560,18 +2381,15 @@
         {
           "data": [
             {
-              "text": "Make "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "Phantom 4"
+              "text": ", fly right "
             },
             {
-              "text": " fly right "
-            },
-            {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "5 feet"
             },
@@ -1586,15 +2404,15 @@
               "text": "Send "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
               "text": " to the right "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "10 meters"
             },
@@ -1609,15 +2427,15 @@
               "text": "Shift "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
               "text": " to the right by "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "3 feet"
             },
@@ -1629,18 +2447,26 @@
         {
           "data": [
             {
-              "text": "Move "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
               "text": " to the right "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "8 meters"
             },
@@ -1655,15 +2481,15 @@
               "text": "Fly "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {
               "text": " right "
             },
             {
-              "entity": "distance",
+              "entity": "distance_entity",
               "slot_name": "distance",
               "text": "6 feet"
             },
@@ -1675,7 +2501,12 @@
         {
           "data": [
             {
-              "text": "move right"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",move right"
             }
           ]
         },
@@ -1683,6 +2514,155 @@
           "data": [
             {
               "text": "please go to your right"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "go to your right"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " can you move "
+            },
+            {
+              "entity": "distance_entity",
+              "slot_name": "distance",
+              "text": "10m"
+            },
+            {
+              "text": " to your right"
+            }
+          ]
+        }
+      ]
+    },
+    "ROTATE_CLOCKWISE": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you rotate clockwise?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you turn clockwise?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you turn to your right?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you rotate to your right "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
+            }
+          ]
+        }
+      ]
+    },
+    "ROTATE_COUNTER_CLOCKWISE": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you rotate counter clockwise?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you turn counter clockwise?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Can you turn to your left?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "can you rotate to your left "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": "?"
             }
           ]
         }
@@ -1693,7 +2673,42 @@
         {
           "data": [
             {
-              "text": "What is your speed?"
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " What is your speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
             }
           ]
         },
@@ -1701,6 +2716,21 @@
           "data": [
             {
               "text": "How fast can you fly?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
             }
           ]
         },
@@ -1743,7 +2773,27 @@
         {
           "data": [
             {
-              "text": "How fast can you go when "
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " How fast can you go when "
             },
             {
               "entity": "movement",
@@ -1751,7 +2801,7 @@
               "text": "flying"
             },
             {
-              "text": " ?"
+              "text": "?"
             }
           ]
         },
@@ -1767,6 +2817,21 @@
             },
             {
               "text": " ?"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", What's your maximum speed?"
             }
           ]
         },
@@ -1792,41 +2857,46 @@
         {
           "data": [
             {
-              "text": "Stop "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "the drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": " now"
+              "text": ", Stop now"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "Halt "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "it"
-            },
-            {
-              "text": " immediately"
+              "text": ", Halt immediately"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "Cease "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Cease "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "its"
             },
             {
@@ -1837,11 +2907,19 @@
         {
           "data": [
             {
-              "text": "Bring "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", Bring "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "it"
             },
             {
@@ -1852,15 +2930,15 @@
         {
           "data": [
             {
-              "text": "Stop "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "the drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": " in its tracks"
+              "text": ", Stop in its tracks"
             }
           ]
         }
@@ -1874,8 +2952,8 @@
               "text": "Take off the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
@@ -1886,11 +2964,16 @@
         {
           "data": [
             {
-              "text": "Launch the "
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "text": " Launch the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
@@ -1901,30 +2984,22 @@
         {
           "data": [
             {
-              "text": "Start the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
             },
             {
-              "text": " and get it in the air."
+              "text": ", get in the air."
             }
           ]
         },
         {
           "data": [
             {
-              "text": "Lift off the "
-            },
-            {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "UAV"
-            },
-            {
-              "text": " from the launchpad."
+              "text": "Lift off the  from the launchpad."
             }
           ]
         },
@@ -1938,7 +3013,15 @@
         {
           "data": [
             {
-              "text": "launch"
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",launch"
             }
           ]
         },
@@ -1952,14 +3035,27 @@
         {
           "data": [
             {
-              "text": "can you please take off"
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": " can you please take off"
             }
           ]
         },
         {
           "data": [
             {
-              "text": "can you please launch"
+              "text": "hey "
+            },
+            {
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you please launch"
             }
           ]
         },
@@ -1973,11 +3069,19 @@
         {
           "data": [
             {
-              "text": "can you please take off "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ", can you please take off "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "this"
             }
           ]
@@ -1989,11 +3093,19 @@
         {
           "data": [
             {
-              "text": "Move the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "quadcopter"
             },
             {
@@ -2015,8 +3127,8 @@
               "text": "Make the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "hexacopter"
             },
             {
@@ -2038,9 +3150,9 @@
               "text": "Send the "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
-              "text": "drone"
+              "entity": "DroneName",
+              "slot_name": "DroneName",
+              "text": "Mavic Air"
             },
             {
               "text": " upwards by "
@@ -2058,11 +3170,19 @@
         {
           "data": [
             {
-              "text": "Make the "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Make the "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "UAV"
             },
             {
@@ -2084,8 +3204,8 @@
               "text": "Move "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic 2"
             },
             {
@@ -2104,11 +3224,19 @@
         {
           "data": [
             {
-              "text": "Make "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Make "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Phantom 4"
             },
             {
@@ -2127,11 +3255,19 @@
         {
           "data": [
             {
-              "text": "Send "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Send "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Inspire 1"
             },
             {
@@ -2153,8 +3289,8 @@
               "text": "Shift "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Mavic Air"
             },
             {
@@ -2173,11 +3309,19 @@
         {
           "data": [
             {
-              "text": "Move "
+              "text": "hey "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "address_entity",
+              "slot_name": "address",
+              "text": "sammy"
+            },
+            {
+              "text": ",Move "
+            },
+            {
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "DJI Mini 2"
             },
             {
@@ -2199,8 +3343,8 @@
               "text": "Fly "
             },
             {
-              "entity": "droneName",
-              "slot_name": "droneName",
+              "entity": "DroneName",
+              "slot_name": "DroneName",
               "text": "Spark"
             },
             {

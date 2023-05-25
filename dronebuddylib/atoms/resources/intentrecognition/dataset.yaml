@@ -1,61 +1,96 @@
+# address Entity
+---
+type: entity # allows to differentiate between entities and intents files
+name: address_entity # name of the entity
+values:
+  - [ sammy, semi , semmi , sami , sammi , semmi ] # entity value with a synonym
+
+# distance Entity
+---
+type: entity # allows to differentiate between entities and intents files
+name: distance_entity # name of the entity
+values:
+  - 10 cm # entity value with a synonym
+  - 1 m # entity value with a synonym
+  - 1m # entity value with a synonym
+# distance Entity
+---
+type: entity # allows to differentiate between entities and intents files
+name: position_entity # name of the entity
+values:
+  - left
+  - right
+  - front
+  - back
+  - up
+  - down
+
+
 # takeoff intent
 ---
 type: intent
 name: TAKE_OFF
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: address
+    entity: address_entity
 utterances:
-  - Take off the [droneName](quadcopter) from the ground.
-  - Launch the [droneName](hexacopter) and make it fly.
-  - Start the [droneName](drone) and get it in the air.
-  - Lift off the [droneName](UAV) from the launchpad.
+  - Take off the [DroneName](quadcopter) from the ground.
+  - "[address](sammy) Launch the [DroneName](hexacopter) and make it fly."
+  - hey [address](sammy), get in the air.
+  - Lift off the  from the launchpad.
   - take off
-  - launch
+  - hey [address](sammy),launch
   - fly
-  - can you please take off
-  - can you please launch
+  - "[address](sammy) can you please take off"
+  - hey [address](sammy), can you please launch
   - can you please fly
-  - can you please take off [droneName](this)
+  - hey [address](sammy), can you please take off [DroneName](this)
 
   # land intent
 ---
 type: intent
 name: LAND
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: address
+    entity: address_entity
 utterances:
-  - Land the [droneName](quadcopter) on the ground.
-  - Bring down the [droneName](hexacopter) and make it land.
-  - Bring the [droneName](drone) back to the ground and land it.
-  - Make the [droneName](UAV) descend and land on the landing pad.
-  - Can you please bring the [droneName](Phantom 4) down and land it safely?
-  - Can you please make the [droneName](Mavic Air) descend and land on the landing pad?
-  - Can you please land the [droneName](Inspire 2) and shut it down?
-  - Can you please bring the [droneName](Spark) back down to the ground and land it?
-  - Can you please descend the [droneName](Phantom 3) and land it on the designated area?
+  - hey [address](sammy), Land the [DroneName](quadcopter) on the ground.
+  - Bring down the [DroneName](hexacopter) and make it land.
+  - hey [address](sammy), Bring the [DroneName] back to the ground and land it.
+  - Make the [DroneName](UAV) descend and land on the landing pad.
+  - "[address](sammy)(sammy), Can you please bring the [DroneName](Phantom 4) down and land it safely?"
+  - Can you please make the [DroneName](Mavic Air) descend and land on the landing pad?
+  - hey [address](sammy), Can you please land the [DroneName](Inspire 2) and shut it down?
+  - Can you please bring the [DroneName](Spark) back down to the ground and land it?
+  - "[address](sammy), Can you please descend the [DroneName](Phantom 3) and land it on the designated area?"
+  - "[address](sammy) land"
 
 # land intent
 ---
 type: intent
 name: FORWARD
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
   - name: distance
-    entity: distance
+    entity: distance_entity
+  - name: address
+    entity: address_entity
 utterances:
-  - Move the [droneName](quadcopter) forward by [distance](10 feet).
-  - Make the [droneName](hexacopter) fly forward [distance](5 meters).
-  - Send the [droneName](drone) forward by [distance](3 feet).
-  - Make the [droneName](UAV) move forward [distance](2 meters).
-  - Move [droneName](Mavic 2) forward by [distance](2 meters).
-  - Make [droneName](Phantom 4) fly ahead [distance](5 feet).
-  - Send [droneName](Inspire 1) forward [distance](10 meters).
-  - Advance [droneName](Mavic Air) by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) forward [distance](8 meters).
-  - Fly [droneName](Spark) ahead [distance](6 feet).
+  - "[address](sammy), Move the [DroneName](quadcopter) forward by [distance](10 feet)"
+  - Make the [DroneName](hexacopter) fly forward [distance](5 meters).
+  - hey [address](sammy), Send the [DroneName] forward by [distance](3 feet).
+  - Make the [DroneName](UAV) move forward [distance](2 meters).
+  - hey [address](sammy), Move [DroneName](Mavic 2) forward by [distance](2 meters).
+  - Make [DroneName](Phantom 4) fly ahead [distance](5 feet).
+  - Send [DroneName](Inspire 1) forward [distance](10 meters).
+  - "hey [address](sammy), Advance by [distance](3 feet)."
+  - Move [DroneName](DJI Mini 2) forward [distance](8 meters).
+  - hey [address](sammy), Fly [DroneName](Spark) ahead [distance](6 feet).
 
 
 # land intent
@@ -63,23 +98,25 @@ utterances:
 type: intent
 name: BACKWARD
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
   - name: distance
-    entity: distance
+    entity: distance_entity
+  - name: address
+    entity: address_entity
 utterances:
   - come back
-  - go back
-  - Move the [droneName](quadcopter) backward by [distance](10 feet).
-  - Make the [droneName](hexacopter) fly backwards [distance](5 meters).
-  - Send the [droneName](drone) backward by [distance](3 feet).
-  - Make the [droneName](UAV) move backward [distance](2 meters).
-  - Move [droneName](Mavic 2) backward by [distance](2 meters).
-  - Make [droneName](Phantom 4) fly back [distance](5 feet).
-  - Send [droneName](Inspire 1) backward [distance](10 meters).
-  - Descend [droneName](Mavic Air) by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) backward [distance](8 meters).
-  - Fly [droneName](Spark) back [distance](6 feet).
+  - hey [address](sammy), go back
+  - Move the [DroneName](quadcopter) backward by [distance](10 feet).
+  - "[address](sammy), fly backwards [distance](5 meters)."
+  - Send the [DroneName] backward by [distance](3 feet).
+  - hey [address](sammy),Make the [DroneName](UAV) move backward [distance](2 meters).
+  - Move backward by [distance](2 meters).
+  - Make [DroneName](Phantom 4) fly back [distance](5 feet).
+  - hey [address](sammy),Send [DroneName](Inspire 1) backward [distance](10 meters).
+  - Descend [DroneName](Mavic Air) by [distance](3 feet).
+  - Move [DroneName](DJI Mini 2) backward [distance](8 meters).
+  - "[address](sammy),Fly [DroneName](Spark) back [distance](6 feet)"
 
 
 # land intent
@@ -87,111 +124,123 @@ utterances:
 type: intent
 name: LEFT
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: distance
+    entity: distance_entity
+  - name: address
+    entity: address_entity
 utterances:
-  - Move the [droneName](quadcopter) backward by [distance](10 feet).
-  - Make the [droneName](hexacopter) fly backward [distance](5 meters).
-  - Send the [droneName](drone) backward by [distance](3 feet).
-  - Make the [droneName](UAV) move backward [distance](2 meters).
-  - Move [droneName](Mavic 2) backward by [distance](2 meters).
-  - Make [droneName](Phantom 4) fly back [distance](5 feet).
-  - Send [droneName](Inspire 1) backward [distance](10 meters).
-  - Retreat [droneName](Mavic Air) by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) backward [distance](8 meters).
-  - Fly [droneName](Spark) back [distance](6 feet).
+  - hey [address](sammy),Move the [DroneName](quadcopter) backward by [distance](10 feet).
+  - Make the [DroneName](hexacopter) fly backward [distance](5 meters).
+  - Send the [DroneName] backward by [distance](3 feet).
+  - hey [address](sammy),Make the [DroneName](UAV) move backward [distance](2 meters).
+  - Move [DroneName](Mavic 2) backward by [distance](2 meters).
+  - hey [address](sammy),Make [DroneName](Phantom 4) fly back [distance](5 feet).
+  - Send [DroneName](Inspire 1) backward [distance](10 meters).
+  - hey [address](sammy),Retreat [DroneName](Mavic Air) by [distance](3 feet).
+  - Move [DroneName](DJI Mini 2) backward [distance](8 meters).
+  - hey [address](sammy),Fly [DroneName](Spark) back [distance](6 feet).
   - move to the left
-  - please go to your left
+  - "[address](sammy),please go to your left"
+  - go to your left
+  - move to your left
+  - can you move [distance](10m) to your left
 
 # land intent
 ---
 type: intent
 name: RIGHT
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: distance
+    entity: distance_entity
+  - name: address
+    entity: address_entity
 utterances:
-  - Move the [droneName](quadcopter) to the right by [distance](10 feet).
-  - Make the [droneName](hexacopter) fly to the right [distance](5 meters).
-  - Send the [droneName](drone) to the right by [distance](3 feet).
-  - Make the [droneName](UAV) move to the right [distance](2 meters).
-  - Move [droneName](Mavic 2) to the right by [distance](2 meters).
-  - Make [droneName](Phantom 4) fly right [distance](5 feet).
-  - Send [droneName](Inspire 1) to the right [distance](10 meters).
-  - Shift [droneName](Mavic Air) to the right by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) to the right [distance](8 meters).
-  - Fly [droneName](Spark) right [distance](6 feet).
-  - move right
+  - hey [address](sammy),Move the [DroneName](quadcopter) to the right by [distance](10 feet).
+  - Make the [DroneName](hexacopter) fly to the right [distance](5 meters).
+  - hey [address](sammy),Send the [DroneName] to the right by [distance](3 feet).
+  - Make the [DroneName](UAV) move to the right [distance](2 meters).
+  - Move [DroneName](Mavic 2) to the right by [distance](2 meters).
+  - "[address](sammy), fly right [distance](5 feet)."
+  - Send [DroneName](Inspire 1) to the right [distance](10 meters).
+  - Shift [DroneName](Mavic Air) to the right by [distance](3 feet).
+  - hey [address](sammy),Move [DroneName](DJI Mini 2) to the right [distance](8 meters).
+  - Fly [DroneName](Spark) right [distance](6 feet).
+  - "[address](sammy),move right"
   - please go to your right
+  - go to your right
+  - "[address](sammy) can you move [distance](10m) to your right"
 
 # land intent
 ---
 type: intent
 name: UP
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: address
+    entity: address_entity
 utterances:
-  - Move the [droneName](quadcopter) up by [distance](10 feet).
-  - Make the [droneName](hexacopter) ascend by [distance](5 meters).
-  - Send the [droneName](drone) upwards by [distance](3 feet).
-  - Make the [droneName](UAV) go up [distance](2 meters).
-  - Move [droneName](Mavic 2) up by [distance](2 meters).
-  - Make [droneName](Phantom 4) ascend [distance](5 feet).
-  - Send [droneName](Inspire 1) upwards by [distance](10 meters).
-  - Shift [droneName](Mavic Air) upward by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) up [distance](8 meters).
-  - Fly [droneName](Spark) higher [distance](6 feet).
+  - hey [address](sammy),Move the [DroneName](quadcopter) up by [distance](10 feet).
+  - Make the [DroneName](hexacopter) ascend by [distance](5 meters).
+  - Send the [DroneName] upwards by [distance](3 feet).
+  - hey [address](sammy),Make the [DroneName](UAV) go up [distance](2 meters).
+  - Move [DroneName](Mavic 2) up by [distance](2 meters).
+  - hey [address](sammy),Make [DroneName](Phantom 4) ascend [distance](5 feet).
+  - hey [address](sammy),Send [DroneName](Inspire 1) upwards by [distance](10 meters).
+  - Shift [DroneName](Mavic Air) upward by [distance](3 feet).
+  - hey [address](sammy),Move [DroneName](DJI Mini 2) up [distance](8 meters).
+  - Fly [DroneName](Spark) higher [distance](6 feet).
 
 # land intent
 ---
 type: intent
 name: DOWN
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: address
+    entity: address_entity
 utterances:
-  - Move the [droneName](quadcopter) down by [distance](10 feet).
-  - Make the [droneName](hexacopter) descend by [distance](5 meters).
-  - Send the [droneName](drone) downwards by [distance](3 feet).
-  - Make the [droneName](UAV) go down [distance](2 meters).
-  - Move [droneName](Mavic 2) down by [distance](2 meters).
-  - Make [droneName](Phantom 4) descend [distance](5 feet).
-  - Send [droneName](Inspire 1) downwards by [distance](10 meters).
-  - Shift [droneName](Mavic Air) downward by [distance](3 feet).
-  - Move [droneName](DJI Mini 2) down [distance](8 meters).
-  - Fly [droneName](Spark) lower [distance](6 feet).
+  - hey [address](sammy), What's your maximum speed?
+  - hey [address](sammy) Move the [DroneName](quadcopter) down by [distance](10 feet).
+  - hi [address](sammy) Make the [DroneName](hexacopter) descend by [distance](5 meters).
+  - "[address](sammy),Send the [DroneName] downwards by [distance](3 feet)."
+  - Make the [DroneName](UAV) go down [distance](2 meters).
+  - hey [address](sammy),Move [DroneName](Mavic 2) down by [distance](2 meters).
+  - hello [address](sammy) Make [DroneName](Phantom 4) descend [distance](5 feet).
+  - hey [address](sammy),Send [DroneName](Inspire 1) downwards by [distance](10 meters).
+  - Shift [DroneName](Mavic Air) downward by [distance](3 feet).
+  - "[address](sammy),Move [DroneName](DJI Mini 2) down [distance](8 meters)."
+  - Fly [DroneName](Spark) lower [distance](6 feet).
 
 # land intent
 ---
 type: intent
 name: SPEED
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
+  - name: address
+    entity: address_entity
 utterances:
-  - What is your speed?
+  - hey [address](sammy), What's your maximum speed?
+  - "[address](sammy) What is your speed?"
+  - hey [address](sammy), What's your maximum speed?
   - How fast can you fly?
+  - hey [address](sammy), What's your maximum speed?
   - What's your maximum speed?
   - Can you tell me your top speed?
   - How quickly can you move?
   - What's your speed while [movement](moving) ?
-  - How fast can you go when [movement](flying) ?
+  - hey [address](sammy), What's your maximum speed?
+  - "[address](sammy) How fast can you go when [movement](flying)?"
   - What's your maximum speed while [movement](hovering) ?
+  - hey [address](sammy), What's your maximum speed?
   - Can you tell me how quickly you move when [movement](ascending) ?
-# land intent
----
-type: intent
-name: HEIGHT
-slots:
-  - name: droneName
-    entity: droneName
-utterances:
-  - How fast are you going?
-  - what is you r speed
-  - How fast can you fly?
-  - What's your maximum speed?
-
 
 
 # land intent
@@ -199,59 +248,133 @@ utterances:
 type: intent
 name: STOP
 slots:
-  - name: droneName
-    entity: droneName
+  - name: address
+    entity: address_entity
 utterances:
-  - Stop [droneName](the drone) now
-  - Halt [droneName](it) immediately
-  - Cease [droneName](its) movement
-  - Bring [droneName](it) to a stop
-  - Stop [droneName](the drone) in its tracks
+  - hey [address](sammy), Stop now
+  - "[address](sammy), Halt immediately"
+  - hey [address](sammy), Cease [DroneName](its) movement
+  - hey [address](sammy), Bring [DroneName](it) to a stop
+  - hey [address](sammy), Stop in its tracks
 # land intent
 ---
 type: intent
 name: BATTERY
 slots:
-  - name: droneName
-    entity: droneName
+  - name: DroneName
+    entity: DroneName
 utterances:
-  - What's [droneName](your) battery level?
-  - Can you tell me how much battery [droneName](you have) left?
-  - What's the battery status on [droneName](it)?
-  - How much battery does [droneName](it) have left?
-  - What's the current battery level on [droneName](it)?
-  - Can you give me an update on [droneName](your) battery life?
+  - hey [address](sammy), What's [DroneName](your) battery level?
+  - hey [address](sammy), Can you tell me how much battery [DroneName](you have) left?
+  - "[address](sammy), What's the battery status on [DroneName](it)?"
+  - hey [address](sammy), How much battery does [DroneName](it) have left?
+  - hey [address](sammy), What's the current battery level on [DroneName](it)?
+  - hey [address](sammy), Can you give me an update on [DroneName](your) battery life?
 
 ---
 type: intent
 name: DESCRIBE
 slots:
-  - name: droneName
-    entity: droneName
+  - name: address
+    entity: address_entity
+  - name: direction
+    entity: direction
 utterances:
-  - Can you tell me what's in front of  [droneName](you)?
-  - what do  [droneName](you) see?
-  - whats in front of the [droneName](drone)?
-  - what can you see?
-  - describe what you see
-  - what's in front of me
-  - what do you see
-  - describe it
-  - can you please describe what is around  [droneName](you)?
+  - hey [address](sammy), Can you tell me what's in front of you?
+  - "[address](sammy), what do  [DroneName](you) see?"
+  - hey [address](sammy), what do you see on your [direction](left)?
+  - hey [address](sammy), what do you see on your [direction](right)?
+  - "[address](sammy), whats in [direction](front) of the [DroneName]?"
+  - hey [address](sammy), whats  [direction](behind) you?
+  - hey [address](sammy), what can you see?
+  - "[address](sammy), describe what you see"
+  - what's in front of me [address](sammy)?
+  - hey [address](sammy), what do you see
+  - "[address](sammy), describe it"
+  - hey [address](sammy), can you please describe what is around  [DroneName](you)?
+  - what is around you [address](sammy)?
+  - describe
 
 ---
 type: intent
 name: RECOGNIZE_PEOPLE
 slots:
-  - name: droneName
-    entity: droneName
+  - name: address
+    entity: address_entity
+  - name: direction
+    entity: direction
 utterances:
-  - Can you tell me who's in front of  [droneName](you)?
-  - Who do  [droneName](you) see?
-  - Who's in front of the [droneName](drone)?
-  - who can you see?
-  - describe who you see
-  - Who's in front of me
-  - who do you see
-  - can you please describe who are around  [droneName](you)?
+  - hey [address](sammy), Can you tell me who's in front of you?
+  - "[address](sammy), Who do  [DroneName](you) see?"
+  - hey [address](sammy), Who's in front of the [DroneName]?
+  - who can you see [address](sammy)?
+  - hey [address](sammy), describe who you see
+  - "[address](sammy), Who's in [direction](front) of me"
+  - hey [address](sammy), Who's on your [direction](left)?
+  - Who's on your [direction](right) [address](sammy)?
+  - hey [address](sammy), Who's  [direction](behind) you?
+  - who do you see [address](sammy)?
+  - "[address](sammy), can you please describe who are around  [DroneName](you)?"
+  - hey [address](sammy), look for people around you
+  - look for people [address](sammy)
+  - who are around you [address](sammy)?
+  - "[address](sammy) who are here?"
+---
+type: intent
+name: ROTATE_CLOCKWISE
+slots:
+  - name: address
+    entity: address_entity
+utterances:
+  - hey [address](sammy), Can you rotate clockwise?
+  - "[address](sammy), can you turn clockwise?"
+  - hey [address](sammy), Can you turn to your right?
+  - can you rotate to your right [address](sammy)?
+
+
+---
+type: intent
+name: ROTATE_COUNTER_CLOCKWISE
+slots:
+  - name: address
+    entity: address_entity
+utterances:
+  - "[address](sammy), Can you rotate counter clockwise?"
+  - hey [address](sammy), can you turn counter clockwise?
+  - hey [address](sammy), Can you turn to your left?
+  - can you rotate to your left [address](sammy)?
+
+
+
+---
+type: intent
+name: FLIP
+slots:
+  - name: address
+    entity: address_entity
+  - name: position
+    entity: position_entity
+utterances:
+  - "[address](sammy), Can you do a flip?"
+  - hey [address](sammy),  can you turn over?
+  - Can you flip to your [address](sammy)?
+  - hey [address](sammy),  Can you flip to your [position](right)?
+
+
+---
+type: intent
+name: HEIGHT
+slots:
+  - name: address
+    entity: address_entity
+utterances:
+  - what is your location [address](sammy)
+  - hey [address](sammy) what is your altitude
+  - "[address](sammy) where are you"
+  - what is your height
+  - what is your distance from the ground [address](sammy)
+  - hey [address](sammy) what is your distance from the floor
+  - what is your distance from the ceiling hey [address](sammy)
+
+
 
