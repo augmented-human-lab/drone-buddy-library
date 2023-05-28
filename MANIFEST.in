@@ -1,6 +1,7 @@
 recursive-include dronebuddylib/atoms/resources/speechrecognition/vosk-model-small-en-us-0.15 *
 recursive-include dronebuddylib/atoms/resources/objectdetection/yolov3 *
 recursive-include dronebuddylib/atoms/resources/intentrecognition *
+recursive-include dronebuddylib/atoms/resources/tracking/pytracking/pytracking/ *
 recursive-include dronebuddylib/atoms *
 recursive-include dronebuddylib/molecules *
 include requirements.txt
