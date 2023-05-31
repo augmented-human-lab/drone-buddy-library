@@ -4,7 +4,7 @@ import pkg_resources
 from snips_nlu import SnipsNLUEngine
 from snips_nlu.default_configs import CONFIG_EN
 
-from utils.logging_config import get_logger
+from dronebuddylib.utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()
@@ -71,7 +71,67 @@ def recognize_intent(engine: SnipsNLUEngine, text: str):
     return engine.parse(text)
 
 
-if __name__ == '__main__':
-    engine = init_intent_recognition_engine()
-    recognized_intent = recognize_intent(engine, "can you please go up")
-    print(recognized_intent)
+def get_intent_name(intent, threshold=0.5):
+    if intent is None:
+        return None
+    if intent['intent']['probability'] < threshold:
+        return None
+    return intent['intent']['intentName']
+
+
+def get_mentioned_entities(intent):
+    """
+     Retrieves the key-value pairs from the slots of an intent.
+
+     Args:
+         intent (dict): The intent object containing slots.
+
+     Returns:
+         dict: A dictionary containing the key-value pairs extracted from the slots.
+               Returns None if the intent is None, slots are None, or if there are no slots.
+
+     """
+    if intent is None:
+        return None
+    if intent['slots'] is None:
+        return None
+    if len(intent['slots']) == 0:
+        return None
+    # Get the slots from the intent object
+    slots = intent.get("slots")
+    # Initialize an empty dictionary for storing the key-value pairs
+    slot_values = {}
+    # Extract the key-value pairs from the slots and store them in the slot_values dictionary
+    for slot in slots:
+        slot_values[slot.get("entity")] = slot.get("rawValue")
+
+    return slot_values
+
+
+def is_addressed_to_drone(intent, name='sammy', similar_pronunciation=None):
+    """
+    Checks if the intent is addressed to the drone
+
+    Args:
+        intent (dict): The intent object containing slots.
+        name (str): The name in which the drone is to be addressed, this should be the same name that the intent
+         classifier ia trained with.
+        similar_pronunciation (list): A list of names that sound similar to the name of the drone
+
+    Returns:
+        bool: True if the intent is addressed to the drone, False otherwise
+    """
+
+    slot_values = get_mentioned_entities(intent)
+    if slot_values is None and name in intent.get("input").casefold():
+        return True
+    if slot_values is None:
+        return False
+    if 'address' in slot_values.keys() and (
+            slot_values['address'].casefold() == name or name in intent.get("input").casefold()):
+        return True
+    if similar_pronunciation is not None and 'address' in slot_values.keys() and (
+            slot_values['address'].casefold() in similar_pronunciation):
+        return True
+    else:
+        return False

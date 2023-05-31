@@ -1,6 +1,6 @@
 import pyttsx3
 
-from utils.logging_config import get_logger
+from dronebuddylib.utils.logging_config import get_logger
 
 # Get an instance of a logger
 logger = get_logger()

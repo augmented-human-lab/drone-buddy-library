@@ -4,31 +4,34 @@ import enum
 class ObjectDetectionReturnTypes(enum.Enum):
     """Enum for the return types of the object detection functions."""
     # The object detection function returns a list of objects.
-    LABELS = 0
+    LABELS = "LABELS"
     # The object detection function returns a dictionary of objects.
-    BBOX = 1
+    BBOX = "BBOX"
 
-    CONF = 2
+    CONF = "CONF"
 
-    ALL = 3
+    ALL = "ALL"
 
 
 class DroneCommands(enum.Enum):
     NONE = None
-    TAKEOFF = 0,
-    LAND = 1,
-    FORWARD = 2,
-    BACKWARD = 3,
-    LEFT = 4,
-    RIGHT = 5,
-    UP = 6,
-    DOWN = 7,
-    ROTATE_CLOCKWISE = 8,
-    ROTATE_COUNTER_CLOCKWISE = 9,
-    BATTERY = 10,
-    SPEED = 11,
-    HEIGHT = 12,
-    STOP = 13,
+    TAKE_OFF = "TAKE_OFF",
+    LAND = "LAND",
+    FORWARD = "FORWARD",
+    BACKWARD = "BACKWARD",
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
+    UP = "UP",
+    DOWN = "DOWN",
+    ROTATE_CLOCKWISE = "ROTATE_CLOCKWISE",
+    ROTATE_COUNTER_CLOCKWISE = "ROTATE_COUNTER_CLOCKWISE",
+    BATTERY = "BATTERY",
+    SPEED = "SPEED",
+    HEIGHT = "HEIGHT",
+    STOP = "STOP",
+    DESCRIBE = "DESCRIBE",
+    RECOGNIZE_PEOPLE = "RECOGNIZE_PEOPLE",
+    FLIP = "FLIP",
 
 
 class Language(enum.Enum):
