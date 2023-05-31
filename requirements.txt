@@ -1,5 +1,5 @@
 opencv-python~=4.7.0.72
-vosk~=0.3.45
+vosk~=0.3.44
 pyttsx3~=2.90
 opencv-contrib-python~=4.7.0.72
 requests~=2.28.0
