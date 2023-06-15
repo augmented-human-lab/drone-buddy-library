@@ -11,7 +11,7 @@ import offline.atoms as dbl
 class TestObjectDetection(unittest.TestCase):
 
     def test_upload_image(self):
-        image = cv2.imread('test_image.jpg')
+        image = cv2.imread('test_image_clear.jpg')
 
         labels = dbl.get_label_yolo(image)
         assert len(labels) > 0 and 'chair' in labels

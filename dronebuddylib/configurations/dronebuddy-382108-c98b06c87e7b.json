@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "dronebuddy-382108",
+  "private_key_id": "c98b06c87e7be44af1ed8818581c63ad6ff64b25",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqU6PtTrueUaix\ngvjg5f5WYv5n0za3CBCyDeLQBmdDORgNRyb1Ks1+gtioC6Y97Qu4GvlhkcDSH5MD\n8iTeChUajeT/n8aVKg0NAsN4cRBxjisIFftLahKy/7IKDCiT8FXZuE3aBV35GhMv\nAOxJLkXPLdJzkALr4+RAGiGGn8uOB9+d0qAnnHyAwvtv0rMsQAOKKmnuXvb12O/q\nR6fHjlKwDbW9bsjRCGdRnUPm0excVKLn0tTcf3mNNmKdNbxbRWPNR9hkRqVImQ/O\nlhrm6TAXBYdwupb7CtIVRzSgx5z+rVFAu0LSZpj/pBIQel19+LnhMUzoYzLawtnK\n87t9B6vPAgMBAAECggEAIQQAeQ3zaT9b6zi/hFygnd8ngDmdWAI8tj7h0cAEATBO\nfLhnkUtgNN8pHv3PFh7eUCwOXf7SOQi8xx2HTvD2YUTS+EfgxuY1TGnWOQD1loVf\nyvvzz4z6ne7ZdIAh13dVNNQ4ZwP2UMRgppJPuum4x22S5yqpnk743gISsJVF8Dw+\nIQ+IxaY8DXw2+GsL8nI1trpiUVSI7RL54C5HkP4oOWSPSHaiwO9wVyIL4vnlhLB3\nUqIRTSk5zkATHrOJY54H9cnoqJmR9vCTZ611OHMwS4et9BSJqH/VXlkaQl36rLh+\n6K0c2ZvYUyFW3ZAh+J/A5FkFWGyg7pfomItBdqREbQKBgQDmUsjqNgeFzS/R/8Ms\nzOUU0G/2mJb4/vj3maLONgae1z6G1tIUc6gLDclTxHnUa7DHluaAIO2AnmNvPJQh\nRgaqNqu51tOwTsrjreVLquFUM4kGMOMLcZc5PyF7KzMg4Dx5Tpx0hEXkk3K9MZkn\nz15d2XouEUn0wu4aqgIEHnVjNQKBgQC9UJtNOwaEBcJUDm8twSjPu6vHbLy7Zn0B\nP83LKhiHsWqpbySf+soP0TIocCzbkCcoBb0Q4voMNW3AFdL8e/YD5vVNgaAV/AVx\nMX10UijK1e9Hz6gIN1UmbiyQWZghqbenoMlmx8Ay03pkdcmXSGC27vXeoyW/7W9B\n902hCwwPcwKBgFUvgy3Uw92B8VDbJqW4NnYHTZHIB/aZ3x08jpF0O+idtXuLknGM\nATftZmv7/A9LsTtwnVoAU7dBXYdzwVm5G5fy1nrKcMsBqVqiI29kCSjqUqCejira\nXVMH/WsfpC5hoRxAre8OSQdsXYCKCppFwSI24FCPhmnnescT3+EEHuiNAoGACaXu\nBEWZ02inurjxmZdaiRu7aXJ1O+fBPysNReljTqcQFIqBh1W0rpGuyLjO0HHMTRHd\nzNqEe9LNQRjbo9p9cz12CvksO3KYpGgtSJxXT98PTs2adrC7OjYrN0AZrL2Fipl7\nKi3L8cstValbGMarhycuiKYv6lQjc20zG54Ag1kCgYEAtT6m+FEvNuhpGqfa/eNT\nsFJWn09xr1LP10K8s6B2cjZZa8fmegGHqjMWCeEp4R+aMr6gA7WlFy+D8b3S6hBd\nssnnc/Y1n1IrgMdlUSCTJVDaEM+DFASHtopaDo8w5wqZuRT9ysPT5DomKzcP06py\n8rwdpfEd6zOyXs2DoVPEQic=\n-----END PRIVATE KEY-----\n",
+  "client_email": "speech-to-text@dronebuddy-382108.iam.gserviceaccount.com",
+  "client_id": "111721868809811708692",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speech-to-text%40dronebuddy-382108.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
