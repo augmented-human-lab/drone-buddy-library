@@ -8,7 +8,7 @@ import offline.atoms as dbl
 class TestFaceRecognition(unittest.TestCase):
 
     def test_add_to_the_memory(self):
-        image = cv2.imread('test_image.jpg')
+        image = cv2.imread('test_image_clear.jpg')
         file_path = r"D:\projects\drone-buddy-library\test\123.png"
         # with open(file_path, 'r') as file:
         #     image_file = file.read()
