@@ -1,8 +1,9 @@
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 from .object_detection_yolo import get_label_yolo
 from .object_detection_yolo import init_yolo_engine
 from .object_detection_yolo import init_yolo_engine
+from .object_detection_yolo import get_boxes_yolo
 
 from .speech_2_text import init_speech_to_text_engine
 from .speech_2_text import recognize_command
@@ -19,3 +20,20 @@ from .intent_recgnition import is_addressed_to_drone
 #
 from .face_recognition import find_all_the_faces
 from .face_recognition import add_people_to_memory
+
+from .gesture_recognition import is_pointing
+from .gesture_recognition import is_stop_following
+
+from .hand_detection import get_hand_landmark
+
+from .head_bounding import get_head_bounding_box
+
+from .object_selection import select_pointed_obj
+
+from .track import init_tracker
+from .track import set_target
+from .track import get_tracked_bounding_box
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent))
