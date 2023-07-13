@@ -1,4 +1,4 @@
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 from .online_speech_to_text import init_google_speech_engine
 from .online_speech_to_text import recognize_speech
