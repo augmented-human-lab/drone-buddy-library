@@ -9,7 +9,7 @@ class FlyArounder:
     def __init__(self, tello: Tello, name: str, tracker: Tracker):
         self.tello = tello
         self.tracker = tracker
-        self.img_dir = str(Path(__file__).resolve().parent) + '\\images\\' + name + "\\"
+        self.img_dir = str(Path(__file__).resolve().parent) + '\\memorized_obj_photo\\' + name + "\\"
         if not os.path.exists(self.img_dir):
             os.mkdir(self.img_dir)
         else:
@@ -51,6 +51,8 @@ def fly_around(flyArounder: FlyArounder, frame, box):
     """
     set_target(frame, box, flyArounder.tracker)
     time.sleep(2)
+    # The following angles and distances are derived by real tests 
+    # allowing the drone to fly around the object and take photos from different positions
     flyArounder.cut("0.jpg")
     flyArounder.tello.rotate_counter_clockwise(15)
     flyArounder.tello.move_right(30)

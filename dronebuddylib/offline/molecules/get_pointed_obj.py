@@ -28,9 +28,11 @@ def get_pointed_obj(follower: HandFollower, yoloEngine: YoloEngine):
         
         tipx = result[8][0]
 
-        rotate = tipx - 0.5
+        rotate = tipx - 0.5 # Deviation to the middle
+        # The following threshold values and coefficients are derived by real test,
+        # which could be scaled up and down based on different size of the room
         if rotate < -0.1:
-            cmd = "ccw " + str(int(-rotate * 55))
+            cmd = "ccw " + str(int(-rotate * 55)) # The Angle of rotation is proportional to the degree of deviation
             follower.tello.rotate_counter_clockwise(int(-rotate * 55))
             follower.route.append(cmd)
         if rotate > 0.1:
@@ -38,15 +40,14 @@ def get_pointed_obj(follower: HandFollower, yoloEngine: YoloEngine):
             follower.tello.rotate_clockwise(int(rotate * 55))
             follower.route.append(cmd)
         
-
-        go = (result[5][0] - result[0][0]) * (result[5][0] - result[0][0]) + (result[5][1] - result[0][1]) * (result[5][1] - result[0][1])
+        go = (result[5][0] - result[0][0]) * (result[5][0] - result[0][0]) + (result[5][1] - result[0][1]) * (result[5][1] - result[0][1]) # The palm length 
         if go < 0.01:
             go_count = go_count + 1
         elif go > 0.04:
             go_count = go_count - 1
         else:
             go_count = 0
-        if go_count >= 2:
+        if go_count >= 2: # move forward or backward if the palm is too big or small in two consecutive frames
             cmd = "forward " + str(int((0.02 - go) * 2000))
             follower.tello.move_forward(int((0.02 - go) * 2000))
             follower.route.append(cmd)
@@ -66,4 +67,5 @@ def get_pointed_obj(follower: HandFollower, yoloEngine: YoloEngine):
             cmd = "down " + str(30)
             follower.tello.move_down(30)
             follower.route.append(cmd)
+
     return [], []

@@ -13,6 +13,7 @@ class TestFollowMe(unittest.TestCase):
             tello = Tello()
             tello.connect()
             tello.streamon()
+            tello.set_video_resolution(Tello.RESOLUTION_720P)
             tello.get_frame_read().frame
             time.sleep(4)
             tello.takeoff()
