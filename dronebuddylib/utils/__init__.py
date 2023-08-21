@@ -1,4 +1,4 @@
-__version__ = "1.0.6"
+__version__ = "1.0.8"
 
 from .enums import DroneCommands
 from .enums import Language
