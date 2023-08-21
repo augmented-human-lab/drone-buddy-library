@@ -5,8 +5,6 @@ import cv2
 import offline.atoms as dbl
 
 
-# read input image
-
 
 class TestObjectDetection(unittest.TestCase):
 
