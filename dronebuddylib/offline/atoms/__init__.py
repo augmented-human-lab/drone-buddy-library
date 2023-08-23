@@ -1,22 +1,22 @@
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 
 from .object_detection_yolo import get_label_yolo
 from .object_detection_yolo import init_yolo_engine
 from .object_detection_yolo import init_yolo_engine
 from .object_detection_yolo import get_boxes_yolo
 
-from .speech_2_text import init_speech_to_text_engine
-from .speech_2_text import recognize_command
-from .speech_2_text import recognize_speech
+from .speech_2_text_conversion import init_speech_to_text_engine
+from .speech_2_text_conversion import recognize_command
+from .speech_2_text_conversion import recognize_speech
 
-from .text_2_speech import generate_speech_and_play
-from .text_2_speech import init_text_to_speech_engine
+from .text_2_speech_conversion import generate_speech_and_play
+from .text_2_speech_conversion import init_text_to_speech_engine
 
-from .intent_recgnition import init_intent_recognition_engine
-from .intent_recgnition import recognize_intent
-from .intent_recgnition import get_intent_name
-from .intent_recgnition import get_mentioned_entities
-from .intent_recgnition import is_addressed_to_drone
+from .intent_recognition import init_intent_recognition_engine
+from .intent_recognition import recognize_intent
+from .intent_recognition import get_intent_name
+from .intent_recognition import get_mentioned_entities
+from .intent_recognition import is_addressed_to_drone
 
 from .face_recognition import find_all_the_faces
 from .face_recognition import add_people_to_memory
@@ -30,8 +30,8 @@ from .head_bounding import get_head_bounding_box
 
 from .object_selection import select_pointed_obj
 
-from .track import init_tracker
-from .track import set_target
-from .track import get_tracked_bounding_box
+from .basic_tracking import init_tracker
+from .basic_tracking import set_target
+from .basic_tracking import get_tracked_bounding_box
 
-from .memorize import update_memory
+from .object_memorize import update_memory

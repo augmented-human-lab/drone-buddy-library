@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dronebuddylib.offline.atoms.speech_2_text_conversion &mdash; DroneBuddy Library V1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=7351be05"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            DroneBuddy Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">drone-buddy-library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DroneBuddy Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">dronebuddylib.offline.atoms.speech_2_text_conversion</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dronebuddylib.offline.atoms.speech_2_text_conversion</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">vosk</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">KaldiRecognizer</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.enums</span> <span class="kn">import</span> <span class="n">DroneCommands</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logging_config</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="c1"># Get an instance of a logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+<span class="n">queue</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">:param language: The language of the model. The default is &#39;en-US&#39;. (currently only supports this language)</span>
+<span class="sd">:return: The vosk model.</span>
+
+<span class="sd">need to initialize the model before using the speech to text engine.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="init_speech_to_text_engine">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.speech_2_text_conversion.init_speech_to_text_engine">[docs]</a>
+<span class="k">def</span> <span class="nf">init_speech_to_text_engine</span><span class="p">(</span><span class="n">language</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Initializes a speech-to-text engine using the Vosk model for a given language.</span>
+<span class="sd">     (currently only supports &#39;en-US&#39; language)</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">     - language: a string representing the language code to use (e.g. &#39;en-us&#39;, &#39;fr-fr&#39;)</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">     - a Vosk KaldiRecognizer object that can be used for speech recognition</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="c1"># Define the path to the Vosk model for the given language</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/speechrecognition/vosk-model-small-en-us-0.15&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Load the Vosk model and create a KaldiRecognizer object</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+
+    <span class="c1"># Log that the speech recognition model has been initialized</span>
+    <span class="n">vosk_kaldi_model</span> <span class="o">=</span> <span class="n">KaldiRecognizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Speech Recognition : Initialized speech recognition model&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Return the Vosk KaldiRecognizer object</span>
+    <span class="k">return</span> <span class="n">vosk_kaldi_model</span></div>
+
+
+
+<div class="viewcode-block" id="recognize_speech">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_speech">[docs]</a>
+<span class="k">def</span> <span class="nf">recognize_speech</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">audio_feed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Recognizes a text from an audio feed using a given model.</span>
+
+<span class="sd">          Args:</span>
+<span class="sd">          - model: The vosk model that is returned by the init_speech_to_text_engine().</span>
+<span class="sd">          - audio_feed: a byte string representing the audio feed to recognize, taken by audio_feed.read(num_frames)</span>
+
+<span class="sd">          Returns:</span>
+<span class="sd">          - the text that was recognized, or None if no text was recognized</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">AcceptWaveform</span><span class="p">(</span><span class="n">audio_feed</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Result</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Speech Recognition : Recognized utterance : &#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="recognize_command">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_command">[docs]</a>
+<span class="k">def</span> <span class="nf">recognize_command</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">audio_feed</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Recognizes a command from an audio feed using a given model.</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">       - model: The vosk model that is returned by the init_speech_to_text_engine().</span>
+<span class="sd">       - audio_feed: a byte string representing the audio feed to recognize, taken by audio_feed.read(num_frames)</span>
+
+<span class="sd">       Returns:</span>
+<span class="sd">       - a label indicating the recognized command, or None if no command was recognized</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if the model accepts the audio waveform</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">AcceptWaveform</span><span class="p">(</span><span class="n">audio_feed</span><span class="p">):</span>
+        <span class="c1"># Retrieve the result from the model</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Result</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Speech Recognition : Recognized command : &#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+
+        <span class="c1"># Classify the result and return the label</span>
+        <span class="k">return</span> <span class="n">classify</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="classify">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.speech_2_text_conversion.classify">[docs]</a>
+<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="n">raw_text</span><span class="p">):</span>
+    <span class="n">raw_text</span> <span class="o">=</span> <span class="n">raw_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">json_object</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">json_object</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;take off&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;takeoff&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">TAKEOFF</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;land&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">LAND</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;battery&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">BATTERY</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">UP</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">DOWN</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">STOP</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">LEFT</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">RIGHT</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;forward&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">FORWARD</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;backward&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">BACKWARD</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;battery&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">BATTERY</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;speed&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">SPEED</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">HEIGHT</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;clockwise&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">ROTATE_CLOCKWISE</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;counter clockwise&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">ROTATE_COUNTER_CLOCKWISE</span>
+
+    <span class="k">return</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">NONE</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, NUS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -140,6 +140,7 @@ def get_label_yolo(yolo_engine: YoloEngine, image):
     # Return the list of labels
     return labels
 
+
 def get_boxes_yolo(yolo_engine: YoloEngine, image):
     """
        Get the bounding boxes of objects detected in an image using a YOLO (You Only Look Once) object detection engine.

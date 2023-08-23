@@ -1,12 +1,42 @@
-from dronebuddylib.offline.atoms.track import *
-from djitellopy import Tello
 import os
 import shutil
-import cv2
 import time
 
-class FlyArounder:
+import cv2
+from djitellopy import Tello
+
+from dronebuddylib.offline.atoms.basic_tracking import *
+
+
+class FlyArrounder:
+    """
+      A class representing a drone's flight behavior for capturing images of memorized objects.
+
+      Args:
+          tello (Tello): The Tello drone instance.
+          name (str): The name of the memorized object.
+          tracker (Tracker): The object tracker instance for tracking the memorized object.
+
+      Attributes:
+          tello (Tello): The Tello drone instance.
+          tracker (Tracker): The object tracker instance for tracking the memorized object.
+          img_dir (str): The directory to store captured images of the memorized object.
+
+      Example:
+          tello_instance = Tello()
+          tracker_instance = Tracker()
+          fly_arrounder = FlyArrounder(tello_instance, "my_object", tracker_instance)
+          fly_arrounder.cut("image_1.jpg")
+      """
     def __init__(self, tello: Tello, name: str, tracker: Tracker):
+        """
+                Initializes the FlyArrounder instance.
+
+                Args:
+                    tello (Tello): The Tello drone instance.
+                    name (str): The name of the memorized object.
+                    tracker (Tracker): The object tracker instance for tracking the memorized object.
+                """
         self.tello = tello
         self.tracker = tracker
         self.img_dir = str(Path(__file__).resolve().parent) + '\\memorized_obj_photo\\' + name + "\\"
@@ -15,8 +45,14 @@ class FlyArounder:
         else:
             shutil.rmtree(self.img_dir)
             os.mkdir(self.img_dir)
-    
+
     def cut(self, img_name: str):
+        """
+               Captures an image of the tracked memorized object from the drone's camera feed.
+
+               Args:
+                   img_name (str): The name to be given to the captured image.
+        """
         frame = self.tello.get_frame_read().frame
         xywh = get_tracked_bounding_box(frame, self.tracker)
         if (xywh == False):
@@ -28,7 +64,8 @@ class FlyArounder:
         cut_img = frame[min_row:max_row, min_col:max_col]
         cv2.imwrite(self.img_dir + img_name, cut_img)
 
-def init_flyArounder(tello: Tello, name: str, tracker: Tracker):
+
+def init_fly_arrounder(tello: Tello, name: str, tracker: Tracker):
     """initiate an engine for flying around the object.
 
     Args:
@@ -37,48 +74,46 @@ def init_flyArounder(tello: Tello, name: str, tracker: Tracker):
         tracker (Tracker): an initialized tracker
 
     Returns:
-        FlyArounder: the initialized FlyArounder engine
+        FlyArrounder: the initialized FlyArounder engine
     """
-    return FlyArounder(tello, name, tracker)
+    return FlyArrounder(tello, name, tracker)
 
-def fly_around(flyArounder: FlyArounder, frame, box):
+
+def fly_around(fly_arrounder: FlyArrounder, frame, box):
     """Fly around and take photos for the object for memorizing
 
     Args:
-        flyArounder (FlyArounder): the initialized FlyArounder engine
+        fly_arrounder (FlyArrounder): the initialized FlyArounder engine
         frame (list): the current frame
         box (list): the bounding box around the object in this frame
     """
-    set_target(frame, box, flyArounder.tracker)
+    set_target(frame, box, fly_arrounder.tracker)
     time.sleep(2)
     # The following angles and distances are derived by real tests 
     # allowing the drone to fly around the object and take photos from different positions
-    flyArounder.cut("0.jpg")
-    flyArounder.tello.rotate_counter_clockwise(15)
-    flyArounder.tello.move_right(30)
-    flyArounder.cut("1.jpg")
-    flyArounder.tello.rotate_counter_clockwise(15)
-    flyArounder.tello.move_right(30)
-    flyArounder.cut("2.jpg")
-    flyArounder.tello.move_left(30)
-    flyArounder.tello.rotate_clockwise(15)
-    flyArounder.tello.move_left(30)
-    flyArounder.tello.rotate_clockwise(30)
-    flyArounder.tello.move_left(30)
-    flyArounder.cut("3.jpg")
-    flyArounder.tello.rotate_clockwise(15)
-    flyArounder.tello.move_left(30)
-    flyArounder.cut("4.jpg")
-    flyArounder.tello.move_right(30)
-    flyArounder.tello.move_forward(20)
-    flyArounder.cut("8.jpg")
-    flyArounder.tello.move_back(50)
-    flyArounder.cut("5.jpg")
-    flyArounder.tello.move_up(30)
-    flyArounder.cut("6.jpg")
-    flyArounder.tello.move_down(50)
-    flyArounder.cut("7.jpg")
+    fly_arrounder.cut("0.jpg")
+    fly_arrounder.tello.rotate_counter_clockwise(15)
+    fly_arrounder.tello.move_right(30)
+    fly_arrounder.cut("1.jpg")
+    fly_arrounder.tello.rotate_counter_clockwise(15)
+    fly_arrounder.tello.move_right(30)
+    fly_arrounder.cut("2.jpg")
+    fly_arrounder.tello.move_left(30)
+    fly_arrounder.tello.rotate_clockwise(15)
+    fly_arrounder.tello.move_left(30)
+    fly_arrounder.tello.rotate_clockwise(30)
+    fly_arrounder.tello.move_left(30)
+    fly_arrounder.cut("3.jpg")
+    fly_arrounder.tello.rotate_clockwise(15)
+    fly_arrounder.tello.move_left(30)
+    fly_arrounder.cut("4.jpg")
+    fly_arrounder.tello.move_right(30)
+    fly_arrounder.tello.move_forward(20)
+    fly_arrounder.cut("8.jpg")
+    fly_arrounder.tello.move_back(50)
+    fly_arrounder.cut("5.jpg")
+    fly_arrounder.tello.move_up(30)
+    fly_arrounder.cut("6.jpg")
+    fly_arrounder.tello.move_down(50)
+    fly_arrounder.cut("7.jpg")
     return
-        
-        
-    
