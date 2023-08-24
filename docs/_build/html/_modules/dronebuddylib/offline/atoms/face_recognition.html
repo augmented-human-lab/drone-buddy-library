@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dronebuddylib.offline.atoms.face_recognition &mdash; DroneBuddy Library V1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=7351be05"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            DroneBuddy Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">drone-buddy-library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DroneBuddy Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">dronebuddylib.offline.atoms.face_recognition</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dronebuddylib.offline.atoms.face_recognition</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">face_recognition</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.exceptions</span> <span class="kn">import</span> <span class="n">FileWritingException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logging_config</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="c1"># Get an instance of a logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">in order to get the trained json file follow the https://snips-nlu.readthedocs.io/en/latest/tutorial.html</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="process_frame_for_recognition">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.process_frame_for_recognition">[docs]</a>
+<span class="k">def</span> <span class="nf">process_frame_for_recognition</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Preprocesses a video frame for faster face recognition processing.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">         frame (numpy.ndarray): The input frame to be processed.</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">         numpy.ndarray: The processed frame ready for face recognition.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="c1"># Resize frame of video to 1/4 size for faster face recognition processing</span>
+    <span class="n">small_frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">fx</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+    <span class="c1"># Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)</span>
+    <span class="c1"># rgb_small_frame = small_frame[:, :, ::-1]</span>
+    <span class="n">rgb_small_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">small_frame</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Face Recognition : shape of the frame : &quot;</span><span class="p">,</span> <span class="n">rgb_small_frame</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rgb_small_frame</span></div>
+
+
+
+<div class="viewcode-block" id="load_known_face_names">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.load_known_face_names">[docs]</a>
+<span class="k">def</span> <span class="nf">load_known_face_names</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Loads a list of known face names from a text file.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          list: List of known face names.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+    <span class="c1"># load the user list from known_faces.txt</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/facerecognition/known_names.txt&quot;</span><span class="p">)</span>
+    <span class="n">known_face_names</span> <span class="o">=</span> <span class="n">read_file_into_list</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">known_face_names</span></div>
+
+
+
+<div class="viewcode-block" id="load_known_face_encodings">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.load_known_face_encodings">[docs]</a>
+<span class="k">def</span> <span class="nf">load_known_face_encodings</span><span class="p">(</span><span class="n">known_face_names</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Loads known face encodings corresponding to the provided face names.</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">           known_face_names (list): List of known face names.</span>
+
+<span class="sd">       Returns:</span>
+<span class="sd">           list: List of known face encodings.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+    <span class="n">known_face_encodings</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">known_face_names</span><span class="p">:</span>
+        <span class="n">face_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/facerecognition/images/&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+        <span class="n">face_image</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">load_image_file</span><span class="p">(</span><span class="n">face_path</span><span class="p">)</span>
+        <span class="n">face_encoding</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">face_encodings</span><span class="p">(</span><span class="n">face_image</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">known_face_encodings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">face_encoding</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">known_face_encodings</span></div>
+
+
+
+<div class="viewcode-block" id="read_file_into_list">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.read_file_into_list">[docs]</a>
+<span class="k">def</span> <span class="nf">read_file_into_list</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Reads lines from a file and returns them as a list.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">         filename (str): Path to the file to be read.</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">         list: List of lines read from the file.</span>
+<span class="sd">     Raises:</span>
+<span class="sd">         FileNotFoundError: If the specified file is not found.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="n">field_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Open the file in read mode</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="c1"># Read the contents of the file line by line</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">lines_without_newline</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines_without_newline</span> <span class="k">if</span> <span class="n">line</span><span class="p">]</span>
+
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;The specified file is not found.&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+    <span class="c1"># Return the list of fields</span>
+
+
+<div class="viewcode-block" id="get_video_feed">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.get_video_feed">[docs]</a>
+<span class="k">def</span> <span class="nf">get_video_feed</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">face_locations</span><span class="p">,</span> <span class="n">face_names</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Displays the video feed with annotated face boxes and names.</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">          frame (numpy.ndarray): The frame to display.</span>
+<span class="sd">          face_locations (list): List of face locations.</span>
+<span class="sd">          face_names (list): List of recognized face names.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">left</span><span class="p">),</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">face_locations</span><span class="p">,</span> <span class="n">face_names</span><span class="p">):</span>
+        <span class="c1"># Scale back up face locations since the frame we detected in was scaled to 1/4 size</span>
+        <span class="n">top</span> <span class="o">*=</span> <span class="mi">4</span>
+        <span class="n">right</span> <span class="o">*=</span> <span class="mi">4</span>
+        <span class="n">bottom</span> <span class="o">*=</span> <span class="mi">4</span>
+        <span class="n">left</span> <span class="o">*=</span> <span class="mi">4</span>
+
+        <span class="c1"># Draw a box around the face</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">),</span> <span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Draw a label with a name below the face</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="mi">35</span><span class="p">),</span> <span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FILLED</span><span class="p">)</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_DUPLEX</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="mi">6</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">-</span> <span class="mi">6</span><span class="p">),</span> <span class="n">font</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Display the resulting image</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;Video&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_all_the_faces">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.find_all_the_faces">[docs]</a>
+<span class="k">def</span> <span class="nf">find_all_the_faces</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">show_feed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detects and recognizes faces in a given video frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The input frame to process.</span>
+<span class="sd">            show_feed (bool): Whether to display the annotated video feed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of recognized face names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="n">processed_frame</span> <span class="o">=</span> <span class="n">process_frame_for_recognition</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="c1"># Find all the faces and face encodings in the current frame of video</span>
+    <span class="n">face_locations</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">face_locations</span><span class="p">(</span><span class="n">processed_frame</span><span class="p">)</span>
+    <span class="n">face_encodings</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">face_encodings</span><span class="p">(</span><span class="n">processed_frame</span><span class="p">,</span> <span class="n">face_locations</span><span class="p">)</span>
+
+    <span class="c1"># load the user list from memory</span>
+    <span class="n">face_names</span> <span class="o">=</span> <span class="n">load_known_face_names</span><span class="p">()</span>
+    <span class="c1"># load the encodings</span>
+    <span class="n">known_face_encodings</span> <span class="o">=</span> <span class="n">load_known_face_encodings</span><span class="p">(</span><span class="n">face_names</span><span class="p">)</span>
+
+    <span class="n">recognized_faces</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">face_encoding</span> <span class="ow">in</span> <span class="n">face_encodings</span><span class="p">:</span>
+        <span class="c1"># See if the face is a match for the known face(s)</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">compare_faces</span><span class="p">(</span><span class="n">known_face_encodings</span><span class="p">,</span> <span class="n">face_encoding</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+
+        <span class="c1"># If a match was found in known_face_encodings, just use the first one.</span>
+        <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">first_match_index</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1">#    name = known_face_names[first_match_index]</span>
+
+        <span class="c1"># Or instead, use the known face with the smallest distance to the new face</span>
+        <span class="n">face_distances</span> <span class="o">=</span> <span class="n">face_recognition</span><span class="o">.</span><span class="n">face_distance</span><span class="p">(</span><span class="n">known_face_encodings</span><span class="p">,</span> <span class="n">face_encoding</span><span class="p">)</span>
+        <span class="n">best_match_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">face_distances</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matches</span><span class="p">[</span><span class="n">best_match_index</span><span class="p">]:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">face_names</span><span class="p">[</span><span class="n">best_match_index</span><span class="p">]</span>
+
+        <span class="n">recognized_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show_feed</span><span class="p">:</span>
+        <span class="n">get_video_feed</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">face_locations</span><span class="p">,</span> <span class="n">recognized_faces</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">recognized_faces</span></div>
+
+
+
+<div class="viewcode-block" id="add_people_to_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.face_recognition.add_people_to_memory">[docs]</a>
+<span class="k">def</span> <span class="nf">add_people_to_memory</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">image_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Adds a new person&#39;s name and image to the recognition memory.</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">          name (str): Name of the new person.</span>
+<span class="sd">          image_path (str): Path to the image of the new person.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          bool: True if the addition was successful, False otherwise.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+
+    <span class="c1"># add name to the known_names.txt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">text_file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/facerecognition/known_names.txt&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">text_file_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error while writing to the file : &quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">FileWritingException</span><span class="p">(</span><span class="s2">&quot;Error while writing to the file : &quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="c1"># add file to the images folder</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">new_file_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/facerecognition/images/&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+        <span class="n">loaded_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">new_file_name</span><span class="p">,</span> <span class="n">loaded_image</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">FileWritingException</span><span class="p">(</span><span class="s2">&quot;Error while writing to the file : &quot;</span><span class="p">,</span> <span class="n">new_file_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, NUS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

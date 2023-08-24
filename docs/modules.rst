@@ -6,5 +6,9 @@ drone-buddy-library
 
    Test
    dronebuddylib
+   dronebuddylib.offline.atoms
+   dronebuddylib.offline.molecules
+   dronebuddylib.online.atoms
+   dronebuddylib.online.molecules
    main
    setup

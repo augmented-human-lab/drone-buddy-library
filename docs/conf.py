@@ -10,6 +10,11 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../dronebuddylib'))
+sys.path.insert(0, os.path.abspath('../dronebuddylib/offline'))
+sys.path.insert(0, os.path.abspath('../dronebuddylib/offline/molecules'))
+sys.path.insert(0, os.path.abspath('../dronebuddylib/offline/atoms'))
+sys.path.insert(0, os.path.abspath('../dronebuddylib/online'))
+sys.path.insert(0, os.path.abspath('../dronebuddylib/online/atoms'))
 
 
 project = 'DroneBuddy Library'

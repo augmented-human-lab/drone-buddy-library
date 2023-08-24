@@ -1,85 +1,85 @@
-Test package
+test package
 ============
 
 Submodules
 ----------
 
-Test.test\_face\_recognition module
+test.test\_face\_recognition module
 -----------------------------------
 
-.. automodule:: Test.test_face_recognition
+.. automodule:: test.test_face_recognition
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_follow\_me module
+test.test\_follow\_me module
 ----------------------------
 
-.. automodule:: Test.test_follow_me
+.. automodule:: test.test_follow_me
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_intent\_recognition module
+test.test\_intent\_recognition module
 -------------------------------------
 
-.. automodule:: Test.test_intent_recognition
+.. automodule:: test.test_intent_recognition
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_me module
+test.test\_me module
 --------------------
 
-.. automodule:: Test.test_me
+.. automodule:: test.test_me
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_memorize module
+test.test\_memorize module
 --------------------------
 
-.. automodule:: Test.test_memorize
+.. automodule:: test.test_memorize
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_objectdetection module
+test.test\_objectdetection module
 ---------------------------------
 
-.. automodule:: Test.test_objectdetection
+.. automodule:: test.test_objectdetection
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_ocr module
+test.test\_ocr module
 ---------------------
 
-.. automodule:: Test.test_ocr
+.. automodule:: test.test_ocr
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_speech2text module
+test.test\_speech2text module
 -----------------------------
 
-.. automodule:: Test.test_speech2text
+.. automodule:: test.test_speech2text
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_text\_2\_speech module
+test.test\_text\_2\_speech module
 ---------------------------------
 
-.. automodule:: Test.test_text_2_speech
+.. automodule:: test.test_text_2_speech
    :members:
    :undoc-members:
    :show-inheritance:
 
-Test.test\_update\_version module
+test.test\_update\_version module
 ---------------------------------
 
-.. automodule:: Test.test_update_version
+.. automodule:: test.test_update_version
    :members:
    :undoc-members:
    :show-inheritance:
@@ -87,7 +87,7 @@ Test.test\_update\_version module
 Module contents
 ---------------
 
-.. automodule:: Test
+.. automodule:: test
    :members:
    :undoc-members:
    :show-inheritance:

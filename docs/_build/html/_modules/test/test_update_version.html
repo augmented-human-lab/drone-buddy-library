@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test.test_update_version &mdash; DroneBuddy Library V1 documentation</title>
+  <title>test.test_update_version &mdash; DroneBuddy Library V1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -59,7 +59,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">Test.test_update_version</li>
+      <li class="breadcrumb-item active">test.test_update_version</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -68,7 +68,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for Test.test_update_version</h1><div class="highlight"><pre>
+  <h1>Source code for test.test_update_version</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 
 <span class="n">init_file_paths</span> <span class="o">=</span> <span class="p">[</span>
@@ -84,7 +84,7 @@
 
 
 <div class="viewcode-block" id="change_init_version">
-<a class="viewcode-back" href="../../Test.html#Test.test_update_version.change_init_version">[docs]</a>
+<a class="viewcode-back" href="../../test.html#test.test_update_version.change_init_version">[docs]</a>
 <span class="k">def</span> <span class="nf">change_init_version</span><span class="p">(</span><span class="n">new_version</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">init_file_paths</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -96,7 +96,7 @@
 
 
 <div class="viewcode-block" id="change_setup_version">
-<a class="viewcode-back" href="../../Test.html#Test.test_update_version.change_setup_version">[docs]</a>
+<a class="viewcode-back" href="../../test.html#test.test_update_version.change_setup_version">[docs]</a>
 <span class="k">def</span> <span class="nf">change_setup_version</span><span class="p">(</span><span class="n">new_version</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">setup_file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
