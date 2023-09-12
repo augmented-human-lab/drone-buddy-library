@@ -9,7 +9,15 @@ import os
 
 
 class TrackEngine:
+    """
+     Description of the TrackEngine class.
+     """
+
     def __init__(self):
+        """
+               Description of the constructor.
+               """
+
         tracker_name = 'tomp'
         tracker_params = 'tomp101'
         tracker_creater = Tracker(tracker_name, tracker_params)
@@ -23,6 +31,9 @@ class TrackEngine:
 
 
 def _build_init_info(box):
+    """
+           Description of the constructor.
+           """
     return {'init_bbox': box, 'init_object_ids': [1, ], 'object_ids': [1, ],
             'sequence_object_ids': [1, ]}
 

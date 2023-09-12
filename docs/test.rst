@@ -11,6 +11,7 @@ test.test\_face\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_follow\_me module
 ----------------------------
@@ -19,6 +20,7 @@ test.test\_follow\_me module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_intent\_recognition module
 -------------------------------------
@@ -27,6 +29,7 @@ test.test\_intent\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_me module
 --------------------
@@ -35,6 +38,7 @@ test.test\_me module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_memorize module
 --------------------------
@@ -43,6 +47,7 @@ test.test\_memorize module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_objectdetection module
 ---------------------------------
@@ -51,6 +56,7 @@ test.test\_objectdetection module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_ocr module
 ---------------------
@@ -59,6 +65,7 @@ test.test\_ocr module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_speech2text module
 -----------------------------
@@ -67,6 +74,7 @@ test.test\_speech2text module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_text\_2\_speech module
 ---------------------------------
@@ -75,6 +83,7 @@ test.test\_text\_2\_speech module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 test.test\_update\_version module
 ---------------------------------
@@ -83,6 +92,7 @@ test.test\_update\_version module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -91,3 +101,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

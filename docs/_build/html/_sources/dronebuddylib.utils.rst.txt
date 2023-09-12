@@ -11,6 +11,7 @@ dronebuddylib.utils.enums module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.utils.exceptions module
 -------------------------------------
@@ -19,6 +20,7 @@ dronebuddylib.utils.exceptions module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.utils.logging\_config module
 ------------------------------------------
@@ -27,6 +29,7 @@ dronebuddylib.utils.logging\_config module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -35,3 +38,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

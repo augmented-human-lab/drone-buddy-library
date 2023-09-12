@@ -7,7 +7,9 @@ from djitellopy import Tello
 
 from dronebuddylib.offline.atoms.basic_tracking import *
 
-
+"""
+This is the docstring for the dronebuddylib.online.molecules module.
+"""
 class FlyArrounder:
     """
       A class representing a drone's flight behavior for capturing images of memorized objects.

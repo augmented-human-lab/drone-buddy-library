@@ -11,6 +11,7 @@ dronebuddylib.offline.molecules.fly\_around module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.molecules.follow\_me module
 -------------------------------------------------
@@ -19,6 +20,7 @@ dronebuddylib.offline.molecules.follow\_me module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.molecules.follower\_engine module
 -------------------------------------------------------
@@ -27,6 +29,7 @@ dronebuddylib.offline.molecules.follower\_engine module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.molecules.hand\_follower\_engine module
 -------------------------------------------------------------
@@ -35,6 +38,7 @@ dronebuddylib.offline.molecules.hand\_follower\_engine module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.molecules.object\_pointer\_engine module
 --------------------------------------------------------------
@@ -43,6 +47,7 @@ dronebuddylib.offline.molecules.object\_pointer\_engine module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -51,3 +56,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

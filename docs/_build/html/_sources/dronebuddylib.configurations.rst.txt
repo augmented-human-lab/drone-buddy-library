@@ -11,6 +11,7 @@ dronebuddylib.configurations.config module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -19,3 +20,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

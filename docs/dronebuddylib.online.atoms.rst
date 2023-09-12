@@ -11,6 +11,7 @@ dronebuddylib.online.atoms.online\_conversation\_generation module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.online.atoms.online\_speech\_2\_text\_conversion module
 ---------------------------------------------------------------------
@@ -19,6 +20,7 @@ dronebuddylib.online.atoms.online\_speech\_2\_text\_conversion module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.online.atoms.online\_text\_recognition module
 -----------------------------------------------------------
@@ -27,6 +29,7 @@ dronebuddylib.online.atoms.online\_text\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -35,3 +38,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

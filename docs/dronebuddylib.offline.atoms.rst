@@ -11,6 +11,7 @@ dronebuddylib.offline.atoms.basic\_tracking module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.face\_recognition module
 ----------------------------------------------------
@@ -19,6 +20,7 @@ dronebuddylib.offline.atoms.face\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.gesture\_recognition module
 -------------------------------------------------------
@@ -27,6 +29,7 @@ dronebuddylib.offline.atoms.gesture\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.hand\_control module
 ------------------------------------------------
@@ -35,6 +38,7 @@ dronebuddylib.offline.atoms.hand\_control module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.hand\_detection module
 --------------------------------------------------
@@ -43,6 +47,7 @@ dronebuddylib.offline.atoms.hand\_detection module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.head\_bounding module
 -------------------------------------------------
@@ -51,6 +56,7 @@ dronebuddylib.offline.atoms.head\_bounding module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.intent\_recognition module
 ------------------------------------------------------
@@ -59,6 +65,7 @@ dronebuddylib.offline.atoms.intent\_recognition module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.intent\_recognition\_1 module
 ---------------------------------------------------------
@@ -67,6 +74,7 @@ dronebuddylib.offline.atoms.intent\_recognition\_1 module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.object\_detection\_yolo module
 ----------------------------------------------------------
@@ -75,6 +83,7 @@ dronebuddylib.offline.atoms.object\_detection\_yolo module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.object\_memorize module
 ---------------------------------------------------
@@ -83,6 +92,7 @@ dronebuddylib.offline.atoms.object\_memorize module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.object\_selection module
 ----------------------------------------------------
@@ -91,6 +101,7 @@ dronebuddylib.offline.atoms.object\_selection module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.recognize\_hand module
 --------------------------------------------------
@@ -99,6 +110,7 @@ dronebuddylib.offline.atoms.recognize\_hand module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.speech\_2\_text\_conversion module
 --------------------------------------------------------------
@@ -107,6 +119,7 @@ dronebuddylib.offline.atoms.speech\_2\_text\_conversion module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 dronebuddylib.offline.atoms.text\_2\_speech\_conversion module
 --------------------------------------------------------------
@@ -115,6 +128,7 @@ dronebuddylib.offline.atoms.text\_2\_speech\_conversion module
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:
 
 Module contents
 ---------------
@@ -123,3 +137,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :private-members:

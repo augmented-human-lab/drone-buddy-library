@@ -2,15 +2,9 @@ drone-buddy-library
 ===================
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 4
 
-   Test
    dronebuddylib
-   dronebuddylib.offline
-   dronebuddylib.offline.atoms
-   dronebuddylib.offline.molecules
-   dronebuddylib.online
-   dronebuddylib.online.atoms
-   dronebuddylib.online.molecules
    main
    setup
+   test
