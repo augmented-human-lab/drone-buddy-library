@@ -2,7 +2,7 @@ import unittest
 
 import cv2
 
-import offline.atoms as dbl
+import dronebuddylib.offline.atoms as dbl
 
 
 class TestFaceRecognition(unittest.TestCase):
