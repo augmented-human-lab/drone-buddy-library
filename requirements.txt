@@ -13,7 +13,6 @@ packaging~=23.0
 pyparsing~=3.0.9
 
 
-PyAudio~=0.2.13
 dronebuddylib~=1.0.7
 djitellopy~=2.5.0
 google~=3.0.0
