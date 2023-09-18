@@ -12,11 +12,11 @@ from .speech_2_text_conversion import recognize_speech
 from .text_2_speech_conversion import generate_speech_and_play
 from .text_2_speech_conversion import init_text_to_speech_engine
 
-from .intent_recognition import init_intent_recognition_engine
-from .intent_recognition import recognize_intent
-from .intent_recognition import get_intent_name
-from .intent_recognition import get_mentioned_entities
-from .intent_recognition import is_addressed_to_drone
+# from .intent_recognition import init_intent_recognition_engine
+# from .intent_recognition import recognize_intent
+# from .intent_recognition import get_intent_name
+# from .intent_recognition import get_mentioned_entities
+# from .intent_recognition import is_addressed_to_drone
 
 from .face_recognition import find_all_the_faces
 from .face_recognition import add_people_to_memory
