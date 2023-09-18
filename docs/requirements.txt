@@ -21,4 +21,9 @@ matplotlib~=3.7.2
 tqdm~=4.66.1
 mediapipe~=0.10.3
 sphinx-rtd-theme==1.1.0b3
+sphinx.ext.autodoc
+sphinx.ext.viewcode
+phinx.ext.napoleon
+sphinx_autodoc_typehints
+
 
