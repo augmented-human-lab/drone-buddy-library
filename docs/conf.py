@@ -21,7 +21,7 @@ release = 'V1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx_rtd_theme", "sphinx.ext.viewcode" , "sphinx.ext.napoleon","sphinx_autodoc_typehints"]
+extensions = ["sphinx.ext.autodoc", "alabaster", "sphinx.ext.viewcode" , "sphinx.ext.napoleon","sphinx_autodoc_typehints"]
 # Extension Settings
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 html_show_sourcelink = False  # Remove 'view source code' from top of page (for html, not python)
@@ -36,5 +36,5 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'dist/*', 'setup.py' ,'v
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'
 html_static_path = ['_static']
