@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
-
-sys.path.append(str(Path(__file__).resolve().parent) + '\\resources\\tracking')
-from dronebuddylib.offline.atoms.resources.tracking.pytracking.evaluation import Tracker
 import cv2
 import shutil
 import os
+
+from dronebuddylib.offline.atoms.resources.tracking.pytracking.evaluation import Tracker
+sys.path.append(str(Path(__file__).resolve().parent) + '\\resources\\tracking')
 
 
 class TrackEngine:

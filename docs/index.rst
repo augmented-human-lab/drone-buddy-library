@@ -1,16 +1,14 @@
-.. DroneBuddy Library documentation master file, created by
-   sphinx-quickstart on Tue Aug 22 20:15:13 2023.
+.. dronebuddy documentation master file, created by
+   sphinx-quickstart on Mon Sep 18 15:51:53 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to DroneBuddy Library's documentation!
-==============================================
+Welcome to dronebuddy's documentation!
+======================================
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 2
    :caption: Contents:
-
-   modules
 
 
 
