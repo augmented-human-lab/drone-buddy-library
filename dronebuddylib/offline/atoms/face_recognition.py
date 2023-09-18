@@ -9,8 +9,22 @@ from dronebuddylib.utils.logging_config import get_logger
 # Get an instance of a logger
 logger = get_logger()
 
+'''
+in order to get the trained json file follow the https://snips-nlu.readthedocs.io/en/latest/tutorial.html
+'''
+
 
 def process_frame_for_recognition(frame):
+    """
+     Preprocesses a video frame for faster face recognition processing.
+
+     Args:
+         frame (numpy.ndarray): The input frame to be processed.
+
+     Returns:
+         numpy.ndarray: The processed frame ready for face recognition.
+     """
+
     # Resize frame of video to 1/4 size for faster face recognition processing
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
@@ -22,6 +36,12 @@ def process_frame_for_recognition(frame):
 
 
 def load_known_face_names():
+    """
+      Loads a list of known face names from a text file.
+
+      Returns:
+          list: List of known face names.
+      """
     # load the user list from known_faces.txt
     path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
     known_face_names = read_file_into_list(path)
@@ -29,6 +49,15 @@ def load_known_face_names():
 
 
 def load_known_face_encodings(known_face_names):
+    """
+       Loads known face encodings corresponding to the provided face names.
+
+       Args:
+           known_face_names (list): List of known face names.
+
+       Returns:
+           list: List of known face encodings.
+       """
     known_face_encodings = []
     for name in known_face_names:
         face_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/images/" + name + ".jpg")
@@ -39,6 +68,17 @@ def load_known_face_encodings(known_face_names):
 
 
 def read_file_into_list(filename):
+    """
+     Reads lines from a file and returns them as a list.
+
+     Args:
+         filename (str): Path to the file to be read.
+
+     Returns:
+         list: List of lines read from the file.
+     Raises:
+         FileNotFoundError: If the specified file is not found.
+     """
     field_list = []
     # Open the file in read mode
     try:
@@ -54,6 +94,17 @@ def read_file_into_list(filename):
 
 
 def get_video_feed(frame, face_locations, face_names):
+    """
+      Displays the video feed with annotated face boxes and names.
+
+      Args:
+          frame (numpy.ndarray): The frame to display.
+          face_locations (list): List of face locations.
+          face_names (list): List of recognized face names.
+
+      Returns:
+          None
+      """
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
         top *= 4
@@ -73,6 +124,16 @@ def get_video_feed(frame, face_locations, face_names):
 
 
 def find_all_the_faces(frame, show_feed=False):
+    """
+        Detects and recognizes faces in a given video frame.
+
+        Args:
+            frame (numpy.ndarray): The input frame to process.
+            show_feed (bool): Whether to display the annotated video feed.
+
+        Returns:
+            list: List of recognized face names.
+        """
     processed_frame = process_frame_for_recognition(frame)
     # Find all the faces and face encodings in the current frame of video
     face_locations = face_recognition.face_locations(processed_frame)
@@ -110,6 +171,17 @@ def find_all_the_faces(frame, show_feed=False):
 
 
 def add_people_to_memory(name, image_path):
+    """
+      Adds a new person's name and image to the recognition memory.
+
+      Args:
+          name (str): Name of the new person.
+          image_path (str): Path to the image of the new person.
+
+      Returns:
+          bool: True if the addition was successful, False otherwise.
+      """
+
     # add name to the known_names.txt
     try:
         text_file_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")

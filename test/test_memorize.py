@@ -20,14 +20,14 @@ class TestMemorize(unittest.TestCase):
             tello.takeoff()
             tello.move_up(80)
             yoloEngine = dbl_atoms.init_yolo_engine(r"C:\Users\wangz\drone\yolov3.weights")
-            handFollower = dbl_molecules.init_handFollower(tello)
+            handFollower = dbl_molecules.init_hand_follower(tello)
             frame, bounding_box = dbl_molecules.get_pointed_obj(handFollower, yoloEngine)
             print(bounding_box)
             if frame == []:
                 tello.land()
                 return
             tracker = dbl_atoms.init_tracker(r"C:\Users\wangz\drone")
-            flyArounder = dbl_molecules.init_flyArounder(tello, "cup", tracker)
+            flyArounder = dbl_molecules.init_fly_arrounder(tello, "cup", tracker)
             dbl_molecules.fly_around(flyArounder, frame, bounding_box)
             tello.land()
             tello.streamoff()

@@ -13,6 +13,23 @@ p_time = 0
 
 
 def count_fingers(frame, show_feedback=False):
+    """
+        Counts the number of raised fingers in a hand shown in a video frame.
+
+        Args:
+            frame (numpy.ndarray): The input frame containing the hand to be analyzed.
+            show_feedback (bool): Whether to display the annotated video frame.
+
+        Returns:
+            int: The count of raised fingers in the hand.
+
+        Notes:
+            This function assumes the use of the MediaPipe library for hand tracking.
+
+        Example:
+            finger_count = count_fingers(frame, show_feedback=True)
+        """
+
     global p_time
 
     c_time = time.time()

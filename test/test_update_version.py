@@ -1,11 +1,13 @@
 import re
 
-init_file_paths = [r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\configurations\__init__.py',
-                   r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\offline\atoms\__init__.py',
-                   r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\offline\__init__.py',
-                   r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\online\atoms\__init__.py',
-                   r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\__init__.py',
-                   r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\utils\__init__.py']
+init_file_paths = [
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\configurations\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\offline\atoms\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\offline\molecules\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\offline\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\online\atoms\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\__init__.py',
+    r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\dronebuddylib\utils\__init__.py']
 
 setup_file_path = r'C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\setup.py'
 
@@ -28,6 +30,6 @@ def change_setup_version(new_version):
 
 
 if __name__ == '__main__':
-    new_version = '1.0.6'
+    new_version = '1.0.7'
     change_init_version(new_version)
     change_setup_version(new_version)
