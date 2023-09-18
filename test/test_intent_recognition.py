@@ -1,6 +1,6 @@
 import unittest
 
-import offline.atoms as dbl
+import dronebuddylib.offline.atoms as dbl
 
 
 class MyTestCase(unittest.TestCase):
