@@ -26,5 +26,7 @@ alabaster==0.7.13
 sphinx_autodoc_typehints==1.24.0
 google-cloud-speech==2.21.0
 google-cloud-vision==3.4.4
+snips_nlu==0.20.2
+
 
 
