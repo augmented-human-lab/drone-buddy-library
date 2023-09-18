@@ -13,6 +13,13 @@ packaging~=23.0
 pyparsing~=3.0.9
 
 
-
-
+PyAudio~=0.2.13
+dronebuddylib~=1.0.7
+djitellopy~=2.5.0
+google~=3.0.0
+openai~=0.28.0
+Pillow~=10.0.0
+matplotlib~=3.7.2
+tqdm~=4.66.1
+mediapipe~=0.10.3
 
