@@ -20,7 +20,7 @@ Pillow~=10.0.0
 matplotlib~=3.7.2
 tqdm~=4.66.1
 mediapipe~=0.10.3
-sphinx-rtd-theme==1.1.0b3
+alabaster==0.7.13
 sphinx_autodoc_typehints==1.24.0
 
 
