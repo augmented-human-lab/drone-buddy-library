@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>dronebuddylib.offline.atoms package &#8212; DroneBuddy Library V1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=7351be05"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="dronebuddylib.offline.molecules package" href="dronebuddylib.offline.molecules.html" />
+    <link rel="prev" title="drone-buddy-library" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="dronebuddylib-offline-atoms-package">
+<h1>dronebuddylib.offline.atoms package<a class="headerlink" href="#dronebuddylib-offline-atoms-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-basic-tracking-module">
+<h2>dronebuddylib.offline.atoms.basic_tracking module<a class="headerlink" href="#dronebuddylib-offline-atoms-basic-tracking-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-face-recognition-module">
+<h2>dronebuddylib.offline.atoms.face_recognition module<a class="headerlink" href="#dronebuddylib-offline-atoms-face-recognition-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.face_recognition">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.add_people_to_memory">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">add_people_to_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#add_people_to_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.add_people_to_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a new person’s name and image to the recognition memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the new person.</p></li>
+<li><p><strong>image_path</strong> (<em>str</em>) – Path to the image of the new person.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the addition was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.find_all_the_faces">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">find_all_the_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_feed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#find_all_the_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.find_all_the_faces" title="Link to this definition">¶</a></dt>
+<dd><p>Detects and recognizes faces in a given video frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The input frame to process.</p></li>
+<li><p><strong>show_feed</strong> (<em>bool</em>) – Whether to display the annotated video feed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of recognized face names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.get_video_feed">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">get_video_feed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_locations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#get_video_feed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.get_video_feed" title="Link to this definition">¶</a></dt>
+<dd><p>Displays the video feed with annotated face boxes and names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The frame to display.</p></li>
+<li><p><strong>face_locations</strong> (<em>list</em>) – List of face locations.</p></li>
+<li><p><strong>face_names</strong> (<em>list</em>) – List of recognized face names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.load_known_face_encodings">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">load_known_face_encodings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_face_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#load_known_face_encodings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.load_known_face_encodings" title="Link to this definition">¶</a></dt>
+<dd><p>Loads known face encodings corresponding to the provided face names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>known_face_names</strong> (<em>list</em>) – List of known face names.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of known face encodings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.load_known_face_names">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">load_known_face_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#load_known_face_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.load_known_face_names" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a list of known face names from a text file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of known face names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.logger">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">dronebuddylib.utils.logging_config</span> <span class="pre">(DEBUG)&gt;</span></em><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.logger" title="Link to this definition">¶</a></dt>
+<dd><p>//snips-nlu.readthedocs.io/en/latest/tutorial.html</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>in order to get the trained json file follow the https</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.process_frame_for_recognition">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">process_frame_for_recognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#process_frame_for_recognition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.process_frame_for_recognition" title="Link to this definition">¶</a></dt>
+<dd><p>Preprocesses a video frame for faster face recognition processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The input frame to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The processed frame ready for face recognition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.face_recognition.read_file_into_list">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.face_recognition.</span></span><span class="sig-name descname"><span class="pre">read_file_into_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/face_recognition.html#read_file_into_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.face_recognition.read_file_into_list" title="Link to this definition">¶</a></dt>
+<dd><p>Reads lines from a file and returns them as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path to the file to be read.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of lines read from the file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the specified file is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-face-recognition-new-module">
+<h2>dronebuddylib.offline.atoms.face_recognition_new module<a class="headerlink" href="#dronebuddylib-offline-atoms-face-recognition-new-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-gesture-recognition-module">
+<h2>dronebuddylib.offline.atoms.gesture_recognition module<a class="headerlink" href="#dronebuddylib-offline-atoms-gesture-recognition-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.gesture_recognition">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.gesture_recognition.dis">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.gesture_recognition.</span></span><span class="sig-name descname"><span class="pre">dis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/gesture_recognition.html#dis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.gesture_recognition.dis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.gesture_recognition.is_pointing">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.gesture_recognition.</span></span><span class="sig-name descname"><span class="pre">is_pointing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/gesture_recognition.html#is_pointing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.gesture_recognition.is_pointing" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether the hand is in the pointing gesture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>landmarks</strong> (<em>list</em>) – the hand landmarks from hand_detection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>whether the hand is in the pointing gesture</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.gesture_recognition.is_stop_following">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.gesture_recognition.</span></span><span class="sig-name descname"><span class="pre">is_stop_following</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/gesture_recognition.html#is_stop_following"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.gesture_recognition.is_stop_following" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether the hand is in the fisted gesture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>landmarks</strong> (<em>list</em>) – the hand landmarks from hand_detection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>whether the hand is in the fisted gesture</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-hand-control-module">
+<h2>dronebuddylib.offline.atoms.hand_control module<a class="headerlink" href="#dronebuddylib-offline-atoms-hand-control-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-hand-detection-module">
+<h2>dronebuddylib.offline.atoms.hand_detection module<a class="headerlink" href="#dronebuddylib-offline-atoms-hand-detection-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.hand_detection">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.hand_detection.get_hand_landmark">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.hand_detection.</span></span><span class="sig-name descname"><span class="pre">get_hand_landmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/hand_detection.html#get_hand_landmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.hand_detection.get_hand_landmark" title="Link to this definition">¶</a></dt>
+<dd><p>Detect hands in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> (<em>list</em>) – the frame to detect the hand in</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>return the list of the landmark of one hand in the frame.
+Return false if no hand is detected.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list | bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-head-bounding-module">
+<h2>dronebuddylib.offline.atoms.head_bounding module<a class="headerlink" href="#dronebuddylib-offline-atoms-head-bounding-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.head_bounding">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.head_bounding.get_head_bounding_box">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.head_bounding.</span></span><span class="sig-name descname"><span class="pre">get_head_bounding_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tello</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/head_bounding.html#get_head_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.head_bounding.get_head_bounding_box" title="Link to this definition">¶</a></dt>
+<dd><p>Get the bounding box of the head in front of the drone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tello</strong> (<em>Tello</em>) – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image,
+[int: x coordinate of the left top corner of the bounding box,
+int: y coordinate of the left top corner of the bounding box,
+int: width,
+int: height]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-intent-recognition-module">
+<h2>dronebuddylib.offline.atoms.intent_recognition module<a class="headerlink" href="#dronebuddylib-offline-atoms-intent-recognition-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-object-detection-yolo-module">
+<h2>dronebuddylib.offline.atoms.object_detection_yolo module<a class="headerlink" href="#dronebuddylib-offline-atoms-object-detection-yolo-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.offline.atoms.object_detection_yolo">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_detection_yolo.</span></span><span class="sig-name descname"><span class="pre">YoloEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_detection_yolo.html#YoloEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_detection_yolo.get_boxes_yolo">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_detection_yolo.</span></span><span class="sig-name descname"><span class="pre">get_boxes_yolo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_detection_yolo.html#get_boxes_yolo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_boxes_yolo" title="Link to this definition">¶</a></dt>
+<dd><p>Get the bounding boxes of objects detected in an image using a YOLO (You Only Look Once) object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yolo_engine</strong> (<a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine" title="dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine"><code class="xref py py-class docutils literal notranslate"><span class="pre">YoloEngine</span></code></a>) – The YoloEngine object used for object detection.</p></li>
+<li><p><strong>image</strong> – The image to detect objects in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes corresponding to the objects detected in the image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_detection_yolo.get_label_yolo">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_detection_yolo.</span></span><span class="sig-name descname"><span class="pre">get_label_yolo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yolo_engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_detection_yolo.html#get_label_yolo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_label_yolo" title="Link to this definition">¶</a></dt>
+<dd><p>Get the labels of objects detected in an image using a YOLO (You Only Look Once) object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yolo_engine</strong> (<a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine" title="dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine"><code class="xref py py-class docutils literal notranslate"><span class="pre">YoloEngine</span></code></a>) – The YoloEngine object used for object detection.</p></li>
+<li><p><strong>image</strong> – The image to detect objects in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of labels corresponding to the objects detected in the image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_detection_yolo.get_output_layers">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_detection_yolo.</span></span><span class="sig-name descname"><span class="pre">get_output_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_detection_yolo.html#get_output_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_output_layers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_detection_yolo.init_yolo_engine">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_detection_yolo.</span></span><span class="sig-name descname"><span class="pre">init_yolo_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_detection_yolo.html#init_yolo_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_detection_yolo.init_yolo_engine" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a YOLO (You Only Look Once) object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weights_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file path to the pre-trained weights file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the specified configuration or labels file is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-object-memorize-module">
+<h2>dronebuddylib.offline.atoms.object_memorize module<a class="headerlink" href="#dronebuddylib-offline-atoms-object-memorize-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-object-selection-module">
+<h2>dronebuddylib.offline.atoms.object_selection module<a class="headerlink" href="#dronebuddylib-offline-atoms-object-selection-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.object_selection">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_selection.dis">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_selection.</span></span><span class="sig-name descname"><span class="pre">dis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_selection.html#dis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_selection.dis" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.object_selection.select_pointed_obj">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.object_selection.</span></span><span class="sig-name descname"><span class="pre">select_pointed_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landmarks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/object_selection.html#select_pointed_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.object_selection.select_pointed_obj" title="Link to this definition">¶</a></dt>
+<dd><p>Pick out the object the finger is pointing to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>list</em>) – the current frame</p></li>
+<li><p><strong>landmarks</strong> (<em>list</em>) – the landmarks detected by hand_detection in this frame</p></li>
+<li><p><strong>obj_result</strong> (<em>list</em>) – the bounding boxes of the objects detected in this frame</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the bounding box of the pointed object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-recognize-hand-module">
+<h2>dronebuddylib.offline.atoms.recognize_hand module<a class="headerlink" href="#dronebuddylib-offline-atoms-recognize-hand-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="dronebuddylib-offline-atoms-speech-2-text-conversion-module">
+<h2>dronebuddylib.offline.atoms.speech_2_text_conversion module<a class="headerlink" href="#dronebuddylib-offline-atoms-speech-2-text-conversion-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.offline.atoms.speech_2_text_conversion">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.speech_2_text_conversion.classify">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.speech_2_text_conversion.</span></span><span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/speech_2_text_conversion.html#classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.classify" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.speech_2_text_conversion.init_speech_to_text_engine">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.speech_2_text_conversion.</span></span><span class="sig-name descname"><span class="pre">init_speech_to_text_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/speech_2_text_conversion.html#init_speech_to_text_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.init_speech_to_text_engine" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes a speech-to-text engine using the Vosk model for a given language.
+(currently only supports ‘en-US’ language)</p>
+<p>Args:
+- language: a string representing the language code to use (e.g. ‘en-us’, ‘fr-fr’)</p>
+<p>Returns:
+- a Vosk KaldiRecognizer object that can be used for speech recognition</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.speech_2_text_conversion.queue">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.speech_2_text_conversion.</span></span><span class="sig-name descname"><span class="pre">queue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.queue" title="Link to this definition">¶</a></dt>
+<dd><p>The language of the model. The default is ‘en-US’. (currently only supports this language)
+:return: The vosk model.</p>
+<p>need to initialize the model before using the speech to text engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>param language</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_command">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.speech_2_text_conversion.</span></span><span class="sig-name descname"><span class="pre">recognize_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_feed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/speech_2_text_conversion.html#recognize_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_command" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes a command from an audio feed using a given model.</p>
+<p>Args:
+- model: The vosk model that is returned by the init_speech_to_text_engine().
+- audio_feed: a byte string representing the audio feed to recognize, taken by audio_feed.read(num_frames)</p>
+<p>Returns:
+- a label indicating the recognized command, or None if no command was recognized</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_speech">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.speech_2_text_conversion.</span></span><span class="sig-name descname"><span class="pre">recognize_speech</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_feed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/speech_2_text_conversion.html#recognize_speech"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_speech" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes a text from an audio feed using a given model.</p>
+<p>Args:
+- model: The vosk model that is returned by the init_speech_to_text_engine().
+- audio_feed: a byte string representing the audio feed to recognize, taken by audio_feed.read(num_frames)</p>
+<p>Returns:
+- the text that was recognized, or None if no text was recognized</p>
+</dd></dl>
+
+</section>
+<section id="dronebuddylib-offline-atoms-text-2-speech-conversion-module">
+<h2>dronebuddylib.offline.atoms.text_2_speech_conversion module<a class="headerlink" href="#dronebuddylib-offline-atoms-text-2-speech-conversion-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.offline.atoms.text_2_speech_conversion">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.text_2_speech_conversion.</span></span><span class="sig-name descname"><span class="pre">Voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_rate">
+<span class="sig-name descname"><span class="pre">get_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.get_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_rate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_volume">
+<span class="sig-name descname"><span class="pre">get_volume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.get_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_volume" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.play_audio">
+<span class="sig-name descname"><span class="pre">play_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.play_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.play_audio" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_rate">
+<span class="sig-name descname"><span class="pre">set_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.set_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_rate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_voice_id">
+<span class="sig-name descname"><span class="pre">set_voice_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_voice_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.set_voice_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_voice_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_volume">
+<span class="sig-name descname"><span class="pre">set_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_volume</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#Voice.set_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_volume" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.generate_speech_and_play">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.text_2_speech_conversion.</span></span><span class="sig-name descname"><span class="pre">generate_speech_and_play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#generate_speech_and_play"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.generate_speech_and_play" title="Link to this definition">¶</a></dt>
+<dd><p>Generates speech from the provided text using a text-to-speech engine and plays it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>TTS Engine</em>) – The text-to-speech engine instance capable of generating speech.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text to be converted into speech and played.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>engine = TextToSpeechEngine()
+generate_speech_and_play(engine, “Hello, how can I assist you?”)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.init_text_to_speech_engine">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.text_2_speech_conversion.</span></span><span class="sig-name descname"><span class="pre">init_text_to_speech_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voice_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TTS_MS_EN-US_ZIRA_11.0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/offline/atoms/text_2_speech_conversion.html#init_text_to_speech_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.init_text_to_speech_engine" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Initializes and configures a text-to-speech engine for generating speech.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>rate (int): The speech rate in words per minute (default is 150).
+volume (float): The speech volume level (default is 1.0).
+voice_id (str): The identifier of the desired voice (default is ‘TTS_MS_EN-US_ZIRA_11.0’).</p>
+</dd>
+<dt>Returns:</dt><dd><p>pyttsx3.Engine: The initialized text-to-speech engine instance.</p>
+</dd>
+<dt>Example:</dt><dd><p>engine = init_text_to_speech_engine(rate=200, volume=0.8, voice_id=’TTS_MS_EN-US_DAVID_11.0’)
+generate_speech_and_play(engine, “Hello, how can I assist you?”)</p>
+</dd>
+</dl>
+</div></blockquote>
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">C:\Users\Public\projects\drone-buddy-library\dronebuddylib\offline\atoms\text_2_speech_conversion.py:docstring of dronebuddylib.offline.atoms.text_2_speech_conversion.init_text_to_speech_engine</span>, line 14)</p>
+<p>Block quote ends without a blank line; unexpected unindent.</p>
+</aside>
+<p class="rubric">Notes</p>
+<p>since this is the offline model, can only support this voice for the moment</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dronebuddylib.offline.atoms.text_2_speech_conversion.logger">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.offline.atoms.text_2_speech_conversion.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">dronebuddylib.utils.logging_config</span> <span class="pre">(DEBUG)&gt;</span></em><a class="headerlink" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.logger" title="Link to this definition">¶</a></dt>
+<dd><p>‘This is a wrapper for ttx.</p>
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">DroneBuddy Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">drone-buddy-library</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dronebuddylib.offline.atoms package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-basic-tracking-module">dronebuddylib.offline.atoms.basic_tracking module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-face-recognition-module">dronebuddylib.offline.atoms.face_recognition module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.add_people_to_memory"><code class="docutils literal notranslate"><span class="pre">add_people_to_memory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.find_all_the_faces"><code class="docutils literal notranslate"><span class="pre">find_all_the_faces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.get_video_feed"><code class="docutils literal notranslate"><span class="pre">get_video_feed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.load_known_face_encodings"><code class="docutils literal notranslate"><span class="pre">load_known_face_encodings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.load_known_face_names"><code class="docutils literal notranslate"><span class="pre">load_known_face_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.process_frame_for_recognition"><code class="docutils literal notranslate"><span class="pre">process_frame_for_recognition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.face_recognition.read_file_into_list"><code class="docutils literal notranslate"><span class="pre">read_file_into_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-face-recognition-new-module">dronebuddylib.offline.atoms.face_recognition_new module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-gesture-recognition-module">dronebuddylib.offline.atoms.gesture_recognition module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.gesture_recognition.dis"><code class="docutils literal notranslate"><span class="pre">dis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.gesture_recognition.is_pointing"><code class="docutils literal notranslate"><span class="pre">is_pointing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.gesture_recognition.is_stop_following"><code class="docutils literal notranslate"><span class="pre">is_stop_following()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-hand-control-module">dronebuddylib.offline.atoms.hand_control module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-hand-detection-module">dronebuddylib.offline.atoms.hand_detection module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.hand_detection.get_hand_landmark"><code class="docutils literal notranslate"><span class="pre">get_hand_landmark()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-head-bounding-module">dronebuddylib.offline.atoms.head_bounding module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.head_bounding.get_head_bounding_box"><code class="docutils literal notranslate"><span class="pre">get_head_bounding_box()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-intent-recognition-module">dronebuddylib.offline.atoms.intent_recognition module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-object-detection-yolo-module">dronebuddylib.offline.atoms.object_detection_yolo module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.YoloEngine"><code class="docutils literal notranslate"><span class="pre">YoloEngine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_boxes_yolo"><code class="docutils literal notranslate"><span class="pre">get_boxes_yolo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_label_yolo"><code class="docutils literal notranslate"><span class="pre">get_label_yolo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.get_output_layers"><code class="docutils literal notranslate"><span class="pre">get_output_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_detection_yolo.init_yolo_engine"><code class="docutils literal notranslate"><span class="pre">init_yolo_engine()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-object-memorize-module">dronebuddylib.offline.atoms.object_memorize module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-object-selection-module">dronebuddylib.offline.atoms.object_selection module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_selection.dis"><code class="docutils literal notranslate"><span class="pre">dis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.object_selection.select_pointed_obj"><code class="docutils literal notranslate"><span class="pre">select_pointed_obj()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-recognize-hand-module">dronebuddylib.offline.atoms.recognize_hand module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-speech-2-text-conversion-module">dronebuddylib.offline.atoms.speech_2_text_conversion module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.init_speech_to_text_engine"><code class="docutils literal notranslate"><span class="pre">init_speech_to_text_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.queue"><code class="docutils literal notranslate"><span class="pre">queue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_command"><code class="docutils literal notranslate"><span class="pre">recognize_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.speech_2_text_conversion.recognize_speech"><code class="docutils literal notranslate"><span class="pre">recognize_speech()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dronebuddylib-offline-atoms-text-2-speech-conversion-module">dronebuddylib.offline.atoms.text_2_speech_conversion module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice"><code class="docutils literal notranslate"><span class="pre">Voice</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_rate"><code class="docutils literal notranslate"><span class="pre">Voice.get_rate()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.get_volume"><code class="docutils literal notranslate"><span class="pre">Voice.get_volume()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.play_audio"><code class="docutils literal notranslate"><span class="pre">Voice.play_audio()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_rate"><code class="docutils literal notranslate"><span class="pre">Voice.set_rate()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_voice_id"><code class="docutils literal notranslate"><span class="pre">Voice.set_voice_id()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.Voice.set_volume"><code class="docutils literal notranslate"><span class="pre">Voice.set_volume()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.generate_speech_and_play"><code class="docutils literal notranslate"><span class="pre">generate_speech_and_play()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.init_text_to_speech_engine"><code class="docutils literal notranslate"><span class="pre">init_text_to_speech_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dronebuddylib.offline.atoms.text_2_speech_conversion.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.offline.molecules.html">dronebuddylib.offline.molecules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.online.atoms.html">dronebuddylib.online.atoms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">test package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">drone-buddy-library</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">drone-buddy-library</a></li>
+      <li>Next: <a href="dronebuddylib.offline.molecules.html" title="next chapter">dronebuddylib.offline.molecules package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, NUS.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/dronebuddylib.offline.atoms.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

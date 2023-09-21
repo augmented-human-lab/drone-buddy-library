@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dronebuddylib.offline.atoms.intent_recognition &#8212; DroneBuddy Library V1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=039e1c02" />
+    <script src="../../../../_static/documentation_options.js?v=7351be05"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dronebuddylib.offline.atoms.intent_recognition</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">snips_nlu</span> <span class="kn">import</span> <span class="n">SnipsNLUEngine</span>
+<span class="kn">from</span> <span class="nn">snips_nlu.default_configs</span> <span class="kn">import</span> <span class="n">CONFIG_EN</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logging_config</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="c1"># Get an instance of a logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">in order to get the trained json file follow the https://snips-nlu.readthedocs.io/en/latest/tutorial.html</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="init_intent_recognition_engine">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.intent_recognition.init_intent_recognition_engine">[docs]</a>
+<span class="k">def</span> <span class="nf">init_intent_recognition_engine</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CONFIG_EN</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Initialize the intent recognition engine using the provided dataset file.</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">           dataset_path (str): Path to the JSON dataset file containing the intents and their corresponding utterances.</span>
+<span class="sd">           config (str): The configuration to use for the SnipsNLUEngine.default is english</span>
+
+<span class="sd">       Returns:</span>
+<span class="sd">           SnipsNLUEngine: A trained instance of the SnipsNLUEngine used for intent recognition.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+
+    <span class="c1"># If dataset path is not provided, use the default path</span>
+    <span class="k">if</span> <span class="n">dataset_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/intentrecognition/dataset.json&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Intent Recognition : Loading default dataset&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Load the SnipsNLUEngine with the provided configuration</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">SnipsNLUEngine</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Load the dataset file in JSON format</span>
+    <span class="c1"># with open(</span>
+    <span class="c1">#         dataset_path,</span>
+    <span class="c1">#         encoding=&#39;utf-16&#39;) as fh:</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+            <span class="n">dataset_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Intent Recognition : Training set loaded from the json file&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Fit the dataset to the engine</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Intent Recognition : Model fitted to the training set&#39;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Intent Recognition : Initialized intent recognition engine&#39;</span><span class="p">)</span>
+    <span class="c1"># Return the trained intent recognition engine</span>
+    <span class="k">return</span> <span class="n">engine</span></div>
+
+
+
+<div class="viewcode-block" id="recognize_intent">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.intent_recognition.recognize_intent">[docs]</a>
+<span class="k">def</span> <span class="nf">recognize_intent</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="n">SnipsNLUEngine</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Given a trained SnipsNLUEngine and a string of text, this function parses the text</span>
+<span class="sd">       and returns a dictionary representing the detected intent and associated slots.</span>
+
+<span class="sd">       Args:</span>
+<span class="sd">           engine: An instance of SnipsNLUEngine, which has been trained on a dataset of intents</span>
+<span class="sd">           text: A string of text to be parsed by the NLU engine</span>
+
+<span class="sd">       Returns:</span>
+<span class="sd">           A dictionary representing the detected intent and associated slots, with the following keys:</span>
+<span class="sd">               - input: the given input text</span>
+<span class="sd">               - intent: An object containing intentName, probability.</span>
+<span class="sd">               - slots: A dictionary containing key-value pairs of detected slots</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_intent_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.intent_recognition.get_intent_name">[docs]</a>
+<span class="k">def</span> <span class="nf">get_intent_name</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Retrieves the name of the recognized intent based on the provided intent object.</span>
+
+<span class="sd">      Args:</span>
+<span class="sd">          intent (dict): The intent object containing information about the recognized intent.</span>
+<span class="sd">          threshold (float): The probability threshold for considering the intent as valid.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          str or None: The name of the recognized intent if its probability is above the threshold, otherwise None.</span>
+
+<span class="sd">      Example:</span>
+<span class="sd">          intent_name = get_intent_name(intent_obj, threshold=0.6)</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">intent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">intent</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">][</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">intent</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">][</span><span class="s1">&#39;intentName&#39;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="get_mentioned_entities">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.intent_recognition.get_mentioned_entities">[docs]</a>
+<span class="k">def</span> <span class="nf">get_mentioned_entities</span><span class="p">(</span><span class="n">intent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Retrieves the key-value pairs from the slots of an intent.</span>
+
+<span class="sd">     Args:</span>
+<span class="sd">         intent (dict): The intent object containing slots.</span>
+
+<span class="sd">     Returns:</span>
+<span class="sd">         dict: A dictionary containing the key-value pairs extracted from the slots.</span>
+<span class="sd">               Returns None if the intent is None, slots are None, or if there are no slots.</span>
+
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">intent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">intent</span><span class="p">[</span><span class="s1">&#39;slots&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intent</span><span class="p">[</span><span class="s1">&#39;slots&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Get the slots from the intent object</span>
+    <span class="n">slots</span> <span class="o">=</span> <span class="n">intent</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slots&quot;</span><span class="p">)</span>
+    <span class="c1"># Initialize an empty dictionary for storing the key-value pairs</span>
+    <span class="n">slot_values</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Extract the key-value pairs from the slots and store them in the slot_values dictionary</span>
+    <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+        <span class="n">slot_values</span><span class="p">[</span><span class="n">slot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">slot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rawValue&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">slot_values</span></div>
+
+
+
+<div class="viewcode-block" id="is_addressed_to_drone">
+<a class="viewcode-back" href="../../../../dronebuddylib.offline.atoms.html#dronebuddylib.offline.atoms.intent_recognition.is_addressed_to_drone">[docs]</a>
+<span class="k">def</span> <span class="nf">is_addressed_to_drone</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;sammy&#39;</span><span class="p">,</span> <span class="n">similar_pronunciation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the intent is addressed to the drone</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        intent (dict): The intent object containing slots.</span>
+<span class="sd">        name (str): The name in which the drone is to be addressed, this should be the same name that the intent</span>
+<span class="sd">         classifier ia trained with.</span>
+<span class="sd">        similar_pronunciation (list): A list of names that sound similar to the name of the drone</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if the intent is addressed to the drone, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">slot_values</span> <span class="o">=</span> <span class="n">get_mentioned_entities</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">slot_values</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intent</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">casefold</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">slot_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s1">&#39;address&#39;</span> <span class="ow">in</span> <span class="n">slot_values</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">slot_values</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span> <span class="o">==</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">intent</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">casefold</span><span class="p">()):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">similar_pronunciation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;address&#39;</span> <span class="ow">in</span> <span class="n">slot_values</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">slot_values</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span> <span class="ow">in</span> <span class="n">similar_pronunciation</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">DroneBuddy Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">drone-buddy-library</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, NUS.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,7 +1,6 @@
 from djitellopy import Tello
 
 from dronebuddylib.offline.atoms.head_bounding import get_head_bounding_box
-from dronebuddylib.offline.atoms.basic_tracking import *
 from .follower_engine import *
 
 

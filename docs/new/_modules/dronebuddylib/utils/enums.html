@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dronebuddylib.utils.enums &#8212; DroneBuddy Library V1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <script src="../../../_static/documentation_options.js?v=7351be05"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for dronebuddylib.utils.enums</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">enum</span>
+
+
+<div class="viewcode-block" id="ObjectDetectionReturnTypes">
+<a class="viewcode-back" href="../../../dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectDetectionReturnTypes</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum for the return types of the object detection functions.&quot;&quot;&quot;</span>
+    <span class="c1"># The object detection function returns a list of objects.</span>
+    <span class="n">LABELS</span> <span class="o">=</span> <span class="s2">&quot;LABELS&quot;</span>
+    <span class="c1"># The object detection function returns a dictionary of objects.</span>
+    <span class="n">BBOX</span> <span class="o">=</span> <span class="s2">&quot;BBOX&quot;</span>
+
+    <span class="n">CONF</span> <span class="o">=</span> <span class="s2">&quot;CONF&quot;</span>
+
+    <span class="n">ALL</span> <span class="o">=</span> <span class="s2">&quot;ALL&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DroneCommands">
+<a class="viewcode-back" href="../../../dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands">[docs]</a>
+<span class="k">class</span> <span class="nc">DroneCommands</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">TAKE_OFF</span> <span class="o">=</span> <span class="s2">&quot;TAKE_OFF&quot;</span><span class="p">,</span>
+    <span class="n">LAND</span> <span class="o">=</span> <span class="s2">&quot;LAND&quot;</span><span class="p">,</span>
+    <span class="n">FORWARD</span> <span class="o">=</span> <span class="s2">&quot;FORWARD&quot;</span><span class="p">,</span>
+    <span class="n">BACKWARD</span> <span class="o">=</span> <span class="s2">&quot;BACKWARD&quot;</span><span class="p">,</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="s2">&quot;LEFT&quot;</span><span class="p">,</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="s2">&quot;RIGHT&quot;</span><span class="p">,</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="s2">&quot;UP&quot;</span><span class="p">,</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="s2">&quot;DOWN&quot;</span><span class="p">,</span>
+    <span class="n">ROTATE_CLOCKWISE</span> <span class="o">=</span> <span class="s2">&quot;ROTATE_CLOCKWISE&quot;</span><span class="p">,</span>
+    <span class="n">ROTATE_COUNTER_CLOCKWISE</span> <span class="o">=</span> <span class="s2">&quot;ROTATE_COUNTER_CLOCKWISE&quot;</span><span class="p">,</span>
+    <span class="n">BATTERY</span> <span class="o">=</span> <span class="s2">&quot;BATTERY&quot;</span><span class="p">,</span>
+    <span class="n">SPEED</span> <span class="o">=</span> <span class="s2">&quot;SPEED&quot;</span><span class="p">,</span>
+    <span class="n">HEIGHT</span> <span class="o">=</span> <span class="s2">&quot;HEIGHT&quot;</span><span class="p">,</span>
+    <span class="n">STOP</span> <span class="o">=</span> <span class="s2">&quot;STOP&quot;</span><span class="p">,</span>
+    <span class="n">DESCRIBE</span> <span class="o">=</span> <span class="s2">&quot;DESCRIBE&quot;</span><span class="p">,</span>
+    <span class="n">RECOGNIZE_PEOPLE</span> <span class="o">=</span> <span class="s2">&quot;RECOGNIZE_PEOPLE&quot;</span><span class="p">,</span>
+    <span class="n">FLIP</span> <span class="o">=</span> <span class="s2">&quot;FLIP&quot;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="Language">
+<a class="viewcode-back" href="../../../dronebuddylib.utils.html#dronebuddylib.utils.enums.Language">[docs]</a>
+<span class="k">class</span> <span class="nc">Language</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s1">&#39;en-gb&#39;</span><span class="p">,</span>
+    <span class="n">FRENCH</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span><span class="p">,</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">DroneBuddy Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">drone-buddy-library</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, NUS.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

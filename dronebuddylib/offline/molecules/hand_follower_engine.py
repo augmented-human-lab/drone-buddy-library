@@ -1,4 +1,3 @@
-from dronebuddylib.offline.atoms.hand_detection import get_hand_landmark
 import threading
 
 from djitellopy import Tello
