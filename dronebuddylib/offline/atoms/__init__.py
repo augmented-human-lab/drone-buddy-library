@@ -1,9 +1,8 @@
-__version__ = "1.0.7"
+__version__ = "1.0.10"
 
-from .object_detection_yolo import get_label_yolo
-from .object_detection_yolo import init_yolo_engine
-from .object_detection_yolo import init_yolo_engine
-from .object_detection_yolo import get_boxes_yolo
+
+from .object_detection import detect_objects
+from .object_detection import get_bounding_boxes
 
 from .speech_2_text_conversion import init_speech_to_text_engine
 from .speech_2_text_conversion import recognize_command
