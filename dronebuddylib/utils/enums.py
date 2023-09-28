@@ -29,11 +29,17 @@ class DroneCommands(enum.Enum):
     SPEED = "SPEED",
     HEIGHT = "HEIGHT",
     STOP = "STOP",
-    DESCRIBE = "DESCRIBE",
     RECOGNIZE_PEOPLE = "RECOGNIZE_PEOPLE",
+    RECOGNIZE_OBJECTS = "RECOGNIZE_OBJECTS",
+    RECOGNIZE_TEXT = "RECOGNIZE_TEXT",
     FLIP = "FLIP",
 
 
 class Language(enum.Enum):
     ENGLISH = 'en-gb',
     FRENCH = 'FR',
+
+
+class VisionAlgorithm(enum.Enum):
+    YOLO_V8 = 'YOLO_V8',
+    GOOGLE_VISION = 'GOOGLE_VISION',

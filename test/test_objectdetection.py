@@ -3,6 +3,8 @@ import unittest
 import cv2
 
 import dronebuddylib.offline.atoms as dbl
+from offline.atoms.objectdetection.VisionConfigs import VisionConfigs
+from utils.enums import VisionAlgorithm
 
 
 # read input image
@@ -11,12 +13,13 @@ import dronebuddylib.offline.atoms as dbl
 class TestObjectDetection(unittest.TestCase):
 
     def test_upload_image(self):
-        image = cv2.imread('test_image_clear.jpg')
-
-        # labels = dbl.get_label_yolo(image)
+        image = cv2.imread('test_image.jpg')
+        # image = cv2.imread('group.jpg')
+        configs = VisionConfigs(r"C:\Users\malshadz\projects\DroneBuddy\drone-buddy-library\Test\yolov3.weights")
+        labels = dbl.detect_objects(VisionAlgorithm.YOLO_V8, configs, image)
         # assert len(labels) > 0 and 'chair' in labels
 
-        print("labels")
+        print("labels", labels)
 
     def test_me(self):
         print('test_me')
