@@ -1,5 +1,5 @@
-from offline.atoms.objectdetection import VisionConfigs
-from offline.atoms.objectdetection.VisionEngine import YoloEngine
+from offline.atoms.objectdetection.vision_configs import VisionConfigs
+from offline.atoms.objectdetection.vision_engine import YoloEngine
 from utils.enums import VisionAlgorithm
 
 

@@ -1,27 +1,27 @@
 import importlib
 import os
-import numpy as np
-from collections import OrderedDict
-from pytracking.evaluation.environment import env_settings
 import time
-import cv2 as cv
-from pytracking.utils.visdom import Visdom
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from pytracking.utils.plotting import draw_figure, overlay_mask
-from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
-from ltr.data.bounding_box_utils import masks_to_bboxes
-from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
+from collections import OrderedDict
 from pathlib import Path
-import torch
 
+import cv2 as cv
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+from ltr.data.bounding_box_utils import masks_to_bboxes
+from pytracking.evaluation.environment import env_settings
+from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
+from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
+from pytracking.utils.plotting import draw_figure, overlay_mask
+from pytracking.utils.visdom import Visdom
 
 _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         4: (255, 255, 255), 5: (0, 0, 0), 6: (0, 255, 128),
                         7: (123, 123, 123), 8: (255, 128, 0), 9: (128, 0, 255)}
 
 
-def trackerlist(name: str, parameter_name: str, run_ids = None, display_name: str = None):
+def trackerlist(name: str, parameter_name: str, run_ids=None, display_name: str = None):
     """Generate list of trackers.
     args:
         name: Name of tracking method.
@@ -57,7 +57,8 @@ class Tracker:
             self.segmentation_dir = '{}/{}/{}'.format(env.segmentation_path, self.name, self.parameter_name)
         else:
             self.results_dir = '{}/{}/{}_{:03d}'.format(env.results_path, self.name, self.parameter_name, self.run_id)
-            self.segmentation_dir = '{}/{}/{}_{:03d}'.format(env.segmentation_path, self.name, self.parameter_name, self.run_id)
+            self.segmentation_dir = '{}/{}/{}_{:03d}'.format(env.segmentation_path, self.name, self.parameter_name,
+                                                             self.run_id)
 
         tracker_module_abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tracker', self.name))
         if os.path.isdir(tracker_module_abspath):
@@ -67,7 +68,6 @@ class Tracker:
             self.tracker_class = None
 
         self.visdom = None
-
 
     def _init_visdom(self, visdom_info, debug):
         visdom_info = {} if visdom_info is None else visdom_info
@@ -96,7 +96,6 @@ class Tracker:
 
             elif data['key'] == 'ArrowRight' and self.pause_mode:
                 self.step = True
-
 
     def create_tracker(self, params):
         tracker = self.tracker_class(params)
@@ -359,7 +358,8 @@ class Tracker:
                 ret, frame = cap.read()
                 frame_disp = frame.copy()
 
-                cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
+                cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL,
+                           1.5,
                            (0, 0, 0), 1)
 
                 cv.imshow(display_name, frame_disp)
@@ -608,7 +608,6 @@ class Tracker:
             elif tracker.params.visualization:
                 self.visualize(image, out['target_bbox'], segmentation)
 
-
     def run_vot(self, debug=None, visdom_info=None):
         params = self.get_parameters()
         params.tracker_name = self.name
@@ -685,13 +684,11 @@ class Tracker:
         params = param_module.parameters()
         return params
 
-
     def init_visualization(self):
         self.pause_mode = False
         self.fig, self.ax = plt.subplots(1)
         self.fig.canvas.mpl_connect('key_press_event', self.press)
         plt.tight_layout()
-
 
     def visualize(self, image, state, segmentation=None):
         self.ax.cla()
@@ -714,7 +711,8 @@ class Tracker:
 
         if getattr(self, 'gt_state', None) is not None:
             gt_state = self.gt_state
-            rect = patches.Rectangle((gt_state[0], gt_state[1]), gt_state[2], gt_state[3], linewidth=1, edgecolor='g', facecolor='none')
+            rect = patches.Rectangle((gt_state[0], gt_state[1]), gt_state[2], gt_state[3], linewidth=1, edgecolor='g',
+                                     facecolor='none')
             self.ax.add_patch(rect)
         self.ax.set_axis_off()
         self.ax.axis('equal')
@@ -739,6 +737,3 @@ class Tracker:
     def _read_image(self, image_file: str):
         im = cv.imread(image_file)
         return cv.cvtColor(im, cv.COLOR_BGR2RGB)
-
-
-

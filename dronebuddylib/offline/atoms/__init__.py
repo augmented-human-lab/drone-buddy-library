@@ -29,8 +29,6 @@ from .head_bounding import get_head_bounding_box
 
 from .object_selection import select_pointed_obj
 
-from .basic_tracking import init_tracker
-from .basic_tracking import set_target
-from .basic_tracking import get_tracked_bounding_box
+from .tracking.tracking_engine import TrackingEngine
 
 from .object_memorize import update_memory
