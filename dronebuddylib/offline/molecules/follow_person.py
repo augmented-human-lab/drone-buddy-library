@@ -1,11 +1,10 @@
 from djitellopy import Tello
 
 from dronebuddylib.offline.atoms.head_bounding import get_head_bounding_box
-from dronebuddylib.offline.atoms.basic_tracking import *
 from .follower_engine import *
 
 
-def follow_me(tello: Tello, path: str):
+def follow_person(tello: Tello, path: str):
     """
     Follow the person in front of the drone.
 
@@ -14,7 +13,10 @@ def follow_me(tello: Tello, path: str):
         path (str): the absolute path to directory of the two .pth files for the tracker
     """
     frame, box = get_head_bounding_box(tello)
-    tracker = init_tracker(path)
-    set_target(frame, box, tracker)
-    follower = init_follower(tracker, tello)
-    follow(follower)
+
+    tracker_engine = TrackingEngine()
+    tracker_engine.init_tracker(path)
+    tracker_engine.set_target(frame, box)
+
+    follower = Follower(tracker_engine, tello)
+    follower.follow_person_with_gesture()
