@@ -36,9 +36,7 @@
     - [Methods](#methods-6)
     - [Examples](#examples-3)
 
-(Note: In an actual documentation, the links (like #overview, #attributes, etc.) would be anchored to the relevant sections. In this text-only format, they are merely placeholders to illustrate the concept.)
 
-You can use this Table of Contents as a starting point for your documentation. Adjustments may be needed based on the specific details of your actual implementation or any additional context you might provide.
 ---
 
 # `IntentRecognitionEngine` 
