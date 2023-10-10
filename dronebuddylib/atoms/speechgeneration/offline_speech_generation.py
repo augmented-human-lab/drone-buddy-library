@@ -51,6 +51,32 @@ class OffLineTextToSpeechEngine:
         logger.debug("Text to speechRecognition: Initialized Text to Speech Engine")
         self.engine = engine
 
+    def get_rate(self):
+        return self.engine.getProperty('rate')
+
+    def get_volume(self):
+        return self.engine.getProperty('volume')
+
+    def set_rate(self, new_rate):
+        self.engine.setProperty('rate', new_rate)
+        return
+
+        # This function is to set the volume of the voice. The volume should between 0 and 1.
+
+    def set_volume(self, new_volume):
+        self.engine.setProperty('volume', new_volume)
+        return
+
+        # This function is to set the texture of the voice, such as language, gender.
+        # For more voice_ids, please see the documentation.
+
+    def set_voice_id(self, new_voice_id):
+        self.engine.setProperty('voice', new_voice_id)
+        return
+
+    def get_voice_id(self, new_voice_id):
+        return self.engine.getProperty('voice')
+
     def generate_speech_and_play(self, text):
         """
            Generates speechRecognition from the provided text using a text-to-speechRecognition engine and plays it.
@@ -73,40 +99,3 @@ class OffLineTextToSpeechEngine:
         self.engine.stop()
         return
 
-    class Voice:
-
-        def __init__(self, r, v):
-            logger.info("Text to speechRecognition: Init")
-            self.engine = pyttsx3.init()
-            self.rate = self.engine.setProperty('rate', r)
-            self.volume = self.engine.setProperty("volume", v)
-
-        def get_rate(self):
-            return self.rate
-
-        def get_volume(self):
-            return self.volume
-
-        def set_rate(self, new_rate):
-            self.engine.setProperty('rate', new_rate)
-            return
-
-        # This function is to set the volume of the voice. The volume should between 0 and 1.
-        def set_volume(self, new_volume):
-            self.engine.setProperty('volume', new_volume)
-            return
-
-        # This function is to set the texture of the voice, such as language, gender.
-        # For more voice_ids, please see the documentation.
-        def set_voice_id(self, new_voice_id):
-            self.engine.setProperty('voice', new_voice_id)
-            return
-
-        # The input is the text. The output is the audio.
-        def play_audio(self, text):
-            logger.debug("Text to speechRecognition: text to convert :" + text)
-            self.engine.say(text)
-            logger.debug("Text to speechRecognition: Audio playback completed")
-            self.engine.runAndWait()
-            self.engine.stop()
-            return

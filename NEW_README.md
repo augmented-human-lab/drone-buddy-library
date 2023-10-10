@@ -383,102 +383,102 @@ engine.read_aloud("Hello, how are you?")
 
 ---
 
-This markdown content can be integrated into any markdown-supported documentation platform. Adjustments might be needed based on the specific details of your actual implementation or any additional context you might provide.
-
 ---
 
 ## `OffLineTextToSpeechEngine`
 
-This class serves as a wrapper around the `pyttsx3` library, providing offline text-to-speech capabilities.
+This class is a wrapper for the Text-to-Speech functionalities provided by `pyttsx3`.
+
+---
 
 ### Methods
+
+---
 
 ### `__init__(self, rate=150, volume=1, voice_id='TTS_MS_EN-US_ZIRA_11.0')`
 
-Initializes and configures a text-to-speech engine for speech generation.
+Initializes and configures a text-to-speech engine.
 
 - **Parameters:**
-  - `rate (int)`: The speech rate in words per minute. Default is 150.
-  - `volume (float)`: The speech volume level. Default is 1.0.
-  - `voice_id (str)`: The identifier of the desired voice. Default is 'TTS_MS_EN-US_ZIRA_11.0'.
+  - `rate (int)`: The speech rate in words per minute (default is 150).
+  - `volume (float)`: The speech volume level (default is 1.0).
+  - `voice_id (str)`: The identifier of the desired voice (default is 'TTS_MS_EN-US_ZIRA_11.0').
 
-- **Notes:** 
-  - Since this is the offline model, it can only support this voice for the moment.
+**Note**: Since this is the offline model, currently only supports 'TTS_MS_EN-US_ZIRA_11.0' voice.
+
+---
 
 ### `generate_speech_and_play(self, text)`
 
-Generates speech from the provided text using a text-to-speech engine and plays it.
+Generates speech from the provided text and plays it.
 
 - **Parameters:**
   - `text (str)`: The text to be converted into speech and played.
-
-### Examples:
-
-```python
-engine = OffLineTextToSpeechEngine()
-engine.generate_speech_and_play("Hello, how can I assist you?")
-```
+  
+- **Returns:** None
 
 ---
 
-## `Voice`
+### `get_rate(self)`
 
-This class provides functionality to manipulate and use different voice properties for text-to-speech.
+Returns the current speech rate.
 
-### Methods
+- **Returns:** `int`: Current speech rate.
 
-### `__init__(self, r, v)`
+---
 
-Initializes a Voice instance with a specified rate and volume.
+### `get_volume(self)`
 
-- **Parameters:**
-  - `r`: Rate of speech.
-  - `v`: Volume level.
+Returns the current speech volume.
 
-### `get_rate(self) -> int`
+- **Returns:** `float`: Current speech volume.
 
-Retrieves the current speech rate.
-
-### `get_volume(self) -> float`
-
-Fetches the current speech volume level.
+---
 
 ### `set_rate(self, new_rate)`
 
-Updates the speech rate to the given value.
+Updates the speech rate.
 
 - **Parameters:**
-  - `new_rate`: The desired new rate for speech.
+  - `new_rate (int)`: New speech rate to set.
+
+---
 
 ### `set_volume(self, new_volume)`
 
-Modifies the volume of the voice.
+Updates the speech volume.
 
 - **Parameters:**
-  - `new_volume`: Desired volume level, should be between 0 and 1.
+  - `new_volume (float)`: New speech volume to set.
+
+---
 
 ### `set_voice_id(self, new_voice_id)`
 
-Changes the texture of the voice, such as language and gender.
+Updates the voice identifier.
 
 - **Parameters:**
-  - `new_voice_id`: Identifier for the desired voice. For more voice_ids, refer to the documentation.
+  - `new_voice_id (str)`: New voice ID to set.
 
-### `play_audio(self, text)`
+---
 
-Converts a given text into audio and plays it.
+### `get_voice_id(self, new_voice_id)`
 
-- **Parameters:**
-  - `text (str)`: The text to be converted to audio and played.
+Returns the current voice identifier.
+
+- **Returns:** `str`: Current voice ID.
+
+---
 
 ### Examples:
 
 ```python
-voice = OffLineTextToSpeechEngine.Voice(200, 0.8)
-voice.play_audio("Hello, this is a test.")
+engine = OffLineTextToSpeechEngine(rate=200, volume=0.8, voice_id='TTS_MS_EN-US_ZIRA_11.0')
+engine.generate_speech_and_play("Hello, how are you?")
 ```
 
 ---
+
 
 
 ---
