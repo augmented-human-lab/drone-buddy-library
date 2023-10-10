@@ -2,7 +2,7 @@ import unittest
 
 import time
 import dronebuddylib.offline.atoms as dbl_atoms
-import dronebuddylib.offline.molecules as dbl_molecules
+import dronebuddylib.molecules as dbl_molecules
 from djitellopy import Tello
 
 # This test could test tracking, object_detection_yolo, object_selection, get_pointed_obj, 

@@ -3,8 +3,7 @@ import unittest
 import cv2
 
 import dronebuddylib.offline.atoms as dbl
-from offline.atoms.objectdetection.vision_configs import VisionConfigs
-from utils.enums import VisionAlgorithm
+
 
 
 # read input image

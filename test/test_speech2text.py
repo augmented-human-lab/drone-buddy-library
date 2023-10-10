@@ -5,7 +5,7 @@ import unittest
 import pyaudio
 
 import dronebuddylib.offline.atoms as dbl
-import dronebuddylib.online.atoms as dbl_online
+import dronebuddylib.atoms as dbl_online
 
 
 # https://github.com/alphacep/vosk-api/blob/380fa9c7c8da71520ccb550959b0f23dc6cde4fb/python/example/test_local.py

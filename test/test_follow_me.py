@@ -1,8 +1,7 @@
 import unittest
 
 import time
-import dronebuddylib.offline.molecules as dbl
-import dronebuddylib.offline.molecules as dbl
+import dronebuddylib.molecules as dbl
 from djitellopy import Tello
 
 # This test could test follow, follow_me, tracking, get_head_bounding_box and face_detection

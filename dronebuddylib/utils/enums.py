@@ -43,3 +43,14 @@ class Language(enum.Enum):
 class VisionAlgorithm(enum.Enum):
     YOLO_V8 = 'YOLO_V8',
     GOOGLE_VISION = 'GOOGLE_VISION',
+
+
+class SpeechGenerationAlgorithm(enum.Enum):
+    GOOGLE_TTS_OFFLINE = 'GOOGLE_TTS_OFFLINE',
+
+
+class IntentRecognitionAlgorithm(enum.Enum):
+    CHAT_GPT = 'CHAT_GPT',
+    SNIPS_NLU = 'SNIPS_NLU',
+
+

@@ -1,6 +1,6 @@
 import unittest
 
-import dronebuddylib.online.atoms as dbl_online
+import dronebuddylib.atoms as dbl_online
 
 
 # read input image
