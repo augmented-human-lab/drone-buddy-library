@@ -300,46 +300,52 @@ Yields the bounding boxes of the detected objects in the provided image by lever
   - A list of bounding boxes corresponding to the identified objects.
 
 ---
+Here's the markdown API documentation for the `SpeechGenerationEngine` class based on the provided code:
 
 ---
+
 ## `SpeechGenerationEngine`
 
-## `read_aloud`
+Handles speech generation based on the provided algorithm and configuration.
 
-This function generates speech from text using the specified algorithm and configuration, then reads it aloud.
-
-### Parameters:
-
-- **`algorithm (SpeechGenerationAlgorithm)`**: 
-  - Description: The algorithm chosen for speech generation. 
-  - Values: Can be `SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE` or others defined in the `SpeechGenerationAlgorithm` enum.
-  
-- **`speech_config (SpeechConfigs)`**: 
-  - Description: The configuration for speech generation.
-  - Attributes:
-    - `rate`: The rate of speech.
-    - `volume`: Volume of the generated speech.
-    - `voice_id`: ID of the voice profile to be used.
-
-- **`frame`**: 
-  - Description: The text frame (or context) for which the speech needs to be generated.
-
-### Returns:
-
-Generated speech which is then played aloud.
-
-### Example:
-
-Suppose `speech_config` is an instance of `SpeechConfigs` with appropriate values:
-
-```python
-read_aloud(SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE, speech_config, "Hello, World!")
-```
-
-This would generate speech for the text "Hello, World!" using the offline Google TTS algorithm and the provided configuration, then play it aloud.
+### Methods
 
 ---
 
+### `__init__(self, algorithm: SpeechGenerationAlgorithm, speech_config: SpeechConfigs)`
+
+Initializes the `SpeechGenerationEngine` with a specific algorithm and configuration.
+
+- **Parameters:**
+  - `algorithm (SpeechGenerationAlgorithm)`: Specifies which speech generation algorithm to use.
+  - `speech_config (SpeechConfigs)`: Configuration for the speech generation.
+
+- **Returns:** None
+
+---
+
+### `read_aloud(self, phrase: str)`
+
+Converts the provided phrase to speech and plays it aloud.
+
+- **Parameters:**
+  - `phrase (str)`: Text that needs to be converted to speech.
+  
+- **Returns:**
+  - The result of the `generate_speech_and_play` method from the initialized speech generation engine (the specific return type is not provided in the given code).
+
+---
+
+### Examples:
+
+```python
+engine = SpeechGenerationEngine(SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE, config)
+engine.read_aloud("Hello, how are you?")
+```
+
+---
+
+This markdown content can be integrated into any markdown-supported documentation platform. Adjustments might be needed based on the specific details of your actual implementation or any additional context you might provide.
 
 ---
 
