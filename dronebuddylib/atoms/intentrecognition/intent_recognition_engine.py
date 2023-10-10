@@ -1,4 +1,5 @@
 from dronebuddylib.atoms.intentrecognition.gpt_intent_recogntion import GPTIntentRecognition
+from dronebuddylib.atoms.intentrecognition.intentconfig import IntentConfigs
 from dronebuddylib.atoms.intentrecognition.offline_intent_recognition import OfflineIntentRecognitionEngine
 from dronebuddylib.utils.enums import IntentRecognitionAlgorithm
 
@@ -12,14 +13,14 @@ class IntentRecognitionEngine:
 
     Args:
         algorithm (IntentRecognitionAlgorithm): The algorithm to be used for intent recognition.
-        config (dict): Configuration parameters required for the chosen algorithm.
+        config (IntentConfigs): Configuration parameters required for the chosen algorithm.
 
     Examples:
         >>> engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, config)
         >>> intent = engine.recognize_intent("Turn off the lights.")
     """
 
-    def __init__(self, algorithm: IntentRecognitionAlgorithm, config):
+    def __init__(self, algorithm: IntentRecognitionAlgorithm, config: IntentConfigs):
         """
         Initialize the IntentRecognitionEngine with a given algorithm and configuration.
 

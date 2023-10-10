@@ -1,6 +1,55 @@
 
 ---
 
+# `IntentRecognitionEngine` 
+
+## Overview
+
+The `IntentRecognitionEngine` class is a versatile engine designed for recognizing user intents. It leverages different algorithms and acts as a bridge between the user's input and the underlying intent recognition systems like ChatGPT and Snips NLU.
+
+## Attributes
+
+- **intent_recognizer:** 
+  - Description: An instance of the intent recognition algorithm chosen.
+
+## Constructors
+
+### `__init__(self, algorithm: IntentRecognitionAlgorithm, config: IntentConfigs) -> None`
+
+Initializes the `IntentRecognitionEngine` using a specific algorithm and its associated configuration.
+
+- **Parameters:**
+  - `algorithm (IntentRecognitionAlgorithm)`: The desired algorithm for intent recognition. Supported values are from the `IntentRecognitionAlgorithm` enum, including `CHAT_GPT` and `SNIPS_NLU`.
+  - `config (IntentConfigs)`: Configuration parameters tailored for the selected algorithm.
+
+### Examples:
+
+```python
+engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, config)
+intent = engine.recognize_intent("Turn off the lights.")
+```
+
+## Methods
+
+### `recognize_intent(self, text: str) -> str`
+
+Given a user's input text, this method recognizes and returns the corresponding intent based on the configured algorithm.
+
+- **Parameters:**
+  - `text (str)`: Input text from the user for which the intent is to be recognized.
+- **Returns:**
+  - `str`: The recognized intent.
+
+### Examples:
+
+```python
+engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, config)
+intent = engine.recognize_intent("What's the weather today?")
+# Expected output: "get_weather"
+```
+
+---
+
 # `OfflineIntentRecognitionEngine` 
 
 ## Overview
@@ -118,55 +167,6 @@ Identifies the intent from the supplied user message using the ChatGPT engine.
   - `str`: Recognized intent based on the user's message.
 
 ---
-
----
-
-# `IntentRecognitionEngine` 
-
-## Overview
-
-The `IntentRecognitionEngine` class is a versatile engine designed for recognizing user intents. It leverages different algorithms and acts as a bridge between the user's input and the underlying intent recognition systems like ChatGPT and Snips NLU.
-
-## Attributes
-
-- **intent_recognizer:** 
-  - Description: An instance of the intent recognition algorithm chosen.
-
-## Constructors
-
-### `__init__(self, algorithm: IntentRecognitionAlgorithm, config: dict) -> None`
-
-Initializes the `IntentRecognitionEngine` using a specific algorithm and its associated configuration.
-
-- **Parameters:**
-  - `algorithm (IntentRecognitionAlgorithm)`: The desired algorithm for intent recognition. Supported values are from the `IntentRecognitionAlgorithm` enum, including `CHAT_GPT` and `SNIPS_NLU`.
-  - `config (dict)`: Configuration parameters tailored for the selected algorithm.
-
-### Examples:
-
-```python
-engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, config)
-intent = engine.recognize_intent("Turn off the lights.")
-```
-
-## Methods
-
-### `recognize_intent(self, text: str) -> str`
-
-Given a user's input text, this method recognizes and returns the corresponding intent based on the configured algorithm.
-
-- **Parameters:**
-  - `text (str)`: Input text from the user for which the intent is to be recognized.
-- **Returns:**
-  - `str`: The recognized intent.
-
-### Examples:
-
-```python
-engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, config)
-intent = engine.recognize_intent("What's the weather today?")
-# Expected output: "get_weather"
-```
 
 ---
 
