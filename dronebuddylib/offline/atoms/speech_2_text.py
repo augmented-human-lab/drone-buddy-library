@@ -1,9 +1,6 @@
-import json
-
 import pkg_resources
 from vosk import Model, KaldiRecognizer
 
-from dronebuddylib.utils.enums import DroneCommands
 from dronebuddylib.utils.logging_config import get_logger
 
 # Get an instance of a logger
