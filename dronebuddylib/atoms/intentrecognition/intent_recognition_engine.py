@@ -2,7 +2,7 @@ import logging
 
 import pkg_resources
 
-from dronebuddylib.atoms.intentrecognition.gpt_intent_recogntion import GPTIntentRecognition
+from dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl import GPTIntentRecognitionImpl
 from dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl import SNIPSIntentRecognitionImpl
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
@@ -49,7 +49,7 @@ class IntentRecognitionEngine:
                 raise FileWritingException("Error while writing default actions to the file : ")
 
         if algorithm == IntentRecognitionAlgorithm.CHAT_GPT:
-            self.intent_recognizer = GPTIntentRecognition(config)
+            self.intent_recognizer = GPTIntentRecognitionImpl(config)
         if algorithm == IntentRecognitionAlgorithm.SNIPS_NLU:
             self.intent_recognizer = SNIPSIntentRecognitionImpl(config)
 

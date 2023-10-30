@@ -6,19 +6,26 @@ from ultralytics import YOLO
 from PIL import Image
 import cv2
 
-from dronebuddylib.atoms.objectdetection.object_detection import ObjectDetection
+from dronebuddylib.atoms.objectdetection.i_object_detection import IObjectDetection
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import Configurations
 from dronebuddylib.models.object_detected import ObjectDetected, BoundingBox, ObjectDetectionResult
 from dronebuddylib.utils.utils import config_validity_check
 
 
-class YOLOObjectDetectionImpl(ObjectDetection):
-    CLASS_NAME = 'OBJECT_DETECTION_YOLO_V8'
-    ALGO_NAME = 'YOLO V8 Object Detection'
+class YOLOObjectDetectionImpl(IObjectDetection):
+    def get_class_name(self) -> str:
+        return 'OBJECT_DETECTION_YOLO_V8'
+
+    def get_algorithm_name(self) -> str:
+        return 'YOLO V8 Object Detection'
 
     def __init__(self, engine_configurations: EngineConfigurations):
-        configs = engine_configurations.get_configurations_for_engine(self.CLASS_NAME)
+        config_validity_check(self.get_required_params(),
+                              engine_configurations.get_configurations_for_engine(self.get_class_name()),
+                              self.get_algorithm_name())
+
+        configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         model_name = configs.get(Configurations.OBJECT_DETECTION_YOLO_VERSION)
         if model_name is None:
             model_name = "yolov8n.pt"

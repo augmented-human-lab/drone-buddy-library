@@ -1,23 +1,14 @@
-import logging
-from abc import ABC
-
-import pkg_resources
-
 from dronebuddylib.atoms.gpt_integration import GPTEngine
-from dronebuddylib.atoms.intentrecognition.intent_recognition import IntentRecognition
+from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRecognition
 from dronebuddylib.models.enums import Configurations
 from dronebuddylib.models.gpt_configs import GPTConfigs
-from dronebuddylib.utils import FileWritingException
 from dronebuddylib.utils.chat_prompts import SYSTEM_PROMPT_INTENT_CLASSIFICATION
 from dronebuddylib.utils.utils import create_custom_drone_action_list, create_system_drone_action_list, \
     config_validity_check
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 
 
-class GPTIntentRecognition(IntentRecognition):
-    CLASS_NAME = 'INTENT_RECOGNITION_OPEN_AI'
-    ALGO_NAME = 'GPT Intent Recognition'
-
+class GPTIntentRecognitionImpl(IIntentRecognition):
     """
     GPT-based intent recognition system specifically tailored for drone actions.
 
@@ -29,9 +20,15 @@ class GPTIntentRecognition(IntentRecognition):
         gpt_engine (GPTEngine): The GPT engine instance used for intent recognition.
 
     Examples:
-        >>> recognizer = GPTIntentRecognition(GPTConfigs)
-        >>> intent = recognizer.recognize_intent("Can you make the drone spin?")
+        >>> recognizer = GPTIntentRecognitionImpl(engine_configurations)
+        >>> intent = recognizer.get_resolved_intent("Can you make the drone spin?")
     """
+
+    def get_class_name(self) -> str:
+        return 'INTENT_RECOGNITION_GPT'
+
+    def get_algorithm_name(self) -> str:
+        return 'GPT Intent Recognition'
 
     def __init__(self, engine_configurations: EngineConfigurations):
         """
@@ -42,8 +39,9 @@ class GPTIntentRecognition(IntentRecognition):
         """
 
         config_validity_check(self.get_required_params(),
-                              engine_configurations.get_configurations_for_engine(self.CLASS_NAME), self.ALGO_NAME)
-        configs = engine_configurations.get_configurations_for_engine(self.CLASS_NAME)
+                              engine_configurations.get_configurations_for_engine(self.get_class_name()),
+                              self.get_algorithm_name())
+        configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         self.configs = engine_configurations
 
         gpt_configs = GPTConfigs(

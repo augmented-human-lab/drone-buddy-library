@@ -1,48 +1,48 @@
-from dronebuddylib.atoms.objectdetection.vision_configs import VisionConfigs
-from dronebuddylib.atoms.objectdetection.vision_engine import YoloEngine
+
+from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import MPObjectDetectionImpl
+from dronebuddylib.atoms.objectdetection.yolo_object_detection_impl import YOLOObjectDetectionImpl
+from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import VisionAlgorithm
+from dronebuddylib.models.object_detected import ObjectDetectionResult
 
 
-def detect_objects(algorithm: VisionAlgorithm, vision_config: VisionConfigs, frame):
-    """
-    Detects objects in a given frame using the specified vision algorithm.
+class ObjectDetectionEngine:
 
-    Parameters:
-    - algorithm (VisionAlgorithm): The vision algorithm to be used for object detection.
-    - vision_config (VisionConfigs): Configuration for the vision algorithm, including weights path.
-    - frame: The input frame for which objects need to be detected.
+    def __init__(self, algorithm: VisionAlgorithm, config: EngineConfigurations):
 
-    Returns:
-    - list: List of detected objects if using YOLO V8.
+        if algorithm == VisionAlgorithm.YOLO:
+            self.vision_engine = YOLOObjectDetectionImpl(config)
+        if algorithm == VisionAlgorithm.MEDIA_PIPE:
+            self.vision_engine = MPObjectDetectionImpl(config)
 
-    Note:
-    Only YOLO V8 is implemented as of now.
-    """
-    if algorithm == VisionAlgorithm.YOLO_V8:
-        yolo_engine = YoloEngine(vision_config.weights_path)
-        yolo_engine.init_engine()
-        return yolo_engine.get_object_list(frame)
-    if algorithm == VisionAlgorithm.GOOGLE_VISION:
-        print("Not implemented yet")
-        pass
+    def get_detected_objects(self, frame) -> ObjectDetectionResult:
+        """
+        Detects objects in a given frame using the specified vision algorithm.
 
+        Parameters:
+        - algorithm (VisionAlgorithm): The vision algorithm to be used for object detection.
+        - vision_config (VisionConfigs): Configuration for the vision algorithm, including weights path.
+        - frame: The input frame for which objects need to be detected.
 
-def get_bounding_boxes(algorithm: VisionAlgorithm, vision_config: VisionConfigs, frame):
-    """
-    Retrieves bounding boxes for objects in a given frame using the specified vision algorithm.
+        Returns:
+        - list: List of detected objects if using YOLO V8.
 
-    Parameters:
-    - algorithm (VisionAlgorithm): The vision algorithm to be used for retrieving bounding boxes.
-    - vision_config (VisionConfigs): Configuration for the vision algorithm, including weights path.
-    - frame: The input frame for which bounding boxes are to be retrieved.
+        Note:
+        Only YOLO V8 and Media pipe is implemented as of now.
+        """
+        return self.vision_engine.get_detected_objects(frame)
 
-    Returns:
-    - list: List of bounding boxes if using YOLO V8.
+    def get_bounding_boxes_of_detected_objects(self, frame) -> list:
+        """
+        Retrieves bounding boxes for objects in a given frame using the specified vision algorithm.
 
-    Note:
-    Only YOLO V8 is implemented as of now.
-    """
-    if algorithm == VisionAlgorithm.YOLO_V8:
-        yolo_engine = YoloEngine(vision_config.weights_path)
-        yolo_engine.init_engine()
-        return yolo_engine.get_bounding_box(frame)
+        Parameters:
+        - frame: The input frame for which bounding boxes are to be retrieved.
+
+        Returns:
+        - list: List of bounding boxes if using YOLO V8.
+
+        Note:
+            Only YOLO V8 and Media pipe is implemented as of now.
+        """
+        return self.vision_engine.get_bounding_boxes_of_detected_objects(frame)

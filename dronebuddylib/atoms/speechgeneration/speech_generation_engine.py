@@ -1,16 +1,14 @@
-from dronebuddylib.atoms.speechgeneration.offline_speech_generation import OffLineTextToSpeechEngine
-from dronebuddylib.atoms.speechgeneration.speech_configs import SpeechConfigs
-from dronebuddylib.models.enums import SpeechGenerationAlgorithm
+from dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl import TTSTextToSpeechEngineImpl
+from dronebuddylib.models.engine_configurations import EngineConfigurations
+from dronebuddylib.utils.enums import SpeechGenerationAlgorithm
 
 
 class SpeechGenerationEngine:
 
-    def __init__(self, algorithm: SpeechGenerationAlgorithm, speech_config: SpeechConfigs):
+    def __init__(self, algorithm: SpeechGenerationAlgorithm, config: EngineConfigurations):
         self.algorithm = algorithm
-        self.speech_config = speech_config
         if algorithm == SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE:
-            self.speech_generation_engine = OffLineTextToSpeechEngine(speech_config.rate, speech_config.volume,
-                                                                      speech_config.voice_id)
+            self.speech_generation_engine = TTSTextToSpeechEngineImpl(config)
 
-    def read_aloud(self, phrase: str):
-        return self.speech_generation_engine.generate_speech_and_play(phrase)
+    def read_phrase(self, phrase: str):
+        return self.speech_generation_engine.read_phrase(phrase)

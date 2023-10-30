@@ -16,3 +16,18 @@ pyparsing~=3.0.9
 
 
 
+
+PyAudio~=0.2.13
+dronebuddylib~=1.0.8
+djitellopy~=2.5.0
+mediapipe~=0.10.3
+torch~=2.1.0
+torchvision~=0.16.0
+Pillow~=10.0.0
+matplotlib~=3.7.2
+pandas~=2.1.1
+tqdm~=4.66.1
+ultralytics~=8.0.199
+google~=3.0.0
+openai~=0.28.0
+tiktoken~=0.5.1

@@ -41,8 +41,9 @@ class Language(enum.Enum):
 
 
 class VisionAlgorithm(enum.Enum):
-    YOLO_V8 = 'YOLO_V8',
+    YOLO = 'YOLO',
     GOOGLE_VISION = 'GOOGLE_VISION',
+    MEDIA_PIPE = 'MEDIA_PIPE',
 
 
 class SpeechGenerationAlgorithm(enum.Enum):
@@ -52,6 +53,10 @@ class SpeechGenerationAlgorithm(enum.Enum):
 class IntentRecognitionAlgorithm(enum.Enum):
     CHAT_GPT = 'CHAT_GPT',
     SNIPS_NLU = 'SNIPS_NLU',
+
+
+class FaceRecognitionAlgorithm(enum.Enum):
+    FACE_RECC = 'FACE_RECC',
 
 
 class Configurations(enum.Enum):
@@ -80,9 +85,11 @@ class Configurations(enum.Enum):
 
     # The configuration for the speech recognition algorithm.
     SPEECH_RECOGNITION_VOSK_LANGUAGE = "SPEECH_RECOGNITION_VOSK_LANGUAGE"
+    SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH = "SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH"
 
     SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE = "SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE"
     SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ = "SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ"
     SPEECH_RECOGNITION_GOOGLE_ENCODING = "SPEECH_RECOGNITION_GOOGLE_ENCODING"
 
+    # The configuration for the speech recognition algorithm.
     # The configur
