@@ -11,6 +11,9 @@ class EngineConfigurations:
     def remove_configurations(self, key: Configurations) -> str:
         return self.configurations.pop(key)
 
+    def get_configuration(self, key: Configurations) -> str:
+        return self.configurations.get(key)
+
     def get_configurations(self) -> dict:
         return self.configurations
 

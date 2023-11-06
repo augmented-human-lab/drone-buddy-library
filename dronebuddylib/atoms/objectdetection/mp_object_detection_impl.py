@@ -18,12 +18,30 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 
 class MPObjectDetectionImpl(IObjectDetection):
     def get_class_name(self) -> str:
+        """
+        Returns the class name.
+
+        Returns:
+            str: The class name.
+        """
         return 'OBJECT_DETECTION_MP'
 
     def get_algorithm_name(self) -> str:
+        """
+        Returns the algorithm name.
+
+        Returns:
+            str: The algorithm name.
+        """
         return 'Mediapipe Object Detection'
 
     def __init__(self, engine_configurations: EngineConfigurations):
+        """
+        Initializes the object detection engine with the given configurations.
+
+        Args:
+            engine_configurations (EngineConfigurations): The engine configurations.
+        """
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
@@ -42,6 +60,15 @@ class MPObjectDetectionImpl(IObjectDetection):
         self.detector = detector
 
     def get_detected_objects(self, image) -> ObjectDetectionResult:
+        """
+        Detects objects in the provided image and returns a result containing a list of detected objects.
+
+        Args:
+            image: The image in which to detect objects.
+
+        Returns:
+            ObjectDetectionResult: A result containing a list of detected objects.
+        """
         detection_result = self.detector.detect(image)
         return_list = []
         simple_list = []
@@ -65,10 +92,31 @@ class MPObjectDetectionImpl(IObjectDetection):
         return ObjectDetectionResult(simple_list, return_list)
 
     def get_bounding_boxes_of_detected_objects(self, image) -> list:
+        """
+        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.
+
+        Args:
+            image: The image in which to detect objects.
+
+        Returns:
+            list: A list of bounding boxes for the detected objects.
+        """
         pass
 
     def get_required_params(self) -> list:
+        """
+        Returns a list of required configuration parameters.
+
+        Returns:
+            list: A list of required configuration parameters.
+        """
         return []
 
     def get_optional_params(self) -> list:
+        """
+        Returns a list of optional configuration parameters.
+
+        Returns:
+            list: A list of optional configuration parameters.
+        """
         return [Configurations.OBJECT_DETECTION_MP_MODELS_PATH]

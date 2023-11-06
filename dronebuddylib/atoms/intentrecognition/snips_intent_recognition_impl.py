@@ -1,6 +1,5 @@
 import json
 from abc import ABC
-
 import pkg_resources
 from snips_nlu import SnipsNLUEngine
 
@@ -14,20 +13,40 @@ import logging
 
 
 class SNIPSIntentRecognitionImpl(IIntentRecognition):
+    """
+    Implementation of intent recognition using the Snips NLU engine.
+
+    Attributes:
+        engine (SnipsNLUEngine): The Snips NLU engine used for intent recognition.
+
+    Methods:
+        get_class_name: Returns the class name.
+        get_algorithm_name: Returns the name of the algorithm.
+        get_resolved_intent: Parses text to detect intent and associated slots.
+        add_new_intent: Adds a new intent to the intent file.
+        get_required_params: Returns a list of required configuration parameters.
+        get_optional_params: Returns a list of optional configuration parameters.
+    """
     def get_class_name(self) -> str:
+        """Returns the class name."""
         return 'INTENT_RECOGNITION_SNIPS'
 
     def get_algorithm_name(self) -> str:
+        """Returns the name of the algorithm."""
         return 'SNIPS Intent Recognition'
 
     def __init__(self, engine_configurations: EngineConfigurations):
-        # Load the SnipsNLUEngine with the provided configuration
+        """
+        Initialize the SNIPSIntentRecognitionImpl with the given configurations.
 
+        Args:
+            engine_configurations (EngineConfigurations): The configurations for the engine.
+        """
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
 
-        # If dataset path is not provided, use the default path
+        # Use the default dataset path if not provided
         if engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
                 Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name) is None:
             dataset_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/dataset.json")
@@ -36,18 +55,13 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
             dataset_path = engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
                 Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name)
 
-        # Load the SnipsNLUEngine with the provided configuration
         engine = SnipsNLUEngine(config=engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
             Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG.name))
 
-        # Load the dataset file in JSON format
-
-        with open(
-                dataset_path) as fh:
+        with open(dataset_path) as fh:
             dataset = json.load(fh)
             logging.debug(self.get_class_name() + ':Training set loaded from the json file')
 
-        # Fit the dataset to the engine
         engine.fit(dataset)
         logging.debug(self.get_class_name() + ': Model fitted to the training set')
 
@@ -56,36 +70,42 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
 
     def get_resolved_intent(self, phrase: str) -> Intent:
         """
-           Given a trained SnipsNLUEngine and a string of text, this function parses the text
-           and returns a dictionary representing the detected intent and associated slots.
+        Parses text to detect intent and associated slots.
 
-           Args:
-               phrase: A string of text to be parsed by the NLU engine
+        Args:
+            phrase (str): The text to be parsed.
 
-           Returns:
-               A dictionary representing the detected intent and associated slots, with the following keys:
-                   - intent: An object containing intentName, probability.
-                   - slots: A dictionary containing key-value pairs of detected slots
-           """
+        Returns:
+            Intent: The detected intent and associated slots.
+        """
         intent = self.engine.parse(phrase)
         return Intent(intent.intent, intent.slots, intent.intent.probability)
 
     def add_new_intent(self, intent: str, description: str) -> bool:
+        """
+        Adds a new intent and its description to the intent file.
 
-        # add intent to the intent list
+        Args:
+            intent (str): The new intent.
+            description (str): The description of the new intent.
+
+        Returns:
+            bool: True if the intent was successfully added, False otherwise.
+        """
         try:
             text_file_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/intents.txt")
             with open(text_file_path, 'a') as file:
                 file.write(intent + "=" + description + '\n')
+            return True
         except IOError:
-            logging.error("Error while writing to the file : ", intent)
-            raise FileWritingException("Error while writing to the file : " + intent)
-        return True
+            logging.error("Error while writing to the file: %s", intent)
+            raise FileWritingException("Error while writing to the file: " + intent)
 
     def get_required_params(self) -> list:
+        """Returns a list of required configuration parameters."""
         return [Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH,
-                Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG
-                ]
+                Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG]
 
     def get_optional_params(self) -> list:
+        """Returns a list of optional configuration parameters."""
         pass

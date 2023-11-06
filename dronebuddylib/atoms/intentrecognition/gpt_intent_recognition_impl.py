@@ -18,16 +18,24 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
     Attributes:
         configs (GPTConfigs): Configurations for the GPT Engine.
         gpt_engine (GPTEngine): The GPT engine instance used for intent recognition.
-
-    Examples:
-        >>> recognizer = GPTIntentRecognitionImpl(engine_configurations)
-        >>> intent = recognizer.get_resolved_intent("Can you make the drone spin?")
     """
 
     def get_class_name(self) -> str:
+        """
+        Returns the class name of the intent recognition implementation.
+
+        Returns:
+            str: The class name.
+        """
         return 'INTENT_RECOGNITION_GPT'
 
     def get_algorithm_name(self) -> str:
+        """
+        Returns the algorithm name of the intent recognition implementation.
+
+        Returns:
+            str: The algorithm name.
+        """
         return 'GPT Intent Recognition'
 
     def __init__(self, engine_configurations: EngineConfigurations):
@@ -35,30 +43,35 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         Initializes the GPTIntentRecognition with configurations and sets up the default system prompt.
 
         Args:
-            configs (GPTConfigs): Configurations for the GPT Engine.
+            engine_configurations (EngineConfigurations): Configurations for the GPT Engine.
         """
-
+        # Validate configurations
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
+
+        # Get configurations
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         self.configs = engine_configurations
 
+        # Initialize GPT configs
         gpt_configs = GPTConfigs(
-            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY.name,
-                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY)),
-            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL.name,
-                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL)),
-            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE.name,
-                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE)),
-            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL.name,
-                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL)),
-            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION.name,
-                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
+            api_key=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY.name,
+                                configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY)),
+            model=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL.name,
+                              configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL)),
+            temperature=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE.name,
+                                    configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE)),
+            api_url=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL.name,
+                                configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL)),
+            logger_location=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION.name,
+                                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
         )
 
+        # Initialize GPT engine
         self.gpt_engine = GPTEngine(gpt_configs)
 
+        # Set system prompt
         if configs.get(Configurations.INTENT_RECOGNITION_SYSTEM_PROMPT.name, None) is not None:
             self.override_system_prompt(configs.get(Configurations.INTENT_RECOGNITION_SYSTEM_PROMPT.name))
         else:
@@ -108,12 +121,23 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         return self.gpt_engine.session.get_chatgpt_response(user_message)
 
     def get_required_params(self) -> list:
+        """
+        Returns the list of required configuration parameters for the intent recognition engine.
+
+        Returns:
+            list: List of required configuration parameters.
+        """
         return [Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY,
                 Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL,
                 Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL,
                 Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE,
-                Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION,
-                ]
+                Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION]
 
     def get_optional_params(self) -> list:
+        """
+        Returns the list of optional configuration parameters for the intent recognition engine.
+
+        Returns:
+            list: List of optional configuration parameters.
+        """
         return [Configurations.INTENT_RECOGNITION_SYSTEM_PROMPT]

@@ -21,60 +21,80 @@ need to initialize the model before using the speechrecognition to text engine.
 
 
 class VoskSpeechToTextConversionImpl(ISpeechToTextConversion):
+    """
+    This class is an implementation of the ISpeechToTextConversion interface for Vosk API.
+
+    Attributes:
+        speech_conversion_engine (KaldiRecognizer): The Vosk KaldiRecognizer object for speech recognition.
+    """
+
     def get_class_name(self) -> str:
+        """
+        Gets the class name.
+
+        Returns:
+            str: The class name.
+        """
         return 'TEXT_TO_SPEECH_VOSK'
 
     def get_algorithm_name(self) -> str:
+        """
+        Gets the algorithm name.
+
+        Returns:
+            str: The algorithm name.
+        """
         return 'Vosk Text to Speech'
 
     def get_required_params(self) -> list:
+        """
+        Gets the list of required parameters.
+
+        Returns:
+            list: The list of required parameters.
+        """
         return []
 
     def get_optional_params(self) -> list:
+        """
+        Gets the list of optional parameters.
+
+        Returns:
+            list: The list of optional parameters.
+        """
         return [Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH]
 
     def __init__(self, engine_configurations: EngineConfigurations):
         """
-         Initializes a speechrecognition-to-text engine using the Vosk model for a given language.
-         (currently only supports 'en-US' language)
+        Initializes a speech-to-text engine using the Vosk model for a given language.
 
-         Args:
-         - language: a string representing the language code to use (e.g. 'en-us', 'fr-fr')
-
-         Returns:
-         - a Vosk KaldiRecognizer object that can be used for speechrecognition recognition
-         """
+        Args:
+            engine_configurations (EngineConfigurations): The engine configurations containing necessary parameters.
+        """
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
 
-        # Define the path to the Vosk model for the given language
-        model_path = pkg_resources.resource_filename(__name__,
-                                                     "resources/speechrecognition/vosk-model-small-en-us-0.15")
+        model_path = pkg_resources.resource_filename(__name__, "resources/speechrecognition/vosk-model-small-en-us-0.15")
         language_model_path = configs.get(Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH, model_path)
 
-        # Load the Vosk model and create a KaldiRecognizer object
         model = Model(language_model_path)
-
-        # Log that the speechrecognition recognition model has been initialized
         vosk_kaldi_model = KaldiRecognizer(model, 44100)
         logger.info('Speech Recognition : Initialized speechrecognition recognition model')
 
-        # Return the Vosk KaldiRecognizer object
         self.speech_conversion_engine = vosk_kaldi_model
 
     def recognize_speech(self, audio_steam):
         """
-              Recognizes a text from an audio feed using a given model.
+        Recognizes text from an audio stream using the Vosk API.
 
-              Args:
-              - model: The vosk model that is returned by the init_speech_to_text_engine().
-              - audio_feed: a byte string representing the audio feed to recognize, taken by audio_feed.read(num_frames)
+        Args:
+            audio_steam (bytes): The audio stream content to be recognized.
 
-              Returns:
-              - the text that was recognized, or None if no text was recognized
-              """
+        Returns:
+            RecognizedSpeechResult: The result containing recognized text and total billed time.
+        """
         if self.speech_conversion_engine.AcceptWaveform(audio_steam):
             r = self.speech_conversion_engine.Result()
             logger.debug('Speech Recognition : Recognized utterance : ', r)

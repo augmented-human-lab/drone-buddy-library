@@ -12,10 +12,28 @@ import face_recognition
 
 
 class FaceRecognitionImpl(IFaceRecognition):
+    """
+    Implementation of the IFaceRecognition interface using face_recognition library.
+    """
     def __init__(self, engine_configurations: EngineConfigurations):
+        """
+        Initialize the FaceRecognitionImpl class.
+
+        Args:
+            engine_configurations (EngineConfigurations): The configurations for the engine.
+        """
         super().__init__(engine_configurations)
 
     def recognize_face(self, image) -> list:
+        """
+        Recognize faces in an image.
+
+        Args:
+            image: The image containing faces to be recognized.
+
+        Returns:
+            list: A list of recognized faces.
+        """
         processed_frame = self.process_frame_for_recognition(image)
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(processed_frame)
@@ -36,7 +54,6 @@ class FaceRecognitionImpl(IFaceRecognition):
             # If a match was found in known_face_encodings, just use the first one.
             if True in matches:
                 first_match_index = matches.index(True)
-            #    name = known_face_names[first_match_index]
 
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
@@ -46,28 +63,47 @@ class FaceRecognitionImpl(IFaceRecognition):
 
             recognized_faces.append(name)
 
-        # if self.show_feed:
-        #     get_video_feed(frame, face_locations, recognized_faces)
-
         return recognized_faces
 
     def process_frame_for_recognition(self, frame):
+        """
+        Pre-process the frame for face recognition.
+
+        Args:
+            frame: The frame to be processed.
+
+        Returns:
+            The processed frame.
+        """
         # Resize frame of video to 1/4 size for faster face recognition processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-        # rgb_small_frame = small_frame[:, :, ::-1]
         rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
         logger.debug("Face Recognition : shape of the frame : ", rgb_small_frame.shape)
         return rgb_small_frame
 
     def load_known_face_names(self):
-        # load the user list from known_faces.txt
+        """
+        Load the known face names from a file.
+
+        Returns:
+            list: A list of known face names.
+        """
         path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
         known_face_names = self.read_file_into_list(path)
         return known_face_names
 
     def load_known_face_encodings(self, known_face_names):
+        """
+        Load the known face encodings from files.
+
+        Args:
+            known_face_names: A list of known face names.
+
+        Returns:
+            list: A list of known face encodings.
+        """
         known_face_encodings = []
         for name in known_face_names:
             face_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/images/" + name + ".jpg")
@@ -77,38 +113,36 @@ class FaceRecognitionImpl(IFaceRecognition):
         return known_face_encodings
 
     def read_file_into_list(self, filename):
+        """
+        Read a file into a list.
+
+        Args:
+            filename: The path to the file.
+
+        Returns:
+            list: A list of lines from the file.
+        """
         field_list = []
-        # Open the file in read mode
         try:
             with open(filename, "r") as file:
-                # Read the contents of the file line by line
                 lines = file.readlines()
                 lines_without_newline = [line.rstrip('\n') for line in lines]
                 return [line for line in lines_without_newline if line]
 
         except FileNotFoundError as e:
             raise FileNotFoundError("The specified file is not found.", e) from e
-        # Return the list of fields
-
-    def get_video_feed(self, frame, face_locations, face_names):
-        for (top, right, bottom, left), name in zip(face_locations, face_names):
-            # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-            top *= 4
-            right *= 4
-            bottom *= 4
-            left *= 4
-
-            # Draw a box around the face
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-            # Draw a label with a name below the face
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-        # Display the resulting image
-        cv2.imshow('Video', frame)
 
     def remember_face(self, image_path, name) -> bool:
+        """
+        Associate a name with a face in an image.
+
+        Args:
+            image_path: The path to the image containing the face.
+            name: The name to be associated with the face.
+
+        Returns:
+            bool: True if the association was successful, False otherwise.
+        """
         try:
             text_file_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
             with open(text_file_path, 'a') as file:
@@ -116,7 +150,6 @@ class FaceRecognitionImpl(IFaceRecognition):
         except IOError:
             logger.error("Error while writing to the file : ", name)
             raise FileWritingException("Error while writing to the file : " + name)
-            # add file to the images folder
 
         try:
             new_file_name = pkg_resources.resource_filename(__name__,
@@ -129,13 +162,37 @@ class FaceRecognitionImpl(IFaceRecognition):
         return True
 
     def get_required_params(self) -> list:
+        """
+        Get the required parameters for the FaceRecognitionImpl class.
+
+        Returns:
+            list: A list of required parameters.
+        """
         pass
 
     def get_optional_params(self) -> list:
+        """
+        Get the optional parameters for the FaceRecognitionImpl class.
+
+        Returns:
+            list: A list of optional parameters.
+        """
         pass
 
     def get_class_name(self) -> str:
+        """
+        Get the class name of the FaceRecognitionImpl class.
+
+        Returns:
+            str: The class name.
+        """
         return 'FACE_RECOGNITION'
 
     def get_algorithm_name(self) -> str:
+        """
+        Get the algorithm name of the FaceRecognitionImpl class.
+
+        Returns:
+            str: The algorithm name.
+        """
         return 'Face Recognition'

@@ -1,0 +1,16 @@
+__version__ = "2.0.0"
+
+from .facerecognition.face_recognition_engine import FaceRecognitionEngine
+
+from .intentrecognition.intent_recognition_engine import IntentRecognitionEngine
+
+from .objectdetection.object_detection_engine import ObjectDetectionEngine
+
+from .speechgeneration.speech_generation_engine import SpeechGenerationEngine
+
+from .speechrecognition.speech_to_text_engine import SpeechToTextEngine
+
+from .bodyfeatureextraction.hand_feature_extraction_impl import HandFeatureExtractionImpl
+from .bodyfeatureextraction.body_feature_extraction_impl import BodyFeatureExtractionImpl
+
+from .gpt_integration import GPTEngine

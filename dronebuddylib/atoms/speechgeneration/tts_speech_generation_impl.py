@@ -8,25 +8,29 @@ from dronebuddylib.utils.utils import config_validity_check
 
 # Get an instance of a logger
 logger = get_logger()
-''''This is a wrapper for ttx. '''
 
-'''
+"""
+This is a wrapper for ttx.
+"""
+
+"""
 :param engine: The pyttsx engine that was returned by the init_text_to_speech_engine().
 :param text: The text to be converted to speechrecognition.
 
-this method will convert the text to speechrecognition and play it.
-'''
+This method will convert the text to speechrecognition and play it.
+"""
 
 
 class TTSTextToSpeechEngineImpl(ISpeechGeneration):
-    # initiates the speechrecognition to text engine
+    """
+    Initiates the speechrecognition to text engine.
+    """
 
-    '''
+    """
     Required to initialize the pyttsx engine before using the text to voice engine.
     ( since this is the offline model, can only support this voice for the moment)
     :return: The pytts engine.
-
-    '''
+    """
 
     def get_class_name(self) -> str:
         return 'TEXT_TO_SPEECH_TTS'
@@ -94,7 +98,7 @@ class TTSTextToSpeechEngineImpl(ISpeechGeneration):
         return [Configurations.SPEECH_GENERATION_TTS_RATE, Configurations.SPEECH_GENERATION_TTS_VOLUME,
                 Configurations.SPEECH_GENERATION_TTS_VOICE_ID]
 
-    def read_phrase(self, text):
+    def read_phrase(self, text) -> None:
         """
            Generates speechrecognition from the provided text using a text-to-speechrecognition engine and plays it.
 
