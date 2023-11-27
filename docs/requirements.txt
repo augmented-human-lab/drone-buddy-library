@@ -4,6 +4,8 @@ pyttsx3~=2.90
 opencv-contrib-python~=4.7.0.72
 requests~=2.28.0
 numpy~=1.23.0
+setuptools-rust~=1.7.0
+
 
 
 cython~=0.29.34
@@ -11,7 +13,6 @@ cython~=0.29.34
 setuptools~=65.5.1
 packaging~=23.0
 pyparsing~=3.0.9
-
 
 dronebuddylib~=1.0.7
 djitellopy~=2.5.0
@@ -21,19 +22,11 @@ Pillow~=10.0.0
 matplotlib~=3.7.2
 tqdm~=4.66.1
 mediapipe~=0.10.3
+alabaster==0.7.13
+sphinx_autodoc_typehints==1.24.0
+google-cloud-speech==2.21.0
+google-cloud-vision==3.4.4
+snips_nlu==0.20.2
 
 
-PyAudio~=0.2.13
-dronebuddylib~=1.0.8
-djitellopy~=2.5.0
-mediapipe~=0.10.3
-torch~=2.1.0
-torchvision~=0.16.0
-Pillow~=10.0.0
-matplotlib~=3.7.2
-pandas~=2.1.1
-tqdm~=4.66.1
-ultralytics~=8.0.199
-google~=3.0.0
-openai~=0.28.0
-tiktoken~=0.5.1
+
