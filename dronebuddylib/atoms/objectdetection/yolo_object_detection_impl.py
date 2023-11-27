@@ -20,7 +20,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         Returns:
             str: The class name of the object detection implementation.
         """
-        return 'OBJECT_DETECTION_YOLO_V8'
+        return 'OBJECT_DETECTION_YOLO'
 
     def get_algorithm_name(self) -> str:
         """

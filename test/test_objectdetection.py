@@ -21,8 +21,7 @@ class TestObjectDetection(unittest.TestCase):
         image = cv2.imread('test_image.jpg')
         # image = cv2.imread('group.jpg')
         engine_configs = EngineConfigurations({})
-        engine_configs.add_configuration(Configurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH,
-                                         "C:/Users/Public/projects/drone-buddy-library/test/yolov3.weights")
+        engine_configs.add_configuration(Configurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
         engine = YOLOObjectDetectionImpl(engine_configs)
         objects = engine.get_detected_objects(image)
         print("objects", objects.object_names)
@@ -35,6 +34,7 @@ class TestObjectDetection(unittest.TestCase):
 
         # assert len(labels) > 0 and 'chair' in labels
 
+
     def test_yolo(self):
         image = cv2.imread('test_image.jpg')
         # image = cv2.imread('group.jpg')
@@ -46,6 +46,7 @@ class TestObjectDetection(unittest.TestCase):
         print("objects", objects.object_names)
         # assert len(labels) > 0 and 'chair' in labels
 
+
     def test_mediapipe(self):
         # image = cv2.imread('test_image.jpg')
         mp_image = mp.Image.create_from_file('test_image.jpg')
@@ -54,6 +55,7 @@ class TestObjectDetection(unittest.TestCase):
         engine = MPObjectDetectionImpl(EngineConfigurations({}))
         objects = engine.get_detected_objects(mp_image)
         print("objects", objects.object_names)
+
 
     def test_simple_performance(self):
         # init yolo
@@ -87,8 +89,9 @@ class TestObjectDetection(unittest.TestCase):
 
         # check the time taken by yolo to return the labels
 
-    def test_me(self):
-        print('test_me')
+
+def test_me(self):
+    print('test_me')
 
 
 if __name__ == '__main__':

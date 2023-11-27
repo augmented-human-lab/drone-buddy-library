@@ -42,11 +42,13 @@ class MPObjectDetectionImpl(IObjectDetection):
         Args:
             engine_configurations (EngineConfigurations): The engine configurations.
         """
+        super().__init__(engine_configurations)
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
 
-        path = pkg_resources.resource_filename(__name__, "resources/efficientdet_lite0.tflite")
+        # path = pkg_resources.resource_filename(__name__, "resources/efficientdet_lite0.tflite")
+        path = "efficientdet_lite0.tflite"
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         model_path = configs.get(Configurations.OBJECT_DETECTION_MP_MODELS_PATH)
         if model_path is not None:

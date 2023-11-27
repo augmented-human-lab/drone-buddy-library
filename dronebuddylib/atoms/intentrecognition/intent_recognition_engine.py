@@ -53,6 +53,7 @@ class IntentRecognitionEngine:
         Returns:
             Intent: Recognized intent.
         """
+
         return self.intent_recognizer.get_resolved_intent(text)
 
     def get_current_intents(self) -> dict:

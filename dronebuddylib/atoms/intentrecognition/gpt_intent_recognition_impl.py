@@ -1,5 +1,6 @@
 from dronebuddylib.atoms.gpt_integration import GPTEngine
 from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRecognition
+from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.enums import Configurations
 from dronebuddylib.models.gpt_configs import GPTConfigs
 from dronebuddylib.utils.chat_prompts import SYSTEM_PROMPT_INTENT_CLASSIFICATION
@@ -27,7 +28,7 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         Returns:
             str: The class name.
         """
-        return 'INTENT_RECOGNITION_GPT'
+        return 'INTENT_RECOGNITION_OPEN_AI'
 
     def get_algorithm_name(self) -> str:
         """
@@ -46,6 +47,7 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
             engine_configurations (EngineConfigurations): Configurations for the GPT Engine.
         """
         # Validate configurations
+        super().__init__(engine_configurations)
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
@@ -56,15 +58,15 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
 
         # Initialize GPT configs
         gpt_configs = GPTConfigs(
-            api_key=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY.name,
+            open_ai_api_key=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY.name,
                                 configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY)),
-            model=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL.name,
+            open_ai_model=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL.name,
                               configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL)),
-            temperature=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE.name,
+            open_ai_temperature=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE.name,
                                     configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE)),
-            api_url=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL.name,
+            open_ai_api_url=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL.name,
                                 configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL)),
-            logger_location=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION.name,
+            loger_location=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION.name,
                                         configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
         )
 
@@ -118,7 +120,13 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         Returns:
             str: Recognized intent based on the user message.
         """
-        return self.gpt_engine.session.get_chatgpt_response(user_message)
+
+        try:
+            return self.gpt_engine.session.get_chatgpt_response(user_message)
+        except KeyError:
+            raise IntentResolutionException("Intent could not be resolved.")
+
+
 
     def get_required_params(self) -> list:
         """

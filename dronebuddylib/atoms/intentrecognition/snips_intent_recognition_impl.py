@@ -4,6 +4,7 @@ import pkg_resources
 from snips_nlu import SnipsNLUEngine
 
 from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRecognition
+from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import Configurations
 from dronebuddylib.models.intent import Intent
@@ -27,6 +28,7 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
         get_required_params: Returns a list of required configuration parameters.
         get_optional_params: Returns a list of optional configuration parameters.
     """
+
     def get_class_name(self) -> str:
         """Returns the class name."""
         return 'INTENT_RECOGNITION_SNIPS'
@@ -79,7 +81,10 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
             Intent: The detected intent and associated slots.
         """
         intent = self.engine.parse(phrase)
-        return Intent(intent.intent, intent.slots, intent.intent.probability)
+        try:
+            return Intent(intent['intent']['intentName'], intent['slots'], intent['intent']['probability'])
+        except KeyError:
+            raise IntentResolutionException("Intent could not be resolved.")
 
     def add_new_intent(self, intent: str, description: str) -> bool:
         """

@@ -9,4 +9,13 @@ recursive-include dronebuddylib/offline/atoms *
 recursive-include dronebuddylib/offline/molecules *
 recursive-include dronebuddylib/online/atoms *
 recursive-include dronebuddylib/online/molecules *
+
+
+recursive-include dronebuddylib/online/atoms/resources *
+recursive-include dronebuddylib/online/atoms/speechrecognition/resources/vosk-model-small-en-us-0.15 *
+recursive-include dronebuddylib/online/atoms/facerecognition/resources/ *
+recursive-include dronebuddylib/online/atoms/facerecognition/resources/images/ *
+recursive-include dronebuddylib/online/atoms/intentrecognition/resources/ *
+recursive-include dronebuddylib/online/atoms/bodyfeatureextraction/resources/ *
+recursive-include dronebuddylib/online/atoms//resources/vosk-model-small-en-us-0.15 *
 include requirements.txt

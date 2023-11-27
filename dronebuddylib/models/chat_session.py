@@ -4,6 +4,7 @@ from typing import List, Dict
 import openai
 import requests
 
+from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.conversation import Conversation
 from dronebuddylib.models.gpt_configs import GPTConfigs
 from dronebuddylib.models.session_logger import SessionLogger
@@ -55,14 +56,14 @@ class ChatSession:
             chatgpt_response = self._chat_completion_request(
                 self.conversation.conversation_history
             )
-            chatgpt_message = chatgpt_response.get("content")
+            chatgpt_message = chatgpt_response['choices'][0]['message']['content']
             self.conversation.add_message("assistant", chatgpt_message)
             self.logger.log_chat('user', -1, chatgpt_message)
 
             return chatgpt_message
         except Exception as e:
             print(e)
-            return "something went wrong"
+            raise IntentResolutionException("Intent could not be resolved.")
 
     def _chat_completion_request(self, messages: List[Dict]):
         headers = {

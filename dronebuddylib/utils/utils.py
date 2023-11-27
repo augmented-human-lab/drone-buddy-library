@@ -40,7 +40,7 @@ def create_custom_drone_action_list(custom_actions: list) -> str:
 
 
 def config_validity_check(class_requirements: list, provided_configs: dict, algo_name: str):
-    if len(provided_configs) == 0:
+    if len(provided_configs) == 0 and len(class_requirements) > 0:
         raise MissingConfigurationException(algo_name, "All")
     for req_key in class_requirements:
         try:

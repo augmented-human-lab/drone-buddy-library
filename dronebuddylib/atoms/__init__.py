@@ -12,5 +12,6 @@ from .speechrecognition.speech_to_text_engine import SpeechToTextEngine
 
 from .bodyfeatureextraction.hand_feature_extraction_impl import HandFeatureExtractionImpl
 from .bodyfeatureextraction.body_feature_extraction_impl import BodyFeatureExtractionImpl
+from .bodyfeatureextraction.head_feature_extraction_impl import HeadFeatureExtractionImpl
 
 from .gpt_integration import GPTEngine
