@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.i_dbl_function import IDBLFunction
+from dronebuddylib.models.object_detected import ObjectDetectionResult
 
 
 class IObjectDetection(IDBLFunction):
@@ -15,7 +16,7 @@ class IObjectDetection(IDBLFunction):
         self.engine_configurations = engine_configurations
 
     @abstractmethod
-    def get_detected_objects(self, image) -> list:
+    def get_detected_objects(self, image) -> ObjectDetectionResult:
         """
         Detects objects in the provided image and returns a list of detected objects.
 
@@ -23,7 +24,7 @@ class IObjectDetection(IDBLFunction):
             image: The image in which to detect objects.
 
         Returns:
-            list: A list of detected objects.
+            ObjectDetectionResult: A result containing a list of detected objects.
         """
         pass
 

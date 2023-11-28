@@ -18,6 +18,8 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 class BodyFeatureExtractionImpl(IFeatureExtraction):
     """
     The BodyFeatureExtractionImpl class is used to extract features related to body postures from an image.
+    built on top of Mediapipe's pose landmarking solution.
+    for more information: https://mediapipe-studio.webapps.google.com/home
     """
 
     def __init__(self, engine_configurations: EngineConfigurations):
@@ -48,12 +50,21 @@ class BodyFeatureExtractionImpl(IFeatureExtraction):
         """
         pass
 
+    def get_supported_features(self) -> list:
+        """
+        Get the list of supported features for the engine.
+
+        Returns:
+            list: The list of supported features.
+        """
+        return ["POSE"]
+
     def get_detected_pose(self, image) -> PoseLandmarkerResult:
         """
         Get the detected pose from an image.
 
         Args:
-            image (list): The image to detect the pose from.
+            image (list): The numpy list image to detect the pose from.
 
         Returns:
             PoseLandmarkerResult: The detected pose.

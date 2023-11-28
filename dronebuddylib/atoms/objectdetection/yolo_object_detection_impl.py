@@ -38,6 +38,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         Args:
             engine_configurations (EngineConfigurations): The engine configurations for the object detection engine.
         """
+        super().__init__(engine_configurations)
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
@@ -57,7 +58,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
             image: The image to detect objects in.
 
         Returns:
-            ObjectDetectionResult: The result of the object detection, including a list of detected objects.
+            ObjectDetectionResult (ObjectDetectionResult): The result of the object detection, including a list of detected objects.
         """
         results = self.detector.predict(source=image, save=True, save_txt=True)
         detected_objects = []

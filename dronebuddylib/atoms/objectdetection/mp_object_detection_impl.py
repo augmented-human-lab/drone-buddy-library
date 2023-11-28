@@ -69,7 +69,7 @@ class MPObjectDetectionImpl(IObjectDetection):
             image: The image in which to detect objects.
 
         Returns:
-            ObjectDetectionResult: A result containing a list of detected objects.
+            ObjectDetectionResult (ObjectDetectionResult) : A result containing a list of detected objects.
         """
         detection_result = self.detector.detect(image)
         return_list = []

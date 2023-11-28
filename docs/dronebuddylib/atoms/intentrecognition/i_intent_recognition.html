@@ -42,6 +42,9 @@
                         <li>
                                 <a class="function" href="#IIntentRecognition.get_resolved_intent">get_resolved_intent</a>
                         </li>
+                        <li>
+                                <a class="function" href="#IIntentRecognition.introduce_new_intents">introduce_new_intents</a>
+                        </li>
                 </ul>
 
             </li>
@@ -102,6 +105,21 @@ dronebuddylib<wbr>.<a href="./../../atoms.html">atoms</a><wbr>.<a href="./../int
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">            str: The recognized intent.</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="k">pass</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span> <span class="nf">introduce_new_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        Introduces new intents to the intent recognition system.</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Args:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">            new_intents (dict): The new intents to be added.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        Returns:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            bool: True if the operation was successful, False otherwise.</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -147,6 +165,21 @@ dronebuddylib<wbr>.<a href="./../../atoms.html">atoms</a><wbr>.<a href="./../int
 </span><span id="IIntentRecognition-35"><a href="#IIntentRecognition-35"><span class="linenos">35</span></a><span class="sd">            str: The recognized intent.</span>
 </span><span id="IIntentRecognition-36"><a href="#IIntentRecognition-36"><span class="linenos">36</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="IIntentRecognition-37"><a href="#IIntentRecognition-37"><span class="linenos">37</span></a>        <span class="k">pass</span>
+</span><span id="IIntentRecognition-38"><a href="#IIntentRecognition-38"><span class="linenos">38</span></a>
+</span><span id="IIntentRecognition-39"><a href="#IIntentRecognition-39"><span class="linenos">39</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IIntentRecognition-40"><a href="#IIntentRecognition-40"><span class="linenos">40</span></a>    <span class="k">def</span> <span class="nf">introduce_new_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="IIntentRecognition-41"><a href="#IIntentRecognition-41"><span class="linenos">41</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IIntentRecognition-42"><a href="#IIntentRecognition-42"><span class="linenos">42</span></a><span class="sd">        Introduces new intents to the intent recognition system.</span>
+</span><span id="IIntentRecognition-43"><a href="#IIntentRecognition-43"><span class="linenos">43</span></a>
+</span><span id="IIntentRecognition-44"><a href="#IIntentRecognition-44"><span class="linenos">44</span></a><span class="sd">        This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</span>
+</span><span id="IIntentRecognition-45"><a href="#IIntentRecognition-45"><span class="linenos">45</span></a>
+</span><span id="IIntentRecognition-46"><a href="#IIntentRecognition-46"><span class="linenos">46</span></a><span class="sd">        Args:</span>
+</span><span id="IIntentRecognition-47"><a href="#IIntentRecognition-47"><span class="linenos">47</span></a><span class="sd">            new_intents (dict): The new intents to be added.</span>
+</span><span id="IIntentRecognition-48"><a href="#IIntentRecognition-48"><span class="linenos">48</span></a>
+</span><span id="IIntentRecognition-49"><a href="#IIntentRecognition-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
+</span><span id="IIntentRecognition-50"><a href="#IIntentRecognition-50"><span class="linenos">50</span></a><span class="sd">            bool: True if the operation was successful, False otherwise.</span>
+</span><span id="IIntentRecognition-51"><a href="#IIntentRecognition-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IIntentRecognition-52"><a href="#IIntentRecognition-52"><span class="linenos">52</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -234,6 +267,48 @@ dronebuddylib<wbr>.<a href="./../../atoms.html">atoms</a><wbr>.<a href="./../int
 
 <p>Returns:
     str: The recognized intent.</p>
+</div>
+
+
+                            </div>
+                            <div id="IIntentRecognition.introduce_new_intents" class="classattr">
+                                        <input id="IIntentRecognition.introduce_new_intents-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator">@abstractmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">introduce_new_intents</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+
+                <label class="view-source-button" for="IIntentRecognition.introduce_new_intents-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#IIntentRecognition.introduce_new_intents"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IIntentRecognition.introduce_new_intents-39"><a href="#IIntentRecognition.introduce_new_intents-39"><span class="linenos">39</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IIntentRecognition.introduce_new_intents-40"><a href="#IIntentRecognition.introduce_new_intents-40"><span class="linenos">40</span></a>    <span class="k">def</span> <span class="nf">introduce_new_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="IIntentRecognition.introduce_new_intents-41"><a href="#IIntentRecognition.introduce_new_intents-41"><span class="linenos">41</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IIntentRecognition.introduce_new_intents-42"><a href="#IIntentRecognition.introduce_new_intents-42"><span class="linenos">42</span></a><span class="sd">        Introduces new intents to the intent recognition system.</span>
+</span><span id="IIntentRecognition.introduce_new_intents-43"><a href="#IIntentRecognition.introduce_new_intents-43"><span class="linenos">43</span></a>
+</span><span id="IIntentRecognition.introduce_new_intents-44"><a href="#IIntentRecognition.introduce_new_intents-44"><span class="linenos">44</span></a><span class="sd">        This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</span>
+</span><span id="IIntentRecognition.introduce_new_intents-45"><a href="#IIntentRecognition.introduce_new_intents-45"><span class="linenos">45</span></a>
+</span><span id="IIntentRecognition.introduce_new_intents-46"><a href="#IIntentRecognition.introduce_new_intents-46"><span class="linenos">46</span></a><span class="sd">        Args:</span>
+</span><span id="IIntentRecognition.introduce_new_intents-47"><a href="#IIntentRecognition.introduce_new_intents-47"><span class="linenos">47</span></a><span class="sd">            new_intents (dict): The new intents to be added.</span>
+</span><span id="IIntentRecognition.introduce_new_intents-48"><a href="#IIntentRecognition.introduce_new_intents-48"><span class="linenos">48</span></a>
+</span><span id="IIntentRecognition.introduce_new_intents-49"><a href="#IIntentRecognition.introduce_new_intents-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
+</span><span id="IIntentRecognition.introduce_new_intents-50"><a href="#IIntentRecognition.introduce_new_intents-50"><span class="linenos">50</span></a><span class="sd">            bool: True if the operation was successful, False otherwise.</span>
+</span><span id="IIntentRecognition.introduce_new_intents-51"><a href="#IIntentRecognition.introduce_new_intents-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IIntentRecognition.introduce_new_intents-52"><a href="#IIntentRecognition.introduce_new_intents-52"><span class="linenos">52</span></a>        <span class="k">pass</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Introduces new intents to the intent recognition system.</p>
+
+<p>This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</p>
+
+<p>Args:
+    new_intents (dict): The new intents to be added.</p>
+
+<p>Returns:
+    bool: True if the operation was successful, False otherwise.</p>
 </div>
 
 

@@ -29,6 +29,26 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
         get_optional_params: Returns a list of optional configuration parameters.
     """
 
+    def introduce_new_intents(self, new_intents: dict) -> bool:
+        """
+        Introduces new intents to the intent recognition system.
+
+        Args:
+            new_intents (dict): The new intents to be added.
+
+        Returns:
+            bool: True if the operation was successful, False otherwise.
+        """
+        try:
+            text_file_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/intents.txt")
+            with open(text_file_path, 'a') as file:
+                for intent in new_intents:
+                    file.write(intent + "=" + new_intents[intent] + '\n')
+            return True
+        except IOError:
+            logging.error("Error while writing to the file: %s", intent)
+            raise FileWritingException("Error while writing to the file: " + intent)
+
     def get_class_name(self) -> str:
         """Returns the class name."""
         return 'INTENT_RECOGNITION_SNIPS'
@@ -44,6 +64,7 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
         Args:
             engine_configurations (EngineConfigurations): The configurations for the engine.
         """
+        super().__init__(engine_configurations)
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())

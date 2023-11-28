@@ -28,6 +28,13 @@
 
 
 
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#follow_person">follow_person</a>
+            </li>
+    </ul>
+
 
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
@@ -48,30 +55,69 @@ dronebuddylib<wbr>.<a href="./../molecules.html">molecules</a><wbr>.follow_perso
                         <label class="view-source-button" for="mod-follow_person-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">djitellopy</span> <span class="kn">import</span> <span class="n">Tello</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="c1">#</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="c1">#</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="c1">#</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="c1">#</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="c1"># def follow_person(tello: Tello, path: str):</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="c1">#     &quot;&quot;&quot;</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="c1">#     Follow the person in front of the drone.</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="c1">#</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="c1">#     Args:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="c1">#         tello (Tello)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="c1">#         path (str): the absolute path to directory of the two .pth files for the tracker</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="c1">#     &quot;&quot;&quot;</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="c1">#     frame, box = get_head_bounding_box(tello)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="c1">#</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="c1">#     tracker_engine = TrackingEngine()</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="c1">#     tracker_engine.init_tracker(path)</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="c1">#     tracker_engine.set_target(frame, box)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="c1">#</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="c1">#     follower = Follower(tracker_engine, tello)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="c1">#     follower.follow_person_with_gesture()</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">def</span> <span class="nf">follow_person</span><span class="p">(</span><span class="n">tello</span><span class="p">:</span> <span class="n">Tello</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    Follow the person in front of the drone.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    Args:</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">        tello (Tello)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">        path (str): the absolute path to directory of the two .pth files for the tracker</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">frame</span><span class="p">,</span> <span class="n">box</span> <span class="o">=</span> <span class="n">get_head_bounding_box</span><span class="p">(</span><span class="n">tello</span><span class="p">)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">tracker_engine</span> <span class="o">=</span> <span class="n">TrackingEngine</span><span class="p">()</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">tracker_engine</span><span class="o">.</span><span class="n">init_tracker</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">tracker_engine</span><span class="o">.</span><span class="n">set_target</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">follower</span> <span class="o">=</span> <span class="n">Follower</span><span class="p">(</span><span class="n">tracker_engine</span><span class="p">,</span> <span class="n">tello</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">follower</span><span class="o">.</span><span class="n">follow_person_with_gesture</span><span class="p">()</span>
 </span></pre></div>
 
 
             </section>
+                <section id="follow_person">
+                            <input id="follow_person-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">follow_person</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">tello</span><span class="p">:</span> <span class="n">djitellopy</span><span class="o">.</span><span class="n">tello</span><span class="o">.</span><span class="n">Tello</span>, </span><span class="param"><span class="n">path</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="follow_person-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#follow_person"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="follow_person-7"><a href="#follow_person-7"><span class="linenos"> 7</span></a><span class="k">def</span> <span class="nf">follow_person</span><span class="p">(</span><span class="n">tello</span><span class="p">:</span> <span class="n">Tello</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="follow_person-8"><a href="#follow_person-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="follow_person-9"><a href="#follow_person-9"><span class="linenos"> 9</span></a><span class="sd">    Follow the person in front of the drone.</span>
+</span><span id="follow_person-10"><a href="#follow_person-10"><span class="linenos">10</span></a>
+</span><span id="follow_person-11"><a href="#follow_person-11"><span class="linenos">11</span></a><span class="sd">    Args:</span>
+</span><span id="follow_person-12"><a href="#follow_person-12"><span class="linenos">12</span></a><span class="sd">        tello (Tello)</span>
+</span><span id="follow_person-13"><a href="#follow_person-13"><span class="linenos">13</span></a><span class="sd">        path (str): the absolute path to directory of the two .pth files for the tracker</span>
+</span><span id="follow_person-14"><a href="#follow_person-14"><span class="linenos">14</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="follow_person-15"><a href="#follow_person-15"><span class="linenos">15</span></a>    <span class="n">frame</span><span class="p">,</span> <span class="n">box</span> <span class="o">=</span> <span class="n">get_head_bounding_box</span><span class="p">(</span><span class="n">tello</span><span class="p">)</span>
+</span><span id="follow_person-16"><a href="#follow_person-16"><span class="linenos">16</span></a>
+</span><span id="follow_person-17"><a href="#follow_person-17"><span class="linenos">17</span></a>    <span class="n">tracker_engine</span> <span class="o">=</span> <span class="n">TrackingEngine</span><span class="p">()</span>
+</span><span id="follow_person-18"><a href="#follow_person-18"><span class="linenos">18</span></a>    <span class="n">tracker_engine</span><span class="o">.</span><span class="n">init_tracker</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="follow_person-19"><a href="#follow_person-19"><span class="linenos">19</span></a>    <span class="n">tracker_engine</span><span class="o">.</span><span class="n">set_target</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</span><span id="follow_person-20"><a href="#follow_person-20"><span class="linenos">20</span></a>
+</span><span id="follow_person-21"><a href="#follow_person-21"><span class="linenos">21</span></a>    <span class="n">follower</span> <span class="o">=</span> <span class="n">Follower</span><span class="p">(</span><span class="n">tracker_engine</span><span class="p">,</span> <span class="n">tello</span><span class="p">)</span>
+</span><span id="follow_person-22"><a href="#follow_person-22"><span class="linenos">22</span></a>    <span class="n">follower</span><span class="o">.</span><span class="n">follow_person_with_gesture</span><span class="p">()</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Follow the person in front of the drone.</p>
+
+<p>Args:
+    tello (Tello)
+    path (str): the absolute path to directory of the two .pth files for the tracker</p>
+</div>
+
+
+                </section>
     </main>
 <script>
     function escapeHTML(html) {

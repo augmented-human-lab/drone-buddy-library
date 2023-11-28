@@ -21,6 +21,10 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         gpt_engine (GPTEngine): The GPT engine instance used for intent recognition.
     """
 
+    def introduce_new_intents(self, new_intents: dict) -> bool:
+        self.set_custom_actions_to_system_prompt(new_intents)
+        return True
+
     def get_class_name(self) -> str:
         """
         Returns the class name of the intent recognition implementation.
@@ -59,15 +63,15 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         # Initialize GPT configs
         gpt_configs = GPTConfigs(
             open_ai_api_key=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY.name,
-                                configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY)),
+                                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY)),
             open_ai_model=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL.name,
-                              configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL)),
+                                      configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL)),
             open_ai_temperature=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE.name,
-                                    configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE)),
+                                            configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE)),
             open_ai_api_url=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL.name,
-                                configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL)),
+                                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL)),
             loger_location=configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION.name,
-                                        configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
+                                       configs.get(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
         )
 
         # Initialize GPT engine
@@ -81,7 +85,7 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
             modified_prompt = SYSTEM_PROMPT_INTENT_CLASSIFICATION.replace("#list", "\'" + drone_actions + "\'")
             self.gpt_engine.set_system_prompt(modified_prompt)
 
-    def set_custom_actions_to_system_prompt(self, custom_actions: list):
+    def set_custom_actions_to_system_prompt(self, custom_actions: dict):
         """
         Updates the system prompt with custom drone actions.
 
@@ -125,8 +129,6 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
             return self.gpt_engine.session.get_chatgpt_response(user_message)
         except KeyError:
             raise IntentResolutionException("Intent could not be resolved.")
-
-
 
     def get_required_params(self) -> list:
         """

@@ -73,43 +73,44 @@ dronebuddylib<wbr>.<a href="./../../atoms.html">atoms</a><wbr>.<a href="./../obj
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">dronebuddylib.models.i_dbl_function</span> <span class="kn">import</span> <span class="n">IDBLFunction</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">dronebuddylib.models.object_detected</span> <span class="kn">import</span> <span class="n">ObjectDetectionResult</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">IObjectDetection</span><span class="p">(</span><span class="n">IDBLFunction</span><span class="p">):</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">        Args:</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        Args:</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">        Returns:</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">            list: A list of detected objects.</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="k">pass</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        Args:</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">        Returns:</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="k">pass</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">IObjectDetection</span><span class="p">(</span><span class="n">IDBLFunction</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectDetectionResult</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">        Args:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">        Returns:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">            ObjectDetectionResult: A result containing a list of detected objects.</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>        <span class="k">pass</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        Returns:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -125,41 +126,41 @@ dronebuddylib<wbr>.<a href="./../../atoms.html">atoms</a><wbr>.<a href="./../obj
 
     </div>
     <a class="headerlink" href="#IObjectDetection"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection-8"><a href="#IObjectDetection-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">IObjectDetection</span><span class="p">(</span><span class="n">IDBLFunction</span><span class="p">):</span>
-</span><span id="IObjectDetection-9"><a href="#IObjectDetection-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
-</span><span id="IObjectDetection-10"><a href="#IObjectDetection-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-11"><a href="#IObjectDetection-11"><span class="linenos">11</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
-</span><span id="IObjectDetection-12"><a href="#IObjectDetection-12"><span class="linenos">12</span></a>
-</span><span id="IObjectDetection-13"><a href="#IObjectDetection-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection-14"><a href="#IObjectDetection-14"><span class="linenos">14</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
-</span><span id="IObjectDetection-15"><a href="#IObjectDetection-15"><span class="linenos">15</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-16"><a href="#IObjectDetection-16"><span class="linenos">16</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
-</span><span id="IObjectDetection-17"><a href="#IObjectDetection-17"><span class="linenos">17</span></a>
-</span><span id="IObjectDetection-18"><a href="#IObjectDetection-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="IObjectDetection-19"><a href="#IObjectDetection-19"><span class="linenos">19</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="IObjectDetection-20"><a href="#IObjectDetection-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-21"><a href="#IObjectDetection-21"><span class="linenos">21</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
-</span><span id="IObjectDetection-22"><a href="#IObjectDetection-22"><span class="linenos">22</span></a>
-</span><span id="IObjectDetection-23"><a href="#IObjectDetection-23"><span class="linenos">23</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection-24"><a href="#IObjectDetection-24"><span class="linenos">24</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="IObjectDetection-25"><a href="#IObjectDetection-25"><span class="linenos">25</span></a>
-</span><span id="IObjectDetection-26"><a href="#IObjectDetection-26"><span class="linenos">26</span></a><span class="sd">        Returns:</span>
-</span><span id="IObjectDetection-27"><a href="#IObjectDetection-27"><span class="linenos">27</span></a><span class="sd">            list: A list of detected objects.</span>
-</span><span id="IObjectDetection-28"><a href="#IObjectDetection-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-29"><a href="#IObjectDetection-29"><span class="linenos">29</span></a>        <span class="k">pass</span>
-</span><span id="IObjectDetection-30"><a href="#IObjectDetection-30"><span class="linenos">30</span></a>
-</span><span id="IObjectDetection-31"><a href="#IObjectDetection-31"><span class="linenos">31</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="IObjectDetection-32"><a href="#IObjectDetection-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="IObjectDetection-33"><a href="#IObjectDetection-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-34"><a href="#IObjectDetection-34"><span class="linenos">34</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
-</span><span id="IObjectDetection-35"><a href="#IObjectDetection-35"><span class="linenos">35</span></a>
-</span><span id="IObjectDetection-36"><a href="#IObjectDetection-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection-37"><a href="#IObjectDetection-37"><span class="linenos">37</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="IObjectDetection-38"><a href="#IObjectDetection-38"><span class="linenos">38</span></a>
-</span><span id="IObjectDetection-39"><a href="#IObjectDetection-39"><span class="linenos">39</span></a><span class="sd">        Returns:</span>
-</span><span id="IObjectDetection-40"><a href="#IObjectDetection-40"><span class="linenos">40</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
-</span><span id="IObjectDetection-41"><a href="#IObjectDetection-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection-42"><a href="#IObjectDetection-42"><span class="linenos">42</span></a>        <span class="k">pass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection-9"><a href="#IObjectDetection-9"><span class="linenos"> 9</span></a><span class="k">class</span> <span class="nc">IObjectDetection</span><span class="p">(</span><span class="n">IDBLFunction</span><span class="p">):</span>
+</span><span id="IObjectDetection-10"><a href="#IObjectDetection-10"><span class="linenos">10</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+</span><span id="IObjectDetection-11"><a href="#IObjectDetection-11"><span class="linenos">11</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-12"><a href="#IObjectDetection-12"><span class="linenos">12</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
+</span><span id="IObjectDetection-13"><a href="#IObjectDetection-13"><span class="linenos">13</span></a>
+</span><span id="IObjectDetection-14"><a href="#IObjectDetection-14"><span class="linenos">14</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection-15"><a href="#IObjectDetection-15"><span class="linenos">15</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
+</span><span id="IObjectDetection-16"><a href="#IObjectDetection-16"><span class="linenos">16</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-17"><a href="#IObjectDetection-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+</span><span id="IObjectDetection-18"><a href="#IObjectDetection-18"><span class="linenos">18</span></a>
+</span><span id="IObjectDetection-19"><a href="#IObjectDetection-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IObjectDetection-20"><a href="#IObjectDetection-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectDetectionResult</span><span class="p">:</span>
+</span><span id="IObjectDetection-21"><a href="#IObjectDetection-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-22"><a href="#IObjectDetection-22"><span class="linenos">22</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
+</span><span id="IObjectDetection-23"><a href="#IObjectDetection-23"><span class="linenos">23</span></a>
+</span><span id="IObjectDetection-24"><a href="#IObjectDetection-24"><span class="linenos">24</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection-25"><a href="#IObjectDetection-25"><span class="linenos">25</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="IObjectDetection-26"><a href="#IObjectDetection-26"><span class="linenos">26</span></a>
+</span><span id="IObjectDetection-27"><a href="#IObjectDetection-27"><span class="linenos">27</span></a><span class="sd">        Returns:</span>
+</span><span id="IObjectDetection-28"><a href="#IObjectDetection-28"><span class="linenos">28</span></a><span class="sd">            ObjectDetectionResult: A result containing a list of detected objects.</span>
+</span><span id="IObjectDetection-29"><a href="#IObjectDetection-29"><span class="linenos">29</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-30"><a href="#IObjectDetection-30"><span class="linenos">30</span></a>        <span class="k">pass</span>
+</span><span id="IObjectDetection-31"><a href="#IObjectDetection-31"><span class="linenos">31</span></a>
+</span><span id="IObjectDetection-32"><a href="#IObjectDetection-32"><span class="linenos">32</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IObjectDetection-33"><a href="#IObjectDetection-33"><span class="linenos">33</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="IObjectDetection-34"><a href="#IObjectDetection-34"><span class="linenos">34</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-35"><a href="#IObjectDetection-35"><span class="linenos">35</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
+</span><span id="IObjectDetection-36"><a href="#IObjectDetection-36"><span class="linenos">36</span></a>
+</span><span id="IObjectDetection-37"><a href="#IObjectDetection-37"><span class="linenos">37</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection-38"><a href="#IObjectDetection-38"><span class="linenos">38</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="IObjectDetection-39"><a href="#IObjectDetection-39"><span class="linenos">39</span></a>
+</span><span id="IObjectDetection-40"><a href="#IObjectDetection-40"><span class="linenos">40</span></a><span class="sd">        Returns:</span>
+</span><span id="IObjectDetection-41"><a href="#IObjectDetection-41"><span class="linenos">41</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
+</span><span id="IObjectDetection-42"><a href="#IObjectDetection-42"><span class="linenos">42</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection-43"><a href="#IObjectDetection-43"><span class="linenos">43</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -178,14 +179,14 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#IObjectDetection.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.__init__-9"><a href="#IObjectDetection.__init__-9"><span class="linenos"> 9</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
-</span><span id="IObjectDetection.__init__-10"><a href="#IObjectDetection.__init__-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.__init__-11"><a href="#IObjectDetection.__init__-11"><span class="linenos">11</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
-</span><span id="IObjectDetection.__init__-12"><a href="#IObjectDetection.__init__-12"><span class="linenos">12</span></a>
-</span><span id="IObjectDetection.__init__-13"><a href="#IObjectDetection.__init__-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection.__init__-14"><a href="#IObjectDetection.__init__-14"><span class="linenos">14</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
-</span><span id="IObjectDetection.__init__-15"><a href="#IObjectDetection.__init__-15"><span class="linenos">15</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.__init__-16"><a href="#IObjectDetection.__init__-16"><span class="linenos">16</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.__init__-10"><a href="#IObjectDetection.__init__-10"><span class="linenos">10</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+</span><span id="IObjectDetection.__init__-11"><a href="#IObjectDetection.__init__-11"><span class="linenos">11</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.__init__-12"><a href="#IObjectDetection.__init__-12"><span class="linenos">12</span></a><span class="sd">        Constructor to initialize the object detection engine.</span>
+</span><span id="IObjectDetection.__init__-13"><a href="#IObjectDetection.__init__-13"><span class="linenos">13</span></a>
+</span><span id="IObjectDetection.__init__-14"><a href="#IObjectDetection.__init__-14"><span class="linenos">14</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection.__init__-15"><a href="#IObjectDetection.__init__-15"><span class="linenos">15</span></a><span class="sd">            engine_configurations (EngineConfigurations): The configurations for the object detection engine.</span>
+</span><span id="IObjectDetection.__init__-16"><a href="#IObjectDetection.__init__-16"><span class="linenos">16</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.__init__-17"><a href="#IObjectDetection.__init__-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
 </span></pre></div>
 
 
@@ -214,24 +215,24 @@ inheritance.</p>
                     <div class="decorator">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">get_detected_objects</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">image</span></span><span class="return-annotation">) -> <span class="nb">list</span>:</span></span>
+        <span class="name">get_detected_objects</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">image</span></span><span class="return-annotation">) -> <span class="n"><a href="../../models/object_detected.html#ObjectDetectionResult">dronebuddylib.models.object_detected.ObjectDetectionResult</a></span>:</span></span>
 
                 <label class="view-source-button" for="IObjectDetection.get_detected_objects-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#IObjectDetection.get_detected_objects"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.get_detected_objects-18"><a href="#IObjectDetection.get_detected_objects-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="IObjectDetection.get_detected_objects-19"><a href="#IObjectDetection.get_detected_objects-19"><span class="linenos">19</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="IObjectDetection.get_detected_objects-20"><a href="#IObjectDetection.get_detected_objects-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.get_detected_objects-21"><a href="#IObjectDetection.get_detected_objects-21"><span class="linenos">21</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
-</span><span id="IObjectDetection.get_detected_objects-22"><a href="#IObjectDetection.get_detected_objects-22"><span class="linenos">22</span></a>
-</span><span id="IObjectDetection.get_detected_objects-23"><a href="#IObjectDetection.get_detected_objects-23"><span class="linenos">23</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection.get_detected_objects-24"><a href="#IObjectDetection.get_detected_objects-24"><span class="linenos">24</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="IObjectDetection.get_detected_objects-25"><a href="#IObjectDetection.get_detected_objects-25"><span class="linenos">25</span></a>
-</span><span id="IObjectDetection.get_detected_objects-26"><a href="#IObjectDetection.get_detected_objects-26"><span class="linenos">26</span></a><span class="sd">        Returns:</span>
-</span><span id="IObjectDetection.get_detected_objects-27"><a href="#IObjectDetection.get_detected_objects-27"><span class="linenos">27</span></a><span class="sd">            list: A list of detected objects.</span>
-</span><span id="IObjectDetection.get_detected_objects-28"><a href="#IObjectDetection.get_detected_objects-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.get_detected_objects-29"><a href="#IObjectDetection.get_detected_objects-29"><span class="linenos">29</span></a>        <span class="k">pass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.get_detected_objects-19"><a href="#IObjectDetection.get_detected_objects-19"><span class="linenos">19</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IObjectDetection.get_detected_objects-20"><a href="#IObjectDetection.get_detected_objects-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectDetectionResult</span><span class="p">:</span>
+</span><span id="IObjectDetection.get_detected_objects-21"><a href="#IObjectDetection.get_detected_objects-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.get_detected_objects-22"><a href="#IObjectDetection.get_detected_objects-22"><span class="linenos">22</span></a><span class="sd">        Detects objects in the provided image and returns a list of detected objects.</span>
+</span><span id="IObjectDetection.get_detected_objects-23"><a href="#IObjectDetection.get_detected_objects-23"><span class="linenos">23</span></a>
+</span><span id="IObjectDetection.get_detected_objects-24"><a href="#IObjectDetection.get_detected_objects-24"><span class="linenos">24</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection.get_detected_objects-25"><a href="#IObjectDetection.get_detected_objects-25"><span class="linenos">25</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="IObjectDetection.get_detected_objects-26"><a href="#IObjectDetection.get_detected_objects-26"><span class="linenos">26</span></a>
+</span><span id="IObjectDetection.get_detected_objects-27"><a href="#IObjectDetection.get_detected_objects-27"><span class="linenos">27</span></a><span class="sd">        Returns:</span>
+</span><span id="IObjectDetection.get_detected_objects-28"><a href="#IObjectDetection.get_detected_objects-28"><span class="linenos">28</span></a><span class="sd">            ObjectDetectionResult: A result containing a list of detected objects.</span>
+</span><span id="IObjectDetection.get_detected_objects-29"><a href="#IObjectDetection.get_detected_objects-29"><span class="linenos">29</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.get_detected_objects-30"><a href="#IObjectDetection.get_detected_objects-30"><span class="linenos">30</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -241,7 +242,7 @@ inheritance.</p>
     image: The image in which to detect objects.</p>
 
 <p>Returns:
-    list: A list of detected objects.</p>
+    ObjectDetectionResult: A result containing a list of detected objects.</p>
 </div>
 
 
@@ -258,18 +259,18 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#IObjectDetection.get_bounding_boxes_of_detected_objects"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-31"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-31"><span class="linenos">31</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-32"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-33"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-34"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-34"><span class="linenos">34</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-35"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-35"><span class="linenos">35</span></a>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-36"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-37"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-37"><span class="linenos">37</span></a><span class="sd">            image: The image in which to detect objects.</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-38"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-38"><span class="linenos">38</span></a>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-39"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-39"><span class="linenos">39</span></a><span class="sd">        Returns:</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-40"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-40"><span class="linenos">40</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-41"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-42"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-42"><span class="linenos">42</span></a>        <span class="k">pass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-32"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-32"><span class="linenos">32</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-33"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-33"><span class="linenos">33</span></a>    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-34"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-34"><span class="linenos">34</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-35"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-35"><span class="linenos">35</span></a><span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-36"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-36"><span class="linenos">36</span></a>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-37"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-37"><span class="linenos">37</span></a><span class="sd">        Args:</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-38"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-38"><span class="linenos">38</span></a><span class="sd">            image: The image in which to detect objects.</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-39"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-39"><span class="linenos">39</span></a>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-40"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-40"><span class="linenos">40</span></a><span class="sd">        Returns:</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-41"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-41"><span class="linenos">41</span></a><span class="sd">            list: A list of bounding boxes for the detected objects.</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-42"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-42"><span class="linenos">42</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IObjectDetection.get_bounding_boxes_of_detected_objects-43"><a href="#IObjectDetection.get_bounding_boxes_of_detected_objects-43"><span class="linenos">43</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 

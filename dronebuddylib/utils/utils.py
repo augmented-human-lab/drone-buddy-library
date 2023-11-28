@@ -31,7 +31,7 @@ def get_current_intents() -> dict:
         raise FileNotFoundError("The specified file is not found.", e) from e
 
 
-def create_custom_drone_action_list(custom_actions: list) -> str:
+def create_custom_drone_action_list(custom_actions: dict) -> str:
     action_string = ""
     for action in custom_actions:
         action_string = action_string + action + "\n"

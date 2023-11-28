@@ -28,7 +28,7 @@ class ObjectDetectionEngine:
             frame: The input frame for which objects need to be detected.
 
         Returns:
-            ObjectDetectionResult: The result of the object detection, including a list of detected objects.
+            ObjectDetectionResult (ObjectDetectionResult): The result of the object detection, including a list of detected objects.
         """
         return self.vision_engine.get_detected_objects(frame)
 

@@ -34,3 +34,18 @@ class IIntentRecognition(IDBLFunction, ABC):
             str: The recognized intent.
         """
         pass
+
+    @abstractmethod
+    def introduce_new_intents(self, new_intents: dict) -> bool:
+        """
+        Introduces new intents to the intent recognition system.
+
+        This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.
+
+        Args:
+            new_intents (dict): The new intents to be added.
+
+        Returns:
+            bool: True if the operation was successful, False otherwise.
+        """
+        pass

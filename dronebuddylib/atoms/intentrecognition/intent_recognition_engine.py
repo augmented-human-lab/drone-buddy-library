@@ -77,7 +77,7 @@ class IntentRecognitionEngine:
             logging.error("The specified file is not found: %s", e)
             raise FileNotFoundError("The specified file is not found.") from e
 
-    def add_new_intent(self, intent: str, description: str) -> bool:
+    def introduce_new_intent(self, intent: str, description: str) -> bool:
         """
         Add a new intent and its description to the intent file.
 
