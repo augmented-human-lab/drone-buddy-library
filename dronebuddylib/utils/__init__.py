@@ -1,7 +1,4 @@
-__version__ = "1.0.7"
+__version__ = "2.0.0"
 
-from .enums import DroneCommands
-from .enums import Language
-from .enums import ObjectDetectionReturnTypes
 from .logging_config import get_logger
 from .exceptions import FileWritingException
