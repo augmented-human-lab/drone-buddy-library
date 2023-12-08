@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.intentrecognition.html" />
+  <link rel="prev" title="User Guide" href="dronebuddylib.userguide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.html"
+       title="previous chapter">← User Guide</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.intentrecognition.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="vosk">
+<h2>VOSK<a class="headerlink" href="#vosk" title="Link to this heading">¶</a></h2>
+<section id="general">
+<h3>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h3>
+<p>The model we are using in drone buddy is VOSK, now let’s discuss about VOSKin the same points.
+If you would like to learn more, more details can be found on <a class="reference external" href="https://alphacephei.com/vosk/">https://alphacephei.com/vosk/</a>.</p>
+<ol class="arabic simple">
+<li><p>Acoustic Model: Vosk starts with an acoustic model, which is trained using deep neural networks. This model analyzes the raw audio input and converts it into a sequence of acoustic features. These features represent different aspects of the sound, such as frequency and intensity.</p></li>
+<li><p>Language Model: In order to convert the acoustic features into actual words, Vosk utilizes a language model. This model incorporates grammar, vocabulary, and contextual information to predict the most likely word sequence given the acoustic features. It helps improve the accuracy and intelligibility of the recognized text.</p></li>
+<li><p>Speech Recognition: Vosk combines the acoustic and language models to perform speech recognition. It processes the audio input by matching the observed acoustic features with the known language patterns. This involves comparing the features against a large database of pre-recorded speech samples to find the closest match.</p></li>
+<li><p>Transcription: After the speech recognition process, Vosk generates a transcription of the spoken words in the audio. This transcription is in the form of text, allowing you to process it further in your programming application.</p></li>
+</ol>
+<p>The way drone buddy has integrated VOSK for voice recognition is as follows.</p>
+<ol class="arabic simple">
+<li><p>Installation: You need to install the Vosk library or package in your programming environment. The installation process may vary depending on the programming language you are using.</p></li>
+<li><p>Model Download: Vosk requires specific pre-trained models to function properly. You’ll need to download the appropriate model files for the language and domain you intend to work with. These models are usually available on the Vosk website or GitHub repository. For now the drone buddy has downloaded the english model ( vosk-model-small-en-us-0.15 ).</p></li>
+<li><p>Integration: Once you have the library installed and the models downloaded, you can integrate Vosk into your programming application. This involves loading the models, capturing audio input, and passing it to Vosk for recognition.</p></li>
+<li><p>Processing Results: Finally, you can process the recognized text output from Vosk according to your application’s needs. This might involve storing it, performing further analysis, or using it to trigger specific actions based on voice commands.</p></li>
+</ol>
+<p>It’s important to note that Vosk is a powerful tool, but like any voice recognition system, its accuracy can be influenced by factors such as audio quality, background noise, and speaker accents. Therefore, it’s a good idea to test and fine-tune the system based on your specific use case to achieve the best results.</p>
+</section>
+<section id="how-to-use-with-drone-buddy">
+<h3>How to use with drone buddy<a class="headerlink" href="#how-to-use-with-drone-buddy" title="Link to this heading">¶</a></h3>
+</section>
+<section id="required-parameters">
+<h3>Required parameters<a class="headerlink" href="#required-parameters" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH: This is the path to the model that you have downloaded. This is a compulsory parameter if you are using any other language.
+If this is not provided, the default model will be used. The default model is the english model ( vosk-model-small-en-us-0.15 ).</p>
+</div>
+<p>Initialize the voice engine</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechrecognition.speech_to_text_engine</span> <span class="kn">import</span> <span class="n">SpeechToTextEngine</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span><span class="p">,</span> <span class="n">SpeechRecognitionAlgorithm</span>
+
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">VOSK_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result will be the recognized text.</p>
+<p>Sample code where you can use the speech to text functionality to control the drone would be as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dronebuddylib</span> <span class="k">as</span> <span class="nn">dbl</span>
+<span class="kn">import</span> <span class="nn">pyaudio</span>
+<span class="kn">from</span> <span class="nn">djitellopy</span> <span class="kn">import</span> <span class="n">Tello</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechrecognition.speech_to_text_engine</span> <span class="kn">import</span> <span class="n">SpeechToTextEngine</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span><span class="p">,</span> <span class="n">SpeechRecognitionAlgorithm</span>
+
+<span class="c1"># initiating Tello instance</span>
+<span class="n">tello</span> <span class="o">=</span> <span class="n">Tello</span><span class="p">()</span>
+<span class="n">listening</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">tello</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">tello</span><span class="o">.</span><span class="n">streamon</span><span class="p">()</span>
+
+<span class="n">mic</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+
+<span class="c1"># initialize speech to text engine</span>
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">,</span> <span class="s2">&quot;C:/users/project/resources/speechrecognition/vosk-model-small-en-us-0.15&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">VOSK_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="c1"># this method receives the audio input from pyaudio and returns the command</span>
+<span class="k">def</span> <span class="nf">get_command</span><span class="p">():</span>
+    <span class="n">listening</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">mic</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt16</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frames_per_buffer</span><span class="o">=</span><span class="mi">8192</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">listening</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
+            <span class="c1"># chunks the audio stream to a byte stream</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8192</span><span class="p">)</span>
+            <span class="n">recognized</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">recognized</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">listening</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">recognized</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="google-speech-recognition">
+<h2>Google Speech Recognition<a class="headerlink" href="#google-speech-recognition" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h3>General<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Refer <a class="reference external" href="https://cloud.google.com/speech-to-text">https://cloud.google.com/speech-to-text</a> for more details.</p>
+<p>We are utilizing Google Speech Recognition in our project. Let’s delve into its features and integration process, similar to how we discussed VOSK. Further details are available on Google’s official speech documentation page.</p>
+<ol class="arabic simple">
+<li><p>Acoustic Model: Google Speech Recognition employs an advanced acoustic model, typically based on deep learning techniques. This model processes raw audio inputs, extracting key acoustic features essential for recognizing speech patterns, such as frequency and amplitude variations.</p></li>
+<li><p>Language Model: The language model in Google Speech Recognition integrates extensive vocabulary and grammar rules. It uses this linguistic knowledge to interpret the acoustic features and generate accurate word predictions, ensuring coherent and contextually relevant speech transcription.</p></li>
+<li><p>Speech Recognition Engine: Google’s engine combines the acoustic and language models to decode and recognize speech. It’s capable of handling various accents and dialects, offering robust performance even in challenging audio conditions.</p></li>
+<li><p>Transcription and Output: The final step involves transcribing the processed speech into text. Google Speech Recognition provides real-time transcription, enabling immediate text output that can be further used in applications or stored for record-keeping.</p></li>
+</ol>
+</section>
+<section id="integration-in-dronebuddy">
+<h3>Integration in Dronebuddy<a class="headerlink" href="#integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Installation: To use Google Speech Recognition, you first need to set up the Google Cloud environment and install necessary SDKs or libraries in your development environment.</p></li>
+<li><p>API Key and Setup: Obtain an API key from Google Cloud and configure it in your application. This key is essential for authenticating and accessing Google’s speech recognition services.</p></li>
+<li><p>Audio Input and Processing: Your application should be capable of capturing audio input, which can be sent to Google’s speech recognition service. The audio data needs to be in a format compatible with Google’s system.</p></li>
+<li><p>Handling the Output: Once Google processes the audio, it returns a text transcription. This output can be used in various ways, such as command interpretation, text analysis, or as input for other systems.</p></li>
+<li><p>Customization: Google Speech Recognition allows customization for specific vocabulary or industry terms, enhancing recognition accuracy for specialized applications.</p></li>
+</ol>
+</section>
+<section id="using-google-speech-recognition-for-command-control">
+<h3>Using Google Speech Recognition for Command Control<a class="headerlink" href="#using-google-speech-recognition-for-command-control" title="Link to this heading">¶</a></h3>
+<p>Here’s a sample code snippet demonstrating how you could integrate Google Speech Recognition into an application for voice-controlled operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span><span class="p">,</span> <span class="s2">&quot;en-US&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_ENCODING</span><span class="p">,</span> <span class="s2">&quot;LINEAR16&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">sr</span><span class="o">.</span><span class="n">Microphone</span><span class="p">()</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listening for commands...&quot;</span><span class="p">)</span>
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">recognizer</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Recognize speech using Google Speech Recognition</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recognized command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Process and execute the command</span>
+        <span class="n">control_function</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code captures audio through the microphone, processes it using Google Speech Recognition, and then uses the recognized command to perform an action within the application.</p>
+</section>
+<section id="important-considerations">
+<h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>
+<p>Google Speech Recognition, like any advanced technology, has limitations. It requires a stable internet connection for processing and may incur costs for extensive use. The system’s effectiveness can also vary based on audio quality, background noise, and speaker’s clarity. Therefore, it is crucial to test and calibrate the system according to your specific requirements for optimal results.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.html"
+       title="previous chapter">← User Guide</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.intentrecognition.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

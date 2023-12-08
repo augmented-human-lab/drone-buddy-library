@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Object Detection package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Speech Generation package" href="dronebuddylib.atoms.speechgeneration.html" />
+  <link rel="prev" title="Intent Recognition package" href="dronebuddylib.atoms.intentrecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.html">dronebuddylib package</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>Object Detection package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.intentrecognition.html"
+       title="previous chapter">← Intent Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.speechgeneration.html"
+       title="next chapter">Speech Generation package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="object-detection-package">
+<h1>Object Detection package<a class="headerlink" href="#object-detection-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="i-object-detection-module">
+<h2>i_object_detection module<a class="headerlink" href="#i-object-detection-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectdetection.i_object_detection">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectdetection.i_object_detection.</span></span><span class="sig-name descname"><span class="pre">IObjectDetection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/i_object_detection.html#IObjectDetection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction" title="dronebuddylib.models.i_dbl_function.IDBLFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDBLFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_bounding_boxes_of_detected_objects">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bounding_boxes_of_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/i_object_detection.html#IObjectDetection.get_bounding_boxes_of_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_bounding_boxes_of_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes for the detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/i_object_detection.html#IObjectDetection.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a list of detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A result containing a list of detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="mp-object-detection-impl-module">
+<h2>mp_object_detection_impl module<a class="headerlink" href="#mp-object-detection-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectdetection.mp_object_detection_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectdetection.mp_object_detection_impl.</span></span><span class="sig-name descname"><span class="pre">MPObjectDetectionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection" title="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection"><code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectDetection</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the algorithm name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects">
+<span class="sig-name descname"><span class="pre">get_bounding_boxes_of_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes for the detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects">
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a result containing a list of detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A result containing a list of detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of optional configuration parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of required configuration parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="object-detection-engine-module">
+<h2>object_detection_engine module<a class="headerlink" href="#object-detection-engine-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectdetection.object_detection_engine">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectdetection.object_detection_engine.</span></span><span class="sig-name descname"><span class="pre">ObjectDetectionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm" title="dronebuddylib.models.enums.VisionAlgorithm"><span class="pre">VisionAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_bounding_boxes_of_detected_objects">
+<span class="sig-name descname"><span class="pre">get_bounding_boxes_of_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine.get_bounding_boxes_of_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_bounding_boxes_of_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves bounding boxes for objects in a given frame using the specified vision algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> – The input frame for which bounding boxes are to be retrieved.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes for the detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects">
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in a given frame using the specified vision algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> – The input frame for which objects need to be detected.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of the object detection, including a list of detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="yolo-object-detection-impl-module">
+<h2>yolo_object_detection_impl module<a class="headerlink" href="#yolo-object-detection-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectdetection.yolo_object_detection_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.</span></span><span class="sig-name descname"><span class="pre">YOLOObjectDetectionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection" title="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection"><code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectDetection</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the algorithm name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_bounding_boxes_of_detected_objects">
+<span class="sig-name descname"><span class="pre">get_bounding_boxes_of_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_bounding_boxes_of_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_bounding_boxes_of_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the bounding boxes of objects detected in an image using YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image to detect objects in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes corresponding to the objects detected in the image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the class name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects">
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the given image using YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image to detect objects in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of the object detection, including a list of detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of optional configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of required configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.objectdetection"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.intentrecognition.html"
+       title="previous chapter">← Intent Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.speechgeneration.html"
+       title="next chapter">Speech Generation package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">mediapipe.tasks.python</span> <span class="kn">import</span> <span class="n">BaseOptions</span>
+<span class="kn">from</span> <span class="nn">mediapipe.tasks.python.vision</span> <span class="kn">import</span> <span class="n">GestureRecognizerOptions</span><span class="p">,</span> <span class="n">GestureRecognizer</span><span class="p">,</span> <span class="n">GestureRecognizerResult</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.bodyfeatureextraction.i_feature_extraction</span> <span class="kn">import</span> <span class="n">IFeatureExtraction</span>
+<span class="kn">import</span> <span class="nn">mediapipe</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.mp_object_detection_impl</span> <span class="kn">import</span> <span class="n">VisionRunningMode</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span>
+
+<span class="c1"># Initialize Mediapipe&#39;s hand module for detecting hand landmarks</span>
+<span class="n">mpHands</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">hands</span>
+<span class="n">hands</span> <span class="o">=</span> <span class="n">mpHands</span><span class="o">.</span><span class="n">Hands</span><span class="p">()</span>
+<span class="c1"># Initialize Mediapipe&#39;s drawing utils for drawing hand landmarks on the image</span>
+<span class="n">mpDraw</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">HandFeatureExtractionImpl</span><span class="p">(</span><span class="n">IFeatureExtraction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of the hand feature extraction using Mediapipe&#39;s hand detection solution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for HandFeatureExtractionImpl class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): Configurations for the engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hand_landmark</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gesture_recognition_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Check if the configurations are valid for the engine</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_feature">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_feature">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect hands in an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image (list): The frame to detect the hand in.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list | bool: Return the list of the landmark of one hand in the frame.</span>
+<span class="sd">                         Return False if no hand is detected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">copied_image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">hand_landmarks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">hands</span><span class="o">.</span><span class="n">Hands</span><span class="p">(</span>
+                <span class="n">static_image_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">max_num_hands</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">min_detection_confidence</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="k">as</span> <span class="n">hands</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">hands</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">copied_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_hand_landmarks</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">hand_landmarks_</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_hand_landmarks</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">landmark</span> <span class="ow">in</span> <span class="n">hand_landmarks_</span><span class="o">.</span><span class="n">landmark</span><span class="p">:</span>
+                        <span class="n">hand_landmarks</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">landmark</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">landmark</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hand_landmarks</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hand_landmark</span> <span class="o">=</span> <span class="n">hand_landmarks</span>
+        <span class="k">return</span> <span class="n">hand_landmarks</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.count_fingers">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.count_fingers">[docs]</a>
+    <span class="k">def</span> <span class="nf">count_fingers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">show_feedback</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count the number of fingers in a frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame (np.array): The frame to count fingers in.</span>
+<span class="sd">            show_feedback (bool): Whether to show the processed frame.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The number of fingers in the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">p_time</span>
+
+        <span class="n">c_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">c_time</span> <span class="o">-</span> <span class="n">p_time</span><span class="p">)</span>
+        <span class="n">p_time</span> <span class="o">=</span> <span class="n">c_time</span>
+
+        <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;FPS:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">fps</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">70</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_PLAIN</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">img_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">hands</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="n">finger_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_hand_landmarks</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">hand_landmarks</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_hand_landmarks</span><span class="p">:</span>
+                <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">lm</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hand_landmarks</span><span class="o">.</span><span class="n">landmark</span><span class="p">):</span>
+                    <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">shape</span>
+                    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">w</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FILLED</span><span class="p">)</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;id12z:</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">))</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_PLAIN</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+                                    <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                    <span class="mi">3</span><span class="p">)</span>
+                    <span class="n">mpDraw</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">hand_landmarks</span><span class="p">,</span> <span class="n">mpHands</span><span class="o">.</span><span class="n">HAND_CONNECTIONS</span><span class="p">)</span>
+                <span class="n">hand_index</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_hand_landmarks</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">hand_landmarks</span><span class="p">)</span>
+                <span class="n">hand_label</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">multi_handedness</span><span class="p">[</span><span class="n">hand_index</span><span class="p">]</span><span class="o">.</span><span class="n">classification</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">label</span>
+                <span class="n">hand_landmarks</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">landmarks</span> <span class="ow">in</span> <span class="n">hand_landmarks</span><span class="o">.</span><span class="n">landmark</span><span class="p">:</span>
+                    <span class="n">hand_landmarks</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">landmarks</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">hand_label</span> <span class="o">==</span> <span class="s2">&quot;Left&quot;</span> <span class="ow">and</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">hand_label</span> <span class="o">==</span> <span class="s2">&quot;Right&quot;</span> <span class="ow">and</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">12</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">16</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">14</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">hand_landmarks</span><span class="p">[</span><span class="mi">18</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">finger_count</span> <span class="o">=</span> <span class="n">finger_count</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="mi">390</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">470</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FILLED</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">finger_count</span><span class="p">),</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">show_feedback</span><span class="p">:</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;Image&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">finger_count</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_gesture">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_gesture">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_gesture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numpy_image</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GestureRecognizerResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the gesture in an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            numpy_image (list): The image to recognize the gesture in.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            GestureRecognizerResult: The result of gesture recognition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span>
+                    <span class="n">Configurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span>
+                    <span class="n">Configurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                             <span class="s2">&quot;bodyfeatureextraction/resources/gesture_recognizer.task&quot;</span><span class="p">)</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="n">GestureRecognizerOptions</span><span class="p">(</span>
+                <span class="n">base_options</span><span class="o">=</span><span class="n">BaseOptions</span><span class="p">(</span><span class="n">model_asset_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">),</span>
+                <span class="n">running_mode</span><span class="o">=</span><span class="n">VisionRunningMode</span><span class="o">.</span><span class="n">IMAGE</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">GestureRecognizer</span><span class="o">.</span><span class="n">create_from_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="k">as</span> <span class="n">recognizer</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gesture_recognition_model</span> <span class="o">=</span> <span class="n">recognizer</span>
+        <span class="n">mp_image</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">image_format</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">ImageFormat</span><span class="o">.</span><span class="n">SRGB</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">numpy_image</span><span class="p">)</span>
+        <span class="c1"># Perform gesture recognition on the provided single image.</span>
+        <span class="c1"># The gesture recognizer must be created with the image mode.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gesture_recognition_model</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="n">mp_image</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the required parameters for the engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of required parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the optional parameters for the engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of optional parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Configurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION</span><span class="p">,</span>
+                <span class="n">Configurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the class name of the engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name of the engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;HAND_FEATURE_EXTRACTION&quot;</span></div>
+
+
+<div class="viewcode-block" id="HandFeatureExtractionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the algorithm name of the engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name of the engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Extracts features and executes functions related to hands&quot;</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
