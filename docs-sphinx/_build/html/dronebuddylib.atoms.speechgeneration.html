@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Speech Generation package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Speech Recognition package" href="dronebuddylib.atoms.speechrecognition.html" />
+  <link rel="prev" title="Object Detection package" href="dronebuddylib.atoms.objectdetection.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.html">dronebuddylib package</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>Speech Generation package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.objectdetection.html"
+       title="previous chapter">← Object Detection package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.speechrecognition.html"
+       title="next chapter">Speech Recognition package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="speech-generation-package">
+<h1>Speech Generation package<a class="headerlink" href="#speech-generation-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="i-speech-generation-module">
+<h2>i_speech_generation module<a class="headerlink" href="#i-speech-generation-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.speechgeneration.i_speech_generation">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.speechgeneration.i_speech_generation.</span></span><span class="sig-name descname"><span class="pre">ISpeechGeneration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction" title="dronebuddylib.models.i_dbl_function.IDBLFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDBLFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_rate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration.change_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the speech rate of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rate</strong> (<em>int</em>) – The desired speech rate.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the rate was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_voice">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change_voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voice_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration.change_voice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_voice" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the voice used by the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>voice_id</strong> (<em>str</em>) – The identifier of the desired voice.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the voice was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_volume">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">change_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration.change_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_volume" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the volume of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>float</em>) – The desired volume level.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the volume was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.get_current_configs">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_current_configs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration.get_current_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.get_current_configs" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the current configurations of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing the current configurations.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.read_phrase">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_phrase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phrase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/i_speech_generation.html#ISpeechGeneration.read_phrase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.read_phrase" title="Link to this definition">¶</a></dt>
+<dd><p>Generates speech from the provided text and plays it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The text to be converted into speech.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="speech-generation-engine-module">
+<h2>speech_generation_engine module<a class="headerlink" href="#speech-generation-engine-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.speechgeneration.speech_generation_engine">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.speechgeneration.speech_generation_engine.</span></span><span class="sig-name descname"><span class="pre">SpeechGenerationEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechGenerationAlgorithm" title="dronebuddylib.utils.enums.SpeechGenerationAlgorithm"><span class="pre">SpeechGenerationAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/speech_generation_engine.html#SpeechGenerationEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A facade that provides a simplified interface to the underlying speech generation engines.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine.read_phrase">
+<span class="sig-name descname"><span class="pre">read_phrase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phrase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/speech_generation_engine.html#SpeechGenerationEngine.read_phrase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine.read_phrase" title="Link to this definition">¶</a></dt>
+<dd><p>Generates speech from the provided phrase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The phrase to be converted into speech.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="tts-speech-generation-impl-module">
+<h2>tts_speech_generation_impl module<a class="headerlink" href="#tts-speech-generation-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.</span></span><span class="sig-name descname"><span class="pre">TTSTextToSpeechEngineImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration" title="dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration"><code class="xref py py-class docutils literal notranslate"><span class="pre">ISpeechGeneration</span></code></a></p>
+<p>Initiates the speechrecognition to text engine.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_rate">
+<span class="sig-name descname"><span class="pre">change_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.change_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the speech rate of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rate</strong> (<em>int</em>) – The desired speech rate.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the rate was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_voice">
+<span class="sig-name descname"><span class="pre">change_voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voice_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.change_voice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_voice" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the voice used by the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>voice_id</strong> (<em>str</em>) – The identifier of the desired voice.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the voice was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_volume">
+<span class="sig-name descname"><span class="pre">change_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.change_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.change_volume" title="Link to this definition">¶</a></dt>
+<dd><p>Changes the volume of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>float</em>) – The desired volume level.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the volume was changed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_current_configs">
+<span class="sig-name descname"><span class="pre">get_current_configs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.get_current_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_current_configs" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the current configurations of the speech generation engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing the current configurations.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.read_phrase">
+<span class="sig-name descname"><span class="pre">read_phrase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/speechgeneration/tts_speech_generation_impl.html#TTSTextToSpeechEngineImpl.read_phrase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechEngineImpl.read_phrase" title="Link to this definition">¶</a></dt>
+<dd><p>Generates speechrecognition from the provided text using a text-to-speechrecognition engine and plays it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>TTS Engine</em>) – The text-to-speechrecognition engine instance capable of generating speechrecognition.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text to be converted into speechrecognition and played.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>engine = TextToSpeechEngine()
+generate_speech_and_play(engine, “Hello, how can I assist you?”)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.logger">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Logger</span> <span class="pre">dronebuddylib.utils.logging_config</span> <span class="pre">(DEBUG)&gt;</span></em><a class="headerlink" href="#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.logger" title="Link to this definition">¶</a></dt>
+<dd><p>This is a wrapper for ttx.</p>
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.speechgeneration"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.objectdetection.html"
+       title="previous chapter">← Object Detection package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.speechrecognition.html"
+       title="next chapter">Speech Recognition package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

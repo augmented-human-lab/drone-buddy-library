@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dronebuddylib.atoms.gpt_integration</span> <span class="kn">import</span> <span class="n">GPTEngine</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.intentrecognition.i_intent_recognition</span> <span class="kn">import</span> <span class="n">IIntentRecognition</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.exceptions.intent_resolution_exception</span> <span class="kn">import</span> <span class="n">IntentResolutionException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.gpt_configs</span> <span class="kn">import</span> <span class="n">GPTConfigs</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.chat_prompts</span> <span class="kn">import</span> <span class="n">SYSTEM_PROMPT_INTENT_CLASSIFICATION</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">create_custom_drone_action_list</span><span class="p">,</span> <span class="n">create_system_drone_action_list</span><span class="p">,</span> \
+    <span class="n">config_validity_check</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">GPTIntentRecognitionImpl</span><span class="p">(</span><span class="n">IIntentRecognition</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GPT-based intent recognition system specifically tailored for drone actions.</span>
+
+<span class="sd">    This class interfaces with the GPTEngine to recognize intents from user messages,</span>
+<span class="sd">    taking into account system-defined and custom-defined drone actions.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        configs (GPTConfigs): Configurations for the GPT Engine.</span>
+<span class="sd">        gpt_engine (GPTEngine): The GPT engine instance used for intent recognition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.introduce_new_intents">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.introduce_new_intents">[docs]</a>
+    <span class="k">def</span> <span class="nf">introduce_new_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_custom_actions_to_system_prompt</span><span class="p">(</span><span class="n">new_intents</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the class name of the intent recognition implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;INTENT_RECOGNITION_OPEN_AI&#39;</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the algorithm name of the intent recognition implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;GPT Intent Recognition&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the GPTIntentRecognition with configurations and sets up the default system prompt.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): Configurations for the GPT Engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate configurations</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+
+        <span class="c1"># Get configurations</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+
+        <span class="c1"># Initialize GPT configs</span>
+        <span class="n">gpt_configs</span> <span class="o">=</span> <span class="n">GPTConfigs</span><span class="p">(</span>
+            <span class="n">open_ai_api_key</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="p">)),</span>
+            <span class="n">open_ai_model</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                      <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="p">)),</span>
+            <span class="n">open_ai_temperature</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="p">)),</span>
+            <span class="n">open_ai_api_url</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="p">)),</span>
+            <span class="n">loger_location</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                       <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Initialize GPT engine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpt_engine</span> <span class="o">=</span> <span class="n">GPTEngine</span><span class="p">(</span><span class="n">gpt_configs</span><span class="p">)</span>
+
+        <span class="c1"># Set system prompt</span>
+        <span class="k">if</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SYSTEM_PROMPT</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">override_system_prompt</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SYSTEM_PROMPT</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">drone_actions</span> <span class="o">=</span> <span class="n">create_system_drone_action_list</span><span class="p">()</span>
+            <span class="n">modified_prompt</span> <span class="o">=</span> <span class="n">SYSTEM_PROMPT_INTENT_CLASSIFICATION</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#list&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">drone_actions</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpt_engine</span><span class="o">.</span><span class="n">set_system_prompt</span><span class="p">(</span><span class="n">modified_prompt</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_custom_actions_to_system_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">custom_actions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the system prompt with custom drone actions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            custom_actions (list): List of custom drone actions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">drone_actions</span> <span class="o">=</span> <span class="n">create_custom_drone_action_list</span><span class="p">(</span><span class="n">custom_actions</span><span class="p">)</span>
+        <span class="n">modified_prompt</span> <span class="o">=</span> <span class="n">SYSTEM_PROMPT_INTENT_CLASSIFICATION</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#list&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">drone_actions</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpt_engine</span><span class="o">.</span><span class="n">set_system_prompt</span><span class="p">(</span><span class="n">modified_prompt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_system_prompt">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_system_prompt">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_system_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the current system prompt being used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Current system prompt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SYSTEM_PROMPT_INTENT_CLASSIFICATION</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.override_system_prompt">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.override_system_prompt">[docs]</a>
+    <span class="k">def</span> <span class="nf">override_system_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overrides the current system prompt with the provided one.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            system_prompt (str): The new system prompt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpt_engine</span><span class="o">.</span><span class="n">set_system_prompt</span><span class="p">(</span><span class="n">system_prompt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_resolved_intent">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_resolved_intent">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_resolved_intent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recognizes the intent from the provided user message using the ChatGPT engine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_message (str): The user&#39;s input message for which the intent is to be recognized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Recognized intent based on the user message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpt_engine</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_chatgpt_response</span><span class="p">(</span><span class="n">user_message</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IntentResolutionException</span><span class="p">(</span><span class="s2">&quot;Intent could not be resolved.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the list of required configuration parameters for the intent recognition engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of required configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="p">,</span>
+                <span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="p">,</span>
+                <span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="p">,</span>
+                <span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="p">,</span>
+                <span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="GPTIntentRecognitionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the list of optional configuration parameters for the intent recognition engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of optional configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SYSTEM_PROMPT</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

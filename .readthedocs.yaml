@@ -14,15 +14,15 @@ build:
     # rust: "1.70"
     # golang: "1.20"
 
-# Build documentation in the "docs/" directory with Sphinx
+# Build documentation in the "docs-sphinx/" directory with Sphinx
 sphinx:
-  configuration: docs/conf.py
+  configuration: docs-sphinx/conf.py
   # You can configure Sphinx to use a different builder, for instance use the dirhtml builder for simpler URLs
   # builder: "dirhtml"
   # Fail on all warnings to avoid broken references
   fail_on_warning: true
 
-  # Optionally build your docs in additional formats such as PDF and ePub
+  # Optionally build your docs-sphinx in additional formats such as PDF and ePub
   # formats:
   #    - pdf
   #    - epub
@@ -32,4 +32,4 @@ sphinx:
   # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: docs-sphinx/requirements.txt
