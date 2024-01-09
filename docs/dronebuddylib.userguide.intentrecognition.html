@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.facerecognition.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.voicerecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.voicerecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.facerecognition.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="snips-nlu">
+<h2>SNIPS NLU<a class="headerlink" href="#snips-nlu" title="Link to this heading">¶</a></h2>
+<p>Snips NLU (Natural Language Understanding) is an open-source library designed to perform intent recognition and slot filling, two essential tasks in natural language processing. It allows computers to understand the meaning and extract relevant information from user queries or commands.</p>
+<ol class="arabic simple">
+<li><p>Training Data: Snips NLU requires training data to learn how to understand and process user queries. Training data consists of labeled examples, including user queries and their corresponding intents and slots. Intents represent the user’s intention, while slots capture specific pieces of information within the query.</p></li>
+<li><p>Intent Recognition: Snips NLU uses machine learning algorithms to train a model on the provided training data. During training, the model learns to recognize different intents by analyzing the patterns and relationships between the words or features in the queries and their corresponding intents. The trained model can then predict the intent of new, unseen queries.</p></li>
+<li><p>Slot Filling: In addition to intent recognition, Snips NLU also performs slot filling. Slot filling involves identifying and extracting specific information or parameters (slots) from the user’s query. For example, in the query “Book a table for two at 7 PM,” the slots could be “table” (slot type: restaurant table) and “time” (slot type: time). Snips NLU learns to recognize and extract these slots based on the patterns observed in the training data.</p></li>
+<li><p>Model Deployment: Once the model is trained, it can be deployed and integrated into your application or system. Snips NLU provides a simple API that allows you to send user queries to the model and receive the recognized intent and extracted slots as the output.</p></li>
+<li><p>Intent Recognition and Slot Filling in Action: When a user query is sent to the deployed Snips NLU model, it processes the text and predicts the intent based on the learned patterns. Additionally, it identifies and extracts relevant slots from the query, providing structured information about the user’s request.</p></li>
+<li><p>Output Generation: The recognized intent and extracted slots are generated as output, enabling your application to understand the user’s intention and access the specific information provided in the query. This output can be further processed to trigger appropriate actions or provide relevant responses based on the recognized intent and slots.</p></li>
+</ol>
+<p>Snips NLU is designed to be flexible and customizable, allowing you to train models specific to your domain or application. It provides tools to annotate training data, train the models, and evaluate their performance.</p>
+<p>By using Snips NLU, you can incorporate natural language understanding capabilities into your applications, such as chatbots, voice assistants, or any system that requires understanding and processing of user queries.</p>
+<section id="integration-in-dronebuddy">
+<h3>Integration in DroneBuddy<a class="headerlink" href="#integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
+</section>
+<section id="install-setuptools-rust">
+<h3>Install setuptools-rust<a class="headerlink" href="#install-setuptools-rust" title="Link to this heading">¶</a></h3>
+<p>To install setuptools-rust on Windows, you can follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Install Rust: setuptools-rust requires Rust to be installed on your system. You can download and install Rust from the official website at <a class="reference external" href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a> .</p></li>
+<li><p>Install Visual C++ Build Tools: setuptools-rust also requires the Visual C++ Build Tools to be installed on your system. You can download and install them from the Microsoft website at <a class="reference external" href="https://visualstudio.microsoft.com/visual-cpp-build-tools/">https://visualstudio.microsoft.com/visual-cpp-build-tools/</a>.</p></li>
+<li><p>Install Python: If you haven’t already, you need to install Python on your system. You can download and install the latest version of Python from the official website at <a class="reference external" href="https://www.python.org/downloads/windows/">https://www.python.org/downloads/windows/</a>.</p></li>
+<li><p>Open a command prompt: Open a command prompt by pressing the Windows key + R, typing “cmd” in the Run dialog box, and pressing Enter.</p></li>
+<li><p>Install setuptools-rust: In the command prompt, navigate to the directory where you want to install setuptools-rust, and run the following command:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>setuptools-rust
+</pre></div>
+</div>
+<p>This will download and install setuptools-rust and its dependencies.
+Note: If you encounter any errors during the installation process, try upgrading pip to the latest version by running pip install –upgrade pip before installing setuptools-rust. You may also need to add Rust and the Visual C++ Build Tools to your system’s PATH environment variable.</p>
+</section>
+<section id="install-snips-nlu">
+<h3>Install Snips NLU<a class="headerlink" href="#install-snips-nlu" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>snips-nlu
+</pre></div>
+</div>
+</section>
+<section id="create-data-set">
+<h3>Create data set<a class="headerlink" href="#create-data-set" title="Link to this heading">¶</a></h3>
+<p>A sample training set is already created with the most common use cases for the drone. It can be accessed in the location;</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dornebuddylib/atoms/resources/intentrecognition/
+</pre></div>
+</div>
+<p>Standard training set contains a defined set of entities and intents.</p>
+</section>
+<section id="intents">
+<h3>Intents<a class="headerlink" href="#intents" title="Link to this heading">¶</a></h3>
+<p>Intents define what the intended objective of  a phrase is. You can define the intent according to the needs of the drone.
+Currently the defined intents are defined in the enum class DroneCommands to ease the programming. This can be overridden anytime.</p>
+<p>Defining Intents</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="err">#</span><span class="w"> </span><span class="kc">ta</span><span class="err">keo</span><span class="kc">ff</span><span class="w"> </span><span class="err">i</span><span class="kc">ntent</span>
+<span class="mi">---</span>
+<span class="kc">t</span><span class="err">ype</span><span class="p">:</span><span class="w"> </span><span class="err">i</span><span class="kc">ntent</span>
+<span class="kc">na</span><span class="err">me</span><span class="p">:</span><span class="w"> </span><span class="err">TAKE_OFF</span>
+<span class="err">slo</span><span class="kc">ts</span><span class="p">:</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="kc">na</span><span class="err">me</span><span class="p">:</span><span class="w"> </span><span class="err">Dro</span><span class="kc">ne</span><span class="err">Name</span>
+<span class="w">   </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="p">:</span><span class="w"> </span><span class="err">Dro</span><span class="kc">ne</span><span class="err">Name</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="kc">na</span><span class="err">me</span><span class="p">:</span><span class="w"> </span><span class="err">address</span>
+<span class="w">   </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="p">:</span><span class="w"> </span><span class="err">address_e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>
+<span class="err">u</span><span class="kc">tteran</span><span class="err">ces</span><span class="p">:</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">Take</span><span class="w"> </span><span class="err">o</span><span class="kc">ff</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="p">[</span><span class="err">Dro</span><span class="kc">ne</span><span class="err">Name</span><span class="p">]</span><span class="err">(quadcop</span><span class="kc">ter</span><span class="err">)</span><span class="w"> </span><span class="kc">fr</span><span class="err">om</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">grou</span><span class="kc">n</span><span class="err">d.</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="s2">&quot;[address](sammy) Launch the [DroneName](hexacopter) and make it fly.&quot;</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">hey</span><span class="w"> </span><span class="p">[</span><span class="err">address</span><span class="p">]</span><span class="err">(sammy)</span><span class="p">,</span><span class="w"> </span><span class="err">ge</span><span class="kc">t</span><span class="w"> </span><span class="err">i</span><span class="kc">n</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">air.</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">Li</span><span class="kc">ft</span><span class="w"> </span><span class="err">o</span><span class="kc">ff</span><span class="w"> </span><span class="kc">fr</span><span class="err">om</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">lau</span><span class="kc">n</span><span class="err">chpad.</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="kc">ta</span><span class="err">ke</span><span class="w"> </span><span class="err">o</span><span class="kc">ff</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">hey</span><span class="w"> </span><span class="p">[</span><span class="err">address</span><span class="p">]</span><span class="err">(sammy)</span><span class="p">,</span><span class="err">lau</span><span class="kc">n</span><span class="err">ch</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="kc">fl</span><span class="err">y</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="s2">&quot;[address](sammy) can you please take off&quot;</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">hey</span><span class="w"> </span><span class="p">[</span><span class="err">address</span><span class="p">]</span><span class="err">(sammy)</span><span class="p">,</span><span class="w"> </span><span class="err">ca</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">please</span><span class="w"> </span><span class="err">lau</span><span class="kc">n</span><span class="err">ch</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">ca</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">please</span><span class="w"> </span><span class="kc">fl</span><span class="err">y</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="err">hey</span><span class="w"> </span><span class="p">[</span><span class="err">address</span><span class="p">]</span><span class="err">(sammy)</span><span class="p">,</span><span class="w"> </span><span class="err">ca</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">please</span><span class="w"> </span><span class="kc">ta</span><span class="err">ke</span><span class="w"> </span><span class="err">o</span><span class="kc">ff</span><span class="w"> </span><span class="p">[</span><span class="err">Dro</span><span class="kc">ne</span><span class="err">Name</span><span class="p">]</span><span class="err">(</span><span class="kc">t</span><span class="err">his)</span>
+</pre></div>
+</div>
+<p>Utterances refer to the training sentences that should be used to train the specific intent.  Generally these should cover a lot of possible, then the intent recognition will give better accuracy.</p>
+<p>You can cover all the intents that you need to cover when programming the drone.</p>
+</section>
+<section id="entities">
+<h3>Entities<a class="headerlink" href="#entities" title="Link to this heading">¶</a></h3>
+<p>Entities refer to the entities that need to be recognized in the conversation. For an example these can be distance, names, locations, directions.
+Defining entities</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="err">#</span><span class="w"> </span><span class="err">address</span><span class="w"> </span><span class="err">E</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>
+<span class="mi">---</span>
+<span class="kc">t</span><span class="err">ype</span><span class="p">:</span><span class="w"> </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">allows</span><span class="w"> </span><span class="kc">t</span><span class="err">o</span><span class="w"> </span><span class="err">di</span><span class="kc">fferent</span><span class="err">ia</span><span class="kc">te</span><span class="w"> </span><span class="err">be</span><span class="kc">t</span><span class="err">wee</span><span class="kc">n</span><span class="w"> </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">ies</span><span class="w"> </span><span class="err">a</span><span class="kc">n</span><span class="err">d</span><span class="w"> </span><span class="err">i</span><span class="kc">ntents</span><span class="w"> </span><span class="kc">f</span><span class="err">iles</span>
+<span class="kc">na</span><span class="err">me</span><span class="p">:</span><span class="w"> </span><span class="err">address_e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="kc">na</span><span class="err">me</span><span class="w"> </span><span class="err">o</span><span class="kc">f</span><span class="w"> </span><span class="kc">t</span><span class="err">he</span><span class="w"> </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>
+<span class="err">values</span><span class="p">:</span>
+<span class="w"> </span><span class="mi">-</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">sammy</span><span class="p">,</span><span class="w"> </span><span class="err">semi</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="err">semmi</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="err">sami</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="err">sammi</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="err">semmi</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">e</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span><span class="w"> </span><span class="err">value</span><span class="w"> </span><span class="err">wi</span><span class="kc">t</span><span class="err">h</span><span class="w"> </span><span class="err">a</span><span class="w"> </span><span class="err">sy</span><span class="kc">n</span><span class="err">o</span><span class="kc">n</span><span class="err">ym</span>
+
+
+<span class="p">[</span><span class="kc">na</span><span class="err">me</span><span class="p">]</span><span class="err">(Sammy)</span><span class="w"> </span><span class="err">ca</span><span class="kc">n</span><span class="w"> </span><span class="err">you</span><span class="w"> </span><span class="err">move</span><span class="w"> </span><span class="p">[</span><span class="err">dis</span><span class="kc">tan</span><span class="err">ce</span><span class="p">]</span><span class="err">(</span><span class="mi">10</span><span class="err">m)</span><span class="w"> </span><span class="kc">t</span><span class="err">o</span><span class="w"> </span><span class="err">your</span><span class="w"> </span><span class="p">[</span><span class="err">direc</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="p">]</span><span class="err">(righ</span><span class="kc">t</span><span class="err">)</span>
+</pre></div>
+</div>
+<p>In the default case the entity is defined as the name to address the drone. Entity is defined as address_entity, this can be retrieved in the recognized intent.</p>
+<p>The response will be as follows</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sammy can you move 10m to your right? &quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;intent&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;intentName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RIGHT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;slots&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;rawValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sammy&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Custom&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sammy&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;address_entity&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;slotName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;address&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;end&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;rawValue&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10m&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Custom&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10m&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;entity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;distance_entity&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;slotName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;distance&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This feature was introduced to reduce the noise of the voice recognition. When the drone is tested in a noisy environment the drone responds to every conversation. In order to stop this you can enable the activation phrase feature, which enables you to command the drone by addressing the drone directly by its name.
+The default name is sammy, which was selected as the probability of it being misrecognized is comparatively lower.
+If you need to change the name, you need to alter the training data set according to your needs.</p>
+<p>The method is_addressed_to_drone can be used to decide whether the drone is being addressed or not.
+Train the NLU
+If you are planning to override the the existing data set, you can simply create dataset.yaml ,
+Modify the paths in the following command to generate the json file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>snips-nlu<span class="w"> </span>generate-dataset<span class="w"> </span>en<span class="w">  </span>C:<span class="se">\U</span>sers<span class="se">\j</span>anedoe<span class="se">\p</span>rojects<span class="se">\D</span>roneBuddy<span class="se">\d</span>rone-buddy-library<span class="se">\d</span>ronebuddylib<span class="se">\r</span>esources<span class="se">\i</span>ntentrecognition<span class="se">\d</span>ataset.yaml<span class="w"> </span>&gt;<span class="w"> </span>C:<span class="se">\U</span>sers<span class="se">\j</span>anedoe<span class="se">\p</span>rojects<span class="se">\D</span>roneBuddy<span class="se">\d</span>rone-buddy-library<span class="se">\d</span>ronebuddylib<span class="se">\r</span>esources<span class="se">\i</span>ntentrecognition<span class="se">\d</span>ataset.json
+</pre></div>
+</div>
+</section>
+<section id="using-the-nlu">
+<h3>Using the NLU<a class="headerlink" href="#using-the-nlu" title="Link to this heading">¶</a></h3>
+<p>The NLU can be used to recognize the intent and the slots of the recognized intent. The following code snippet can be used to recognize the intent and the slots.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo-0613&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">CHAT_GPT</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="s2">&quot;take a picture of a chair&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="chat-gpt">
+<h2>Chat GPT<a class="headerlink" href="#chat-gpt" title="Link to this heading">¶</a></h2>
+<p>DroneBuddy is integrating ChatGPT for intent resolution. This section explores the role of ChatGPT in DroneBuddy, highlighting its capabilities, features, and integration process. For more comprehensive details about ChatGPT, refer to OpenAI’s official documentation.</p>
+<ol class="arabic simple">
+<li><p>Language Understanding: ChatGPT is adept at interpreting natural language inputs in DroneBuddy. It analyzes user queries or commands to discern the underlying intents, essential for providing accurate responses or actions.</p></li>
+<li><p>Contextual Awareness: A key strength of ChatGPT in DroneBuddy is its ability to maintain context throughout a conversation. This ensures understanding of follow-up queries or references to previous parts of the dialogue, enhancing the user experience.</p></li>
+<li><p>Response Generation: In DroneBuddy, ChatGPT is tasked with generating human-like, coherent responses that are contextually appropriate and informative, based on the user’s intent.</p></li>
+<li><p>Continuous Learning: While ChatGPT comes pre-trained on extensive textual data, DroneBuddy can fine-tune it for specific domains or applications, improving its effectiveness and relevance.</p></li>
+</ol>
+<section id="id1">
+<h3>Integration in DroneBuddy<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Setup and Configuration: Integrating ChatGPT in DroneBuddy involves setting up an environment that interfaces with OpenAI’s API, including obtaining and configuring API keys.</p></li>
+<li><p>User Input Processing: DroneBuddy captures user inputs, which can be text or speech (converted to text), and sends them to ChatGPT for processing.</p></li>
+<li><p>Handling Responses: Upon receiving a response from ChatGPT, DroneBuddy manages this output accordingly. This may involve displaying it to the user, triggering specific functions, or logging for analysis.</p></li>
+<li><p>Context Management: For conversational continuity, DroneBuddy manages the context across interactions, tracking conversation history and providing it to ChatGPT for each new request.</p></li>
+</ol>
+</section>
+<section id="example-of-chatgpt-integration-in-dronebuddy">
+<h3>Example of ChatGPT Integration in DroneBuddy<a class="headerlink" href="#example-of-chatgpt-integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
+<p>Here’s a hypothetical example of how ChatGPT could be integrated from DroneBuddy for intent resolution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo-0613&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="p">,</span>
+                                     <span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">Public</span><span class="se">\\</span><span class="s2">projects</span><span class="se">\\</span><span class="s2">drone-buddy-library</span><span class="se">\\</span><span class="s2">dronebuddylib</span><span class="se">\\</span><span class="s2">atoms</span><span class="se">\\</span><span class="s2">intentrecognition</span><span class="se">\\</span><span class="s2">resources</span><span class="se">\\</span><span class="s2">stats</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="p">,</span>
+                                     <span class="s2">&quot;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&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="p">,</span>
+                                     <span class="s2">&quot;https://api.openai.com/v1/chat/completions&quot;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">CHAT_GPT</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="s2">&quot;take a picture of a chair&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code snippet demonstrates the process of sending a user query to ChatGPT and receiving a contextually relevant response, which DroneBuddy can then use in various ways.</p>
+</section>
+<section id="important-considerations">
+<h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>It’s crucial to remember that ChatGPT, as implemented in DroneBuddy, generates responses based on learned data patterns and probabilities. Therefore, its output might not always be perfectly accurate or suitable for every situation. Continuous monitoring and occasional fine-tuning are recommended to ensure the system aligns with DroneBuddy’s specific needs and provides optimal results.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.voicerecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.facerecognition.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

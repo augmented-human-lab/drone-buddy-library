@@ -1,4 +1,3 @@
-__version__ = "2.0.0"
+__version__ = "2.0.15"
 
-from .logging_config import get_logger
 from .exceptions import FileWritingException

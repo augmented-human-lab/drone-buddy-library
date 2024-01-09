@@ -10,7 +10,7 @@ import cv2
 
 from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import VisionRunningMode
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.models.enums import Configurations
+from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.utils.utils import config_validity_check
 
 # Mediapipe hands module for detecting hand landmarks

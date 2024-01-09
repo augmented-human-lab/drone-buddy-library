@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>atoms packages</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Body feature extraction package" href="dronebuddylib.atoms.bodyfeatureextraction.html" />
+  <link rel="prev" title="dronebuddylib package" href="dronebuddylib.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Atomic Modules</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#gpt-integration-module" class="reference internal">GPT Integration module</a></li>
+                
+                  <li class="toctree-l2"><a href="#body-feature-extraction-module" class="reference internal">Body Feature Extraction module</a></li>
+                
+                  <li class="toctree-l2"><a href="#face-recognition-module" class="reference internal">Face Recognition module</a></li>
+                
+                  <li class="toctree-l2"><a href="#intent-recognition-module" class="reference internal">Intent Recognition module</a></li>
+                
+                  <li class="toctree-l2"><a href="#object-detection-module" class="reference internal">Object Detection module</a></li>
+                
+                  <li class="toctree-l2"><a href="#speech-generation-module" class="reference internal">Speech Generation module</a></li>
+                
+                  <li class="toctree-l2"><a href="#speech-recognition-module" class="reference internal">Speech Recognition module</a></li>
+                
+                  <li class="toctree-l2"><a href="#text-recognition-module" class="reference internal">Text Recognition module</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.html">dronebuddylib package</a> &raquo;</li>
+    
+    <li>atoms packages</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.html"
+       title="previous chapter">← dronebuddylib package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.bodyfeatureextraction.html"
+       title="next chapter">Body feature extraction package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="atoms-packages">
+<h1>atoms packages<a class="headerlink" href="#atoms-packages" title="Link to this heading">¶</a></h1>
+<section id="gpt-integration-module">
+<h2>GPT Integration module<a class="headerlink" href="#gpt-integration-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.gpt_integration">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.gpt_integration.</span></span><span class="sig-name descname"><span class="pre">GPTEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.gpt_configs.GPTConfigs" title="dronebuddylib.models.gpt_configs.GPTConfigs"><span class="pre">GPTConfigs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine.get_response">
+<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine.get_response" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine.set_system_prompt">
+<span class="sig-name descname"><span class="pre">set_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine.set_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine.set_system_prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="body-feature-extraction-module">
+<h2>Body Feature Extraction module<a class="headerlink" href="#body-feature-extraction-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.bodyfeatureextraction">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html">Body feature extraction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#body-feature-extraction-impl-module">body_feature_extraction_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#hand-feature-extraction-impl-module">hand_feature_extraction_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#head-feature-extraction-impl-module">head_feature_extraction_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#i-feature-extraction-module">i_feature_extraction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="face-recognition-module">
+<h2>Face Recognition module<a class="headerlink" href="#face-recognition-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.facerecognition">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html">Face Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-engine-module">face_recognition_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-impl-module">face_recognition_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#i-face-recognition-module">i_face_recognition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="intent-recognition-module">
+<h2>Intent Recognition module<a class="headerlink" href="#intent-recognition-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.intentrecognition">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html">Intent Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#gpt-intent-recognition-impl-module">gpt_intent_recognition_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#i-intent-recognition-module">i_intent_recognition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#intent-recognition-engine-module">intent_recognition_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#snips-intent-recognition-impl-module">snips_intent_recognition_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="object-detection-module">
+<h2>Object Detection module<a class="headerlink" href="#object-detection-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.objectdetection">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html">Object Detection package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#i-object-detection-module">i_object_detection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#mp-object-detection-impl-module">mp_object_detection_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#object-detection-engine-module">object_detection_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#yolo-object-detection-impl-module">yolo_object_detection_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="speech-generation-module">
+<h2>Speech Generation module<a class="headerlink" href="#speech-generation-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.speechgeneration">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html">Speech Generation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#i-speech-generation-module">i_speech_generation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#speech-generation-engine-module">speech_generation_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#tts-speech-generation-impl-module">tts_speech_generation_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="speech-recognition-module">
+<h2>Speech Recognition module<a class="headerlink" href="#speech-recognition-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.speechrecognition">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html">Speech Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#google-speech-2-text-conversion-impl-module">google_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#i-speech-to-text-conversion-module">i_speech_to_text_conversion module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#speech-to-text-engine-module">speech_to_text_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#vosk-speech-2-text-conversion-impl-module">vosk_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="text-recognition-module">
+<h2>Text Recognition module<a class="headerlink" href="#text-recognition-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.textrecognition">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html">Text Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#text-recognition-engine-module">text_recognition_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#google-text-recognition-impl-module">google_text_recognition_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#i-text-recognition-module">i_text_recognition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.html"
+       title="previous chapter">← dronebuddylib package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.bodyfeatureextraction.html"
+       title="next chapter">Body feature extraction package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

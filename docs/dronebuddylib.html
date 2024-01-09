@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>dronebuddylib package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="atoms packages" href="dronebuddylib.atoms.html" />
+  <link rel="prev" title="Welcome to Dronebuddy’s documentation!" href="index.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Introduction</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#subpackages" class="reference internal">Subpackages</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-contents" class="reference internal">Module contents</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>dronebuddylib package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Welcome to Dronebuddy’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.html"
+       title="next chapter">atoms packages →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="dronebuddylib-package">
+<h1>dronebuddylib package<a class="headerlink" href="#dronebuddylib-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.html">atoms packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#gpt-integration-module">GPT Integration module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.html#dronebuddylib.atoms.gpt_integration.GPTEngine"><code class="docutils literal notranslate"><span class="pre">GPTEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.html#dronebuddylib.atoms.gpt_integration.GPTEngine.get_response"><code class="docutils literal notranslate"><span class="pre">GPTEngine.get_response()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.html#dronebuddylib.atoms.gpt_integration.GPTEngine.set_system_prompt"><code class="docutils literal notranslate"><span class="pre">GPTEngine.set_system_prompt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#body-feature-extraction-module">Body Feature Extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html">Body feature extraction package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#body-feature-extraction-impl-module">body_feature_extraction_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#hand-feature-extraction-impl-module">hand_feature_extraction_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#head-feature-extraction-impl-module">head_feature_extraction_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#i-feature-extraction-module">i_feature_extraction module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#face-recognition-module">Face Recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html">Face Recognition package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-engine-module">face_recognition_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-impl-module">face_recognition_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#i-face-recognition-module">i_face_recognition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#intent-recognition-module">Intent Recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html">Intent Recognition package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#gpt-intent-recognition-impl-module">gpt_intent_recognition_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#i-intent-recognition-module">i_intent_recognition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#intent-recognition-engine-module">intent_recognition_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#snips-intent-recognition-impl-module">snips_intent_recognition_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#object-detection-module">Object Detection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html">Object Detection package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#i-object-detection-module">i_object_detection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#mp-object-detection-impl-module">mp_object_detection_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#object-detection-engine-module">object_detection_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#yolo-object-detection-impl-module">yolo_object_detection_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#speech-generation-module">Speech Generation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html">Speech Generation package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#i-speech-generation-module">i_speech_generation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#speech-generation-engine-module">speech_generation_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#tts-speech-generation-impl-module">tts_speech_generation_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#speech-recognition-module">Speech Recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html">Speech Recognition package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#google-speech-2-text-conversion-impl-module">google_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#i-speech-to-text-conversion-module">i_speech_to_text_conversion module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#speech-to-text-engine-module">speech_to_text_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#vosk-speech-2-text-conversion-impl-module">vosk_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.html#text-recognition-module">Text Recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html">Text Recognition package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#text-recognition-engine-module">text_recognition_engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#google-text-recognition-impl-module">google_text_recognition_impl module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#i-text-recognition-module">i_text_recognition module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.textrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html">Body feature extraction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#body-feature-extraction-impl-module">body_feature_extraction_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.draw_landmarks_on_image"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.draw_landmarks_on_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_detected_pose"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_detected_pose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_feature"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_feature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_supported_features"><code class="docutils literal notranslate"><span class="pre">BodyFeatureExtractionImpl.get_supported_features()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#hand-feature-extraction-impl-module">hand_feature_extraction_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.count_fingers"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.count_fingers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.count_raised_fingers"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.count_raised_fingers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_feature"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_feature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_gesture"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_gesture()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.hand_feature_extraction_impl.HandFeatureExtractionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">HandFeatureExtractionImpl.get_required_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#head-feature-extraction-impl-module">head_feature_extraction_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl.get_feature"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl.get_feature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.head_feature_extraction_impl.HeadFeatureExtractionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">HeadFeatureExtractionImpl.get_required_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#i-feature-extraction-module">i_feature_extraction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.i_feature_extraction.IFeatureExtraction"><code class="docutils literal notranslate"><span class="pre">IFeatureExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.i_feature_extraction.IFeatureExtraction.get_feature"><code class="docutils literal notranslate"><span class="pre">IFeatureExtraction.get_feature()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.bodyfeatureextraction.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html">Face Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-engine-module">face_recognition_engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.recognize_face"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionEngine.recognize_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.remember_face"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionEngine.remember_face()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#face-recognition-impl-module">face_recognition_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.IMAGE_PATH"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.IMAGE_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.KNOWN_NAMES_FILE_PATH"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.KNOWN_NAMES_FILE_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_encodings"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.load_known_face_encodings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_names"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.load_known_face_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.process_frame_for_recognition"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.process_frame_for_recognition()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.read_file_into_list"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.read_file_into_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.recognize_face"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.recognize_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.remember_face"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionImpl.remember_face()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#i-face-recognition-module">i_face_recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition"><code class="docutils literal notranslate"><span class="pre">IFaceRecognition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.recognize_face"><code class="docutils literal notranslate"><span class="pre">IFaceRecognition.recognize_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.remember_face"><code class="docutils literal notranslate"><span class="pre">IFaceRecognition.remember_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#id0"><code class="docutils literal notranslate"><span class="pre">IFaceRecognition.recognize_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#id1"><code class="docutils literal notranslate"><span class="pre">IFaceRecognition.remember_face()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.facerecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html">Intent Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#gpt-intent-recognition-impl-module">gpt_intent_recognition_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.configs"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.configs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.gpt_engine"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.gpt_engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_resolved_intent"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_resolved_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_system_prompt"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.get_system_prompt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.introduce_new_intents"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.introduce_new_intents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.override_system_prompt"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.override_system_prompt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt"><code class="docutils literal notranslate"><span class="pre">GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#i-intent-recognition-module">i_intent_recognition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition"><code class="docutils literal notranslate"><span class="pre">IIntentRecognition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.get_resolved_intent"><code class="docutils literal notranslate"><span class="pre">IIntentRecognition.get_resolved_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.introduce_new_intents"><code class="docutils literal notranslate"><span class="pre">IIntentRecognition.introduce_new_intents()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#intent-recognition-engine-module">intent_recognition_engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.ACTION_FILE_PATH"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine.ACTION_FILE_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.intent_recognizer"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine.intent_recognizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.get_current_intents"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine.get_current_intents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.introduce_new_intent"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine.introduce_new_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.recognize_intent"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionEngine.recognize_intent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#snips-intent-recognition-impl-module">snips_intent_recognition_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.engine"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_resolved_intent"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_resolved_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.add_new_intent"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.add_new_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id0"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.add_new_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id1"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id2"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id3"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id4"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#id5"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.get_resolved_intent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.introduce_new_intents"><code class="docutils literal notranslate"><span class="pre">SNIPSIntentRecognitionImpl.introduce_new_intents()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.intentrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html">Object Detection package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#i-object-detection-module">i_object_detection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection"><code class="docutils literal notranslate"><span class="pre">IObjectDetection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_bounding_boxes_of_detected_objects"><code class="docutils literal notranslate"><span class="pre">IObjectDetection.get_bounding_boxes_of_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects"><code class="docutils literal notranslate"><span class="pre">IObjectDetection.get_detected_objects()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#mp-object-detection-impl-module">mp_object_detection_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">MPObjectDetectionImpl.get_required_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#object-detection-engine-module">object_detection_engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_bounding_boxes_of_detected_objects"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionEngine.get_bounding_boxes_of_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionEngine.get_detected_objects()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#yolo-object-detection-impl-module">yolo_object_detection_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_bounding_boxes_of_detected_objects"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_bounding_boxes_of_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_detected_objects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">YOLOObjectDetectionImpl.get_required_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html">Speech Generation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#i-speech-generation-module">i_speech_generation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_rate"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration.change_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_voice"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration.change_voice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.change_volume"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration.change_volume()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.get_current_configs"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration.get_current_configs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.i_speech_generation.ISpeechGeneration.read_phrase"><code class="docutils literal notranslate"><span class="pre">ISpeechGeneration.read_phrase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#speech-generation-engine-module">speech_generation_engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.speech_generation_engine.SpeechGenerationEngine.read_phrase"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationEngine.read_phrase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#tts-speech-generation-impl-module">tts_speech_generation_impl module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_rate"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.change_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_voice"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.change_voice()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_volume"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.change_volume()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_class_name"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_current_configs"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.get_current_configs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_optional_params"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_required_params"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.get_required_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.read_phrase"><code class="docutils literal notranslate"><span class="pre">TTSTextToSpeechGenerationImpl.read_phrase()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechgeneration.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html">Speech Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#google-speech-2-text-conversion-impl-module">google_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#i-speech-to-text-conversion-module">i_speech_to_text_conversion module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#speech-to-text-engine-module">speech_to_text_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#vosk-speech-2-text-conversion-impl-module">vosk_speech_2_text_conversion_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.speechrecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.configurations.html">Configurations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.configurations.html#config-module">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.configurations.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.models.html">Models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#chat-session-module">chat_session module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession"><code class="docutils literal notranslate"><span class="pre">ChatSession</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession.end_session"><code class="docutils literal notranslate"><span class="pre">ChatSession.end_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession.get_chatgpt_response"><code class="docutils literal notranslate"><span class="pre">ChatSession.get_chatgpt_response()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession.get_messages"><code class="docutils literal notranslate"><span class="pre">ChatSession.get_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession.set_system_prompt"><code class="docutils literal notranslate"><span class="pre">ChatSession.set_system_prompt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#conversation-module">conversation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.conversation.Conversation"><code class="docutils literal notranslate"><span class="pre">Conversation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.conversation.Conversation.add_message"><code class="docutils literal notranslate"><span class="pre">Conversation.add_message()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#engine-configurations-module">engine_configurations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations.add_configuration"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations.add_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations.get_configuration"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations.get_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations.get_configurations"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations.get_configurations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations.get_configurations_for_engine"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations.get_configurations_for_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations.remove_configurations"><code class="docutils literal notranslate"><span class="pre">EngineConfigurations.remove_configurations()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#enums-module">enums module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations"><code class="docutils literal notranslate"><span class="pre">Configurations</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.BODY_FEATURE_EXTRACTION_POSTURE_DETECTION_MODEL_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.BODY_FEATURE_EXTRACTION_POSTURE_DETECTION_MODEL_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION"><code class="docutils literal notranslate"><span class="pre">Configurations.HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_OPEN_AI_MODEL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.INTENT_RECOGNITION_SYSTEM_PROMPT"><code class="docutils literal notranslate"><span class="pre">Configurations.INTENT_RECOGNITION_SYSTEM_PROMPT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.OBJECT_DETECTION_MP_MODELS_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.OBJECT_DETECTION_MP_MODELS_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.OBJECT_DETECTION_YOLO_VERSION"><code class="docutils literal notranslate"><span class="pre">Configurations.OBJECT_DETECTION_YOLO_VERSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_GENERATION_TTS_RATE"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_GENERATION_TTS_RATE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_GENERATION_TTS_VOICE_ID"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_GENERATION_TTS_VOICE_ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_GENERATION_TTS_VOLUME"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_GENERATION_TTS_VOLUME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_GOOGLE_ENCODING"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_GOOGLE_ENCODING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGO_MIC_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGO_MIC_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGO_PHRASE_TIME_LIMIT"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGO_PHRASE_TIME_LIMIT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_MULTI_ALGO_IBM_KEY"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_MULTI_ALGO_IBM_KEY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH"><code class="docutils literal notranslate"><span class="pre">Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands"><code class="docutils literal notranslate"><span class="pre">DroneCommands</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.BACKWARD"><code class="docutils literal notranslate"><span class="pre">DroneCommands.BACKWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.BATTERY"><code class="docutils literal notranslate"><span class="pre">DroneCommands.BATTERY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.DOWN"><code class="docutils literal notranslate"><span class="pre">DroneCommands.DOWN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.FLIP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.FLIP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.FORWARD"><code class="docutils literal notranslate"><span class="pre">DroneCommands.FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.HEIGHT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.HEIGHT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.LAND"><code class="docutils literal notranslate"><span class="pre">DroneCommands.LAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.LEFT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.LEFT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.NONE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.NONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.RECOGNIZE_OBJECTS"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_OBJECTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.RECOGNIZE_PEOPLE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_PEOPLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.RECOGNIZE_TEXT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_TEXT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.RIGHT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RIGHT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.ROTATE_CLOCKWISE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.ROTATE_CLOCKWISE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.ROTATE_COUNTER_CLOCKWISE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.ROTATE_COUNTER_CLOCKWISE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.SPEED"><code class="docutils literal notranslate"><span class="pre">DroneCommands.SPEED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.STOP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.STOP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.TAKE_OFF"><code class="docutils literal notranslate"><span class="pre">DroneCommands.TAKE_OFF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands.UP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.UP</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.FaceRecognitionAlgorithm"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.FaceRecognitionAlgorithm.FACE_RECC"><code class="docutils literal notranslate"><span class="pre">FaceRecognitionAlgorithm.FACE_RECC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.IntentRecognitionAlgorithm"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.IntentRecognitionAlgorithm.CHAT_GPT"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm.CHAT_GPT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.IntentRecognitionAlgorithm.SNIPS_NLU"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm.SNIPS_NLU</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Language"><code class="docutils literal notranslate"><span class="pre">Language</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Language.ENGLISH"><code class="docutils literal notranslate"><span class="pre">Language.ENGLISH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.Language.FRENCH"><code class="docutils literal notranslate"><span class="pre">Language.FRENCH</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors"><code class="docutils literal notranslate"><span class="pre">LoggerColors</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.BLUE"><code class="docutils literal notranslate"><span class="pre">LoggerColors.BLUE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.CYAN"><code class="docutils literal notranslate"><span class="pre">LoggerColors.CYAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.GREEN"><code class="docutils literal notranslate"><span class="pre">LoggerColors.GREEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.PURPLE"><code class="docutils literal notranslate"><span class="pre">LoggerColors.PURPLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.RED"><code class="docutils literal notranslate"><span class="pre">LoggerColors.RED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.WHITE"><code class="docutils literal notranslate"><span class="pre">LoggerColors.WHITE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors.YELLOW"><code class="docutils literal notranslate"><span class="pre">LoggerColors.YELLOW</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes.ALL"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.ALL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes.BBOX"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.BBOX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes.CONF"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.CONF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes.LABELS"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.LABELS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.SpeechGenerationAlgorithm"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.TextRecognitionAlgorithm"><code class="docutils literal notranslate"><span class="pre">TextRecognitionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.TextRecognitionAlgorithm.GOOGLE_VISION"><code class="docutils literal notranslate"><span class="pre">TextRecognitionAlgorithm.GOOGLE_VISION</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm.GOOGLE_VISION"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm.GOOGLE_VISION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm.MEDIA_PIPE"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm.MEDIA_PIPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm.YOLO"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm.YOLO</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#gpt-configs-module">gpt_configs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.gpt_configs.GPTConfigs"><code class="docutils literal notranslate"><span class="pre">GPTConfigs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#i-dbl-function-module">i_dbl_function module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction"><code class="docutils literal notranslate"><span class="pre">IDBLFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction.get_algorithm_name"><code class="docutils literal notranslate"><span class="pre">IDBLFunction.get_algorithm_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction.get_class_name"><code class="docutils literal notranslate"><span class="pre">IDBLFunction.get_class_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction.get_optional_params"><code class="docutils literal notranslate"><span class="pre">IDBLFunction.get_optional_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction.get_required_params"><code class="docutils literal notranslate"><span class="pre">IDBLFunction.get_required_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#intent-module">intent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#object-detected-module">object_detected module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.BoundingBox"><code class="docutils literal notranslate"><span class="pre">BoundingBox</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.DetectedCategories"><code class="docutils literal notranslate"><span class="pre">DetectedCategories</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetected"><code class="docutils literal notranslate"><span class="pre">ObjectDetected</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetected.add_category"><code class="docutils literal notranslate"><span class="pre">ObjectDetected.add_category()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionResult</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#recognized-speech-module">recognized_speech module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.recognized_speech.RecognizedSpeechResult"><code class="docutils literal notranslate"><span class="pre">RecognizedSpeechResult</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#session-logger-module">session_logger module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.session_logger.SessionLogger"><code class="docutils literal notranslate"><span class="pre">SessionLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.session_logger.SessionLogger.close_file"><code class="docutils literal notranslate"><span class="pre">SessionLogger.close_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.session_logger.SessionLogger.log_chat"><code class="docutils literal notranslate"><span class="pre">SessionLogger.log_chat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#token-counter-module">token_counter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.token_counter.num_tokens_from_messages"><code class="docutils literal notranslate"><span class="pre">num_tokens_from_messages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.models.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.utils.html">dronebuddylib.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#chat-prompts-module">chat_prompts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#enums-module">enums module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands"><code class="docutils literal notranslate"><span class="pre">DroneCommands</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.BACKWARD"><code class="docutils literal notranslate"><span class="pre">DroneCommands.BACKWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.BATTERY"><code class="docutils literal notranslate"><span class="pre">DroneCommands.BATTERY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.DOWN"><code class="docutils literal notranslate"><span class="pre">DroneCommands.DOWN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.FLIP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.FLIP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.FORWARD"><code class="docutils literal notranslate"><span class="pre">DroneCommands.FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.HEIGHT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.HEIGHT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.LAND"><code class="docutils literal notranslate"><span class="pre">DroneCommands.LAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.LEFT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.LEFT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.NONE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.NONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.RECOGNIZE_OBJECTS"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_OBJECTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.RECOGNIZE_PEOPLE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_PEOPLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.RECOGNIZE_TEXT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RECOGNIZE_TEXT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.RIGHT"><code class="docutils literal notranslate"><span class="pre">DroneCommands.RIGHT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.ROTATE_CLOCKWISE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.ROTATE_CLOCKWISE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.ROTATE_COUNTER_CLOCKWISE"><code class="docutils literal notranslate"><span class="pre">DroneCommands.ROTATE_COUNTER_CLOCKWISE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.SPEED"><code class="docutils literal notranslate"><span class="pre">DroneCommands.SPEED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.STOP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.STOP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.TAKE_OFF"><code class="docutils literal notranslate"><span class="pre">DroneCommands.TAKE_OFF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.DroneCommands.UP"><code class="docutils literal notranslate"><span class="pre">DroneCommands.UP</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.IntentRecognitionAlgorithm"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.IntentRecognitionAlgorithm.CHAT_GPT"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm.CHAT_GPT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.IntentRecognitionAlgorithm.SNIPS_NLU"><code class="docutils literal notranslate"><span class="pre">IntentRecognitionAlgorithm.SNIPS_NLU</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.Language"><code class="docutils literal notranslate"><span class="pre">Language</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.Language.ENGLISH"><code class="docutils literal notranslate"><span class="pre">Language.ENGLISH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.Language.FRENCH"><code class="docutils literal notranslate"><span class="pre">Language.FRENCH</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes.ALL"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.ALL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes.BBOX"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.BBOX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes.CONF"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.CONF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.ObjectDetectionReturnTypes.LABELS"><code class="docutils literal notranslate"><span class="pre">ObjectDetectionReturnTypes.LABELS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechGenerationAlgorithm"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE"><code class="docutils literal notranslate"><span class="pre">SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionAlgorithm"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.GOOGLE"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.GOOGLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.IBM"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.IBM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.VOSK"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.VOSK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.WHISPER"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.WHISPER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.WIT"><code class="docutils literal notranslate"><span class="pre">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.WIT</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.VisionAlgorithm"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.VisionAlgorithm.GOOGLE_VISION"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm.GOOGLE_VISION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.VisionAlgorithm.YOLO_V8"><code class="docutils literal notranslate"><span class="pre">VisionAlgorithm.YOLO_V8</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#exceptions-module">exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.exceptions.FileWritingException"><code class="docutils literal notranslate"><span class="pre">FileWritingException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.exceptions.MissingConfigurationException"><code class="docutils literal notranslate"><span class="pre">MissingConfigurationException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#logging-config-module">logging_config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger.log_debug"><code class="docutils literal notranslate"><span class="pre">Logger.log_debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger.log_error"><code class="docutils literal notranslate"><span class="pre">Logger.log_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger.log_info"><code class="docutils literal notranslate"><span class="pre">Logger.log_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger.log_success"><code class="docutils literal notranslate"><span class="pre">Logger.log_success()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.logging_config.Logger.log_warning"><code class="docutils literal notranslate"><span class="pre">Logger.log_warning()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#utils-module">utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.utils.config_validity_check"><code class="docutils literal notranslate"><span class="pre">config_validity_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.utils.create_custom_drone_action_list"><code class="docutils literal notranslate"><span class="pre">create_custom_drone_action_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.utils.create_system_drone_action_list"><code class="docutils literal notranslate"><span class="pre">create_system_drone_action_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.utils.get_current_intents"><code class="docutils literal notranslate"><span class="pre">get_current_intents()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.utils.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Welcome to Dronebuddy’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.html"
+       title="next chapter">atoms packages →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,16 +1,14 @@
 import json
-from abc import ABC
 import pkg_resources
 from snips_nlu import SnipsNLUEngine
 
 from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRecognition
 from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.models.enums import Configurations
-from dronebuddylib.models.intent import Intent
+from dronebuddylib.models.enums import AtomicEngineConfigurations
+from dronebuddylib.atoms.intentrecognition.recognized_intent import RecognizedIntent, RecognizedEntities
 from dronebuddylib.utils import FileWritingException
-from dronebuddylib.utils.utils import config_validity_check
-import logging
+from dronebuddylib.utils.utils import config_validity_check, logger
 
 
 class SNIPSIntentRecognitionImpl(IIntentRecognition):
@@ -46,7 +44,7 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
                     file.write(intent + "=" + new_intents[intent] + '\n')
             return True
         except IOError:
-            logging.error("Error while writing to the file: %s", intent)
+            logger.log_error(self.get_class_name(), "Error while writing to the file: %s", intent)
             raise FileWritingException("Error while writing to the file: " + intent)
 
     def get_class_name(self) -> str:
@@ -71,27 +69,27 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
 
         # Use the default dataset path if not provided
         if engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
-                Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name) is None:
+                AtomicEngineConfigurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name) is None:
             dataset_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/dataset.json")
-            logging.debug(self.get_class_name() + ': initialized with default dataset')
+            logger.log_debug(self.get_class_name(), 'initialized with default dataset')
         else:
             dataset_path = engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
-                Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name)
+                AtomicEngineConfigurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH.name)
 
         engine = SnipsNLUEngine(config=engine_configurations.get_configurations_for_engine(self.get_class_name()).get(
-            Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG.name))
+            AtomicEngineConfigurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG.name))
 
         with open(dataset_path) as fh:
             dataset = json.load(fh)
-            logging.debug(self.get_class_name() + ':Training set loaded from the json file')
+            logger.log_debug(self.get_class_name(), 'Training set loaded from the json file')
 
         engine.fit(dataset)
-        logging.debug(self.get_class_name() + ': Model fitted to the training set')
+        logger.log_debug(self.get_class_name(), ' Model fitted to the training set')
 
         self.engine = engine
-        logging.debug(self.get_class_name() + ': Initialized intent recognition engine')
+        logger.log_debug(self.get_class_name(), ' Initialized intent recognition engine')
 
-    def get_resolved_intent(self, phrase: str) -> Intent:
+    def get_resolved_intent(self, phrase: str) -> RecognizedIntent:
         """
         Parses text to detect intent and associated slots.
 
@@ -99,13 +97,27 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
             phrase (str): The text to be parsed.
 
         Returns:
-            Intent: The detected intent and associated slots.
+            RecognizedIntent: The detected intent and associated slots.
         """
+        logger.log_debug(self.get_class_name(), ' Detection started.')
+
         intent = self.engine.parse(phrase)
+        logger.log_debug(self.get_class_name(), ' Detection Successful.')
+
         try:
-            return Intent(intent['intent']['intentName'], intent['slots'], intent['intent']['probability'])
+            formatted_intent = RecognizedIntent(intent['intent']['intentName'], [], intent['intent']['probability'],
+                                                False)
+            entity_list = []
+            for slot in intent['slots']:
+                entity_list.append(RecognizedEntities(slot['entity'], slot['rawValue']))
+                if slot['entity'] == 'DroneName':
+                    formatted_intent.addressed_to = True
+
+            formatted_intent.set_entities(entity_list)
+            logger.log_debug(self.get_class_name(), ' Detection completed.')
+            return formatted_intent
         except KeyError:
-            raise IntentResolutionException("Intent could not be resolved.")
+            raise IntentResolutionException("Intent could not be resolved.", 500)
 
     def add_new_intent(self, intent: str, description: str) -> bool:
         """
@@ -119,19 +131,19 @@ class SNIPSIntentRecognitionImpl(IIntentRecognition):
             bool: True if the intent was successfully added, False otherwise.
         """
         try:
-            text_file_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/intents.txt")
+            text_file_path = pkg_resources.resource_filename(__name__, "intentrecognition/resources/intents.txt")
             with open(text_file_path, 'a') as file:
                 file.write(intent + "=" + description + '\n')
             return True
         except IOError:
-            logging.error("Error while writing to the file: %s", intent)
+            logger.log_error(self.get_class_name(), " Error while writing to the file: %s", intent)
             raise FileWritingException("Error while writing to the file: " + intent)
 
     def get_required_params(self) -> list:
         """Returns a list of required configuration parameters."""
-        return [Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH,
-                Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG]
+        return []
 
     def get_optional_params(self) -> list:
         """Returns a list of optional configuration parameters."""
-        pass
+        return [AtomicEngineConfigurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH,
+                AtomicEngineConfigurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG]

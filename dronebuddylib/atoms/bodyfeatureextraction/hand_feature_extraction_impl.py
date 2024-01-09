@@ -9,14 +9,17 @@ import cv2
 
 from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import VisionRunningMode
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.models.enums import Configurations
+from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.utils.utils import config_validity_check
 
 # Initialize Mediapipe's hand module for detecting hand landmarks
 mpHands = mp.solutions.hands
-hands = mpHands.Hands()
+# hands = mpHands.Hands()
 # Initialize Mediapipe's drawing utils for drawing hand landmarks on the image
 mpDraw = mp.solutions.drawing_utils
+# hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.7)
+
+p_time = time.time()
 
 
 class HandFeatureExtractionImpl(IFeatureExtraction):
@@ -39,6 +42,8 @@ class HandFeatureExtractionImpl(IFeatureExtraction):
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
+        self.hands = mpHands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.7)
+
         self.configs = engine_configurations
 
     def get_feature(self, image) -> list:
@@ -69,6 +74,35 @@ class HandFeatureExtractionImpl(IFeatureExtraction):
         self.hand_landmark = hand_landmarks
         return hand_landmarks
 
+    def count_raised_fingers(self, image):
+        # Convert the image color space from BGR to RGB
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        # Process the image and get the hand landmarks
+        results = self.hands.process(image)
+
+        # Check if any hand is detected
+        if results.multi_hand_landmarks:
+            # Assuming a single hand is detected
+            hand_landmarks = results.multi_hand_landmarks[0]
+
+            # Tip ids for thumb, index, middle, ring, pinky fingers
+            tip_ids = [4, 8, 12, 16, 20]
+
+            # Count raised fingers
+            raised_fingers = 0
+            for tip_id in tip_ids:
+                finger_tip = hand_landmarks.landmark[tip_id]
+                finger_bottom = hand_landmarks.landmark[tip_id - 2]
+
+                # Check if the finger is raised (depends on the orientation of the hand)
+                if finger_tip.y < finger_bottom.y:  # Adjust the condition based on the hand orientation
+                    raised_fingers += 1
+
+            return raised_fingers
+        else:
+            return 0
+
     def count_fingers(self, frame, show_feedback=False) -> int:
         """
         Count the number of fingers in a frame.
@@ -89,7 +123,7 @@ class HandFeatureExtractionImpl(IFeatureExtraction):
         cv2.putText(frame, f'FPS:{int(fps)}', (400, 70), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
 
         img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = hands.process(frame)
+        results = self.hands.process(frame)
 
         finger_count = 0
 
@@ -129,33 +163,37 @@ class HandFeatureExtractionImpl(IFeatureExtraction):
 
         return finger_count
 
-    def get_gesture(self, numpy_image: list) -> GestureRecognizerResult:
+    def get_gesture(self, numpy_image) -> GestureRecognizerResult:
         """
         Get the gesture in an image.
 
         Args:
-            numpy_image (list): The image to recognize the gesture in.
+            numpy_image : The image to recognize the gesture in.
 
         Returns:
             GestureRecognizerResult: The result of gesture recognition.
         """
-        if self.configs.get_configuration(Configurations.HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION) is True:
-            if self.configs.get_configuration(
-                    Configurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH) is not None:
-                model_path = self.configs.get_configuration(
-                    Configurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH)
-            else:
-                model_path = pkg_resources.resource_filename(__name__,
-                                                             "bodyfeatureextraction/resources/gesture_recognizer.task")
-            options = GestureRecognizerOptions(
-                base_options=BaseOptions(model_asset_path=model_path),
-                running_mode=VisionRunningMode.IMAGE)
-            with GestureRecognizer.create_from_options(options) as recognizer:
-                self.gesture_recognition_model = recognizer
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=numpy_image)
-        # Perform gesture recognition on the provided single image.
-        # The gesture recognizer must be created with the image mode.
-        return self.gesture_recognition_model.recognize(mp_image)
+        if self.configs.get_configuration(
+                AtomicEngineConfigurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH) is not None:
+            model_path = self.configs.get_configuration(
+                AtomicEngineConfigurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH)
+        else:
+            model_path = pkg_resources.resource_filename(__name__,
+                                                         "resources/gesture_recognizer.task")
+
+        with open(model_path, 'rb') as file:
+            model_data = file.read()
+
+        options = GestureRecognizerOptions(
+            base_options=BaseOptions(model_asset_buffer=model_data),
+            running_mode=VisionRunningMode.IMAGE)
+        with GestureRecognizer.create_from_options(options) as recognizer:
+            self.gesture_recognition_model = recognizer
+
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=numpy_image)
+            # Perform gesture recognition on the provided single image.
+            # The gesture recognizer must be created with the image mode.
+            return self.gesture_recognition_model.recognize(mp_image)
 
     def get_required_params(self) -> list:
         """
@@ -173,8 +211,8 @@ class HandFeatureExtractionImpl(IFeatureExtraction):
         Returns:
             list: The list of optional parameters.
         """
-        return [Configurations.HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION,
-                Configurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH]
+        return [AtomicEngineConfigurations.HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION,
+                AtomicEngineConfigurations.HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH]
 
     def get_class_name(self) -> str:
         """

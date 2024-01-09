@@ -4,9 +4,10 @@ import pkg_resources
 
 from dronebuddylib.atoms.facerecognition.i_face_recognition import IFaceRecognition
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.utils import FileWritingException, get_logger
+from dronebuddylib.utils import FileWritingException
+from dronebuddylib.utils.logger import Logger
 
-logger = get_logger()
+logger = Logger()
 
 import face_recognition
 
@@ -15,6 +16,9 @@ class FaceRecognitionImpl(IFaceRecognition):
     """
     Implementation of the IFaceRecognition interface using face_recognition library.
     """
+    KNOWN_NAMES_FILE_PATH = pkg_resources.resource_filename(__name__, "resources/known_names.txt")
+    IMAGE_PATH = "resources/images/"
+
     def __init__(self, engine_configurations: EngineConfigurations):
         """
         Initialize the FaceRecognitionImpl class.
@@ -80,7 +84,7 @@ class FaceRecognitionImpl(IFaceRecognition):
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
-        logger.debug("Face Recognition : shape of the frame : ", rgb_small_frame.shape)
+        logger.log_debug(self.get_class_name(), "Face Recognition : shape of the frame : " + rgb_small_frame.shape.__str__())
         return rgb_small_frame
 
     def load_known_face_names(self):
@@ -90,7 +94,7 @@ class FaceRecognitionImpl(IFaceRecognition):
         Returns:
             list: A list of known face names.
         """
-        path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
+        path = self.KNOWN_NAMES_FILE_PATH
         known_face_names = self.read_file_into_list(path)
         return known_face_names
 
@@ -106,7 +110,7 @@ class FaceRecognitionImpl(IFaceRecognition):
         """
         known_face_encodings = []
         for name in known_face_names:
-            face_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/images/" + name + ".jpg")
+            face_path = pkg_resources.resource_filename(__name__, self.IMAGE_PATH + name + ".jpg")
             face_image = face_recognition.load_image_file(face_path)
             face_encoding = face_recognition.face_encodings(face_image)[0]
             known_face_encodings.append(face_encoding)
@@ -122,7 +126,6 @@ class FaceRecognitionImpl(IFaceRecognition):
         Returns:
             list: A list of lines from the file.
         """
-        field_list = []
         try:
             with open(filename, "r") as file:
                 lines = file.readlines()
@@ -144,16 +147,16 @@ class FaceRecognitionImpl(IFaceRecognition):
             bool: True if the association was successful, False otherwise.
         """
         try:
-            text_file_path = pkg_resources.resource_filename(__name__, "resources/facerecognition/known_names.txt")
+            text_file_path = self.KNOWN_NAMES_FILE_PATH
             with open(text_file_path, 'a') as file:
                 file.write(name + '\n')
         except IOError:
-            logger.error("Error while writing to the file : ", name)
+            logger.log_error(self.get_class_name(), "Error while writing to the file : " + name)
             raise FileWritingException("Error while writing to the file : " + name)
 
         try:
             new_file_name = pkg_resources.resource_filename(__name__,
-                                                            "resources/facerecognition/images/" + name + ".jpg")
+                                                            self.IMAGE_PATH + name + ".jpg")
             loaded_image = cv2.imread(image_path)
             cv2.imwrite(new_file_name, loaded_image)
 

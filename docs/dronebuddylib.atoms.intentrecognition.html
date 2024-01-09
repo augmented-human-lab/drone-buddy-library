@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Intent Recognition package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Object Detection package" href="dronebuddylib.atoms.objectdetection.html" />
+  <link rel="prev" title="Face Recognition package" href="dronebuddylib.atoms.facerecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.html">dronebuddylib package</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>Intent Recognition package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.facerecognition.html"
+       title="previous chapter">← Face Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.objectdetection.html"
+       title="next chapter">Object Detection package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="intent-recognition-package">
+<h1>Intent Recognition package<a class="headerlink" href="#intent-recognition-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="gpt-intent-recognition-impl-module">
+<h2>gpt_intent_recognition_impl module<a class="headerlink" href="#gpt-intent-recognition-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.</span></span><span class="sig-name descname"><span class="pre">GPTIntentRecognitionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition" title="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IIntentRecognition</span></code></a></p>
+<p>GPT-based intent recognition system specifically tailored for drone actions.</p>
+<p>This class interfaces with the GPTEngine to recognize intents from user messages,
+taking into account system-defined and custom-defined drone actions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.configs">
+<span class="sig-name descname"><span class="pre">configs</span></span><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.configs" title="Link to this definition">¶</a></dt>
+<dd><p>Configurations for the GPT Engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.gpt_configs.GPTConfigs" title="dronebuddylib.models.gpt_configs.GPTConfigs">GPTConfigs</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.gpt_engine">
+<span class="sig-name descname"><span class="pre">gpt_engine</span></span><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.gpt_engine" title="Link to this definition">¶</a></dt>
+<dd><p>The GPT engine instance used for intent recognition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.atoms.gpt_integration.html#dronebuddylib.atoms.gpt_integration.GPTEngine" title="dronebuddylib.atoms.gpt_integration.GPTEngine">GPTEngine</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the algorithm name of the intent recognition implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name of the intent recognition implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the list of optional configuration parameters for the intent recognition engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the list of required configuration parameters for the intent recognition engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_resolved_intent">
+<span class="sig-name descname"><span class="pre">get_resolved_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RecognizedIntent</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_resolved_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_resolved_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes the intent from the provided user message using the ChatGPT engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user_message</strong> (<em>str</em>) – The user’s input message for which the intent is to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Recognized intent based on the user message.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_system_prompt">
+<span class="sig-name descname"><span class="pre">get_system_prompt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.get_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.get_system_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves the current system prompt being used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current system prompt.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.introduce_new_intents">
+<span class="sig-name descname"><span class="pre">introduce_new_intents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_intents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.introduce_new_intents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.introduce_new_intents" title="Link to this definition">¶</a></dt>
+<dd><p>Introduces new intents to the intent recognition system.</p>
+<p>This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_intents</strong> (<em>dict</em>) – The new intents to be added.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the operation was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.override_system_prompt">
+<span class="sig-name descname"><span class="pre">override_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.override_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.override_system_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Overrides the current system prompt with the provided one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>system_prompt</strong> (<em>str</em>) – The new system prompt.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt">
+<span class="sig-name descname"><span class="pre">set_custom_actions_to_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_actions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/gpt_intent_recognition_impl.html#GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.gpt_intent_recognition_impl.GPTIntentRecognitionImpl.set_custom_actions_to_system_prompt" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the system prompt with custom drone actions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>custom_actions</strong> (<em>list</em>) – List of custom drone actions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="i-intent-recognition-module">
+<h2>i_intent_recognition module<a class="headerlink" href="#i-intent-recognition-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.intentrecognition.i_intent_recognition">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.intentrecognition.i_intent_recognition.</span></span><span class="sig-name descname"><span class="pre">IIntentRecognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/i_intent_recognition.html#IIntentRecognition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction" title="dronebuddylib.models.i_dbl_function.IDBLFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDBLFunction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for intent recognition implementations.</p>
+<p>This class defines the interface for intent recognition systems that are used to determine the user’s intent based on their input.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.get_resolved_intent">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_resolved_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phrase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RecognizedIntent</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/i_intent_recognition.html#IIntentRecognition.get_resolved_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.get_resolved_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Resolves the user’s intent based on the given phrase.</p>
+<p>This method should be implemented by subclasses to provide the functionality for recognizing the user’s intent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The user’s input phrase.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The recognized intent.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.introduce_new_intents">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">introduce_new_intents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_intents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/i_intent_recognition.html#IIntentRecognition.introduce_new_intents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition.introduce_new_intents" title="Link to this definition">¶</a></dt>
+<dd><p>Introduces new intents to the intent recognition system.</p>
+<p>This method should be implemented by subclasses to provide the functionality for adding new intents to the intent recognition system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_intents</strong> (<em>dict</em>) – The new intents to be added.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the operation was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="intent-recognition-engine-module">
+<h2>intent_recognition_engine module<a class="headerlink" href="#intent-recognition-engine-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.intentrecognition.intent_recognition_engine">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.intentrecognition.intent_recognition_engine.</span></span><span class="sig-name descname"><span class="pre">IntentRecognitionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.IntentRecognitionAlgorithm" title="dronebuddylib.models.enums.IntentRecognitionAlgorithm"><span class="pre">IntentRecognitionAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/intent_recognition_engine.html#IntentRecognitionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.ACTION_FILE_PATH">
+<span class="sig-name descname"><span class="pre">ACTION_FILE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\intentrecognition\\resources\\intents.txt'</span></em><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.ACTION_FILE_PATH" title="Link to this definition">¶</a></dt>
+<dd><p>A high-level engine for intent recognition leveraging various algorithms.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.intent_recognizer">
+<span class="sig-name descname"><span class="pre">intent_recognizer</span></span><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.intent_recognizer" title="Link to this definition">¶</a></dt>
+<dd><p>An instance of the intent recognition algorithm chosen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition" title="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition">IIntentRecognition</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.get_current_intents">
+<span class="sig-name descname"><span class="pre">get_current_intents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/intent_recognition_engine.html#IntentRecognitionEngine.get_current_intents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.get_current_intents" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the current intents and their descriptions from the intent file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing intents as keys and their descriptions as values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.introduce_new_intent">
+<span class="sig-name descname"><span class="pre">introduce_new_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/intent_recognition_engine.html#IntentRecognitionEngine.introduce_new_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.introduce_new_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new intent and its description to the intent file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intent</strong> (<em>str</em>) – The new intent to be added.</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – The description of the new intent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the new intent was successfully added, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.recognize_intent">
+<span class="sig-name descname"><span class="pre">recognize_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RecognizedIntent</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/intent_recognition_engine.html#IntentRecognitionEngine.recognize_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.intent_recognition_engine.IntentRecognitionEngine.recognize_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Recognize the intent from the provided text using the configured algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – The input text from which intent needs to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Recognized intent.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RecognizedIntent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="snips-intent-recognition-impl-module">
+<h2>snips_intent_recognition_impl module<a class="headerlink" href="#snips-intent-recognition-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.</span></span><span class="sig-name descname"><span class="pre">SNIPSIntentRecognitionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition" title="dronebuddylib.atoms.intentrecognition.i_intent_recognition.IIntentRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IIntentRecognition</span></code></a></p>
+<p>Implementation of intent recognition using the Snips NLU engine.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.engine">
+<span class="sig-name descname"><span class="pre">engine</span></span><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.engine" title="Link to this definition">¶</a></dt>
+<dd><p>The Snips NLU engine used for intent recognition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SnipsNLUEngine</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the name of the algorithm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_resolved_intent">
+<span class="sig-name descname"><span class="pre">get_resolved_intent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_resolved_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_resolved_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Parses text to detect intent and associated slots.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.add_new_intent">
+<span class="sig-name descname"><span class="pre">add_new_intent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.add_new_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.add_new_intent" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a new intent to the intent file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of required configuration parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of optional configuration parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">add_new_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">intent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.add_new_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a new intent and its description to the intent file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>intent</strong> (<em>str</em>) – The new intent.</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – The description of the new intent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the intent was successfully added, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the name of the algorithm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of optional configuration parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of required configuration parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">get_resolved_intent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phrase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RecognizedIntent</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.get_resolved_intent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dd><p>Parses text to detect intent and associated slots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phrase</strong> (<em>str</em>) – The text to be parsed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The detected intent and associated slots.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RecognizedIntent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.introduce_new_intents">
+<span class="sig-name descname"><span class="pre">introduce_new_intents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_intents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/intentrecognition/snips_intent_recognition_impl.html#SNIPSIntentRecognitionImpl.introduce_new_intents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.introduce_new_intents" title="Link to this definition">¶</a></dt>
+<dd><p>Introduces new intents to the intent recognition system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_intents</strong> (<em>dict</em>) – The new intents to be added.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the operation was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.intentrecognition"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.facerecognition.html"
+       title="previous chapter">← Face Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.objectdetection.html"
+       title="next chapter">Object Detection package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

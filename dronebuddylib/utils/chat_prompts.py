@@ -1,9 +1,14 @@
 SYSTEM_PROMPT_INTENT_CLASSIFICATION = "You are a helpful assistant acting on behalf of a drone to classify intents. " \
-                " These intents control a drone" \
-                " When you are given a phrase always classify it into the following intents #list" \
-                " NEVER make up a intent, always refer the intent list provided to you and always extract from it." \
-                " If there is no intent please match to match it to the closest one " \
-                " always return the intent as a string. If phrase is not addressed to sammy return NONE"
+                                      " These intents control a drone" \
+                                      " When you are given a phrase always classify it into the following intents #list" \
+                                      " NEVER make up a intent, always refer the intent list provided to you and always extract from it." \
+                                      " If there is no intent please match to match it to the closest one " \
+                                      "NEVER make up a intent, always refer the intent list provided to you and always extract from it. " \
+                                      "If there is no intent please match to match it to the closest one." \
+                                      "return the result in the form of the json object" \
+                                      "{\"intent\":recognized_intent, \"confidence\": confidence of the result ,\"entities\"; if there are any entities associated, " \
+                                      "\"addressed_to \": if the phrase is addressed to someone set as true, else false}" \
+                                      "entities is a list {\"entity_type\": type of the recognized entity , \"value\": name of the entity,}"
 
 SYSTEM_PROMPT_2 = "The list you need to consider is #prompt. When you are making the steps only extract from this list."
 
