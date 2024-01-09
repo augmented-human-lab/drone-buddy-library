@@ -28,6 +28,26 @@ YOLO models are typically trained on large labeled datasets, such as COCO (Commo
 
 Keep in mind that while YOLO offers fast inference times, it may sacrifice some accuracy compared to slower, more complex object detection algorithms. The choice of object detection algorithm depends on the specific requirements of the application, balancing factors like accuracy, speed, and available computational resources.
 
+
+Install required dependencies for YOLO
+------------------------------------------------------------------
+The easiest way to install the modules required for SNIPS NLU is to use the following command.
+
+.. code-block:: bash
+
+    pip install dronebuddylib[OBJECT_DETECTION_YOLO]
+
+This will take care of the dependencies and install the required modules.
+
+
+Install required dependencies for YOLO
+------------------------------------------------------------------
+Or if you are installing the dependencies manually, you can use the following command.
+
+.. code-block:: bash
+
+    pip install ultralytics
+
 How to use
 --------------------
 
@@ -77,14 +97,39 @@ Here’s a hypothetical code example showing how MediaPipe’s object detection 
 
 .. code-block:: python
 
-     image = cv2.imread('test_image.jpg')
+Install required dependencies for Snips NLU
+------------------------------------------------------------------
+The easiest way to install the modules required for SNIPS NLU is to use the following command.
 
-     engine_configs = EngineConfigurations({})
-     engine_configs.add_configuration(Configurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
-     engine = ObjectDetectionEngine(VisionAlgorithm.MEDIA_PIPE, engine_configs)
+.. code-block:: bash
+
+    pip install dronebuddylib[OBJECT_DETECTION_YOLO]
+
+This will take care of the dependencies and install the required modules.
 
 
-     objects = engine.get_detected_objects(image)
+Install required dependencies for Snips NLU
+------------------------------------------------------------------
+Or if you are installing the dependencies manually, you can use the following command.
+
+.. code-block:: bash
+
+    pip install ultralytics
+
+How to use
+--------------------
+
+.. code-block:: Python
+
+    import media_pipe as mp
+
+    image = cv2.imread('test_image.jpg')
+    mp_image = mp.Image.create_from_file(
+            r'C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg')
+    engine = MPObjectDetectionImpl(EngineConfigurations({}))
+    detected_objects = engine.get_detected_objects(mp_image)
+
+
 
 This example demonstrates capturing video frames from DroneBuddy’s camera, processing them through MediaPipe for object detection, and then handling the detection results.
 

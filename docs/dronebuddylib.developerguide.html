@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Developer Guide</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="dronebuddylib" href="modules.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Developer Guide</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#developer-guide" class="reference internal">Developer Guide</a></li>
+                
+                  <li class="toctree-l2"><a href="#release-drone-buddy-library" class="reference internal">Release drone-buddy-library</a></li>
+                
+                  <li class="toctree-l2"><a href="#sphinx-documentation" class="reference internal">Sphinx Documentation</a></li>
+                
+                  <li class="toctree-l2"><a href="#publish-to-github-pages" class="reference internal">Publish to github pages</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Developer Guide</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="modules.html"
+       title="previous chapter">← dronebuddylib</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="developer-guide">
+<h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">¶</a></h1>
+<section id="coding-standards">
+<h2>Coding Standards<a class="headerlink" href="#coding-standards" title="Link to this heading">¶</a></h2>
+</section>
+<section id="code-formatting">
+<h2>Code Formatting<a class="headerlink" href="#code-formatting" title="Link to this heading">¶</a></h2>
+<p>The library was initially developedd on PyCharm IDE, which has a built-in PEP8 checker. The code should be PEP8 compliant, with the exception of the line length, which is set to 120 characters.</p>
+<p>Please refer to the [PEP8 Style Guide](<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>) for more information.</p>
+<p>And with regards to the pycharm settings, please refer to the [PyCharm PEP8 Settings](<a class="reference external" href="https://www.jetbrains.com/help/pycharm/reformat-and-rearrange-code.html">https://www.jetbrains.com/help/pycharm/reformat-and-rearrange-code.html</a>) for more information.</p>
+</section>
+<section id="file-naming">
+<h2>File Naming<a class="headerlink" href="#file-naming" title="Link to this heading">¶</a></h2>
+<p>FIle naming should be in lowercase, with underscores separating words. For example, <cite>my_file.py</cite>.
+Please use meaningful names for files, and avoid generic names such as <cite>test.py</cite>.
+For more information, please refer to the [PEP8 Style Guide](<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/#prescriptive-naming-conventions">https://www.python.org/dev/peps/pep-0008/#prescriptive-naming-conventions</a>).</p>
+<p>The library maintains a folder structure, which is described in the [Folder Structure](#folder-structure) section. so when creating a new file, please make sure to place it in the correct folder.
+If the file is a new module, please make sure to add it to the <cite>__init__.py</cite> file in the relevant folder.</p>
+</section>
+<section id="folder-structure">
+<h2>Folder Structure<a class="headerlink" href="#folder-structure" title="Link to this heading">¶</a></h2>
+<p>The main functionalities each have their own folder, and each folder has its own <cite>__init__.py</cite> file, which imports the relevant modules.
+The folder structure is as follows:</p>
+<ul>
+<li><p>drone-buddy-library/
+* dist/
+* docs/
+* docs-sphinx/
+* dronebuddylib/</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>atoms/
+* bodyfeatureextraction/
+* facerecognition/
+* intentrecognition/
+* objectdetection/
+* speechgeneration/
+* speechrecognition/
+* textrecognition/</p></li>
+<li><p>configurations/</p></li>
+<li><p>exceptions/</p></li>
+<li><p>models/</p></li>
+<li><p>molecules/</p></li>
+<li><p>utils/</p></li>
+<li><p>__init__.py</p></li>
+<li><p>gpt_integration.py</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>dronebuddylib.egg-info/</p></li>
+<li><p>runs/</p></li>
+<li><p>test/</p></li>
+<li><p>venv/</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<p>The architecture for the library is as follows:</p>
+<img alt="Architecture" class="align-center" src="_images/architecture.png" />
+<p>The class diagram for the library can be found here: [Class Diagram](<a class="reference external" href="https://app.diagrams.net/#Haugmented-human-lab%2Fdrone-buddy-library%2Fmain%2FDroneBuddy.drawio">https://app.diagrams.net/#Haugmented-human-lab%2Fdrone-buddy-library%2Fmain%2FDroneBuddy.drawio</a>)</p>
+<p>The library is divided into atoms and molecules, which are described in the [Library Structure](#library-structure) section.
+The atoms are the basic building blocks of the library, and the molecules are the higher level functionalities, which are built using the atoms.</p>
+</section>
+<section id="library-structure">
+<h2>Library Structure<a class="headerlink" href="#library-structure" title="Link to this heading">¶</a></h2>
+<p>In this section, we will describe the structure of the library, and the different modules that it contains.</p>
+<p>### Atoms</p>
+<p>If you believe the the functionality you plan is a very basic building box, and can be used in multiple molecules, then it should be an atom.</p>
+<p>Each atomic module can have multiple implementations of the functionality and the user can choose which one to use by passing the relevant parameters to the molecule.</p>
+<p>An atomic module has the following structure:</p>
+<p>if we take object detection atomic module as an example</p>
+<ul class="simple">
+<li><p>objectdetection/
+* i_object_detection.py
+* object_detection_engine.py
+* mp_object_detection_impl.py
+* yolo_object_detection_impl.py
+* object_detection_result.py
+* __init__.py</p></li>
+</ul>
+<p>The <cite>i_object_detection.py</cite> is an implementation of the abstract class <cite>IDBLFunction</cite>.</p>
+</section>
+<section id="basic-structure-of-i-object-detection-py">
+<h2>Basic structure of <cite>i_object_detection.py</cite>:<a class="headerlink" href="#basic-structure-of-i-object-detection-py" title="Link to this heading">¶</a></h2>
+<p><cite>IDBLFunction</cite> is an abstract class that defines the high-level structure for the atomic module. It has the following structure:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">IDBLFunction</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>This abstract class acts as a guideline for the future implementations of the atomic module.
+Here,</p>
+<p><cite>get_required_params()</cite> defines the parameters that are compulsory for the implementations to work, for examples API_KEYS as such.
+The enums should be defined at <cite>models/AtomicEngineConfigurations.py</cite> and then used in the get_required_params() method.
+These will be passed the engine using <cite>EngineConfigurations</cite> class, after which will be validated by crosschecking the defined values in thee implementation class.</p>
+<p>Defining enums in <cite>AtomicEngineConfigurations.py</cite>:</p>
+<blockquote>
+<div><p><cite>OBJECT_DETECTION_MP_MODELS_PATH</cite> is formed by <cite>get_class_name() + configuration name</cite> and should be in uppercase.</p>
+</div></blockquote>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                        <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><cite>get_optional_params()</cite> defines the parameters that are optional for the implementations to work, for examples fine  tuning parameters as such.</p>
+<p><cite>get_class_name()</cite> returns the name of the class, which is used to identify the class in the <cite>AtomicEngineConfigurations</cite> class.</p>
+<p><cite>get_algorithm_name()</cite> returns the name of the algorithm.</p>
+</section>
+<section id="implementations-of-i-object-detection-py">
+<h2>Implementations of i_object_detection.py<a class="headerlink" href="#implementations-of-i-object-detection-py" title="Link to this heading">¶</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The naming convention for the implementation class is <cite>AlgorithmName</cite> + <cite>EngineName</cite> + <cite>Impl</cite>, for example <cite>YoloObjectDetectionImpl</cite>.</p>
+</div>
+<p>When it comes to the implementation of the interface,
+.. important:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>always verify the parameters passed to the implementation class using the `config_validity_check()` method.
+</pre></div>
+</div>
+</section>
+<section id="object-detection-engine-py">
+<h2>object_detection_engine.py<a class="headerlink" href="#object-detection-engine-py" title="Link to this heading">¶</a></h2>
+<p>The <cite>object_detection_engine.py</cite> is the engine that is used to run the atomic module. It acts as a wrapper for the implementations of the feature. The engine exposes the methods available to be used.
+The purpose of this engine is to reduce the complexity for the clients so they don’t have to worry about initializing the correct algorithm.
+The engine also handles the configuration of the algorithm, and the parameters passed to it.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="n">VisionAlgorithm</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Initializes the object detection engine with the specified algorithm and configuration.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">      algorithm (VisionAlgorithm): The vision algorithm to be used for object detection.</span>
+<span class="sd">      config (EngineConfigurations): The configuration for the vision engine.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="n">VisionAlgorithm</span><span class="o">.</span><span class="n">YOLO</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s1">&#39;Preparing to initialize YOLO object detection engine.&#39;</span><span class="p">)</span>
+      <span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.yolo_object_detection_impl</span> <span class="kn">import</span> <span class="n">YOLOObjectDetectionImpl</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">vision_engine</span> <span class="o">=</span> <span class="n">YOLOObjectDetectionImpl</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="n">VisionAlgorithm</span><span class="o">.</span><span class="n">MEDIA_PIPE</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s1">&#39;Preparing to initialize Mediapipe object detection engine.&#39;</span><span class="p">)</span>
+      <span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.mp_object_detection_impl</span> <span class="kn">import</span> <span class="n">MPObjectDetectionImpl</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">vision_engine</span> <span class="o">=</span> <span class="n">MPObjectDetectionImpl</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Link to this heading">¶</a></h2>
+<p>The library uses the <cite>Logger</cite> class to log messages. The logger class is defined in <cite>utils/Logger.py</cite>.
+The class includes the following methods:</p>
+<ul class="simple">
+<li><p><cite>log_info(class_name, info_message)</cite> - logs an info message in YELLOW.</p></li>
+<li><p><cite>log_warning(class_name, warning_message)</cite> - logs a warning message in CYAN.</p></li>
+<li><p><cite>log_error(class_name, error_message)</cite> - logs an error message in RED.</p></li>
+<li><p><cite>log_debug(class_name, debug_message)</cite> - logs a debug message in BLUE.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Please use these methods to appropriately log messages, and do not use the <cite>print()</cite> function.</p>
+</div>
+</section>
+</section>
+<section id="release-drone-buddy-library">
+<h1>Release drone-buddy-library<a class="headerlink" href="#release-drone-buddy-library" title="Link to this heading">¶</a></h1>
+<p>#. Install build, [build](<a class="reference external" href="https://github.com/pypa/build">https://github.com/pypa/build</a>)
+.. code-block:: bash</p>
+<blockquote>
+<div><p>pip install build</p>
+</div></blockquote>
+<p>#. Install twine, [twine](<a class="reference external" href="https://pypi.org/project/twine/">https://pypi.org/project/twine/</a>)
+.. code-block:: bash</p>
+<blockquote>
+<div><p>pip install –upgrade twine</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Do the necessary development</dt><dd><p><a href="#id1"><span class="problematic" id="id2">*</span></a>. If introducing a new feature use a new python class in the dronebuddylib directory
+<a href="#id3"><span class="problematic" id="id4">*</span></a>. If not update the corresponding file</p>
+</dd>
+</dl>
+</li>
+<li><p>If new methods that needs to be exposed by the library are introduced, declare the method names and all helper classes in the __init__.py</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Always remember that the __init__.py file is the entry point for the library, so the methods that you declare in the __init__.py file will be exposed to the user and will be compiled when installing the library.
+So if you dont need to import the dependencies on installation do not mention the classes explicitly in the __init__.py file</p>
+</div>
+<ol class="arabic simple">
+<li><p>Update the version number in the setup.py file and the __init__.py files.</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The version number should be in the format of <cite>major.minor.patch</cite>, for example <cite>1.0.0</cite>.
+You can utilize the <cite>test_update_version</cite> class to update the version number in the setup.py file and the __init__.py files.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>If there are any libraries required for the execution mention them in setup.py in install_requires=[]</p></li>
+<li><p>It is good practice to declare the dependencies required to use each module. This can be done using specifying the dependencies as follows</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">extras_require</span><span class="o">=</span><span class="p">{</span>
+     <span class="s2">&quot;FACE_RECOGNITION&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;face-recognition&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;INTENT_RECOGNITION_GPT&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;openai&#39;</span><span class="p">,</span> <span class="s1">&#39;tiktoken&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;INTENT_RECOGNITION_SNIPS&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;snips-nlu&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;OBJECT_DETECTION_MP&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mediapipe&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;OBJECT_DETECTION_YOLO&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ultralytics&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;TEXT_RECOGNITION&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;google-cloud-vision&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;SPEECH_RECOGNITION_MULTI&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;SpeechRecognition&#39;</span><span class="p">],</span>
+     <span class="s2">&quot;SPEECH_RECOGNITION_VOSK&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vosk&#39;</span><span class="p">],</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>Here the key is the name of the module and the value is the list of dependencies required to use the module. With this users will be able to install the dependencies required for the modules that they want to use by the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib<span class="o">[</span>&lt;module_name&gt;<span class="o">]</span>
+</pre></div>
+</div>
+<section id="release-the-library">
+<h2>Release the library<a class="headerlink" href="#release-the-library" title="Link to this heading">¶</a></h2>
+<p>#. Build the library
+.. code-block:: bash</p>
+<blockquote>
+<div><p>python setup.py sdist</p>
+</div></blockquote>
+<p>This step creates a .tar.gz file in the dist file. Double check if the file created has the corrected version number</p>
+<p>#. Create the wheel file
+.. code-block:: bash</p>
+<blockquote>
+<div><p>py -m build</p>
+</div></blockquote>
+<p>When this step executes, .whl file will be created with the version number. Double check this too</p>
+<ol class="arabic simple">
+<li><p>Upload the library to pypi or test pypi</p></li>
+</ol>
+<p>if using the testpypi environment, use the following command
+.. code-block:: bash</p>
+<blockquote>
+<div><p>python -m twine upload –repository testpypi dist/*</p>
+</div></blockquote>
+<p>if using the pypi environment, use the following command
+.. code-block:: bash</p>
+<blockquote>
+<div><p>python -m twine upload –repository pypi dist/*</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>YOu will be prompted for the username and password. Use the credentials of the dronebuddy account</p></li>
+</ol>
+<p>#. Write to
+.. _Email to Malsha:</p>
+<blockquote>
+<div><p>Email Malsha at <a class="reference external" href="mailto:malshadz&#37;&#52;&#48;nus&#46;edu&#46;sg">malshadz<span>&#64;</span>nus<span>&#46;</span>edu<span>&#46;</span>sg</a></p>
+</div></blockquote>
+<p>to get the credentials, or if you have authorization to access the credentials visit the [Dronebuddy folder](<a class="reference external" href="https://docs.google.com/document/d/1PEBjiZCyPtjfHjF54C7YjlqW-dnpWyiwuduNJ38C4m0">https://docs.google.com/document/d/1PEBjiZCyPtjfHjF54C7YjlqW-dnpWyiwuduNJ38C4m0</a>)</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Once the library is uploaded, you can view it at</dt><dd><p><a href="#id5"><span class="problematic" id="id6">*</span></a>. <a class="reference external" href="https://test.pypi.org/project/dronebuddylib/">https://test.pypi.org/project/dronebuddylib/</a>
+<a href="#id7"><span class="problematic" id="id8">*</span></a>. <a class="reference external" href="https://pypi.org/project/dronebuddylib/">https://pypi.org/project/dronebuddylib/</a></p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+</section>
+<section id="sphinx-documentation">
+<h1>Sphinx Documentation<a class="headerlink" href="#sphinx-documentation" title="Link to this heading">¶</a></h1>
+<p>The library uses Sphinx to generate documentation. The documentation is generated in the <cite>docs-sphinx</cite> folder.</p>
+<ol class="arabic simple">
+<li><p>Make sure each module has a <cite>__init__.py</cite> file and all the classes that you need to generate documentation for are imported in the <cite>__init__.py</cite> file.</p></li>
+<li><p>Install Sphinx, [Sphinx](<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/installation.html">https://www.sphinx-doc.org/en/master/usage/installation.html</a>)</p></li>
+</ol>
+<p>#. Go to the <cite>docs-sphinx</cite> folder and run the following command
+.. code-block:: bash</p>
+<blockquote>
+<div><p>sphinx-build -b html . _build -v</p>
+</div></blockquote>
+<p>This will generate the .rst files in the <cite>docs-sphinx</cite> folder</p>
+<p>#. Run the following command to generate the html files
+.. code-block:: bash</p>
+<blockquote>
+<div><p>make html</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>The html files will be generated in the <cite>docs-sphinx/build/html</cite> folder</p></li>
+</ol>
+</section>
+<section id="publish-to-github-pages">
+<h1>Publish to github pages<a class="headerlink" href="#publish-to-github-pages" title="Link to this heading">¶</a></h1>
+<ol class="arabic simple">
+<li><p>Move the html files to the <cite>docs</cite> folder</p></li>
+<li><p>Commit and push the changes to the main branch</p></li>
+<li><p>Go to the settings of the repository and scroll down to the GitHub Pages section</p></li>
+<li><p>Select the <cite>main</cite> branch and the <cite>docs</cite> folder</p></li>
+<li><p>Click on save</p></li>
+<li><p>The documentation will be available at <a class="reference external" href="https://augmented-human-lab.github.io/drone-buddy-library/">https://augmented-human-lab.github.io/drone-buddy-library/</a></p></li>
+</ol>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="modules.html"
+       title="previous chapter">← dronebuddylib</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

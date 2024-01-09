@@ -62,15 +62,7 @@ intent module
 object\_detected module
 --------------------------------------------
 
-.. automodule:: dronebuddylib.models.object_detected
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-recognized\_speech module
-----------------------------------------------
-
-.. automodule:: dronebuddylib.models.recognized_speech
+.. automodule:: dronebuddylib.models.detected_object
    :members:
    :undoc-members:
    :show-inheritance:

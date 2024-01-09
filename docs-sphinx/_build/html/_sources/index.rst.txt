@@ -18,6 +18,7 @@ Welcome to Dronebuddy's documentation!
    Utility Functions <dronebuddylib.utils>
    Configuration Settings <dronebuddylib.configurations>
    Module Index <modules>
+   Developer Guide <dronebuddylib.developerguide>
 
 
 

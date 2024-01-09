@@ -125,7 +125,7 @@ To use the recognition feature you can use the find_all_the_faces method by simp
 .. code-block:: python
 
      engine_configs = EngineConfigurations({})
-     image = cv2.imread('test_clear.jpg')
+     image = cv2.imread('test_jane.jpg')
      engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECC, engine_configs)
      result = engine.recognize_face(image)
 

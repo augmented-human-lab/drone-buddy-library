@@ -25,7 +25,6 @@ By using Snips NLU, you can incorporate natural language understanding capabilit
 Integration in DroneBuddy
 ---------------------------------
 
-
 Install setuptools-rust
 ------------------------------------------------------------------
 
@@ -45,8 +44,22 @@ To install setuptools-rust on Windows, you can follow these steps:
 This will download and install setuptools-rust and its dependencies.
 Note: If you encounter any errors during the installation process, try upgrading pip to the latest version by running pip install --upgrade pip before installing setuptools-rust. You may also need to add Rust and the Visual C++ Build Tools to your system's PATH environment variable.
 
+
+Install required dependencies for Snips NLU
+------------------------------------------------------------------
+The easiest way to install the modules required for SNIPS NLU is to use the following command.
+
+.. code-block:: bash
+
+    pip install dronebuddylib[INTENT_RECOGNITION_SNIPS]
+
+This will take care of the dependencies and install the required modules.
+
+
 Install Snips NLU
 ------------------------------------------------------------------
+
+Or you can manually install the required modules by using the following commands.
 
 .. code-block:: bash
 
@@ -188,12 +201,10 @@ The NLU can be used to recognize the intent and the slots of the recognized inte
 
 .. code-block:: python
 
-     engine_configs = EngineConfigurations({})
-     engine_configs.add_configuration(Configurations.INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH, "0.7")
-     engine_configs.add_configuration(Configurations.INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG, "gpt-3.5-turbo-0613")
-
-     engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, engine_configs)
-     result = engine.recognize_intent("take a picture of a chair")
+      def test_object_recognition_engine_with_snips(self):
+        engine_configs = EngineConfigurations({})
+        engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.SNIPS_NLU, engine_configs)
+        result = engine.recognize_intent("find the chair")
 
 
 Chat GPT
@@ -208,6 +219,27 @@ DroneBuddy is integrating ChatGPT for intent resolution. This section explores t
 #. Response Generation: In DroneBuddy, ChatGPT is tasked with generating human-like, coherent responses that are contextually appropriate and informative, based on the user's intent.
 
 #. Continuous Learning: While ChatGPT comes pre-trained on extensive textual data, DroneBuddy can fine-tune it for specific domains or applications, improving its effectiveness and relevance.
+
+Install required dependencies for chat GPT
+------------------------------------------------------------------
+The easiest way to install the modules required for SNIPS NLU is to use the following command.
+
+.. code-block:: bash
+
+    pip install dronebuddylib[INTENT_RECOGNITION_GPT]
+
+This will take care of the dependencies and install the required modules.
+
+Install Snips NLU
+------------------------------------------------------------------
+
+Or you can manually install the required modules by using the following commands.
+
+.. code-block:: bash
+
+    pip install openai
+
+    pip install tiktoken
 
 Integration in DroneBuddy
 -------------------------
@@ -233,7 +265,7 @@ Here’s a hypothetical example of how ChatGPT could be integrated from DroneBud
     engine_configs.add_configuration(Configurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION,
                                          "C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\intentrecognition\\resources\\stats\\")
     engine_configs.add_configuration(Configurations.INTENT_RECOGNITION_OPEN_AI_API_KEY,
-                                         "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")
+                                         "sk-*****************************************")
     engine_configs.add_configuration(Configurations.INTENT_RECOGNITION_OPEN_AI_API_URL,
                                          "https://api.openai.com/v1/chat/completions")
     engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, engine_configs)

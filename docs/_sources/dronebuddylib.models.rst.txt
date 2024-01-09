@@ -62,7 +62,7 @@ intent module
 object\_detected module
 --------------------------------------------
 
-.. automodule:: dronebuddylib.models.object_detected
+.. automodule:: dronebuddylib.models.detected_object
    :members:
    :undoc-members:
    :show-inheritance:

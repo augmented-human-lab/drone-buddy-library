@@ -136,6 +136,15 @@
           </li>
 
         
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -201,7 +210,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/i_object_detection.html#IObjectDetection.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectDetectionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/i_object_detection.html#IObjectDetection.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection.get_detected_objects" title="Link to this definition">¶</a></dt>
 <dd><p>Detects objects in the provided image and returns a list of detected objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -211,7 +220,7 @@
 <dd class="field-even"><p>A result containing a list of detected objects.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a></p>
+<dd class="field-odd"><p>ObjectDetectionResult</p>
 </dd>
 </dl>
 </dd></dl>
@@ -272,7 +281,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects">
-<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectDetectionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/mp_object_detection_impl.html#MPObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
 <dd><p>Detects objects in the provided image and returns a result containing a list of detected objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -282,7 +291,7 @@
 <dd class="field-even"><p>A result containing a list of detected objects.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+<dd class="field-odd"><p>ObjectDetectionResult (ObjectDetectionResult)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -342,8 +351,22 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects">
-<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectDetectionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/object_detection_engine.html#ObjectDetectionEngine.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.object_detection_engine.ObjectDetectionEngine.get_detected_objects" title="Link to this definition">¶</a></dt>
 <dd><p>Detects objects in a given frame using the specified vision algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -353,7 +376,7 @@
 <dd class="field-even"><p>The result of the object detection, including a list of detected objects.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+<dd class="field-odd"><p>ObjectDetectionResult (ObjectDetectionResult)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -414,7 +437,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects">
-<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult"><span class="pre">ObjectDetectionResult</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectDetectionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectdetection/yolo_object_detection_impl.html#YOLOObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectdetection.yolo_object_detection_impl.YOLOObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
 <dd><p>Detects objects in the given image using YOLO V8 object detection engine.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -424,7 +447,7 @@
 <dd class="field-even"><p>The result of the object detection, including a list of detected objects.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.object_detected.ObjectDetectionResult" title="dronebuddylib.models.object_detected.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+<dd class="field-odd"><p>ObjectDetectionResult (ObjectDetectionResult)</p>
 </dd>
 </dl>
 </dd></dl>

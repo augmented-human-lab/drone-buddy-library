@@ -136,6 +136,15 @@
           </li>
 
         
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -284,7 +293,7 @@
 <h3>Recognize faces<a class="headerlink" href="#recognize-faces" title="Link to this heading">¶</a></h3>
 <p>To use the recognition feature you can use the find_all_the_faces method by simply feeding the frame to it. The show_feed variable refers to whether to show the video feed in a new window. The default settings for this is false. The method returns a list of names of the people in the frame, if not recognized it will return unknown.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_clear.jpg&#39;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_jane.jpg&#39;</span><span class="p">)</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="n">FaceRecognitionEngine</span><span class="p">(</span><span class="n">FaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">FACE_RECC</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_face</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 </pre></div>

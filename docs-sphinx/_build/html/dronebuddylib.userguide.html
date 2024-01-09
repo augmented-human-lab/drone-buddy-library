@@ -92,8 +92,6 @@
                 
                   <li class="toctree-l2"><a href="#introduction" class="reference internal">Introduction</a></li>
                 
-                  <li class="toctree-l2"><a href="#installation" class="reference internal">Installation</a></li>
-                
                   <li class="toctree-l2"><a href="#installing-visual-c" class="reference internal">Installing visual C++</a></li>
                 
                   <li class="toctree-l2"><a href="#installing-dronebuddy" class="reference internal">Installing DroneBuddy</a></li>
@@ -158,6 +156,15 @@
           </li>
 
         
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -193,21 +200,31 @@
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">¶</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
-<p>The vision of DroneBuddy is to give the possibility to everyone to programme their intelligent drone by themselves adding all the features they wish. DroneBuddy provides all the basic building blocks so you can use them to make your drone fly.
-Best thing about DroneBuddy is that it is an offline library, so you don’t need an active internet connection to carry on the tasks.</p>
-</section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>DroneBuddy is just another python library that you can install. You can find the library at <a class="reference external" href="https://pypi.org/project/dronebuddylib/">https://pypi.org/project/dronebuddylib/</a></p>
+<p>DroneBuddy envisions empowering everyone with the ability to personally program their intelligent drones, enriching them with desired features. At its core, DroneBuddy offers a suite of fundamental building blocks, enabling users to seamlessly integrate these elements to bring their drone to flight.</p>
+<p>Functioning as an intuitive interface, DroneBuddy simplifies complex algorithms, stripping away the intricacies to offer straightforward input-output modalities. This approach ensures that users can accomplish their objectives efficiently, without getting bogged down in technical complexities. With DroneBuddy, the focus is on user-friendliness and ease of use, making drone programming accessible and hassle-free.
+Installation
+————
+DroneBuddy behaves as any other python library. You can find the library at <a class="reference external" href="https://pypi.org/project/dronebuddylib/">https://pypi.org/project/dronebuddylib/</a> and install using pip.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib
+</pre></div>
+</div>
 <p>But before the installation DroneBuddy needs some prerequisites.</p>
 <p>It is compulsory that you follow all the steps, so that they are installed correctly. These requirements are requested by some of the machine learning models that we use in DroneBuddy.</p>
 <ol class="arabic simple">
-<li><p>Python 3.10 or higher</p></li>
+<li><p>Python 3.9 or higher</p></li>
 <li><p>Install visual C++ through <a class="reference external" href="https://visualstudio.microsoft.com/visual-cpp-build-tools/">https://visualstudio.microsoft.com/visual-cpp-build-tools/</a>, when you are installing there is an option for CMake, select that.</p></li>
 <li><p>Need to install rust, use <a class="reference external" href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a>. Follow all the instructions are here</p></li>
-<li><p>Install CMake and add it to the system path as here</p></li>
-<li><p>pip install setuptools-rust</p></li>
 </ol>
+<p>#.  Install CMake and add it to the system path as here
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Note</span><span class="p">:</span> <span class="n">This</span> <span class="n">C</span><span class="o">++</span> <span class="n">version</span> <span class="ow">is</span> <span class="n">required</span> <span class="n">to</span> <span class="n">install</span> <span class="n">CMake</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">required</span> <span class="n">to</span> <span class="n">install</span> <span class="n">the</span> <span class="n">face</span> <span class="n">recognition</span> <span class="n">model</span><span class="o">.</span> <span class="n">CMake</span> <span class="ow">is</span> <span class="n">required</span> <span class="n">to</span> <span class="n">install</span> <span class="n">dlib</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">used</span> <span class="n">by</span> <span class="n">the</span> <span class="n">face</span><span class="o">-</span><span class="n">recognition</span> <span class="n">algorithm</span><span class="o">.</span> <span class="n">Not</span> <span class="n">required</span> <span class="n">to</span> <span class="n">follow</span> <span class="n">this</span> <span class="n">step</span> <span class="k">if</span> <span class="n">you</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">using</span> <span class="n">face</span> <span class="n">recognition</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>#.  pip install setuptools-rust
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Note</span><span class="p">:</span> <span class="n">Rust</span> <span class="ow">is</span> <span class="n">required</span> <span class="k">for</span> <span class="n">SNIPS</span><span class="o">-</span><span class="n">NLU</span><span class="p">,</span> <span class="n">the</span> <span class="n">offline</span> <span class="n">intent</span> <span class="n">recognition</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">explained</span> <span class="n">further</span> <span class="n">down</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">documentation</span><span class="o">.</span> <span class="n">Not</span> <span class="n">required</span> <span class="n">to</span> <span class="n">follow</span> <span class="n">this</span> <span class="n">step</span> <span class="k">if</span> <span class="n">you</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">using</span> <span class="n">SNIPS</span><span class="o">-</span><span class="n">NLU</span><span class="o">.</span>
+</pre></div>
+</div>
 <section id="installing-pre-requisites">
 <h3>Installing Pre-requisites<a class="headerlink" href="#installing-pre-requisites" title="Link to this heading">¶</a></h3>
 <div class="toctree-wrapper compound">
@@ -340,6 +357,7 @@ Best thing about DroneBuddy is that it is an offline library, so you don’t nee
 <li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#snips-nlu">SNIPS NLU</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#integration-in-dronebuddy">Integration in DroneBuddy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#install-setuptools-rust">Install setuptools-rust</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#install-required-dependencies-for-snips-nlu">Install required dependencies for Snips NLU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#install-snips-nlu">Install Snips NLU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#create-data-set">Create data set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#intents">Intents</a></li>
@@ -348,7 +366,9 @@ Best thing about DroneBuddy is that it is an offline library, so you don’t nee
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#chat-gpt">Chat GPT</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#id1">Integration in DroneBuddy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#install-required-dependencies-for-chat-gpt">Install required dependencies for chat GPT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#id1">Install Snips NLU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#id2">Integration in DroneBuddy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#example-of-chatgpt-integration-in-dronebuddy">Example of ChatGPT Integration in DroneBuddy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.intentrecognition.html#important-considerations">Important Considerations</a></li>
 </ul>
@@ -415,12 +435,17 @@ Best thing about DroneBuddy is that it is an offline library, so you don’t nee
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html">Supported models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#yolo">YOLO</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#install-required-dependencies-for-yolo">Install required dependencies for YOLO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#id1">Install required dependencies for YOLO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#how-to-use">How to use</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#mediapipe">MediaPipe</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#integration-in-dronebuddy">Integration in DroneBuddy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#example-of-mediapipe-integration-in-dronebuddy">Example of MediaPipe Integration in DroneBuddy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#install-required-dependencies-for-snips-nlu">Install required dependencies for Snips NLU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#id2">Install required dependencies for Snips NLU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#id3">How to use</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.objectdetection.html#important-considerations">Important Considerations</a></li>
 </ul>
 </li>

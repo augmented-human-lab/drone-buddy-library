@@ -4,22 +4,32 @@ User Guide
 Introduction
 ------------
 
-The vision of DroneBuddy is to give the possibility to everyone to programme their intelligent drone by themselves adding all the features they wish. DroneBuddy provides all the basic building blocks so you can use them to make your drone fly.
-Best thing about DroneBuddy is that it is an offline library, so you don’t need an active internet connection to carry on the tasks.
 
+DroneBuddy envisions empowering everyone with the ability to personally program their intelligent drones, enriching them with desired features. At its core, DroneBuddy offers a suite of fundamental building blocks, enabling users to seamlessly integrate these elements to bring their drone to flight.
+
+Functioning as an intuitive interface, DroneBuddy simplifies complex algorithms, stripping away the intricacies to offer straightforward input-output modalities. This approach ensures that users can accomplish their objectives efficiently, without getting bogged down in technical complexities. With DroneBuddy, the focus is on user-friendliness and ease of use, making drone programming accessible and hassle-free.
 Installation
 ------------
-DroneBuddy is just another python library that you can install. You can find the library at https://pypi.org/project/dronebuddylib/
+DroneBuddy behaves as any other python library. You can find the library at https://pypi.org/project/dronebuddylib/ and install using pip.
+
+.. code-block:: bash
+
+    pip install dronebuddylib
+
 
 But before the installation DroneBuddy needs some prerequisites.
 
 It is compulsory that you follow all the steps, so that they are installed correctly. These requirements are requested by some of the machine learning models that we use in DroneBuddy.
 
-#.  Python 3.10 or higher
+#.  Python 3.9 or higher
 #.  Install visual C++ through https://visualstudio.microsoft.com/visual-cpp-build-tools/, when you are installing there is an option for CMake, select that.
 #.  Need to install rust, use https://www.rust-lang.org/tools/install. Follow all the instructions are here
 #.  Install CMake and add it to the system path as here
+.. note::
+    Note: This C++ version is required to install CMake which is required to install the face recognition model. CMake is required to install dlib which is used by the face-recognition algorithm. Not required to follow this step if you are not using face recognition.
 #.  pip install setuptools-rust
+.. note::
+    Note: Rust is required for SNIPS-NLU, the offline intent recognition which is explained further down in the documentation. Not required to follow this step if you are not using SNIPS-NLU.
 
 Installing Pre-requisites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,6 +92,7 @@ If the command with the --no-modify-path option works, you'll have to manually u
     source ~/.cargo/env
 
 Now you are all ready to install DroneBuddy.
+
 
 Installing DroneBuddy
 ------------

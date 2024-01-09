@@ -59,7 +59,7 @@ Architecture
 
 The architecture for the library is as follows:
 
-.. image:: docs/images/architecture.png
+.. image:: images/architecture.png
    :align: center
    :alt: Architecture
 
@@ -301,7 +301,7 @@ The library uses Sphinx to generate documentation. The documentation is generate
 
 #. Go to the `docs-sphinx` folder and run the following command
 .. code-block:: bash
-     python setup.py sdist
+     sphinx-build -b html . _build -v
 
 This will generate the .rst files in the `docs-sphinx` folder
 
