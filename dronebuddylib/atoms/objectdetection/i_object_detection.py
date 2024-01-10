@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.i_dbl_function import IDBLFunction
-from dronebuddylib.models.object_detected import ObjectDetectionResult
+from dronebuddylib.atoms.objectdetection.detected_object import ObjectDetectionResult
 
 
 class IObjectDetection(IDBLFunction):

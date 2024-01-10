@@ -1,8 +1,7 @@
 import uuid
 from typing import List, Dict
 
-import openai
-import requests
+from openai import OpenAI
 
 from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.conversation import Conversation
@@ -25,12 +24,11 @@ class ChatSession:
         self.conversation = Conversation()
 
         # get action list from the enum class as a list
-        openai.api_key = configs.open_ai_api_key
-        self.openai = openai
         self.openai_model = configs.open_ai_model
         self.openai_api_url = configs.open_ai_api_url
         self.openai_temperature = configs.open_ai_temperature
         self.logger = SessionLogger(configs.loger_location)
+        self.openai = OpenAI(api_key=configs.open_ai_api_key)
 
     def set_system_prompt(self, system_prompt: str):
         self.conversation.add_message("system", system_prompt)
@@ -56,34 +54,21 @@ class ChatSession:
             chatgpt_response = self._chat_completion_request(
                 self.conversation.conversation_history
             )
-            chatgpt_message = chatgpt_response['choices'][0]['message']['content']
+            chatgpt_message = chatgpt_response.content
             self.conversation.add_message("assistant", chatgpt_message)
             self.logger.log_chat('user', -1, chatgpt_message)
 
             return chatgpt_message
         except Exception as e:
             print(e)
-            raise IntentResolutionException("Intent could not be resolved.")
+            raise IntentResolutionException("Intent could not be resolved.", 500)
 
     def _chat_completion_request(self, messages: List[Dict]):
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + self.openai.api_key,
-        }
-        json_data = {"model": self.openai_model,
-                     "messages": messages,
-                     "temperature": float(self.openai_temperature)}
-        try:
-            response = requests.post(
-                self.openai_api_url,
-                headers=headers,
-                json=json_data,
-            )
-            return response.json()["choices"][0]["message"]
-        except Exception as e:
-            print("Unable to generate ChatCompletion response")
-            print(f"Exception: {e}")
-            return e
+        completion = self.openai.chat.completions.create(
+            model=self.openai_model,
+            messages=messages,
+        )
+        return completion.choices[0].message
 
     def end_session(self):
         self.logger.close_file()

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Text Recognition package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Configurations package" href="dronebuddylib.configurations.html" />
+  <link rel="prev" title="Speech Recognition package" href="dronebuddylib.atoms.speechrecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.html">dronebuddylib package</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>Text Recognition package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.speechrecognition.html"
+       title="previous chapter">← Speech Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.configurations.html"
+       title="next chapter">Configurations package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="text-recognition-package">
+<h1>Text Recognition package<a class="headerlink" href="#text-recognition-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="text-recognition-engine-module">
+<h2>text_recognition_engine module<a class="headerlink" href="#text-recognition-engine-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.textrecognition.text_recognition_engine">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.textrecognition.text_recognition_engine.</span></span><span class="sig-name descname"><span class="pre">TextRecognitionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.TextRecognitionAlgorithm" title="dronebuddylib.models.enums.TextRecognitionAlgorithm"><span class="pre">TextRecognitionAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/text_recognition_engine.html#TextRecognitionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The TextRecognitionEngine class handles text recognition operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/text_recognition_engine.html#TextRecognitionEngine.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine.recognize_text">
+<span class="sig-name descname"><span class="pre">recognize_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/text_recognition_engine.html#TextRecognitionEngine.recognize_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.text_recognition_engine.TextRecognitionEngine.recognize_text" title="Link to this definition">¶</a></dt>
+<dd><p>Recognize faces in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image containing faces to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of recognized faces.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="google-text-recognition-impl-module">
+<h2>google_text_recognition_impl module<a class="headerlink" href="#google-text-recognition-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.textrecognition.google_text_recognition_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.textrecognition.google_text_recognition_impl.</span></span><span class="sig-name descname"><span class="pre">GoogleTextRecognitionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition" title="dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITextRecognition</span></code></a></p>
+<p>Implementation of the IFaceRecognition interface using face_recognition library.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.recognize_text">
+<span class="sig-name descname"><span class="pre">recognize_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TextRecognitionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/google_text_recognition_impl.html#GoogleTextRecognitionImpl.recognize_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.google_text_recognition_impl.GoogleTextRecognitionImpl.recognize_text" title="Link to this definition">¶</a></dt>
+<dd><p>Detects text within an image located at the specified path.</p>
+<p>This method reads the image file, creates an Image object, and uses the
+Google Cloud Vision API’s text detection capabilities to find text within the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_path</strong> (<em>str</em>) – The file path of the image to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the response from the Google Cloud Vision API. This object
+includes text annotations for detected text in the image.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Google API client exceptions if the request fails.</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="i-text-recognition-module">
+<h2>i_text_recognition module<a class="headerlink" href="#i-text-recognition-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.textrecognition.i_text_recognition">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.textrecognition.i_text_recognition.</span></span><span class="sig-name descname"><span class="pre">ITextRecognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/i_text_recognition.html#ITextRecognition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.i_dbl_function.IDBLFunction" title="dronebuddylib.models.i_dbl_function.IDBLFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">IDBLFunction</span></code></a></p>
+<p>Interface for face recognition functionality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.recognize_face">
+<span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.recognize_face" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes faces in an image.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.remember_face">
+<span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.remember_face" title="Link to this definition">¶</a></dt>
+<dd><p>Associates a name with a face in an image.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.recognize_text">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recognize_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/textrecognition/i_text_recognition.html#ITextRecognition.recognize_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.textrecognition.i_text_recognition.ITextRecognition.recognize_text" title="Link to this definition">¶</a></dt>
+<dd><p>Recognize text in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image containing text to be recognized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.textrecognition"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.speechrecognition.html"
+       title="previous chapter">← Speech Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.configurations.html"
+       title="next chapter">Configurations package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

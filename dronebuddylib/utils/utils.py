@@ -2,6 +2,9 @@ import pkg_resources
 
 from dronebuddylib.models.enums import DroneCommands
 from dronebuddylib.utils.exceptions import MissingConfigurationException
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
 
 
 def create_system_drone_action_list() -> str:
@@ -14,7 +17,7 @@ def create_system_drone_action_list() -> str:
 
 
 def get_current_intents() -> dict:
-    text_file_path = pkg_resources.resource_filename(__name__, "resources/intentrecognition/intents.txt")
+    text_file_path = pkg_resources.resource_filename(__name__, "intentrecognition/resources/intents.txt")
 
     try:
         with open(text_file_path, "r") as file:
@@ -41,9 +44,13 @@ def create_custom_drone_action_list(custom_actions: dict) -> str:
 
 def config_validity_check(class_requirements: list, provided_configs: dict, algo_name: str):
     if len(provided_configs) == 0 and len(class_requirements) > 0:
+        logger.log_error(
+            'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + "All")
         raise MissingConfigurationException(algo_name, "All")
     for req_key in class_requirements:
         try:
             provided_configs.pop(req_key, None)
         except KeyError:
+            logger.log_error(
+                'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + req_key)
             raise MissingConfigurationException(algo_name, req_key)

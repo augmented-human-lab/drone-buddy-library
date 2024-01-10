@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">vosk</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">KaldiRecognizer</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechrecognition.i_speech_to_text_conversion</span> <span class="kn">import</span> <span class="n">ISpeechToTextConversion</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.recognized_speech</span> <span class="kn">import</span> <span class="n">RecognizedSpeechResult</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logging_config</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span>
+
+<span class="c1"># Get an instance of a logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+<span class="n">queue</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">:param language: The language of the model. The default is &#39;en-US&#39;. (currently only supports this language)</span>
+<span class="sd">:return: The vosk model.</span>
+
+<span class="sd">need to initialize the model before using the speechrecognition to text engine.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">VoskSpeechToTextConversionImpl</span><span class="p">(</span><span class="n">ISpeechToTextConversion</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is an implementation of the ISpeechToTextConversion interface for Vosk API.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        speech_conversion_engine (KaldiRecognizer): The Vosk KaldiRecognizer object for speech recognition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the class name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;TEXT_TO_SPEECH_VOSK&#39;</span></div>
+
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the algorithm name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;Vosk Text to Speech&#39;</span></div>
+
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of required parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of required parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of optional parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of optional parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a speech-to-text engine using the Vosk model for a given language.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The engine configurations containing necessary parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+
+        <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/speechrecognition/vosk-model-small-en-us-0.15&quot;</span><span class="p">)</span>
+        <span class="n">language_model_path</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">,</span> <span class="n">model_path</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">language_model_path</span><span class="p">)</span>
+        <span class="n">vosk_kaldi_model</span> <span class="o">=</span> <span class="n">KaldiRecognizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Speech Recognition : Initialized speechrecognition recognition model&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speech_conversion_engine</span> <span class="o">=</span> <span class="n">vosk_kaldi_model</span>
+
+<div class="viewcode-block" id="VoskSpeechToTextConversionImpl.recognize_speech">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechrecognition.html#dronebuddylib.atoms.speechrecognition.vosk_speech_2_text_conversion_impl.VoskSpeechToTextConversionImpl.recognize_speech">[docs]</a>
+    <span class="k">def</span> <span class="nf">recognize_speech</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio_steam</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recognizes text from an audio stream using the Vosk API.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            audio_steam (bytes): The audio stream content to be recognized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RecognizedSpeechResult: The result containing recognized text and total billed time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_conversion_engine</span><span class="o">.</span><span class="n">AcceptWaveform</span><span class="p">(</span><span class="n">audio_steam</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_conversion_engine</span><span class="o">.</span><span class="n">Result</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Speech Recognition : Recognized utterance : &#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">RecognizedSpeechResult</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

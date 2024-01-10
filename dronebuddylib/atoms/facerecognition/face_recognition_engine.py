@@ -1,4 +1,3 @@
-from dronebuddylib.atoms.facerecognition.face_recognition_impl import FaceRecognitionImpl
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import FaceRecognitionAlgorithm
 
@@ -18,6 +17,7 @@ class FaceRecognitionEngine:
         self.face_recognition_model = algorithm
 
         if algorithm == FaceRecognitionAlgorithm.FACE_RECC:
+            from dronebuddylib.atoms.facerecognition.face_recognition_impl import FaceRecognitionImpl
             self.face_recognition_engine = FaceRecognitionImpl(config)
         else:
             # Optionally handle other algorithms if you have any.

@@ -1,11 +1,22 @@
 import re
 
-init_file_paths = [r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\bodyfeatureextraction\__init__.py',
-                   r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\__init__.py',
-                   r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\intentrecognition\__init__.py',
-                   r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectdetection\__init__.py',
-                   r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechgeneration\__init__.py',
-                   r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechrecognition\__init__.py']
+init_file_paths = [
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\bodyfeatureextraction\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\intentrecognition\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\facerecognition\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectdetection\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechgeneration\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechrecognition\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\textrecognition\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\configurations\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\models\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\utils\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\molecules\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\exceptions\__init__.py',
+
+    ]
 
 setup_file_path = r'C:\Users\Public\projects\drone-buddy-library\setup.py'
 
@@ -28,6 +39,6 @@ def change_setup_version(new_version):
 
 
 if __name__ == '__main__':
-    new_version = '2.0.1'
+    new_version = '2.0.15'
     change_init_version(new_version)
     change_setup_version(new_version)

@@ -1,15 +1,13 @@
-import logging
-import numpy as np
-import pkg_resources
 from ultralytics import YOLO
-from PIL import Image
-import cv2
 
 from dronebuddylib.atoms.objectdetection.i_object_detection import IObjectDetection
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.models.enums import Configurations
-from dronebuddylib.models.object_detected import ObjectDetected, BoundingBox, ObjectDetectionResult
+from dronebuddylib.models.enums import AtomicEngineConfigurations
+from dronebuddylib.atoms.objectdetection.detected_object import DetectedObject, BoundingBox, ObjectDetectionResult
+from dronebuddylib.utils.logger import Logger
 from dronebuddylib.utils.utils import config_validity_check
+
+logger = Logger()
 
 
 class YOLOObjectDetectionImpl(IObjectDetection):
@@ -44,11 +42,15 @@ class YOLOObjectDetectionImpl(IObjectDetection):
                               self.get_algorithm_name())
 
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
-        model_name = configs.get(Configurations.OBJECT_DETECTION_YOLO_VERSION)
+        model_name = configs.get(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION)
         if model_name is None:
             model_name = "yolov8n.pt"
+
+        logger.log_info(self.get_class_name() + ':Initializing with model with ' + model_name + '')
+
         self.detector = YOLO(model_name)
         self.object_names = self.detector.names
+        logger.log_debug(self.get_class_name() ,'Initialized the YOLO object detection')
 
     def get_detected_objects(self, image) -> ObjectDetectionResult:
         """
@@ -60,16 +62,21 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         Returns:
             ObjectDetectionResult (ObjectDetectionResult): The result of the object detection, including a list of detected objects.
         """
+        logger.log_debug(self.get_class_name() ,'Detection started.')
+
         results = self.detector.predict(source=image, save=True, save_txt=True)
+        logger.log_debug(self.get_class_name() + ' :Detection Successful.')
+
         detected_objects = []
         detected_names = []
         # Save predictions as labels
         for result in results:
             for res in result.boxes.cls:
-                detected = ObjectDetected([], BoundingBox(0, 0, 0, 0))
+                detected = DetectedObject([], BoundingBox(0, 0, 0, 0))
                 detected.add_category(self.object_names[int(res)], 0.0)
                 detected_objects.append(detected)
                 detected_names.append(self.object_names[int(res)])
+        logger.log_debug(self.get_class_name(),'Detection completed.')
 
         return ObjectDetectionResult(detected_names, detected_objects)
 
@@ -93,7 +100,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         Returns:
             list: The list of required configuration parameters.
         """
-        return [Configurations.OBJECT_DETECTION_YOLO_VERSION]
+        return [AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION]
 
     def get_optional_params(self) -> list:
         """

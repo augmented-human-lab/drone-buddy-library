@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="dronebuddylib" href="modules.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.objectdetection.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="modules.html"
+       title="next chapter">dronebuddylib →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="pyttsx3">
+<h2>Pyttsx3<a class="headerlink" href="#pyttsx3" title="Link to this heading">¶</a></h2>
+<p>pyttsx3 is a Python library that provides a simple and convenient interface for performing text-to-speech synthesis. It allows you to convert text into spoken words using various speech synthesis engines available on your system.</p>
+<p>Here’s a brief explanation of pyttsx3’s key features and how it works:</p>
+<ol class="arabic simple">
+<li><p>Multi-Platform Support: pyttsx3 is designed to work on multiple platforms, including Windows, macOS, and Linux, providing cross-platform compatibility for text-to-speech functionality in Python.</p></li>
+<li><p>Text-to-Speech Engines: pyttsx3 supports different speech synthesis engines, allowing you to choose the one that best suits your needs. By default, it uses the SAPI5 on Windows, NSSpeechSynthesizer on macOS, and eSpeak on Linux. Additionally, pyttsx3 can be configured to work with other third-party speech synthesis engines available on your system.</p></li>
+<li><p>Installation: To install pyttsx3, you can use pip, the Python package manager, by running the following command in your terminal or command prompt:</p></li>
+</ol>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyttsx3
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Basic Usage: Once installed, you can start using pyttsx3 in your Python scripts. The library provides a simple and consistent API for text-to-speech synthesis.</p></li>
+<li><p>Additional Features: pyttsx3 offers additional functionality to customize the speech synthesis process. You can control properties such as the speech rate, volume, voice selection, and more. The library provides methods to retrieve available voices, change voice settings, and handle events like the completion of speech.</p></li>
+</ol>
+<p>pyttsx3 provides a straightforward and user-friendly way to incorporate text-to-speech functionality into your Python applications. By leveraging pyttsx3, you can easily generate spoken output from text for various purposes, such as accessibility, interactive systems, or voice-guided applications.</p>
+</section>
+<section id="how-to-use-with-dronebuddy">
+<h3>How to use with DroneBuddy<a class="headerlink" href="#how-to-use-with-dronebuddy" title="Link to this heading">¶</a></h3>
+<p>The text to speech functionality utilizes the offline text to speech engine pyttsx3. More information about pyttsx3 can be found here: <a class="reference external" href="https://pypi.org/project/pyttsx3/">https://pypi.org/project/pyttsx3/</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_RATE</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOLUME</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span><span class="p">,</span> <span class="s2">&quot;com.apple.speech.synthesis.voice.Alex&quot;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechGenerationEngine</span><span class="p">(</span><span class="n">SpeechGenerationAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_TTS_OFFLINE</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+
+<span class="n">objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">read_phrase</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="modules.html"
+       title="next chapter">dronebuddylib →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

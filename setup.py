@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name='dronebuddylib',
-    version='2.0.0',
+    version='2.0.15',
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -19,6 +19,16 @@ setup(
         'setuptools>=50.3.0',
     ],
     install_requires=[requirements],
+    extras_require={
+        "FACE_RECOGNITION": ['face-recognition'],
+        "INTENT_RECOGNITION_GPT": ['openai', 'tiktoken'],
+        "INTENT_RECOGNITION_SNIPS": ['snips-nlu'],
+        "OBJECT_DETECTION_MP": ['mediapipe'],
+        "OBJECT_DETECTION_YOLO": ['ultralytics'],
+        "TEXT_RECOGNITION": ['google-cloud-vision'],
+        "SPEECH_RECOGNITION_MULTI": ['SpeechRecognition'],
+        "SPEECH_RECOGNITION_VOSK": ['vosk'],
+    },
     python_requires='>=3.9',
     description='Everything to control and customize Tello',
     author='Malsha de Zoysa',

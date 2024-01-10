@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.voicegeneration.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.facerecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.facerecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.voicegeneration.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="yolo">
+<h2>YOLO<a class="headerlink" href="#yolo" title="Link to this heading">¶</a></h2>
+<p>YOLO (You Only Look Once) is a popular object detection algorithm known for its fast and real-time performance. It stands out for its ability to simultaneously predict object classes and bounding box coordinates in a single forward pass through a deep neural network.</p>
+<p>Please refer to the [YOLOv5](<a class="reference external" href="https://docs.ultralytics.com/">https://docs.ultralytics.com/</a>) documentation for more details.
+Here’s a simplified explanation of how YOLO works:</p>
+<p>Dividing the Image into Grid: YOLO divides the input image into a grid of cells. Each cell is responsible for predicting objects located within its boundaries.</p>
+<ol class="arabic simple">
+<li><p>Anchor Boxes: YOLO uses pre-defined anchor boxes, which are a set of bounding box shapes with different aspect ratios. These anchor boxes are initially defined based on the characteristics of the dataset being used.</p></li>
+<li><p>Prediction: The neural network is designed to simultaneously predict multiple bounding boxes and their corresponding class probabilities within each grid cell. For each anchor box, the network predicts the coordinates (x, y, width, height) of the bounding box and the confidence score representing the likelihood of containing an object. It also predicts class probabilities for each object class.</p></li>
+<li><p>Non-Maximum Suppression: YOLO applies a post-processing step called non-maximum suppression (NMS) to remove duplicate or overlapping bounding box predictions. NMS selects the most confident detection among overlapping boxes based on a defined threshold.</p></li>
+<li><p>Output: The final output of the YOLO algorithm is a set of bounding boxes along with their class labels and confidence scores, representing the detected objects in the image.</p></li>
+</ol>
+<p>YOLO’s key advantages lie in its speed and efficiency. Since it performs object detection in a single pass through the neural network, it avoids the need for region proposals or sliding windows, resulting in faster inference times. This makes YOLO suitable for real-time applications like video analysis, robotics, and autonomous vehicles.</p>
+<p>YOLO has evolved over time, and different versions such as YOLOv1, YOLOv2 (also known as YOLO9000), YOLOv3, YOLOv4, YOLOv8 have been introduced. These iterations have incorporated various improvements, including network architecture changes, feature extraction enhancements, and the use of more advanced techniques like skip connections and feature pyramid networks.</p>
+<p>YOLO models are typically trained on large labeled datasets, such as COCO (Common Objects in Context), to learn to detect objects across multiple classes effectively. The training process involves optimizing the neural network parameters using techniques like backpropagation and gradient descent.</p>
+<p>Keep in mind that while YOLO offers fast inference times, it may sacrifice some accuracy compared to slower, more complex object detection algorithms. The choice of object detection algorithm depends on the specific requirements of the application, balancing factors like accuracy, speed, and available computational resources.</p>
+<section id="install-required-dependencies-for-yolo">
+<h3>Install required dependencies for YOLO<a class="headerlink" href="#install-required-dependencies-for-yolo" title="Link to this heading">¶</a></h3>
+<p>The easiest way to install the modules required for SNIPS NLU is to use the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib<span class="o">[</span>OBJECT_DETECTION_YOLO<span class="o">]</span>
+</pre></div>
+</div>
+<p>This will take care of the dependencies and install the required modules.</p>
+</section>
+<section id="id1">
+<h3>Install required dependencies for YOLO<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Or if you are installing the dependencies manually, you can use the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ultralytics
+</pre></div>
+</div>
+</section>
+<section id="how-to-use">
+<h3>How to use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_image.jpg&#39;</span><span class="p">)</span>
+
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">OBJECT_DETECTION_YOLO_VERSION</span><span class="p">,</span> <span class="s2">&quot;yolov8n.pt&quot;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">ObjectDetectionEngine</span><span class="p">(</span><span class="n">VisionAlgorithm</span><span class="o">.</span><span class="n">YOLO</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mediapipe">
+<h2>MediaPipe<a class="headerlink" href="#mediapipe" title="Link to this heading">¶</a></h2>
+<p>Please refer to the [MediaPipe](<a class="reference external" href="https://developers.google.com/mediapipe/solutions/vision/object_detector">https://developers.google.com/mediapipe/solutions/vision/object_detector</a>) documentation for more details.</p>
+<p>DroneBuddy utilizes MediaPipe for object detection, leveraging its advanced computer vision capabilities. This section provides an overview of how MediaPipe’s object detection is integrated and employed in DroneBuddy, enhancing its functionalities. Detailed information about MediaPipe can be found on its official website or documentation.</p>
+<ol class="arabic simple">
+<li><p>Computer Vision Technology: MediaPipe offers state-of-the-art computer vision technology, enabling DroneBuddy to detect and identify objects in real-time. It uses machine learning models to recognize various objects within the camera’s field of view.</p></li>
+<li><p>Real-Time Processing: MediaPipe’s object detection in DroneBuddy is designed for real-time application. It efficiently processes video frames to detect objects quickly and accurately, which is crucial for dynamic drone operations.</p></li>
+<li><p>Robust and Versatile: MediaPipe’s models are trained on a diverse set of data, making them robust and versatile for different environments and scenarios. This versatility is beneficial for DroneBuddy, which may operate in various settings.</p></li>
+<li><p>Lightweight and Efficient: The algorithms used in MediaPipe are optimized for performance, ensuring that they are lightweight and efficient. This is particularly important for DroneBuddy, as it allows for faster processing without overburdening the drone’s computational resources.</p></li>
+</ol>
+<section id="integration-in-dronebuddy">
+<h3>Integration in DroneBuddy<a class="headerlink" href="#integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Installation and Setup: To integrate MediaPipe in DroneBuddy, first, install the MediaPipe library in the development environment. This might involve adding MediaPipe as a dependency in the project.</p></li>
+<li><p>Model Selection: Choose the appropriate MediaPipe object detection model based on DroneBuddy’s requirements. MediaPipe offers several pre-trained models that vary in accuracy and performance.</p></li>
+<li><p>Video Stream Processing: In DroneBuddy, integrate the MediaPipe object detection into the video stream processing pipeline. This involves capturing video frames from the drone’s camera and feeding them into the MediaPipe model for object detection.</p></li>
+<li><p>Handling Detection Output: Once objects are detected, DroneBuddy processes this information. This could involve marking objects on a display, logging information, or making real-time decisions based on the detected objects.</p></li>
+<li><p>Tuning and Customization: Depending on the specific use case of DroneBuddy, you might need to fine-tune the MediaPipe models or customize the detection parameters for optimal performance.</p></li>
+</ol>
+</section>
+<section id="example-of-mediapipe-integration-in-dronebuddy">
+<h3>Example of MediaPipe Integration in DroneBuddy<a class="headerlink" href="#example-of-mediapipe-integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
+<p>Here’s a hypothetical code example showing how MediaPipe’s object detection could be integrated into DroneBuddy:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</section>
+<section id="install-required-dependencies-for-snips-nlu">
+<h3>Install required dependencies for Snips NLU<a class="headerlink" href="#install-required-dependencies-for-snips-nlu" title="Link to this heading">¶</a></h3>
+<p>The easiest way to install the modules required for SNIPS NLU is to use the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib<span class="o">[</span>OBJECT_DETECTION_YOLO<span class="o">]</span>
+</pre></div>
+</div>
+<p>This will take care of the dependencies and install the required modules.</p>
+</section>
+<section id="id2">
+<h3>Install required dependencies for Snips NLU<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>Or if you are installing the dependencies manually, you can use the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ultralytics
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>How to use<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">media_pipe</span> <span class="k">as</span> <span class="nn">mp</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_image.jpg&#39;</span><span class="p">)</span>
+<span class="n">mp_image</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">create_from_file</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s1">&#39;C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg&#39;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">MPObjectDetectionImpl</span><span class="p">(</span><span class="n">EngineConfigurations</span><span class="p">({}))</span>
+<span class="n">detected_objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">mp_image</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This example demonstrates capturing video frames from DroneBuddy’s camera, processing them through MediaPipe for object detection, and then handling the detection results.</p>
+</section>
+<section id="important-considerations">
+<h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>
+<p>While MediaPipe offers sophisticated object detection capabilities, it’s important to note that its performance can vary based on environmental conditions, object sizes, and camera quality. Regular testing and adjustments may be necessary to ensure MediaPipe operates effectively within the specific context of DroneBuddy.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.facerecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.voicegeneration.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

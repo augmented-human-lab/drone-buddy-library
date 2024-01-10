@@ -1,17 +1,17 @@
-from dronebuddylib.models.enums import Configurations
+from dronebuddylib.models.enums import AtomicEngineConfigurations
 
 
 class EngineConfigurations:
     def __init__(self, configurations: dict):
         self.configurations = configurations
 
-    def add_configuration(self, key: Configurations, value: str):
+    def add_configuration(self, key: AtomicEngineConfigurations, value: str):
         self.configurations[key] = value
 
-    def remove_configurations(self, key: Configurations) -> str:
+    def remove_configurations(self, key: AtomicEngineConfigurations) -> str:
         return self.configurations.pop(key)
 
-    def get_configuration(self, key: Configurations) -> str:
+    def get_configuration(self, key: AtomicEngineConfigurations) -> str:
         return self.configurations.get(key)
 
     def get_configurations(self) -> dict:

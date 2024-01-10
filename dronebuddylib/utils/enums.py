@@ -52,6 +52,15 @@ class SpeechGenerationAlgorithm(enum.Enum):
 class SpeechRecognitionAlgorithm(enum.Enum):
     GOOGLE_SPEECH_RECOGNITION = 'GOOGLE_SPEECH_RECOGNITION',
     VOSK_SPEECH_RECOGNITION = 'VOSK_SPEECH_RECOGNITION',
+    MULTI_ALGO_SPEECH_RECOGNITION = 'MULTI_ALGO_SPEECH_RECOGNITION',
+
+
+class SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms(enum.Enum):
+    GOOGLE = 'GOOGLE',
+    IBM = 'IBM',
+    VOSK = 'VOSK',
+    WIT = 'WIT',
+    WHISPER = 'WHISPER',
 
 
 class IntentRecognitionAlgorithm(enum.Enum):

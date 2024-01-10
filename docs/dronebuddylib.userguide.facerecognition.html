@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.objectdetection.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.intentrecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.intentrecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="face-recognition">
+<h2>Face-recognition<a class="headerlink" href="#face-recognition" title="Link to this heading">¶</a></h2>
+<p>Face-recognition is an open-source Python library that provides face detection, face alignment, and face recognition capabilities.</p>
+<p>Here’s a simplified explanation of how the “face_recognition” library works:</p>
+<ol class="arabic simple">
+<li><p>Installation: To use the “face_recognition” library, you need to install it first. You can install it via pip by running the following command in your Python environment:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>face_recognition
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Face Detection: The library utilizes pre-trained models to detect faces in images or video frames. It can detect multiple faces in an image and return the bounding box coordinates (top, right, bottom, left) for each detected face. The detection process uses computer vision algorithms to locate the presence and location of faces.</p></li>
+<li><p>Face Alignment: After face detection, the library can perform face alignment to normalize the face’s position and orientation. This helps improve the accuracy of subsequent face recognition tasks by aligning the faces to a standardized pose.</p></li>
+<li><p>Feature Extraction: The library extracts facial features from the aligned face images. It employs a deep learning-based method to capture important characteristics of the face. These features are represented as numerical feature vectors that encode information about the face’s geometry, texture, and other discriminative details.</p></li>
+<li><p>Face Recognition: Using the extracted feature vectors, the “face_recognition” library can perform face recognition by comparing the features of a query face with the features of known faces stored in a database. It calculates the similarity or distance between the feature vectors and determines the closest matches. You can specify a threshold to define the level of similarity required for a positive recognition.</p></li>
+<li><p>Usage: To use the library, you typically load an image or video frame, detect faces, align the faces (optional), and then extract and compare the face features for recognition. The library provides easy-to-use functions and classes to perform these tasks, allowing you to integrate face recognition capabilities into your Python applications.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s worth noting that the “face_recognition” library is built on top of popular deep learning frameworks like dlib and OpenCV. It provides a high-level interface to simplify face recognition tasks and abstracts away the complexities of model training and implementation.</p>
+</div>
+<p>Remember that face recognition accuracy can be influenced by factors such as image quality, variations in lighting and pose, and the number of training examples available for known faces. Therefore, it’s important to consider these factors and perform proper testing and fine-tuning to achieve optimal results in your specific use case.</p>
+<section id="dlib">
+<h3>dlib<a class="headerlink" href="#dlib" title="Link to this heading">¶</a></h3>
+</section>
+<section id="why-do-we-need-dlib">
+<h3>Why do we need dlib<a class="headerlink" href="#why-do-we-need-dlib" title="Link to this heading">¶</a></h3>
+<p>dlib is a dependency that provides essential functionality for face detection and facial landmark estimation. The “face_recognition” library builds upon dlib’s capabilities to offer a higher-level interface specifically for face recognition tasks.</p>
+<p>Dlib is a C++ library that contains various machine learning algorithms and tools, including the implementation of the “HOG” (Histogram of Oriented Gradients) feature descriptor and the “SVM” (Support Vector Machine) classifier. These components are used by the “face_recognition” library to perform face detection, facial landmark detection, and face alignment.</p>
+<p>Here’s a breakdown of dlib’s role in the face recognition process:</p>
+<ol class="arabic simple">
+<li><p>Face Detection: The face detection component in dlib utilizes the “HOG” feature descriptor and the “SVM” classifier to detect faces in images. It searches for patterns in image gradients to identify regions likely to contain faces.</p></li>
+<li><p>Facial Landmark Detection: Dlib provides a facial landmark estimation model, which is trained to identify key facial landmarks such as the eyes, nose, and mouth. These landmarks are crucial for face alignment and accurately extracting facial features.</p></li>
+<li><p>Face Alignment: Using the detected facial landmarks, dlib performs face alignment by applying geometric transformations to normalize the face’s position, scale, and orientation. Face alignment helps ensure that subsequent face recognition tasks are robust to variations in pose and improve the accuracy of feature extraction.</p></li>
+<li><p>The “face_recognition” library abstracts the usage of dlib by providing a simpler, user-friendly interface that allows developers to focus on the face recognition tasks rather than dealing with low-level details. It leverages the face detection and facial landmark estimation capabilities of dlib to provide a higher-level API for face recognition and feature extraction.</p></li>
+</ol>
+<p>In summary, dlib plays a critical role in providing the underlying functionality for face detection, facial landmark detection, and face alignment in the “face_recognition” library. It enables accurate and efficient face recognition by handling the low-level details of these tasks, allowing developers to work with face recognition in a more accessible manner using the “face_recognition” library.</p>
+</section>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h3>
+<p>To install dlib, you need to ensure that you meet the following specifications:</p>
+<ol class="arabic simple">
+<li><p>Operating System: dlib is compatible with Windows, macOS, and Linux operating systems.</p></li>
+<li><p>Python Version: dlib works with Python 2.7 or Python 3.x versions.</p></li>
+<li><p>Compiler: You need a C++ compiler to build and install dlib. For Windows, you can use Microsoft Visual C++ (MSVC) or MinGW. On macOS, Xcode Command Line Tools are required. On Linux, the GNU C++ Compiler (g++) is typically used.</p></li>
+<li><p>Dependencies: dlib relies on a few external dependencies, including Boost and CMake. These dependencies need to be installed beforehand to successfully build dlib.</p></li>
+</ol>
+</section>
+<section id="for-windows-installation">
+<h3>For windows installation<a class="headerlink" href="#for-windows-installation" title="Link to this heading">¶</a></h3>
+<p>The official installation instructions are found here <a class="reference external" href="https://github.com/ageitgey/face_recognition/issues/175#issue-257710508">https://github.com/ageitgey/face_recognition/issues/175#issue-257710508</a></p>
+<ol class="arabic">
+<li><dl>
+<dt>To install the library, first you need to install the dlib library</dt><dd><ol class="arabic simple">
+<li><p>Installation instructions are here</p></li>
+<li><dl class="simple">
+<dt>Download CMake windows installer from here</dt><dd><ol class="arabic simple">
+<li><p>While installing CMake select Add CMake to the system PATH to avoid any error in the next steps.</p></li>
+</ol>
+</dd>
+</dl>
+</li>
+</ol>
+<p>#. Install VIsual C++ download here
+#.
+.. code-block::bash</p>
+<blockquote>
+<div><p>pip install cmake</p>
+</div></blockquote>
+<p>#.
+.. code-block::bash</p>
+<blockquote>
+<div><p>pip install dlib</p>
+</div></blockquote>
+<p>#.
+.. code-block::bash</p>
+<blockquote>
+<div><p>pip install face_recognition</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="resources">
+<h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h3>
+<p><a href="#id1"><span class="problematic" id="id2">*</span></a>. <a class="reference external" href="https://pypi.org/project/face-recognition/#description">https://pypi.org/project/face-recognition/#description</a>
+<a href="#id3"><span class="problematic" id="id4">*</span></a>. <a class="reference external" href="https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf">https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf</a>
+<a href="#id5"><span class="problematic" id="id6">*</span></a>. <a class="reference external" href="https://github.com/ageitgey/face_recognition/issues/175#issue-257710508">https://github.com/ageitgey/face_recognition/issues/175#issue-257710508</a></p>
+</section>
+</section>
+<section id="integration-in-dronebuddy">
+<h2>Integration in DroneBuddy<a class="headerlink" href="#integration-in-dronebuddy" title="Link to this heading">¶</a></h2>
+<section id="add-faces-to-the-memory">
+<h3>Add faces to the memory<a class="headerlink" href="#add-faces-to-the-memory" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>In order to proceed with the face recognition , the algorithm needs encoding s of the known faces. The library has a method that is specifically designed to add these faces to the memory.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_clear.jpg&#39;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">FaceRecognitionEngine</span><span class="p">(</span><span class="n">FaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">FACE_RECC</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">remember_face</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can check if the images and names are added to the library by simply going to the location where the library is installed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>newvenv/Lib/site-packages/dronebuddylib/atoms/resources
+</pre></div>
+</div>
+</section>
+<section id="recognize-faces">
+<h3>Recognize faces<a class="headerlink" href="#recognize-faces" title="Link to this heading">¶</a></h3>
+<p>To use the recognition feature you can use the find_all_the_faces method by simply feeding the frame to it. The show_feed variable refers to whether to show the video feed in a new window. The default settings for this is false. The method returns a list of names of the people in the frame, if not recognized it will return unknown.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_jane.jpg&#39;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">FaceRecognitionEngine</span><span class="p">(</span><span class="n">FaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">FACE_RECC</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_face</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.intentrecognition.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="next chapter">Supported models →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

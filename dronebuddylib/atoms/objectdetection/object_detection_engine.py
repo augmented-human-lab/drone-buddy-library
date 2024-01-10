@@ -1,8 +1,9 @@
-from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import MPObjectDetectionImpl
-from dronebuddylib.atoms.objectdetection.yolo_object_detection_impl import YOLOObjectDetectionImpl
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import VisionAlgorithm
-from dronebuddylib.models.object_detected import ObjectDetectionResult
+from dronebuddylib.atoms.objectdetection.detected_object import ObjectDetectionResult
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
 
 
 class ObjectDetectionEngine:
@@ -16,9 +17,22 @@ class ObjectDetectionEngine:
             config (EngineConfigurations): The configuration for the vision engine.
         """
         if algorithm == VisionAlgorithm.YOLO:
+            logger.log_info(self.get_class_name(), 'Preparing to initialize YOLO object detection engine.')
+            from dronebuddylib.atoms.objectdetection.yolo_object_detection_impl import YOLOObjectDetectionImpl
             self.vision_engine = YOLOObjectDetectionImpl(config)
         elif algorithm == VisionAlgorithm.MEDIA_PIPE:
+            logger.log_info(self.get_class_name(), 'Preparing to initialize Mediapipe object detection engine.')
+            from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import MPObjectDetectionImpl
             self.vision_engine = MPObjectDetectionImpl(config)
+
+    def get_class_name(self) -> str:
+        """
+        Returns the class name.
+
+        Returns:
+            str: The class name.
+        """
+        return 'OBJECT_DETECTION_ENGINE'
 
     def get_detected_objects(self, frame) -> ObjectDetectionResult:
         """
@@ -43,4 +57,3 @@ class ObjectDetectionEngine:
             list: A list of bounding boxes for the detected objects.
         """
         return self.vision_engine.get_bounding_boxes_of_detected_objects(frame)
-

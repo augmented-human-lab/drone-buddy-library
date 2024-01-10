@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.i_dbl_function import IDBLFunction
+from dronebuddylib.atoms.intentrecognition.recognized_intent import RecognizedIntent
 
 
 class IIntentRecognition(IDBLFunction, ABC):
@@ -21,7 +22,7 @@ class IIntentRecognition(IDBLFunction, ABC):
         self.engine_configurations = engine_configurations
 
     @abstractmethod
-    def get_resolved_intent(self, phrase: str) -> str:
+    def get_resolved_intent(self, phrase: str) -> RecognizedIntent:
         """
         Resolves the user's intent based on the given phrase.
 
