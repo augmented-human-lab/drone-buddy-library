@@ -19,6 +19,7 @@ Welcome to Dronebuddy's documentation!
    Configuration Settings <dronebuddylib.configurations>
    Module Index <modules>
    Developer Guide <dronebuddylib.developerguide>
+   Sample Program <dronebuddylib.codeexample>
 
 
 

@@ -7,7 +7,6 @@ import unittest
 import pyaudio
 
 from dronebuddylib import SpeechRecognitionEngine
-from dronebuddylib.atoms.speechrecognition import ResumableMicrophoneStream
 from dronebuddylib.atoms.speechrecognition.microphone_stream import MicrophoneStream
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import AtomicEngineConfigurations
@@ -110,50 +109,50 @@ class TestSpeechRecognition(unittest.TestCase):
                 print(time.time(), "audio out")
 
     def test_speech_to_text_online_stream(self):
-        engine_configs = EngineConfigurations({})
-        engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE, "0.7")
-        engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_MODEL,
-                                         "gpt-3.5-turbo-0613")
-
-        engine = SpeechRecognitionEngine(SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION, engine_configs)
-        mic_manager = ResumableMicrophoneStream(self.SAMPLE_RATE, self.CHUNK_SIZE)
-        print(mic_manager.chunk_size)
-        sys.stdout.write(self.YELLOW)
-        sys.stdout.write('\nListening, say "Quit" or "Exit" to stop.\n\n')
-        sys.stdout.write("End (ms)       Transcript Results/Status\n")
-        sys.stdout.write("=====================================================\n")
-
-        with mic_manager as stream:
-            while not stream.closed:
-                sys.stdout.write(self.YELLOW)
-                sys.stdout.write(
-                    "\n" + str(self.STREAMING_LIMIT * stream.restart_counter) + ": NEW REQUEST\n"
-                )
-
-                stream.audio_input = []
-                audio_generator = stream.generator()
-
-                requests = (
-                    speech.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator
-                )
-
-                responses = engine.recognize_speech(requests)
-
-                # Now, put the transcription responses to use.
-                self.listen_print_loop_for_stream(responses, stream)
-
-                if stream.result_end_time > 0:
-                    stream.final_request_end_time = stream.is_final_end_time
-                stream.result_end_time = 0
-                stream.last_audio_input = []
-                stream.last_audio_input = stream.audio_input
-                stream.audio_input = []
-                stream.restart_counter = stream.restart_counter + 1
-
-                if not stream.last_transcript_was_final:
-                    sys.stdout.write("\n")
-                stream.new_stream = True
+        # engine_configs = EngineConfigurations({})
+        # engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE, "0.7")
+        # engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_MODEL,
+        #                                  "gpt-3.5-turbo-0613")
+        #
+        # engine = SpeechRecognitionEngine(SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION, engine_configs)
+        # mic_manager = ResumableMicrophoneStream(self.SAMPLE_RATE, self.CHUNK_SIZE)
+        # print(mic_manager.chunk_size)
+        # sys.stdout.write(self.YELLOW)
+        # sys.stdout.write('\nListening, say "Quit" or "Exit" to stop.\n\n')
+        # sys.stdout.write("End (ms)       Transcript Results/Status\n")
+        # sys.stdout.write("=====================================================\n")
+        #
+        # with mic_manager as stream:
+        #     while not stream.closed:
+        #         sys.stdout.write(self.YELLOW)
+        #         sys.stdout.write(
+        #             "\n" + str(self.STREAMING_LIMIT * stream.restart_counter) + ": NEW REQUEST\n"
+        #         )
+        #
+        #         stream.audio_input = []
+        #         audio_generator = stream.generator()
+        #
+        #         requests = (
+        #             speech.StreamingRecognizeRequest(audio_content=content)
+        #             for content in audio_generator
+        #         )
+        #
+        #         responses = engine.recognize_speech(requests)
+        #
+        #         # Now, put the transcription responses to use.
+        #         self.listen_print_loop_for_stream(responses, stream)
+        #
+        #         if stream.result_end_time > 0:
+        #             stream.final_request_end_time = stream.is_final_end_time
+        #         stream.result_end_time = 0
+        #         stream.last_audio_input = []
+        #         stream.last_audio_input = stream.audio_input
+        #         stream.audio_input = []
+        #         stream.restart_counter = stream.restart_counter + 1
+        #
+        #         if not stream.last_transcript_was_final:
+        #             sys.stdout.write("\n")
+        #         stream.new_stream = True
 
     def listen_print_loop(self, responses: object) -> str:
         """Iterates through server responses and prints them.

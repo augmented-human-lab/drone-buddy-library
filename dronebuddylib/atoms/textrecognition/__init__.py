@@ -1,4 +1,4 @@
-__version__ = "2.0.15"
+__version__ = "2.0.16"
 
 from .i_text_recognition import ITextRecognition
 from .text_recognition_engine import TextRecognitionEngine

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Sample Program</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="Developer Guide" href="dronebuddylib.developerguide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">Module Index</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Sample Program</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#sample-program" class="reference internal">Sample Program</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Sample Program</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.developerguide.html"
+       title="previous chapter">← Developer Guide</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="sample-program">
+<h1>Sample Program<a class="headerlink" href="#sample-program" title="Link to this heading">¶</a></h1>
+<p>A sample programs that uses dronebuddylib to interact with a drone is given below. This program uses the library to
+recognize speech, recognize intent, and execute drone functions based on the recognized intent. The program also uses
+the library to recognize faces, objects, and text. The program also uses the library to generate speech and read aloud
+the recognized intent and the results of the face, object, and text recognition.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">speech_recognition</span>
+<span class="kn">from</span> <span class="nn">djitellopy</span> <span class="kn">import</span> <span class="n">Tello</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib</span> <span class="kn">import</span> <span class="n">SpeechRecognitionEngine</span><span class="p">,</span> <span class="n">IntentRecognitionEngine</span><span class="p">,</span> <span class="n">FaceRecognitionEngine</span><span class="p">,</span> \
+    <span class="n">ObjectDetectionEngine</span><span class="p">,</span> <span class="n">TextRecognitionEngine</span><span class="p">,</span> <span class="n">SpeechGenerationEngine</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span><span class="p">,</span> <span class="n">IntentRecognitionAlgorithm</span><span class="p">,</span> <span class="n">DroneCommands</span><span class="p">,</span> \
+    <span class="n">FaceRecognitionAlgorithm</span><span class="p">,</span> <span class="n">VisionAlgorithm</span><span class="p">,</span> <span class="n">TextRecognitionAlgorithm</span><span class="p">,</span> <span class="n">SpeechGenerationAlgorithm</span>
+    <span class="kn">from</span> <span class="nn">dronebuddylib.utils.enums</span> <span class="kn">import</span> <span class="n">SpeechRecognitionAlgorithm</span><span class="p">,</span> <span class="n">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms</span>
+    <span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">open_mic_operations</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">speech_microphone</span> <span class="o">=</span> <span class="n">speech_recognition</span><span class="o">.</span><span class="n">Microphone</span><span class="p">()</span>
+
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME</span><span class="p">,</span>
+                                     <span class="n">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms</span><span class="o">.</span><span class="n">GOOGLE</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechRecognitionEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">MULTI_ALGO_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">speech_microphone</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;*********************************************************************************************************&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Say something...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;*********************************************************************************************************&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">recognized_speech</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;TEST&quot;</span><span class="p">,</span> <span class="s2">&quot;Recognized: &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">recognized_speech</span><span class="p">)</span>
+                    <span class="n">intent</span> <span class="o">=</span> <span class="n">recognize_intent_gpt</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">recognized_speech</span><span class="p">)</span>
+                    <span class="n">execute_drone_functions</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="s2">&quot;TEST&quot;</span><span class="p">,</span> <span class="s2">&quot;Not Recognized: voice &quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="n">speech_recognition</span><span class="o">.</span><span class="n">WaitTimeoutError</span><span class="p">:</span>
+                <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">recognize_intent_snips</span><span class="p">(</span><span class="n">recognized_text</span><span class="p">):</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechRecognitionEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">MULTI_ALGO_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">SNIPS_NLU</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">recognized_intent</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="n">recognized_text</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Recognized intent: &quot;</span><span class="p">,</span> <span class="n">recognized_intent</span><span class="o">.</span><span class="n">intent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">recognized_intent</span><span class="o">.</span><span class="n">intent</span>
+
+
+<span class="k">def</span> <span class="nf">recognize_intent_gpt</span><span class="p">(</span><span class="n">recognized_text</span><span class="p">):</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo-0613&quot;</span><span class="p">)</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="p">,</span>
+                                     <span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">Public</span><span class="se">\\</span><span class="s2">projects</span><span class="se">\\</span><span class="s2">drone-buddy-library</span><span class="se">\\</span><span class="s2">dronebuddylib</span><span class="se">\\</span><span class="s2">atoms</span><span class="se">\\</span><span class="s2">intentrecognition</span><span class="se">\\</span><span class="s2">resources</span><span class="se">\\</span><span class="s2">stats</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="p">,</span>
+                                     <span class="s2">&quot;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&quot;</span><span class="p">)</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="p">,</span>
+                                     <span class="s2">&quot;https://api.openai.com/v1/chat/completions&quot;</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">CHAT_GPT</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+    <span class="n">recognized_intent</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="n">recognized_text</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Recognized intent: &quot;</span><span class="p">,</span> <span class="n">recognized_intent</span><span class="o">.</span><span class="n">intent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">recognized_intent</span><span class="o">.</span><span class="n">intent</span>
+
+
+<span class="k">def</span> <span class="nf">execute_drone_functions</span><span class="p">(</span><span class="n">intent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">TAKE_OFF</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m taking off&quot;</span><span class="p">)</span>
+        <span class="n">take_off</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">LAND</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m landing&quot;</span><span class="p">)</span>
+        <span class="n">land</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">ROTATE_CLOCKWISE</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m rotating clockwise&quot;</span><span class="p">)</span>
+        <span class="n">rotate_clockwise</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">ROTATE_COUNTER_CLOCKWISE</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m rotating counter clockwise&quot;</span><span class="p">)</span>
+        <span class="n">rotate_counter_clockwise</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving forward&quot;</span><span class="p">)</span>
+        <span class="n">move_forward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">BACKWARD</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving backward&quot;</span><span class="p">)</span>
+        <span class="n">move_backward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving to the left&quot;</span><span class="p">)</span>
+        <span class="n">move_left</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving to the right&quot;</span><span class="p">)</span>
+        <span class="n">move_right</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving up&quot;</span><span class="p">)</span>
+        <span class="n">move_up</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m moving down&quot;</span><span class="p">)</span>
+        <span class="n">move_down</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">FLIP</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m flipping&quot;</span><span class="p">)</span>
+        <span class="n">flip_forward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">RECOGNIZE_TEXT</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m trying to read the text&quot;</span><span class="p">)</span>
+        <span class="n">recognize_text</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">RECOGNIZE_PEOPLE</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m trying to recognize people&quot;</span><span class="p">)</span>
+        <span class="n">recognize_people</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">RECOGNIZE_OBJECTS</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m trying to recognize objects&quot;</span><span class="p">)</span>
+        <span class="n">recognize_objects</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">intent</span> <span class="o">==</span> <span class="n">DroneCommands</span><span class="o">.</span><span class="n">STOP</span><span class="p">:</span>
+        <span class="n">read_aloud</span><span class="p">(</span><span class="s2">&quot;I&#39;m stopping&quot;</span><span class="p">)</span>
+        <span class="n">land</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">init_drone</span><span class="p">():</span>
+    <span class="n">drone_instance</span> <span class="o">=</span> <span class="n">Tello</span><span class="p">()</span>
+    <span class="n">drone_instance</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="n">drone_instance</span><span class="o">.</span><span class="n">streamon</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">drone_instance</span>
+
+
+<span class="k">def</span> <span class="nf">take_off</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is taking off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">takeoff</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">land</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is landing&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">land</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">rotate_clockwise</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is rotating clockwise&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">rotate_clockwise</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">rotate_counter_clockwise</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is rotating counter clockwise&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">rotate_counter_clockwise</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_forward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving forward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_forward</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_backward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving backward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_backward</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_left</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving left&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_left</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_right</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving right&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_right</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_up</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving up&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_up</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">move_down</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is moving down&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_down</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">flip_forward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is flipping forward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">flip_forward</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">flip_backward</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is flipping backward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">flip_backward</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">flip_left</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is flipping left&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">drone_instance</span><span class="o">.</span><span class="n">flip_left</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">recognize_people</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is recognizing people&quot;</span><span class="p">)</span>
+    <span class="n">current_resized_image</span> <span class="o">=</span> <span class="n">get_image_with_cv2</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">FaceRecognitionEngine</span><span class="p">(</span><span class="n">FaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">FACE_RECC</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_face</span><span class="p">(</span><span class="n">current_resized_image</span><span class="p">)</span>
+    <span class="n">people</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">describe_face_rec_results</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">people</span>
+
+
+<span class="k">def</span> <span class="nf">get_image_with_cv2</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">current_frame</span> <span class="o">=</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+    <span class="n">current_resized_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">current_frame</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">current_resized_image</span>
+
+
+<span class="k">def</span> <span class="nf">recognize_objects</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is recognizing objects&quot;</span><span class="p">)</span>
+    <span class="n">current_resized_image</span> <span class="o">=</span> <span class="n">get_image_with_cv2</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_DETECTION_YOLO_VERSION</span><span class="p">,</span> <span class="s2">&quot;yolov8n.pt&quot;</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">ObjectDetectionEngine</span><span class="p">(</span><span class="n">VisionAlgorithm</span><span class="o">.</span><span class="n">YOLO</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">detected_objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">current_resized_image</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_success</span><span class="p">(</span><span class="s2">&quot;Recognized objects: &quot;</span><span class="p">,</span> <span class="n">detected_objects</span><span class="o">.</span><span class="n">object_names</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">describe_object_rec_results</span><span class="p">(</span><span class="n">detected_objects</span><span class="o">.</span><span class="n">object_names</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">format_list</span><span class="p">(</span><span class="n">object_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="c1"># creates a string from the object list, if there are duplicates count the number of duplicates and add it to the string.</span>
+    <span class="c1"># for example if there are duplicates of chair in te list, add to the string 2 chairs</span>
+    <span class="c1"># add a comma after each object and before the last item and a &#39;and&#39; before the last item</span>
+
+    <span class="n">formatted_list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">object_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">object_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">formatted_list</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">object_list</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="nb">object</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">object</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">formatted_list</span> <span class="o">+=</span> <span class="nb">object</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+    <span class="n">formatted_list</span> <span class="o">=</span> <span class="n">formatted_list</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">formatted_list</span> <span class="o">=</span> <span class="n">formatted_list</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;and &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">formatted_list</span>
+
+
+<span class="k">def</span> <span class="nf">describe_face_rec_results</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">init_position</span>
+    <span class="c1"># remove duplicates from the labels</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+    <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot;I see &quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot;I don&#39;t see anyone I recognize&quot;</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot; I see  &quot;</span> <span class="o">+</span> <span class="n">get_describing_phrase</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot; I see &quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">read_aloud_text</span> <span class="o">+=</span> <span class="n">get_describing_phrase</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; ,  &quot;</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="n">read_aloud_text</span> <span class="o">+</span> <span class="s2">&quot; and  &quot;</span> <span class="o">+</span> <span class="n">get_describing_phrase</span><span class="p">((</span><span class="n">labels</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">read_aloud_text</span>
+
+
+<span class="k">def</span> <span class="nf">read_aloud</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechGenerationEngine</span><span class="p">(</span><span class="n">SpeechGenerationAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_TTS_OFFLINE</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">read_phrase</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_describing_phrase</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;unknown&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;someone I don&#39;t recognize&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+
+<span class="k">def</span> <span class="nf">describe_object_rec_results</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+    <span class="c1"># remove duplicates from the labels</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+    <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot;I see &quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot;I don&#39;t see anything in the front, you are safe to move forward&quot;</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot; I see a &quot;</span> <span class="o">+</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="s2">&quot; I see a &quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">read_aloud_text</span> <span class="o">+=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; , &quot;</span>
+        <span class="n">read_aloud_text</span> <span class="o">=</span> <span class="n">read_aloud_text</span> <span class="o">+</span> <span class="s2">&quot; and a &quot;</span> <span class="o">+</span> <span class="n">labels</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">recognize_text</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is recognizing text&quot;</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">TextRecognitionEngine</span><span class="p">(</span><span class="n">TextRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_VISION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">image_path</span> <span class="o">=</span> <span class="n">save_frame</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">,</span> <span class="s2">&quot;text_rec_images&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_text</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">save_frame</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+    <span class="c1"># Assuming &#39;frame&#39; is your frame from the drone</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+    <span class="c1"># Specify the path where you want to save the image</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-launcher\resources</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">type</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span>
+
+    <span class="c1"># Save the frame as a JPEG image</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output_path</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">keep_drone_in_air</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">):</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing functions: &quot;</span><span class="p">,</span> <span class="s2">&quot;Drone is in the air&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">drone_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;battery: &quot;</span><span class="p">,</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_battery</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_battery</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+                <span class="n">land</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">drone_instance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># drone_instance = init_drone()</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">open_mic_operations</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">),</span> <span class="n">keep_drone_in_air</span><span class="p">(</span><span class="n">drone_instance</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.developerguide.html"
+       title="previous chapter">← Developer Guide</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
