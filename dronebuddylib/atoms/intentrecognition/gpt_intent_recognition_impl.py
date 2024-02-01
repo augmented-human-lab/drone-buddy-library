@@ -5,7 +5,7 @@ from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRe
 from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.models.gpt_configs import GPTConfigs
-from dronebuddylib.atoms.intentrecognition.recognized_intent import RecognizedIntent, RecognizedEntities
+from dronebuddylib.atoms.intentrecognition.recognized_intent_result import RecognizedIntent, RecognizedEntities
 from dronebuddylib.utils.chat_prompts import SYSTEM_PROMPT_INTENT_CLASSIFICATION
 from dronebuddylib.utils.utils import create_custom_drone_action_list, create_system_drone_action_list, \
     config_validity_check, logger
@@ -131,7 +131,6 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         Returns:
             str: Recognized intent based on the user message.
         """
-
         try:
             logger.log_debug(self.get_class_name(), ' Recognition started.')
 
@@ -139,10 +138,25 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
             logger.log_debug(self.get_class_name(), ' Recognition successful.')
 
             json_result = json.loads(result)
-            formatted_result = RecognizedIntent(json_result['intent'], [], json_result['confidence'],
-                                                json_result['addressed_to'])
-            for entity in json_result['entities']:
-                formatted_result.entities.append(RecognizedEntities(entity['entity_type'], entity['value']))
+            addressee = None
+            try:
+                addressee = json_result['addressed_to']
+            except KeyError:
+                addressee = ""
+            confidence = None
+            try:
+                confidence = json_result['confidence']
+            except KeyError:
+                confidence = 0
+
+            formatted_result = RecognizedIntent(json_result['intent'], [], confidence,
+
+                                                addressee)
+            try:
+                for entity in json_result['entities']:
+                    formatted_result.entities.append(RecognizedEntities(entity['entity_type'], entity['value']))
+            except KeyError:
+                pass
             logger.log_debug(self.get_class_name(), ' Recognition completed.')
 
             return formatted_result

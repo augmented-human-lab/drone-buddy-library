@@ -12,10 +12,12 @@ the recognized intent and the results of the face, object, and text recognition.
 
         import asyncio
         import datetime
+        import threading
         import time
         from typing import List
 
         import cv2
+        import requests
         import speech_recognition
         from djitellopy import Tello
         from dronebuddylib import SpeechRecognitionEngine, IntentRecognitionEngine, FaceRecognitionEngine, \
@@ -23,23 +25,34 @@ the recognized intent and the results of the face, object, and text recognition.
         from dronebuddylib.models import EngineConfigurations
         from dronebuddylib.models.enums import AtomicEngineConfigurations, IntentRecognitionAlgorithm, DroneCommands, \
             FaceRecognitionAlgorithm, VisionAlgorithm, TextRecognitionAlgorithm, SpeechGenerationAlgorithm
-            from dronebuddylib.utils.enums import SpeechRecognitionAlgorithm, SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms
-            from dronebuddylib.utils.utils import Logger
+        from dronebuddylib.utils.enums import SpeechRecognitionAlgorithm, SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms
+        from dronebuddylib.utils.utils import Logger
 
         engine_configs = EngineConfigurations({})
 
         logger = Logger()
 
+        is_drone_in_air = False
 
-        async def open_mic_operations(drone_instance):
+
+        def open_mic_operations(drone_instance, on_recognized_callback):
             speech_microphone = speech_recognition.Microphone()
 
             engine_configs.add_configuration(AtomicEngineConfigurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME,
                                              SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms.GOOGLE.name)
             engine = SpeechRecognitionEngine(SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION, engine_configs)
 
+            intent_engine = init_intent_rec_engine()
+            face_recognition_engine = init_face_rec_engine()
+            object_recognition_engine = init_object_rec_engine()
+            text_recognition_engine = init_text_rec_engine()
+            voice_engine = init_voice_generation_engine()
+
             while True:
                 with speech_microphone as source:
+                    logger.log_info("TEST",
+                                    "Recognizing voice *********************************************************************************************************")
+
                     print(
                         "*********************************************************************************************************")
                     print("Say something...")
@@ -47,17 +60,31 @@ the recognized intent and the results of the face, object, and text recognition.
                         "*********************************************************************************************************")
                     print(time.time())
                     try:
+                        logger.log_info("TEST",
+                                        "Recognizing voice *********************************************************************************************************")
                         result = engine.recognize_speech(source)
                         if result.recognized_speech is not None:
                             logger.log_info("TEST", "Recognized: " + result.recognized_speech)
-                            intent = recognize_intent_gpt(result.recognized_speech)
-                            execute_drone_functions(intent, drone_instance)
+                            intent = recognize_intent_gpt(intent_engine, result.recognized_speech)
+                            read_aloud_text = execute_drone_functions(intent, drone_instance, face_recognition_engine,
+                                                                      object_recognition_engine,
+                                                                      text_recognition_engine, voice_engine)
+                            on_recognized_callback(read_aloud_text, voice_engine)
+
                         else:
                             logger.log_warning("TEST", "Not Recognized: voice ")
 
                     except speech_recognition.WaitTimeoutError:
                         engine.recognize_speech(source)
 
+                    time.sleep(1)  # Sleep to simulate work and prevent a tight loop
+
+
+        def generate_voice_response(voice_engine, text):
+            try:
+                voice_engine.read_phrase(text)
+            except Exception as e:
+                logger.log_error("Error in voice generation:", str(e))
 
 
         def recognize_intent_snips(recognized_text):
@@ -68,68 +95,96 @@ the recognized intent and the results of the face, object, and text recognition.
             return recognized_intent.intent
 
 
-        def recognize_intent_gpt(recognized_text):
+        def init_intent_rec_engine():
             engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_TEMPERATURE, "0.7")
             engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_MODEL, "gpt-3.5-turbo-0613")
             engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION,
                                              "C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\intentrecognition\\resources\\stats\\")
             engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_API_KEY,
-                                             "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")
+                                             "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
             engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_API_URL,
                                              "https://api.openai.com/v1/chat/completions")
             engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, engine_configs)
-
-            recognized_intent = engine.recognize_intent(recognized_text)
-            logger.log_info("Recognized intent: ", recognized_intent.intent)
-            return recognized_intent.intent
+            return engine
 
 
-        def execute_drone_functions(intent: str, drone_instance):
-            if intent == DroneCommands.TAKE_OFF:
-                read_aloud("I'm taking off")
+        def init_object_rec_engine():
+            engine_configs.add_configuration(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
+            engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)
+            return engine
+
+
+        def init_voice_generation_engine():
+            engine = SpeechGenerationEngine(SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE.name, engine_configs)
+            return engine
+
+
+        def init_face_rec_engine():
+            engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECC, engine_configs)
+            return engine
+
+
+        def recognize_intent_gpt(engine, recognized_text):
+            try:
+                recognized_intent = engine.recognize_intent(recognized_text)
+                logger.log_info("Recognized intent: ", recognized_intent.intent)
+                return recognized_intent.intent
+            except:
+                logger.log_error("Recognized intent: ", 'NONE')
+                return "NONE"
+
+
+        def execute_drone_functions(intent: str, drone_instance, face_engine, object_engine, text_engine, voice_engine):
+            global is_drone_in_air
+
+            if intent == DroneCommands.TAKE_OFF.name:
+                is_drone_in_air = True
                 take_off(drone_instance)
-            elif intent == DroneCommands.LAND:
-                read_aloud("I'm landing")
+                return "I'm taking off"
+            elif intent == DroneCommands.LAND.name:
+                is_drone_in_air = False
                 land(drone_instance)
-            elif intent == DroneCommands.ROTATE_CLOCKWISE:
-                read_aloud("I'm rotating clockwise")
+                return "I'm landing"
+            elif intent == DroneCommands.ROTATE_CLOCKWISE.name:
                 rotate_clockwise(drone_instance)
-            elif intent == DroneCommands.ROTATE_COUNTER_CLOCKWISE:
-                read_aloud("I'm rotating counter clockwise")
+                return "I'm rotating clockwise"
+            elif intent == DroneCommands.ROTATE_COUNTER_CLOCKWISE.name:
                 rotate_counter_clockwise(drone_instance)
-            elif intent == DroneCommands.FORWARD:
-                read_aloud("I'm moving forward")
+                return "I'm rotating counter clockwise"
+            elif intent == DroneCommands.FORWARD.name:
                 move_forward(drone_instance)
-            elif intent == DroneCommands.BACKWARD:
-                read_aloud("I'm moving backward")
+                return "I'm moving forward"
+            elif intent == DroneCommands.BACKWARD.name:
                 move_backward(drone_instance)
-            elif intent == DroneCommands.LEFT:
-                read_aloud("I'm moving to the left")
+                return "I'm moving backward"
+            elif intent == DroneCommands.LEFT.name:
                 move_left(drone_instance)
-            elif intent == DroneCommands.RIGHT:
-                read_aloud("I'm moving to the right")
+                return "I'm moving to the left"
+            elif intent == DroneCommands.RIGHT.name:
                 move_right(drone_instance)
-            elif intent == DroneCommands.UP:
-                read_aloud("I'm moving up")
+                return "I'm moving to the right"
+            elif intent == DroneCommands.UP.name:
                 move_up(drone_instance)
-            elif intent == DroneCommands.DOWN:
-                read_aloud("I'm moving down")
+                return "I'm moving up"
+            elif intent == DroneCommands.DOWN.name:
                 move_down(drone_instance)
-            elif intent == DroneCommands.FLIP:
-                read_aloud("I'm flipping")
-                flip_forward(drone_instance)
-            elif intent == DroneCommands.RECOGNIZE_TEXT:
-                read_aloud("I'm trying to read the text")
-                recognize_text(drone_instance)
-            elif intent == DroneCommands.RECOGNIZE_PEOPLE:
-                read_aloud("I'm trying to recognize people")
-                recognize_people(drone_instance)
-            elif intent == DroneCommands.RECOGNIZE_OBJECTS:
-                read_aloud("I'm trying to recognize objects")
-                recognize_objects(drone_instance)
-            elif intent == DroneCommands.STOP:
-                read_aloud("I'm stopping")
+                return "I'm moving down"
+            elif intent == DroneCommands.FLIP.name:
+                flip_forward(drone_instance)  # Assuming flip_forward is the desired flip command
+                return "I'm flipping"
+            elif intent == DroneCommands.RECOGNIZE_TEXT.name:
+                text = recognize_text(text_engine, drone_instance)
+                return "I read the text as " + text
+            elif intent == DroneCommands.RECOGNIZE_PEOPLE.name:
+                return recognize_people(face_engine, drone_instance)
+                # return "I'm trying to recognize people"
+            elif intent == DroneCommands.RECOGNIZE_OBJECTS.name:
+                detected = recognize_objects(object_engine, drone_instance)
+                return detected
+            elif intent == DroneCommands.STOP.name:
                 land(drone_instance)
+                is_drone_in_air = False
+                return "I'm stopping"
 
 
         def init_drone():
@@ -217,15 +272,11 @@ the recognized intent and the results of the face, object, and text recognition.
                 drone_instance.flip_left()
 
 
-        def recognize_people(drone_instance):
+        def recognize_people(engine, drone_instance):
             logger.log_info("Executing functions: ", "Drone is recognizing people")
             current_resized_image = get_image_with_cv2(drone_instance)
-
-            engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECC, engine_configs)
             result = engine.recognize_face(current_resized_image)
-            people = ""
-            describe_face_rec_results(result)
-            return people
+            return describe_face_rec_results(result)
 
 
         def get_image_with_cv2(drone_instance):
@@ -234,14 +285,11 @@ the recognized intent and the results of the face, object, and text recognition.
             return current_resized_image
 
 
-        def recognize_objects(drone_instance):
+        def recognize_objects(engine, drone_instance):
             logger.log_info("Executing functions: ", "Drone is recognizing objects")
             current_resized_image = get_image_with_cv2(drone_instance)
 
-            engine_configs.add_configuration(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
-            engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)
             detected_objects = engine.get_detected_objects(current_resized_image)
-            logger.log_success("Recognized objects: ", detected_objects.object_names)
             return describe_object_rec_results(detected_objects.object_names)
 
 
@@ -279,12 +327,6 @@ the recognized intent and the results of the face, object, and text recognition.
                 read_aloud_text = read_aloud_text + " and  " + get_describing_phrase((labels[len(labels) - 1]))
             return read_aloud_text
 
-
-        def read_aloud(text):
-            engine = SpeechGenerationEngine(SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE, engine_configs)
-            engine.read_phrase(text)
-
-
         def get_describing_phrase(name):
             if name.lower() == 'unknown':
                 return "someone I don't recognize"
@@ -306,11 +348,20 @@ the recognized intent and the results of the face, object, and text recognition.
                 for i in range(0, len(labels) - 1):
                     read_aloud_text += labels[i] + " , "
                 read_aloud_text = read_aloud_text + " and a " + labels[len(labels) - 1]
+            else:
+                read_aloud_text = "I don't see anything in the front, you are safe to move forward"
+            logger.log_success("Recognized objects: ", read_aloud_text)
+
+            return read_aloud_text
 
 
-        def recognize_text(drone_instance):
-            logger.log_info("Executing functions: ", "Drone is recognizing text")
+        def init_text_rec_engine():
             engine = TextRecognitionEngine(TextRecognitionAlgorithm.GOOGLE_VISION, engine_configs)
+            return engine
+
+
+        def recognize_text(engine, drone_instance):
+            logger.log_info("Executing functions: ", "Drone is recognizing text")
             image_path = save_frame(drone_instance, "text_rec_images")
             result = engine.recognize_text(image_path)
             return result.text
@@ -328,23 +379,50 @@ the recognized intent and the results of the face, object, and text recognition.
             return output_path
 
 
-        async def keep_drone_in_air(drone_instance):
+        def keep_drone_in_air(drone_instance):
+            moving_dir = -1
+            voice = init_voice_generation_engine()
+            global is_drone_in_air
             while True:
-                time.sleep(1)
                 logger.log_info("Executing functions: ", "Drone is in the air")
-                if drone_instance is not None:
+                if drone_instance is not None and is_drone_in_air:
                     print("battery: ", drone_instance.get_battery())
                     if drone_instance.get_battery() < 20:
                         land(drone_instance)
-                    break
-                await asyncio.sleep(5)
+                        voice.read_phrase("I'm running out of battery, I'm landing")
+                    if drone_instance.get_temperature() > 90:
+                        land(drone_instance)
+                        voice.read_phrase("I'm getting overheated, I'm landing")
+
+                    drone_instance.send_rc_control(0, 0, moving_dir, 0)
+                    moving_dir = moving_dir * -1
+                    # break
+                time.sleep(4)  # Sleep to simulate work and prevent a tight loop
 
 
-        async def main():
-            drone_instance = None
-            # drone_instance = init_drone()
-            await asyncio.gather(open_mic_operations(drone_instance), keep_drone_in_air(drone_instance))
+        def find_person(face_engine, drone_instance):
+            logger.log_info("Executing functions: ", "Drone is recognizing people")
+            current_resized_image = get_image_with_cv2(drone_instance)
+            result = face_engine.recognize_face(current_resized_image)
+            return result
+
+
+        def on_voice_recognized(recognized_text, voice_engine):
+            logger.log_info("Recognized text:", recognized_text)
+            # Call the voice generation function with the recognized text
+            generate_voice_response(voice_engine, recognized_text)
 
 
         if __name__ == '__main__':
-            asyncio.run(main())
+            # drone_instance = None
+            drone_instance = init_drone()
+            # Create threads
+            thread1 = threading.Thread(target=open_mic_operations, args=(drone_instance, on_voice_recognized,))
+            thread2 = threading.Thread(target=keep_drone_in_air, args=(drone_instance,))
+
+            # Start threads
+            thread1.start()
+            thread2.start()
+
+            thread1.join()
+            thread2.join()

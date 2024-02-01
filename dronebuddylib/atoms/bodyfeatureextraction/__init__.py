@@ -1,4 +1,4 @@
-__version__ = "2.0.16"
+__version__ = "2.0.25"
 
 from .body_feature_extraction_impl import BodyFeatureExtractionImpl
 from .hand_feature_extraction_impl import HandFeatureExtractionImpl

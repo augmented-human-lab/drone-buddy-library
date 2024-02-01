@@ -6,7 +6,7 @@ from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRe
 from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import AtomicEngineConfigurations
-from dronebuddylib.atoms.intentrecognition.recognized_intent import RecognizedIntent, RecognizedEntities
+from dronebuddylib.atoms.intentrecognition.recognized_intent_result import RecognizedIntent, RecognizedEntities
 from dronebuddylib.utils import FileWritingException
 from dronebuddylib.utils.utils import config_validity_check, logger
 

@@ -1,4 +1,7 @@
 from dronebuddylib.models.enums import AtomicEngineConfigurations
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
 
 
 class EngineConfigurations:
@@ -21,8 +24,16 @@ class EngineConfigurations:
         # return all the key pairs which contains a given string as a part of the key
         filtered_items = {}
 
-        for key, value in self.configurations.items():
-            if class_name in key.name:
-                filtered_items[key] = value
+        try:
+            for key, value in self.configurations.items():
+                if isinstance(key, AtomicEngineConfigurations):
+                    if class_name in key.name:
+                        filtered_items[key] = value
+                else:
+                    if class_name in key:
+                        filtered_items[key] = value
 
-        return filtered_items
+            return filtered_items
+        except:
+            logger.log_error("ENGINE_CONFIGURATIONS", 'Error in get_configurations_for_engine')
+            return filtered_items

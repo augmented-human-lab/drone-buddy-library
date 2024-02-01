@@ -18,7 +18,8 @@ class TextRecognitionEngine:
         """
         self.text_recognition_model = algorithm
 
-        if algorithm == TextRecognitionAlgorithm.GOOGLE_VISION:
+        if (algorithm == TextRecognitionAlgorithm.GOOGLE_VISION
+                or algorithm == TextRecognitionAlgorithm.GOOGLE_VISION.name):
             logger.log_info(self.get_class_name(), 'Preparing to initialize Google Vision engine.')
 
             from dronebuddylib.atoms.textrecognition.google_text_recognition_impl import GoogleTextRecognitionImpl

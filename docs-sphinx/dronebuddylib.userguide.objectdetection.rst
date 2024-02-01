@@ -29,38 +29,6 @@ YOLO models are typically trained on large labeled datasets, such as COCO (Commo
 Keep in mind that while YOLO offers fast inference times, it may sacrifice some accuracy compared to slower, more complex object detection algorithms. The choice of object detection algorithm depends on the specific requirements of the application, balancing factors like accuracy, speed, and available computational resources.
 
 
-Install required dependencies for YOLO
-------------------------------------------------------------------
-The easiest way to install the modules required for SNIPS NLU is to use the following command.
-
-.. code-block:: bash
-
-    pip install dronebuddylib[OBJECT_DETECTION_YOLO]
-
-This will take care of the dependencies and install the required modules.
-
-
-Install required dependencies for YOLO
-------------------------------------------------------------------
-Or if you are installing the dependencies manually, you can use the following command.
-
-.. code-block:: bash
-
-    pip install ultralytics
-
-How to use
---------------------
-
-.. code-block:: Python
-
-     image = cv2.imread('test_image.jpg')
-
-     engine_configs = EngineConfigurations({})
-     engine_configs.add_configuration(Configurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
-     engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)
-     objects = engine.get_detected_objects(image)
-
-
 MediaPipe
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,62 +44,6 @@ DroneBuddy utilizes MediaPipe for object detection, leveraging its advanced comp
 #. Robust and Versatile: MediaPipe's models are trained on a diverse set of data, making them robust and versatile for different environments and scenarios. This versatility is beneficial for DroneBuddy, which may operate in various settings.
 
 #. Lightweight and Efficient: The algorithms used in MediaPipe are optimized for performance, ensuring that they are lightweight and efficient. This is particularly important for DroneBuddy, as it allows for faster processing without overburdening the drone's computational resources.
-
-Integration in DroneBuddy
--------------------------
-
-#. Installation and Setup: To integrate MediaPipe in DroneBuddy, first, install the MediaPipe library in the development environment. This might involve adding MediaPipe as a dependency in the project.
-
-#. Model Selection: Choose the appropriate MediaPipe object detection model based on DroneBuddy’s requirements. MediaPipe offers several pre-trained models that vary in accuracy and performance.
-
-#. Video Stream Processing: In DroneBuddy, integrate the MediaPipe object detection into the video stream processing pipeline. This involves capturing video frames from the drone’s camera and feeding them into the MediaPipe model for object detection.
-
-#. Handling Detection Output: Once objects are detected, DroneBuddy processes this information. This could involve marking objects on a display, logging information, or making real-time decisions based on the detected objects.
-
-#. Tuning and Customization: Depending on the specific use case of DroneBuddy, you might need to fine-tune the MediaPipe models or customize the detection parameters for optimal performance.
-
-Example of MediaPipe Integration in DroneBuddy
-------------------------------------------------
-
-Here’s a hypothetical code example showing how MediaPipe’s object detection could be integrated into DroneBuddy:
-
-.. code-block:: python
-
-Install required dependencies for Snips NLU
-------------------------------------------------------------------
-The easiest way to install the modules required for SNIPS NLU is to use the following command.
-
-.. code-block:: bash
-
-    pip install dronebuddylib[OBJECT_DETECTION_YOLO]
-
-This will take care of the dependencies and install the required modules.
-
-
-Install required dependencies for Snips NLU
-------------------------------------------------------------------
-Or if you are installing the dependencies manually, you can use the following command.
-
-.. code-block:: bash
-
-    pip install ultralytics
-
-How to use
---------------------
-
-.. code-block:: Python
-
-    import media_pipe as mp
-
-    image = cv2.imread('test_image.jpg')
-    mp_image = mp.Image.create_from_file(
-            r'C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg')
-    engine = MPObjectDetectionImpl(EngineConfigurations({}))
-    detected_objects = engine.get_detected_objects(mp_image)
-
-
-
-This example demonstrates capturing video frames from DroneBuddy’s camera, processing them through MediaPipe for object detection, and then handling the detection results.
 
 
 Important Considerations

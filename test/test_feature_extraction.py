@@ -3,7 +3,7 @@ import unittest
 import cv2
 import numpy as np
 
-from dronebuddylib import BodyFeatureExtractionImpl, HandFeatureExtractionImpl
+from dronebuddylib.atoms.bodyfeatureextraction import BodyFeatureExtractionImpl, HandFeatureExtractionImpl
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 import mediapipe as mp
 

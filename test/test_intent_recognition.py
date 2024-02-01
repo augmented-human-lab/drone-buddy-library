@@ -29,13 +29,14 @@ class TestIntentRecognition(unittest.TestCase):
         engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION,
                                          "C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\intentrecognition\\resources\\stats\\")
         engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_API_KEY,
-                                         "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")
+                                         "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")
         engine_configs.add_configuration(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_API_URL,
                                          "https://api.openai.com/v1/chat/completions")
         engine = IntentRecognitionEngine(IntentRecognitionAlgorithm.CHAT_GPT, engine_configs)
-        result = engine.recognize_intent("find the chair")
+
+        result = engine.recognize_intent("what can you see?")
         print(result)
-        self.assertEqual(result.intent, "RECOGNIZE_OBJECTS")
+        self.assertEqual( "RECOGNIZE_OBJECTS", result.intent)
 
 
 if __name__ == '__main__':

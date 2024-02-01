@@ -16,7 +16,7 @@ class FaceRecognitionEngine:
         """
         self.face_recognition_model = algorithm
 
-        if algorithm == FaceRecognitionAlgorithm.FACE_RECC:
+        if algorithm == FaceRecognitionAlgorithm.FACE_RECC or algorithm == FaceRecognitionAlgorithm.FACE_RECC.name:
             from dronebuddylib.atoms.facerecognition.face_recognition_impl import FaceRecognitionImpl
             self.face_recognition_engine = FaceRecognitionImpl(config)
         else:

@@ -23,21 +23,24 @@ class SpeechRecognitionEngine:
         """
         self.algorithm = algorithm
         self.speech_config = speech_config
-        if algorithm == SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION:
+        if (algorithm == SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION
+                or algorithm == SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION.name):
             logger.log_info(self.get_class_name(), 'Preparing to initialize Google speech recognition engine.')
 
             from dronebuddylib.atoms.speechrecognition.google_speech_recognition_impl import GoogleSpeechRecognitionImpl
 
             self.speech_conversion_engine = GoogleSpeechRecognitionImpl(speech_config)
 
-        if algorithm == SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION:
+        if (algorithm == SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION
+                or algorithm == SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION.name):
             logger.log_info(self.get_class_name(), 'Preparing to initialize VOSK speech recognition engine.')
 
             from dronebuddylib.atoms.speechrecognition.vosk_speech_recognition_impl import VoskSpeechRecognitionImpl
 
             self.speech_conversion_engine = VoskSpeechRecognitionImpl(speech_config)
 
-        if algorithm == SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION:
+        if (algorithm == SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION
+                or algorithm == SpeechRecognitionAlgorithm.MULTI_ALGO_SPEECH_RECOGNITION.name):
             logger.log_info(self.get_class_name(), 'Preparing to initialize Multi Algorithm speech recognition engine.')
 
             from dronebuddylib.atoms.speechrecognition.multi_algo_speech_recognition_impl import \

@@ -7,6 +7,3 @@ cython~=0.29.34
 setuptools~=65.5.1
 packaging~=23.0
 pyparsing~=3.0.9
-
-
-djitellopy~=2.5.0

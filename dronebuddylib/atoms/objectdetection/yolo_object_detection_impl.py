@@ -46,11 +46,11 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         if model_name is None:
             model_name = "yolov8n.pt"
 
-        logger.log_info(self.get_class_name() + ':Initializing with model with ' + model_name + '')
+        logger.log_info(self.get_class_name() , ':Initializing with model with ' + model_name + '')
 
         self.detector = YOLO(model_name)
         self.object_names = self.detector.names
-        logger.log_debug(self.get_class_name() ,'Initialized the YOLO object detection')
+        logger.log_debug(self.get_class_name(), 'Initialized the YOLO object detection')
 
     def get_detected_objects(self, image) -> ObjectDetectionResult:
         """
@@ -62,10 +62,10 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         Returns:
             ObjectDetectionResult (ObjectDetectionResult): The result of the object detection, including a list of detected objects.
         """
-        logger.log_debug(self.get_class_name() ,'Detection started.')
+        logger.log_debug(self.get_class_name(), 'Detection started.')
 
         results = self.detector.predict(source=image, save=True, save_txt=True)
-        logger.log_debug(self.get_class_name() + ' :Detection Successful.')
+        logger.log_debug(self.get_class_name(), ' :Detection Successful.')
 
         detected_objects = []
         detected_names = []
@@ -76,7 +76,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
                 detected.add_category(self.object_names[int(res)], 0.0)
                 detected_objects.append(detected)
                 detected_names.append(self.object_names[int(res)])
-        logger.log_debug(self.get_class_name(),'Detection completed.')
+        logger.log_debug(self.get_class_name(), 'Detection completed.')
 
         return ObjectDetectionResult(detected_names, detected_objects)
 

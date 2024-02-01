@@ -16,11 +16,11 @@ class ObjectDetectionEngine:
             algorithm (VisionAlgorithm): The vision algorithm to be used for object detection.
             config (EngineConfigurations): The configuration for the vision engine.
         """
-        if algorithm == VisionAlgorithm.YOLO:
+        if algorithm == VisionAlgorithm.YOLO or algorithm == VisionAlgorithm.YOLO.name:
             logger.log_info(self.get_class_name(), 'Preparing to initialize YOLO object detection engine.')
             from dronebuddylib.atoms.objectdetection.yolo_object_detection_impl import YOLOObjectDetectionImpl
             self.vision_engine = YOLOObjectDetectionImpl(config)
-        elif algorithm == VisionAlgorithm.MEDIA_PIPE:
+        elif algorithm == VisionAlgorithm.MEDIA_PIPE or algorithm == VisionAlgorithm.MEDIA_PIPE.name:
             logger.log_info(self.get_class_name(), 'Preparing to initialize Mediapipe object detection engine.')
             from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import MPObjectDetectionImpl
             self.vision_engine = MPObjectDetectionImpl(config)

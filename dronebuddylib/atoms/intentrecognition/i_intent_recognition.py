@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.i_dbl_function import IDBLFunction
-from dronebuddylib.atoms.intentrecognition.recognized_intent import RecognizedIntent
+from dronebuddylib.atoms.intentrecognition.recognized_intent_result import RecognizedIntent
 
 
 class IIntentRecognition(IDBLFunction, ABC):

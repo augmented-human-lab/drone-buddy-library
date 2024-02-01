@@ -44,7 +44,7 @@ def create_custom_drone_action_list(custom_actions: dict) -> str:
 
 def config_validity_check(class_requirements: list, provided_configs: dict, algo_name: str):
     if len(provided_configs) == 0 and len(class_requirements) > 0:
-        logger.log_error(
+        logger.log_error("Utils",
             'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + "All")
         raise MissingConfigurationException(algo_name, "All")
     for req_key in class_requirements:
@@ -52,5 +52,5 @@ def config_validity_check(class_requirements: list, provided_configs: dict, algo
             provided_configs.pop(req_key, None)
         except KeyError:
             logger.log_error(
-                'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + req_key)
+              "UTILS",  'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + req_key)
             raise MissingConfigurationException(algo_name, req_key)
