@@ -75,7 +75,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
             
 
             
@@ -93,43 +93,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="modules.html" class="reference internal ">Module Index</a>
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
             
 
             
@@ -139,6 +103,15 @@
           <li class="toctree-l1 ">
             
               <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
             
 
             
@@ -196,32 +169,6 @@ Here’s a simplified explanation of how YOLO works:</p>
 <p>YOLO has evolved over time, and different versions such as YOLOv1, YOLOv2 (also known as YOLO9000), YOLOv3, YOLOv4, YOLOv8 have been introduced. These iterations have incorporated various improvements, including network architecture changes, feature extraction enhancements, and the use of more advanced techniques like skip connections and feature pyramid networks.</p>
 <p>YOLO models are typically trained on large labeled datasets, such as COCO (Common Objects in Context), to learn to detect objects across multiple classes effectively. The training process involves optimizing the neural network parameters using techniques like backpropagation and gradient descent.</p>
 <p>Keep in mind that while YOLO offers fast inference times, it may sacrifice some accuracy compared to slower, more complex object detection algorithms. The choice of object detection algorithm depends on the specific requirements of the application, balancing factors like accuracy, speed, and available computational resources.</p>
-<section id="install-required-dependencies-for-yolo">
-<h3>Install required dependencies for YOLO<a class="headerlink" href="#install-required-dependencies-for-yolo" title="Link to this heading">¶</a></h3>
-<p>The easiest way to install the modules required for SNIPS NLU is to use the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib<span class="o">[</span>OBJECT_DETECTION_YOLO<span class="o">]</span>
-</pre></div>
-</div>
-<p>This will take care of the dependencies and install the required modules.</p>
-</section>
-<section id="id1">
-<h3>Install required dependencies for YOLO<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
-<p>Or if you are installing the dependencies manually, you can use the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ultralytics
-</pre></div>
-</div>
-</section>
-<section id="how-to-use">
-<h3>How to use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h3>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_image.jpg&#39;</span><span class="p">)</span>
-
-<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">OBJECT_DETECTION_YOLO_VERSION</span><span class="p">,</span> <span class="s2">&quot;yolov8n.pt&quot;</span><span class="p">)</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">ObjectDetectionEngine</span><span class="p">(</span><span class="n">VisionAlgorithm</span><span class="o">.</span><span class="n">YOLO</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
-<span class="n">objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
 </section>
 <section id="mediapipe">
 <h2>MediaPipe<a class="headerlink" href="#mediapipe" title="Link to this heading">¶</a></h2>
@@ -233,51 +180,6 @@ Here’s a simplified explanation of how YOLO works:</p>
 <li><p>Robust and Versatile: MediaPipe’s models are trained on a diverse set of data, making them robust and versatile for different environments and scenarios. This versatility is beneficial for DroneBuddy, which may operate in various settings.</p></li>
 <li><p>Lightweight and Efficient: The algorithms used in MediaPipe are optimized for performance, ensuring that they are lightweight and efficient. This is particularly important for DroneBuddy, as it allows for faster processing without overburdening the drone’s computational resources.</p></li>
 </ol>
-<section id="integration-in-dronebuddy">
-<h3>Integration in DroneBuddy<a class="headerlink" href="#integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>Installation and Setup: To integrate MediaPipe in DroneBuddy, first, install the MediaPipe library in the development environment. This might involve adding MediaPipe as a dependency in the project.</p></li>
-<li><p>Model Selection: Choose the appropriate MediaPipe object detection model based on DroneBuddy’s requirements. MediaPipe offers several pre-trained models that vary in accuracy and performance.</p></li>
-<li><p>Video Stream Processing: In DroneBuddy, integrate the MediaPipe object detection into the video stream processing pipeline. This involves capturing video frames from the drone’s camera and feeding them into the MediaPipe model for object detection.</p></li>
-<li><p>Handling Detection Output: Once objects are detected, DroneBuddy processes this information. This could involve marking objects on a display, logging information, or making real-time decisions based on the detected objects.</p></li>
-<li><p>Tuning and Customization: Depending on the specific use case of DroneBuddy, you might need to fine-tune the MediaPipe models or customize the detection parameters for optimal performance.</p></li>
-</ol>
-</section>
-<section id="example-of-mediapipe-integration-in-dronebuddy">
-<h3>Example of MediaPipe Integration in DroneBuddy<a class="headerlink" href="#example-of-mediapipe-integration-in-dronebuddy" title="Link to this heading">¶</a></h3>
-<p>Here’s a hypothetical code example showing how MediaPipe’s object detection could be integrated into DroneBuddy:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</section>
-<section id="install-required-dependencies-for-snips-nlu">
-<h3>Install required dependencies for Snips NLU<a class="headerlink" href="#install-required-dependencies-for-snips-nlu" title="Link to this heading">¶</a></h3>
-<p>The easiest way to install the modules required for SNIPS NLU is to use the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib<span class="o">[</span>OBJECT_DETECTION_YOLO<span class="o">]</span>
-</pre></div>
-</div>
-<p>This will take care of the dependencies and install the required modules.</p>
-</section>
-<section id="id2">
-<h3>Install required dependencies for Snips NLU<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
-<p>Or if you are installing the dependencies manually, you can use the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ultralytics
-</pre></div>
-</div>
-</section>
-<section id="id3">
-<h3>How to use<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">media_pipe</span> <span class="k">as</span> <span class="nn">mp</span>
-
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_image.jpg&#39;</span><span class="p">)</span>
-<span class="n">mp_image</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">create_from_file</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s1">&#39;C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg&#39;</span><span class="p">)</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">MPObjectDetectionImpl</span><span class="p">(</span><span class="n">EngineConfigurations</span><span class="p">({}))</span>
-<span class="n">detected_objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">mp_image</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This example demonstrates capturing video frames from DroneBuddy’s camera, processing them through MediaPipe for object detection, and then handling the detection results.</p>
-</section>
 <section id="important-considerations">
 <h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>
 <p>While MediaPipe offers sophisticated object detection capabilities, it’s important to note that its performance can vary based on environmental conditions, object sizes, and camera quality. Regular testing and adjustments may be necessary to ensure MediaPipe operates effectively within the specific context of DroneBuddy.</p>

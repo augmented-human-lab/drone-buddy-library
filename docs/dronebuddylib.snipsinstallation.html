@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Snips- NLU Module</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="User Guide" href="dronebuddylib.userguide.html" />
+  <link rel="prev" title="GPT Integration Module" href="dronebuddylib.gpt_integrationinstallation.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+    <li>Snips- NLU Module</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.gpt_integrationinstallation.html"
+       title="previous chapter">← GPT Integration Module</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="snips-nlu-module">
+<h1>Snips- NLU Module<a class="headerlink" href="#snips-nlu-module" title="Link to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install SNIPS NLU Integration run the following snippet, which will install the required dependencies
+The official documentation can be found [here](<a class="reference external" href="https://snips-nlu.readthedocs.io/en/latest/">https://snips-nlu.readthedocs.io/en/latest/</a>)</p>
+<dl class="simple">
+<dt>The SNIPS NLU requires the following pre-requisites</dt><dd><ol class="arabic simple">
+<li><p>Rust - [Official documentation](<a class="reference external" href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a>)</p></li>
+<li><p>Visual C++ Build Tools</p></li>
+<li><p>setuptools-rust</p></li>
+</ol>
+</dd>
+</dl>
+<section id="rust-installation">
+<h3>Rust Installation<a class="headerlink" href="#rust-installation" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>Rust is required to install the intent recognition library that is needed to understand the commands given to the drone.</p>
+<p>You can download Rust from [here](<a class="reference external" href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a>)</p>
+<p>The steps will differ from Windows to mac, so follow the steps on the website.</p>
+</div></blockquote>
+<section id="windows">
+<h4>Windows<a class="headerlink" href="#windows" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>Windows installation is pretty straightforward</p>
+</div></blockquote>
+</section>
+<section id="mac-os-installation">
+<h4>mac OS installation<a class="headerlink" href="#mac-os-installation" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>If you get a permission error while installing , follow the steps in the stackoverflow [answer](<a class="reference external" href="https://stackoverflow.com/questions/45899815/could-not-write-to-bash-profile-when-installing-rust-on-macos-sierra">https://stackoverflow.com/questions/45899815/could-not-write-to-bash-profile-when-installing-rust-on-macos-sierra</a> ) .</p>
+<p>Give a try using this not using sudo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://sh.rustup.rs<span class="w"> </span>-sSf<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>–<span class="w"> </span>–help
+</pre></div>
+</div>
+<p>If that works then probably you could try:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://sh.rustup.rs<span class="w"> </span>-sSf<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh<span class="w"> </span>-s<span class="w"> </span>–<span class="w"> </span>–no-modify-path
+</pre></div>
+</div>
+<p>If the command with the –no-modify-path option works, you’ll have to manually update .bash_profile to include it in your path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.cargo/env
+</pre></div>
+</div>
+<p>Now you are all ready to install Setuptools-rust.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="visual-c-build-tools">
+<h3>Visual C++ Build Tools<a class="headerlink" href="#visual-c-build-tools" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>setuptools-rust  requires the Visual C++ Build Tools to be installed on your system. You can download and install them from the Microsoft website [here](<a class="reference external" href="https://visualstudio.microsoft.com/visual-cpp-build-tools/">https://visualstudio.microsoft.com/visual-cpp-build-tools/</a> ).</p>
+</div></blockquote>
+</section>
+<section id="setuptools-rust">
+<h3>setuptools-rust<a class="headerlink" href="#setuptools-rust" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>In your virtual environment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">setuptools</span><span class="o">-</span><span class="n">rust</span>
+</pre></div>
+</div>
+<p>This will download and install setuptools-rust and its dependencies. Note: If you encounter any errors during the installation process, try upgrading pip to the latest version by running pip install –upgrade pip before installing setuptools-rust. You may also need to add Rust and the Visual C++ Build Tools to your system’s PATH environment variable.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">INTENT_RECOGNITION_SNIPS</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>The Snips integration module have the following configurations as optional</p>
+<ol class="arabic simple">
+<li><p>INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH          - Current SNIPs uses a default data set that is created by the owners, which supports basic drone controls, if you need to retrain the NLU for your data set, pass the path of the data set here. Refer to the original documentation for tips to create the data set</p></li>
+<li><p>INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG           - The language your new data set is in, supported languages can be found [here](<a class="reference external" href="https://snips-nlu.readthedocs.io/en/latest/installation.html#language-resources">https://snips-nlu.readthedocs.io/en/latest/installation.html#language-resources</a>) and follow the steps mentioned here for proper setup</p></li>
+</ol>
+<p>A sample data set can be found at <cite>dornebuddylib/atoms/resources/intentrecognition/</cite></p>
+<blockquote>
+<div><p>Intents define what the intended objective of  a phrase is. You can define the intent according to the needs of the drone.
+Currently the defined intents are defined in the enum class DroneCommands to ease the programming. This can be overridden anytime.</p>
+<p>Defining Intents</p>
+<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span># takeoff intent
+---
+type: intent
+name: TAKE_OFF
+slots:
+ - name: DroneName
+   entity: DroneName
+ - name: address
+   entity: address_entity
+utterances:
+ - Take off the [DroneName](quadcopter) from the ground.
+ - &quot;[address](sammy) Launch the [DroneName](hexacopter) and make it fly.&quot;
+ - hey [address](sammy), get in the air.
+ - Lift off from the launchpad.
+ - take off
+ - hey [address](sammy),launch
+ - fly
+ - &quot;[address](sammy) can you please take off&quot;
+ - hey [address](sammy), can you please launch
+ - can you please fly
+ - hey [address](sammy), can you please take off [DroneName](this)
+</pre></div>
+</div>
+<p>Utterances refer to the training sentences that should be used to train the specific intent.  Generally these should cover a lot of possible, then the intent recognition will give better accuracy.</p>
+<p>You can cover all the intents that you need to cover when programming the drone.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Entities refer to the entities that need to be recognized in the conversation. For an example these can be distance, names, locations, directions.
+Defining entities</p>
+<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span># address Entity
+---
+type: entity # allows to differentiate between entities and intents files
+name: address_entity # name of the entity
+values:
+ - [ sammy, semi , semmi , sami , sammi , semmi ] # entity value with a synonym
+
+
+[name](Sammy) can you move [distance](10m) to your [direction](right)
+</pre></div>
+</div>
+<p>In the default case the entity is defined as the name to address the drone. Entity is defined as address_entity, this can be retrieved in the recognized intent.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Train the NLU If you are planning to override the the existing data set, you can simply create dataset.yaml , Modify the paths in the following command to generate the json file.</p>
+</div></blockquote>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">intent_engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">SNIPS_NLU</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">intent_engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="s2">&quot;what can you see?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be given in the following json format</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;intent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RECOGNIZED_INTENT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;entities&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;entity_type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;addressed_to&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Where</dt><dd><ul class="simple">
+<li><p>intent - Recognized intent</p></li>
+<li><p>entity - Recognized entities</p></li>
+<li><p>confidence  - Confidence of the recognition</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.gpt_integrationinstallation.html"
+       title="previous chapter">← GPT Integration Module</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

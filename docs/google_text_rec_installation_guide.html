@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-      <title>Configurations package</title>
+      <title>Google Text Recognition Module Installation</title>
     
           <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
           <link rel="stylesheet" href="_static/theme.css " type="text/css" />
@@ -20,7 +20,9 @@
       <script src="_static/theme.js" defer></script>
     
   <link rel="index" title="Index" href="genindex.html" />
-  <link rel="search" title="Search" href="search.html" /> 
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="User Guide" href="dronebuddylib.userguide.html" />
+  <link rel="prev" title="Text Recognition Module Installation" href="text_recognition_installation_guide.html" /> 
   </head>
 
   <body>
@@ -128,31 +130,65 @@
   <ul class="breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
     
-    <li>Configurations package</li>
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+      <li><a href="text_recognition_installation_guide.html">Text Recognition Module Installation</a> &raquo;</li>
+    
+    <li>Google Text Recognition Module Installation</li>
   </ul>
   
 
   <ul class="page-nav">
+  <li class="prev">
+    <a href="text_recognition_installation_guide.html"
+       title="previous chapter">← Text Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
 </ul>
   
 </div>
 <hr>
           <div class="content" role="main" v-pre>
             
-  <section id="configurations-package">
-<h1>Configurations package<a class="headerlink" href="#configurations-package" title="Link to this heading">¶</a></h1>
-<section id="config-module">
-<h2>config module<a class="headerlink" href="#config-module" title="Link to this heading">¶</a></h2>
+  <section id="google-text-recognition-module-installation">
+<h1>Google Text Recognition Module Installation<a class="headerlink" href="#google-text-recognition-module-installation" title="Link to this heading">¶</a></h1>
+<p>The official documentation can be found <a class="reference external" href="https://cloud.google.com/use-cases/ocr??utm_source=google&amp;utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=japac-SG-all-en-dr-SKWS-all-all-trial-DSA-dr-1605216&amp;utm_content=text-ad-none-none-DEV_c-CRE_647923039857-ADGP_Hybrid+%7C+SKWS+-+BRO+%7C+DSA+~+All+Webpages-KWID_39700075148142355-aud-1596662388934:dsa-19959388920&amp;userloc_9062542-network_g&amp;utm_term=KW_&amp;gad_source=1&amp;gclid=Cj0KCQiAn-2tBhDVARIsAGmStVkoIwR9T1wHOGz7mvZOl4096RF4VVmipdEqAl2g9knnke5Wv0qhR0UaAnYdEALw_wcB&amp;gclsrc=aw.ds&amp;hl=en">here</a></p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install pyttsx3 Integration, run the following snippet, which will install the required dependencies</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">TEXT_RECOGNITION</span><span class="p">]</span>
+</pre></div>
+</div>
 </section>
-<section id="module-contents">
-<span id="module-dronebuddylib.configurations.config"></span><h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
-<span class="target" id="module-dronebuddylib.configurations"></span></section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">TextRecognitionEngine</span><span class="p">(</span><span class="n">TextRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_VISION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image_clear.jpg&#39;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_text</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+</section>
 </section>
 
 
           </div>
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="text_recognition_installation_guide.html"
+       title="previous chapter">← Text Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2023, NUS.
     <br>

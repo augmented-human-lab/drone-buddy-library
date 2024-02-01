@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>GPT Integration Module</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="GPT Integration Module" href="dronebuddylib.snipsinstallation.html" />
+  <link rel="prev" title="Installation Guide" href="dronebuddylib.installationguide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+    <li>GPT Integration Module</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.installationguide.html"
+       title="previous chapter">← Installation Guide</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.snipsinstallation.html"
+       title="next chapter">GPT Integration Module →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="gpt-integration-module">
+<h1>GPT Integration Module<a class="headerlink" href="#gpt-integration-module" title="Link to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install Open Ai Integration run the following snippet, which will install the required dependencies</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">INTENT_RECOGNITION_GPT</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>The OpenAi integration module requires the following configurations to function</p>
+<ol class="arabic simple">
+<li><p>INTENT_RECOGNITION_OPEN_AI_API_URL          - URL provided by openai to send the requests, this can be found in [openai apidoc](<a class="reference external" href="https://platform.openai.com/docs/api-reference">https://platform.openai.com/docs/api-reference</a>)</p></li>
+<li><p>INTENT_RECOGNITION_OPEN_AI_MODEL            - The model you need to use, the model list can be found [here](<a class="reference external" href="https://platform.openai.com/docs/models">https://platform.openai.com/docs/models</a>)</p></li>
+<li><p>INTENT_RECOGNITION_OPEN_AI_API_KEY          - API key provided to you by openai found in the [API key page](<a class="reference external" href="https://platform.openai.com/account/api-keys">https://platform.openai.com/account/api-keys</a>)</p></li>
+<li><p>INTENT_RECOGNITION_OPEN_AI_TEMPERATURE      - OpenAI’s models adjusts the randomness of responses, with lower values leading to more predictable text and higher values increasing creativity and variability.</p></li>
+<li><p>INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION  - A location in your local folder to store the logs of the conversation history</p></li>
+</ol>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span><span class="p">,</span> <span class="s2">&quot;gpt-3.5-turbo-0613&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span><span class="p">,</span>
+                                     <span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">Public</span><span class="se">\\</span><span class="s2">projects</span><span class="se">\\</span><span class="s2">drone-buddy-library</span><span class="se">\\</span><span class="s2">dronebuddylib</span><span class="se">\\</span><span class="s2">atoms</span><span class="se">\\</span><span class="s2">intentrecognition</span><span class="se">\\</span><span class="s2">resources</span><span class="se">\\</span><span class="s2">stats</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span><span class="p">,</span>
+                                     <span class="s2">&quot;sk-*********** YOUR API KEY *****************&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span><span class="p">,</span>
+                                     <span class="s2">&quot;https://api.openai.com/v1/chat/completions&quot;</span><span class="p">)</span>
+<span class="n">intent_engine</span> <span class="o">=</span> <span class="n">IntentRecognitionEngine</span><span class="p">(</span><span class="n">IntentRecognitionAlgorithm</span><span class="o">.</span><span class="n">CHAT_GPT</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">intent_engine</span><span class="o">.</span><span class="n">recognize_intent</span><span class="p">(</span><span class="s2">&quot;what can you see?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be given in the following json format</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;intent&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RECOGNIZED_INTENT&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;entities&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;entity_type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;value&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;addressed_to&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Where</dt><dd><ul class="simple">
+<li><p>intent - Recognized intent</p></li>
+<li><p>entity - Recognized entities</p></li>
+<li><p>confidence  - Confidence of the recognition</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.installationguide.html"
+       title="previous chapter">← Installation Guide</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.snipsinstallation.html"
+       title="next chapter">GPT Integration Module →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

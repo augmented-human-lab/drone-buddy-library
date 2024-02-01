@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Installation Guide</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Intent Recognition Module Installation" href="dronebuddylib.intentrecognitioninstallation.html" />
+  <link rel="prev" title="Welcome to Dronebuddy’s documentation!" href="index.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Installation Guide</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#introduction" class="reference internal">Introduction</a></li>
+                
+                  <li class="toctree-l2"><a href="#installation" class="reference internal">Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#intent-recognition-module-installation" class="reference internal">Intent Recognition Module Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#voice-recognition-module-installation" class="reference internal">Voice Recognition Module Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#face-recognition-module-installation" class="reference internal">Face Recognition Module Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#object-detection-module-installation" class="reference internal">Object Detection Module Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#voice-generation-module-installation" class="reference internal">Voice Generation Module Installation</a></li>
+                
+                  <li class="toctree-l2"><a href="#text-recognition-module-installation" class="reference internal">Text Recognition Module Installation</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Installation Guide</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Welcome to Dronebuddy’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.intentrecognitioninstallation.html"
+       title="next chapter">Intent Recognition Module Installation →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="installation-guide">
+<h1>Installation Guide<a class="headerlink" href="#installation-guide" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>DroneBuddy envisions empowering everyone with the ability to personally program their intelligent drones, enriching them with desired features. At its core, DroneBuddy offers a suite of fundamental building blocks, enabling users to seamlessly integrate these elements to bring their drone to flight.</p>
+<p>Functioning as an intuitive interface, DroneBuddy simplifies complex algorithms, stripping away the intricacies to offer straightforward input-output modalities. This approach ensures that users can accomplish their objectives efficiently, without getting bogged down in technical complexities. With DroneBuddy, the focus is on user-friendliness and ease of use, making drone programming accessible and hassle-free.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>DroneBuddy behaves as any other python library. You can find the library at <a class="reference external" href="https://pypi.org/project/dronebuddylib/">https://pypi.org/project/dronebuddylib/</a> and install using pip.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dronebuddylib
+</pre></div>
+</div>
+<p>The installation of DroneBuddy needs the following prerequisites.</p>
+<ol class="arabic simple">
+<li><p>Python 3.9 or higher</p></li>
+<li><p>Compatible pip version</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that running <a href="#id1"><span class="problematic" id="id2">`</span></a>pip install dronebuddylib ` will only install the drone buddy library, with only the required dependencies.
+which are
+#.  requests -
+#.  numpy       - required by
+#.  cython      -
+#.  setuptools
+#.  packaging
+#.  pyparsing</p>
+</div>
+<p>…</p>
+<section id="installation-of-features">
+<h3>Installation of Features<a class="headerlink" href="#installation-of-features" title="Link to this heading">¶</a></h3>
+<p>Each and every feature and it’s required dependencies can be installed by the following code snippet</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">FEATURE_NAME</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="intent-recognition-module-installation">
+<h2>Intent Recognition Module Installation<a class="headerlink" href="#intent-recognition-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.intentrecognitioninstallation.html">Intent Recognition Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.intentrecognitioninstallation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.intentrecognitioninstallation.html#openai-intent-resolution">OpenAi intent resolution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.gpt_integrationinstallation.html">GPT Integration Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.intentrecognitioninstallation.html#snips-nlu-intent-resolution">SNIPS-NLU intent resolution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.snipsinstallation.html">Snips- NLU Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="voice-recognition-module-installation">
+<h2>Voice Recognition Module Installation<a class="headerlink" href="#voice-recognition-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="voice_recogntion_installation_guide.html">Voice Recognition Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="voice_recogntion_installation_guide.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="voice_recogntion_installation_guide.html#vosk-voice-recognition">VOSK Voice Recognition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vosk_installation_guide.html">VOSK Voice Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="voice_recogntion_installation_guide.html#google-voice-recognition">Google Voice Recognition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="google_voice_installation_guide.html">Google Voice Recognition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="voice_recogntion_installation_guide.html#multi-algorithm-voice-recognition">Multi Algorithm Voice Recognition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mnulti_algo_voice_installation_guide.html">Multi Algorithm Recognition</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="face-recognition-module-installation">
+<h2>Face Recognition Module Installation<a class="headerlink" href="#face-recognition-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="face_recogntion_installation_guide.html">Face Recognition Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="face_recogntion_installation_guide.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="face_recogntion_installation_guide.html#dlib-face-recognition">dlib Face Recognition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="face_recc_installation_guide.html">face_recognition Recognition</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="object-detection-module-installation">
+<h2>Object Detection Module Installation<a class="headerlink" href="#object-detection-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="object_detection_installation_guide.html">Object Detection Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="object_detection_installation_guide.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_detection_installation_guide.html#yolo-detection">YOLO Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yolo_installation_guide.html">YOLO Object Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="object_detection_installation_guide.html#mediapipe-detection">Mediapipe Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mediapipe_installation_guide.html">Mediapipe Object Detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="voice-generation-module-installation">
+<h2>Voice Generation Module Installation<a class="headerlink" href="#voice-generation-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="voice_generation_installation_guide.html">Voice Generation Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="voice_generation_installation_guide.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="voice_generation_installation_guide.html#pyttsx3-integration">Pyttsx3 Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="google_voice_gen_installation_guide.html">Pyttsx3 Voice Generation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="text-recognition-module-installation">
+<h2>Text Recognition Module Installation<a class="headerlink" href="#text-recognition-module-installation" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="text_recognition_installation_guide.html">Text Recognition Module Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_recognition_installation_guide.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_recognition_installation_guide.html#google-vision-integration">Google vision Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="google_text_rec_installation_guide.html">Google Text Recognition Module Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← Welcome to Dronebuddy’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.intentrecognitioninstallation.html"
+       title="next chapter">Intent Recognition Module Installation →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
