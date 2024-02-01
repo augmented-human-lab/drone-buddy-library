@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Multi Algorithm Recognition</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Face Recognition Module Installation" href="face_recogntion_installation_guide.html" />
+  <link rel="prev" title="Google Voice Recognition" href="google_voice_installation_guide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+      <li><a href="voice_recogntion_installation_guide.html">Voice Recognition Module Installation</a> &raquo;</li>
+    
+    <li>Multi Algorithm Recognition</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="google_voice_installation_guide.html"
+       title="previous chapter">← Google Voice Recognition</a>
+  </li>
+  <li class="next">
+    <a href="face_recogntion_installation_guide.html"
+       title="next chapter">Face Recognition Module Installation →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="multi-algorithm-recognition">
+<h1>Multi Algorithm Recognition<a class="headerlink" href="#multi-algorithm-recognition" title="Link to this heading">¶</a></h1>
+<p>Built on a third party library. The official documentation for vosk can be found <a class="reference external" href="https://pypi.org/project/SpeechRecognition/">here</a>.
+The library performs well in multi thread environments</p>
+<p>officially supported algorithms</p>
+<ul class="simple">
+<li><p>CMU Sphinx (works offline)</p></li>
+<li><p>Google Speech Recognition</p></li>
+<li><p>Google Cloud Speech API</p></li>
+<li><p>Wit.ai</p></li>
+<li><p>Microsoft Azure Speech</p></li>
+<li><p>Microsoft Bing Voice Recognition (Deprecated)</p></li>
+<li><p>Houndify API</p></li>
+<li><p>IBM Speech to Text</p></li>
+<li><p>Snowboy Hotword Detection (works offline)</p></li>
+<li><p>Tensorflow</p></li>
+<li><p>Vosk API (works offline)</p></li>
+<li><p>OpenAI whisper (works offline)</p></li>
+<li><p>Whisper API</p></li>
+</ul>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install Google Integration run the following snippet, which will install the required dependencies</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">SPEECH_RECOGNITION_MULTI</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>The Google integration module requires the following configurations to function</p>
+<section id="required-configurations">
+<h3>Required Configurations<a class="headerlink" href="#required-configurations" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME - The maximum number of seconds the microphone listens before timing out.</p></li>
+</ol>
+</section>
+<section id="optional-configurations">
+<h3>Optional Configurations<a class="headerlink" href="#optional-configurations" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>SPEECH_RECOGNITION_MULTI_ALGO_ALGO_MIC_TIMEOUT - The maximum number of seconds the microphone listens before timing out.</p></li>
+<li><p>SPEECH_RECOGNITION_MULTI_ALGO_ALGO_PHRASE_TIME_LIMIT - The maximum duration for a single phrase before cutting off.</p></li>
+<li><p>SPEECH_RECOGNITION_MULTI_ALGO_IBM_KEY - The IBM API key for using IBM speech recognition</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME</span><span class="p">,</span>
+                                 <span class="n">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms</span><span class="o">.</span><span class="n">GOOGLE</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechRecognitionEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">MULTI_ALGO_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-use-with-the-mic">
+<h3>How to use with the mic<a class="headerlink" href="#how-to-use-with-the-mic" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME</span><span class="p">,</span>
+                                 <span class="n">SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms</span><span class="o">.</span><span class="n">GOOGLE</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechRecognitionEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">MULTI_ALGO_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+ <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+
+    <span class="k">with</span> <span class="n">speech_microphone</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">recognized_speech</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">intent</span> <span class="o">=</span> <span class="n">recognize_intent_gpt</span><span class="p">(</span><span class="n">intent_engine</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">recognized_speech</span><span class="p">)</span>
+                <span class="n">execute_drone_functions</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">,</span> <span class="n">face_recognition_engine</span><span class="p">,</span> <span class="n">object_recognition_engine</span><span class="p">,</span>
+                                        <span class="n">text_recognition_engine</span><span class="p">,</span> <span class="n">voice_engine</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="s2">&quot;TEST&quot;</span><span class="p">,</span> <span class="s2">&quot;Not Recognized: voice &quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">speech_recognition</span><span class="o">.</span><span class="n">WaitTimeoutError</span><span class="p">:</span>
+            <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Sleep to simulate work and prevent a tight loop</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be given in the following json format</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="err">&#39;recog</span><span class="kc">n</span><span class="err">ized_speech&#39;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="kc">t</span><span class="err">o</span><span class="kc">tal</span><span class="err">_billed_</span><span class="kc">t</span><span class="err">ime&#39;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Where</dt><dd><ul class="simple">
+<li><p>recognized_speech - Text with the recognized speech</p></li>
+<li><p>total_billed_time - if a paid service the billed time</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="google_voice_installation_guide.html"
+       title="previous chapter">← Google Voice Recognition</a>
+  </li>
+  <li class="next">
+    <a href="face_recogntion_installation_guide.html"
+       title="next chapter">Face Recognition Module Installation →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

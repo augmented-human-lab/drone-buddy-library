@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Google Voice Recognition</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Multi Algorithm Recognition" href="mnulti_algo_voice_installation_guide.html" />
+  <link rel="prev" title="VOSK Voice Recognition" href="vosk_installation_guide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+      <li><a href="voice_recogntion_installation_guide.html">Voice Recognition Module Installation</a> &raquo;</li>
+    
+    <li>Google Voice Recognition</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="vosk_installation_guide.html"
+       title="previous chapter">← VOSK Voice Recognition</a>
+  </li>
+  <li class="next">
+    <a href="mnulti_algo_voice_installation_guide.html"
+       title="next chapter">Multi Algorithm Recognition →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="google-voice-recognition">
+<h1>Google Voice Recognition<a class="headerlink" href="#google-voice-recognition" title="Link to this heading">¶</a></h1>
+<p>The official documentation for vosk can be found <a class="reference external" href="https://cloud.google.com/speech-to-text">here</a>.
+Follow the steps to create the cloud console.</p>
+<ol class="arabic simple">
+<li><p>Installation: To use Google Speech Recognition, you first need to set up the Google Cloud environment and install necessary SDKs or libraries in your development environment.</p></li>
+<li><p>API Key and Setup: Obtain an API key from Google Cloud and configure it in your application. This key is essential for authenticating and accessing Google’s speech recognition services.</p></li>
+<li><p>Audio Input and Processing: Your application should be capable of capturing audio input, which can be sent to Google’s speech recognition service. The audio data needs to be in a format compatible with Google’s system.</p></li>
+<li><p>Handling the Output: Once Google processes the audio, it returns a text transcription. This output can be used in various ways, such as command interpretation, text analysis, or as input for other systems.</p></li>
+<li><p>Customization: Google Speech Recognition allows customization for specific vocabulary or industry terms, enhancing recognition accuracy for specialized applications.</p></li>
+</ol>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install Google Integration run the following snippet, which will install the required dependencies</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">SPEECH_RECOGNITION_GOOGLE</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>The Google integration module requires the following configurations to function</p>
+<ol class="arabic simple">
+<li><p>SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ -</p></li>
+<li><p>SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE -</p></li>
+<li><p>SPEECH_RECOGNITION_GOOGLE_ENCODING -</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span><span class="p">,</span> <span class="s2">&quot;en-US&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_ENCODING</span><span class="p">,</span> <span class="s2">&quot;LINEAR16&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="how-to-use-with-the-mic">
+<h3>How to use with the mic<a class="headerlink" href="#how-to-use-with-the-mic" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span><span class="p">,</span> <span class="s2">&quot;en-US&quot;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_ENCODING</span><span class="p">,</span> <span class="s2">&quot;LINEAR16&quot;</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">sr</span><span class="o">.</span><span class="n">Microphone</span><span class="p">()</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listening for commands...&quot;</span><span class="p">)</span>
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">recognizer</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Recognize speech using Google Speech Recognition</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recognized command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Process and execute the command</span>
+        <span class="n">control_function</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be given in the following json format</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="err">&#39;recog</span><span class="kc">n</span><span class="err">ized_speech&#39;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">&#39;</span><span class="kc">t</span><span class="err">o</span><span class="kc">tal</span><span class="err">_billed_</span><span class="kc">t</span><span class="err">ime&#39;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Where</dt><dd><ul class="simple">
+<li><p>recognized_speech - Text with the recognized speech</p></li>
+<li><p>total_billed_time - if a paid service the billed time</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="vosk_installation_guide.html"
+       title="previous chapter">← VOSK Voice Recognition</a>
+  </li>
+  <li class="next">
+    <a href="mnulti_algo_voice_installation_guide.html"
+       title="next chapter">Multi Algorithm Recognition →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

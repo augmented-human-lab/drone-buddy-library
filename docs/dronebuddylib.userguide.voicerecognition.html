@@ -75,7 +75,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.html" class="reference internal ">Introduction</a>
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
             
 
             
@@ -93,43 +93,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.atoms.html" class="reference internal ">Atomic Modules</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.models.html" class="reference internal ">Model Definitions</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.utils.html" class="reference internal ">Utility Functions</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="dronebuddylib.configurations.html" class="reference internal ">Configuration Settings</a>
-            
-
-            
-          </li>
-
-        
-          <li class="toctree-l1 ">
-            
-              <a href="modules.html" class="reference internal ">Module Index</a>
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
             
 
             
@@ -139,6 +103,15 @@
           <li class="toctree-l1 ">
             
               <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
             
 
             
@@ -201,71 +174,6 @@ If you would like to learn more, more details can be found on <a class="referenc
 </ol>
 <p>It’s important to note that Vosk is a powerful tool, but like any voice recognition system, its accuracy can be influenced by factors such as audio quality, background noise, and speaker accents. Therefore, it’s a good idea to test and fine-tune the system based on your specific use case to achieve the best results.</p>
 </section>
-<section id="how-to-use-with-drone-buddy">
-<h3>How to use with drone buddy<a class="headerlink" href="#how-to-use-with-drone-buddy" title="Link to this heading">¶</a></h3>
-</section>
-<section id="required-parameters">
-<h3>Required parameters<a class="headerlink" href="#required-parameters" title="Link to this heading">¶</a></h3>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH: This is the path to the model that you have downloaded. This is a compulsory parameter if you are using any other language.
-If this is not provided, the default model will be used. The default model is the english model ( vosk-model-small-en-us-0.15 ).</p>
-</div>
-<p>Initialize the voice engine</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechrecognition.speech_to_text_engine</span> <span class="kn">import</span> <span class="n">SpeechToTextEngine</span>
-<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
-<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span><span class="p">,</span> <span class="n">SpeechRecognitionAlgorithm</span>
-
-<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">)</span>
-
-<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">VOSK_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The result will be the recognized text.</p>
-<p>Sample code where you can use the speech to text functionality to control the drone would be as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dronebuddylib</span> <span class="k">as</span> <span class="nn">dbl</span>
-<span class="kn">import</span> <span class="nn">pyaudio</span>
-<span class="kn">from</span> <span class="nn">djitellopy</span> <span class="kn">import</span> <span class="n">Tello</span>
-<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechrecognition.speech_to_text_engine</span> <span class="kn">import</span> <span class="n">SpeechToTextEngine</span>
-<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
-<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">Configurations</span><span class="p">,</span> <span class="n">SpeechRecognitionAlgorithm</span>
-
-<span class="c1"># initiating Tello instance</span>
-<span class="n">tello</span> <span class="o">=</span> <span class="n">Tello</span><span class="p">()</span>
-<span class="n">listening</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">tello</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">tello</span><span class="o">.</span><span class="n">streamon</span><span class="p">()</span>
-
-<span class="n">mic</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
-
-<span class="c1"># initialize speech to text engine</span>
-<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span><span class="p">,</span> <span class="s2">&quot;C:/users/project/resources/speechrecognition/vosk-model-small-en-us-0.15&quot;</span><span class="p">)</span>
-
-<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">VOSK_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
-
-<span class="c1"># this method receives the audio input from pyaudio and returns the command</span>
-<span class="k">def</span> <span class="nf">get_command</span><span class="p">():</span>
-    <span class="n">listening</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">stream</span> <span class="o">=</span> <span class="n">mic</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt16</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frames_per_buffer</span><span class="o">=</span><span class="mi">8192</span><span class="p">)</span>
-
-    <span class="k">while</span> <span class="n">listening</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">stream</span><span class="o">.</span><span class="n">start_stream</span><span class="p">()</span>
-            <span class="c1"># chunks the audio stream to a byte stream</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8192</span><span class="p">)</span>
-            <span class="n">recognized</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio_steam</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">recognized</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">listening</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-                <span class="k">return</span> <span class="n">recognized</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
 </section>
 <section id="google-speech-recognition">
 <h2>Google Speech Recognition<a class="headerlink" href="#google-speech-recognition" title="Link to this heading">¶</a></h2>
@@ -289,33 +197,6 @@ If this is not provided, the default model will be used. The default model is th
 <li><p>Handling the Output: Once Google processes the audio, it returns a text transcription. This output can be used in various ways, such as command interpretation, text analysis, or as input for other systems.</p></li>
 <li><p>Customization: Google Speech Recognition allows customization for specific vocabulary or industry terms, enhancing recognition accuracy for specialized applications.</p></li>
 </ol>
-</section>
-<section id="using-google-speech-recognition-for-command-control">
-<h3>Using Google Speech Recognition for Command Control<a class="headerlink" href="#using-google-speech-recognition-for-command-control" title="Link to this heading">¶</a></h3>
-<p>Here’s a sample code snippet demonstrating how you could integrate Google Speech Recognition into an application for voice-controlled operations:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span><span class="p">,</span> <span class="mi">44100</span><span class="p">)</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span><span class="p">,</span> <span class="s2">&quot;en-US&quot;</span><span class="p">)</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_RECOGNITION_GOOGLE_ENCODING</span><span class="p">,</span> <span class="s2">&quot;LINEAR16&quot;</span><span class="p">)</span>
-
-<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechToTextEngine</span><span class="p">(</span><span class="n">SpeechRecognitionAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_SPEECH_RECOGNITION</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="n">sr</span><span class="o">.</span><span class="n">Microphone</span><span class="p">()</span> <span class="k">as</span> <span class="n">source</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listening for commands...&quot;</span><span class="p">)</span>
-    <span class="n">audio</span> <span class="o">=</span> <span class="n">recognizer</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Recognize speech using Google Speech Recognition</span>
-        <span class="n">command</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_speech</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recognized command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Process and execute the command</span>
-        <span class="n">control_function</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This code captures audio through the microphone, processes it using Google Speech Recognition, and then uses the recognized command to perform an action within the application.</p>
 </section>
 <section id="important-considerations">
 <h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>face_recognition Recognition</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="User Guide" href="dronebuddylib.userguide.html" />
+  <link rel="prev" title="Face Recognition Module Installation" href="face_recogntion_installation_guide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+      <li><a href="face_recogntion_installation_guide.html">Face Recognition Module Installation</a> &raquo;</li>
+    
+    <li>face_recognition Recognition</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="face_recogntion_installation_guide.html"
+       title="previous chapter">← Face Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="face-recognition-recognition">
+<h1>face_recognition Recognition<a class="headerlink" href="#face-recognition-recognition" title="Link to this heading">¶</a></h1>
+<p>Face-recognition is an open-source Python library that provides face detection, face alignment, and face recognition capabilities.
+The official documentation can be found <a class="reference external" href="https://github.com/ageitgey/face_recognition">here</a></p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>The face_recognition requires the following pre-requisites
+#.  dlib</p>
+<section id="dlib-installation">
+<h3>dlib Installation<a class="headerlink" href="#dlib-installation" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>To install dlib, you need to ensure that you meet the following specifications:</p>
+<p>Operating System: dlib is compatible with Windows, macOS, and Linux operating systems.</p>
+<p>Python Version: dlib works with Python 2.7 or Python 3.x versions.</p>
+<p>Compiler: You need a C++ compiler to build and install dlib. For Windows, you can use Microsoft Visual C++ (MSVC) or MinGW. On macOS, Xcode Command Line Tools are required. On Linux, the GNU C++ Compiler (g++) is typically used.</p>
+<p>Dependencies: dlib relies on a few external dependencies, including Boost and CMake. These dependencies need to be installed beforehand to successfully build dlib.</p>
+</div></blockquote>
+<section id="windows">
+<h4>Windows<a class="headerlink" href="#windows" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>The official installation instructions are found <a class="reference external" href="https://github.com/ageitgey/face_recognition/issues/175#issue-257710508">here</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>To install the library, first you need to install the dlib library</p></li>
+</ul>
+<p>Installation instructions are here</p>
+<ol class="arabic simple">
+<li><p>Download CMake windows installer from <a class="reference external" href="https://cmake.org/download/">here</a></p></li>
+<li><p>While installing CMake select Add CMake to the system PATH to avoid any error in the next steps.</p></li>
+<li><p>Install Visual C++ , if not installed previously</p></li>
+</ol>
+<p>Then run the following commands to install the face_recognition
+#.  cmake installation
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cmake</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>dlib installation</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dlib</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>face_recognition</p></li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="mac-os-installation">
+<h4>mac OS installation<a class="headerlink" href="#mac-os-installation" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>mac installation is pretty straightforward.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">FACE_RECOGNITION</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>In order to proceed with the face recognition , the algorithm needs encoding s of the known faces. The library has a method that is specifically designed to add these faces to the memory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;test_clear.jpg&#39;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">FaceRecognitionEngine</span><span class="p">(</span><span class="n">FaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">FACE_RECC</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">remember_face</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can check if the images and names are added to the library by simply going to the location where the library is installed.</p>
+<ol class="arabic simple">
+<li><p>SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH - This is the path to the model that you have downloaded. This is a compulsory parameter if you are using any other language. If this is not provided, the default model will be used. The default model is the english model ( vosk-model-small-en-us-0.15 ). Vosk supported languages can be found <a class="reference external" href="https://alphacephei.com/vosk/models">here</a>.</p></li>
+</ol>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be a list of names, if no people are spotted in the frame empty list will be returned. If people are spotted but not recognized, ‘unknown’ will be added as a list item.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pypi.org/project/face-recognition/#description">https://pypi.org/project/face-recognition/#description</a></p></li>
+<li><p><a class="reference external" href="https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf">https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ageitgey/face_recognition/issues/175#issue-257710508">https://github.com/ageitgey/face_recognition/issues/175#issue-257710508</a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="face_recogntion_installation_guide.html"
+       title="previous chapter">← Face Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
