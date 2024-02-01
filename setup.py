@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name='dronebuddylib',
-    version='2.0.16',
+    version='2.0.25',
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -28,10 +28,12 @@ setup(
         "TEXT_RECOGNITION": ['google-cloud-vision'],
         "SPEECH_RECOGNITION_MULTI": ['SpeechRecognition'],
         "SPEECH_RECOGNITION_VOSK": ['vosk'],
+        "SPEECH_RECOGNITION_GOOGLE": ['google-cloud-speech'],
+        "SPEECH_GENERATION": ['pyttsx3'],
     },
     python_requires='>=3.9',
     description='Everything to control and customize Tello',
-    author='Malsha de Zoysa',
-    author_email='malsha@ahlab.org',
+    author='NUS',
+    author_email='malshadz@nus.edu.sg',
     license='MIT',
 )

@@ -37,7 +37,7 @@ class VoskSpeechRecognitionImpl(ISpeechRecognition):
         Returns:
             str: The class name.
         """
-        return 'TEXT_TO_SPEECH_VOSK'
+        return 'SPEECH_RECOGNITION_VOSK'
 
     def get_algorithm_name(self) -> str:
         """
@@ -108,7 +108,7 @@ class VoskSpeechRecognitionImpl(ISpeechRecognition):
             r = self.speech_conversion_engine.Result()
             cleaned_string = r.replace("\n", "")
             formatted_string = json.loads(cleaned_string)
-            logger.log_success(self.get_class_name(), 'Recognized utterance : ', r)
+            logger.log_success(self.get_class_name(), 'Recognized utterance : ' + r)
             logger.log_debug(self.get_class_name(), 'Recognition Successful.')
 
             return RecognizedSpeechResult(formatted_string['text'], None)

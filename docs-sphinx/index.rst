@@ -10,14 +10,9 @@ Welcome to Dronebuddy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
-   Introduction <dronebuddylib>
-   User Guide <dronebuddylib.userguide>
-   Atomic Modules <dronebuddylib.atoms>
-   Model Definitions <dronebuddylib.models>
-   Utility Functions <dronebuddylib.utils>
-   Configuration Settings <dronebuddylib.configurations>
-   Module Index <modules>
+   Installation Guide <dronebuddylib.installationguide>
+   Algorithm Details <dronebuddylib.userguide>
+   API Doc <dronebuddylib.atoms>
    Developer Guide <dronebuddylib.developerguide>
    Sample Program <dronebuddylib.codeexample>
 

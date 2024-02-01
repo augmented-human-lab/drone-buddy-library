@@ -17,7 +17,8 @@ class SpeechGenerationEngine:
             config (EngineConfigurations): The engine configurations.
         """
         self.algorithm = algorithm
-        if algorithm == SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE:
+        if (algorithm == SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE
+                or algorithm == SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE.name):
             logger.log_info(self.get_class_name(), 'Preparing to initialize offline Google TTS engine.')
             from dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl import TTSTextToSpeechGenerationImpl
             self.speech_generation_engine = TTSTextToSpeechGenerationImpl(config)

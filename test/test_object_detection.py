@@ -3,12 +3,13 @@ import time
 
 import cv2
 
+from dronebuddylib import ObjectDetectionEngine
 from dronebuddylib.atoms.objectdetection.mp_object_detection_impl import MPObjectDetectionImpl
 import mediapipe as mp
 
 from dronebuddylib.atoms.objectdetection.yolo_object_detection_impl import YOLOObjectDetectionImpl
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.models.enums import AtomicEngineConfigurations
+from dronebuddylib.models.enums import AtomicEngineConfigurations, VisionAlgorithm
 
 
 # read input image
@@ -20,8 +21,9 @@ class TestObjectDetection(unittest.TestCase):
         image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg')
         engine_configs = EngineConfigurations({})
         engine_configs.add_configuration(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
-        engine = YOLOObjectDetectionImpl(engine_configs)
-        detected_objects = engine.get_detected_objects(image)
+        object_engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)
+        # engine = YOLOObjectDetectionImpl(engine_configs)
+        detected_objects = object_engine.get_detected_objects(image)
         print("objects", detected_objects.object_names)
         assert len(detected_objects.object_names) > 0  # Expecting at least one object to be detected
         assert 'potted plant' in detected_objects.object_names  # Expecting a person to be detected

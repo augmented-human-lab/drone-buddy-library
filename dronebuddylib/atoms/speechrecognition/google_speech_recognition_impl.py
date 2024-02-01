@@ -76,10 +76,10 @@ class GoogleSpeechRecognitionImpl(ISpeechRecognition):
         self.language = configs.get(AtomicEngineConfigurations.SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE, 'en-US')
         self.encoding = configs.get(AtomicEngineConfigurations.SPEECH_RECOGNITION_GOOGLE_ENCODING,
                                     speech.RecognitionConfig.AudioEncoding.LINEAR16)
-        logger.log_info(self.get_class_name() + ':Initializing with model with ' + self.language + '')
+        logger.log_info(self.get_class_name() ,':Initializing with model with ' + self.language + '')
 
         self.speech_conversion_engine = speech.SpeechClient()
-        logger.log_debug(self.get_class_name() + ' :Initialized the Google Speech Recognition')
+        logger.log_debug(self.get_class_name() ,' :Initialized the Google Speech Recognition')
 
     def recognize_speech(self, audio_steam) -> RecognizedSpeechResult:
         """
@@ -91,7 +91,7 @@ class GoogleSpeechRecognitionImpl(ISpeechRecognition):
             Returns:
                 RecognizedSpeechResult: The result containing recognized speech and total billed time.
             """
-        logger.log_debug(self.get_class_name() + ' :Recognition started.')
+        logger.log_debug(self.get_class_name() , ' :Recognition started.')
 
         config = speech.RecognitionConfig(
             encoding=self.encoding,
@@ -105,7 +105,7 @@ class GoogleSpeechRecognitionImpl(ISpeechRecognition):
 
         # Detects speechrecognition in the audio file
         response = self.speech_conversion_engine.streaming_recognize(streaming_config, audio_steam)
-        logger.log_debug(self.get_class_name() + ' :Recognition Successful.')
+        logger.log_debug(self.get_class_name() ,' :Recognition Successful.')
 
         # return RecognizedSpeechResult(response, None)
         return response
