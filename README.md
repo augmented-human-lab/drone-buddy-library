@@ -7,9 +7,6 @@ With the library, you can easily augment the Tello drone with different intellig
 
 The complete documentation of the library can be found at [Drone Buddy documentation](https://augmented-human-lab.github.io/drone-buddy-library/index.html).
 
-
-# Installation
-
 ##  Basic Installation
 
 The installation of DroneBuddy needs the following prerequisites:
@@ -34,10 +31,7 @@ pip install dronebuddylib
 At the core, we use the `Face-recognition` library. `Face-recognition` is an open-source Python library that provides face detection, face alignment, and face recognition capabilities.
 The official documentation can be found [here](https://github.com/ageitgey/face_recognition).
 
-The face_recognition requires the following pre-requisites:
->1. dlib
-
-To install dlib, you need to ensure that you meet the following specifications:
+The `Face_recognition` requires `dlib` as the pre-requisite. To install dlib, you need to ensure that you meet the following specifications:
 
 - **Operating System:** dlib is compatible with Windows, macOS, and Linux operating systems.
 - **Compiler:** You need a C++ compiler to build and install dlib. For Windows, you can use Microsoft Visual C++ (MSVC) or MinGW. On macOS, Xcode Command Line Tools are required. On Linux, the GNU C++ Compiler (g++) is typically used.
@@ -50,8 +44,7 @@ To install the library, you need to install the dlib library. The more detailed 
 2. While installing CMake select `Add CMake to the system PATH` to avoid any error in the next steps.
 3. Install Visual C++, if not installed previously.
 
-
-Then run the following commands 
+Then run the following commands. 
 
 ```bash
     pip install cmake
@@ -60,10 +53,33 @@ Then run the following commands
 
 ### MacOS
 
-macOS installation is pretty straightforward.
+MacOS installation is pretty straightforward.
 
 ```bash
 pip install face_recognition
+```
+
+## Object Detection
+
+For object detection, we provided two algorithms, the description are described below. 
+If you want to know the difference between these two, please refer to the detailed documentation. 
+
+### Mediapipe Object Detection
+
+The official documentation for Mediapipe can be found [here](https://developers.google.com/mediapipe).
+To install Mediapipe Integration, run the following snippet.
+
+```bash
+pip install dronebuddylib[OBJECT_DETECTION_MP]
+```
+
+### YOLO Object Detection
+
+The official documentation for YOLO can be found [here](https://docs.ultralytics.com/).
+To install YOLO Integration, run the following snippet.
+
+```bash
+pip install dronebuddylib[OBJECT_DETECTION_YOLO]
 ```
 
 #  Voice Generation
@@ -90,124 +106,7 @@ engine = SpeechGenerationEngine(SpeechGenerationAlgorithm.GOOGLE_TTS_OFFLINE.nam
 result = engine.read_phrase("Read aloud phrase")
 ```
 
-# Object Detection
 
-
-## Mediapipe Object Detection
-
-The official documentation for Mediapipe can be found [here](https://developers.google.com/mediapipe).
-
-### Installation
-
-To install Mediapipe Integration, run the following snippet, which will install the required dependencies:
-
-```bash
-pip install dronebuddylib[OBJECT_DETECTION_MP]
-```
-
-### Usage
-
-The Mediapipe integration module requires no configurations to function.
-
-#### Code Example
-
-```python
-engine_configs = EngineConfigurations({})
-engine = MPObjectDetectionImpl(EngineConfigurations({}))
-detected_objects = engine.get_detected_objects(mp_image)
-```
-
-### Output
-
-The output will be given in the following JSON format:
-
-```json
-{
-  "message": "",
-  "result": {
-    "object_names": [
-      ""
-    ],
-    "detected_objects": [
-      {
-        "detected_categories": [
-          {
-            "category_name": "",
-            "confidence": 0
-          }
-        ],
-        "bounding_box": {
-          "origin_x": 0,
-          "origin_y": 0,
-          "width": 0,
-          "height": 0
-        }
-      }
-    ]
-  }
-}
-```
-
-
-# YOLO Object Detection
-
-The official documentation for YOLO can be found [here](https://docs.ultralytics.com/).
-
-## Installation
-
-To install YOLO Integration, run the following snippet, which will install the required dependencies:
-
-```bash
-pip install dronebuddylib[OBJECT_DETECTION_YOLO]
-```
-
-## Usage
-
-The YOLO integration module requires the following configurations to function:
-
-- **OBJECT_DETECTION_YOLO_VERSION** - This refers to the model that you want to use for detection purposes. The list of versions can be found [here](https://docs.ultralytics.com/).
-
-### Code Example
-
-```python
-image = cv2.imread('test_image.jpg')
-
-engine_configs = EngineConfigurations({})
-engine_configs.add_configuration(Configurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
-engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)
-objects = engine.get_detected_objects(image)
-```
-
-## Output
-
-The output will be given in the following JSON format:
-
-```json
-{
-  "message": "",
-  "result": {
-    "object_names": [
-      ""
-    ],
-    "detected_objects": [
-      {
-        "detected_categories": [
-          {
-            "category_name": "",
-            "confidence": 0
-          }
-        ],
-        "bounding_box": {
-          "origin_x": 0,
-          "origin_y": 0,
-          "width": 0,
-          "height": 0
-        }
-      }
-    ]
-  }
-}
-```
 
 # Voice Recognition
 
