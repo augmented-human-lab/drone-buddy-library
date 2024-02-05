@@ -1,43 +1,34 @@
-# DroneBuddyLib
+# DroneBuddy Library
 
 ## Introduction
 
-DroneBuddy lib can be used as helper library to program your own drone. this is a offline library, so you can use it
-without internet connection, which is required when you are connecting with Tello drone.
+DroneBuddy libray is designed as a helper library to program the Tello drone as part of the research project carried out in National University of Singapore. 
+With the library, you can easily augment the Tello drone with different intelligent functionalities such as object recognition, text recognition and face recognition. 
 
-The compleete documentation can be found at [Drone Buddy documentation](https://augmented-human-lab.github.io/drone-buddy-library/index.html)
+The complete documentation of the library can be found at [Drone Buddy documentation](https://augmented-human-lab.github.io/drone-buddy-library/index.html).
 
 
-# Installation Guide
+# Installation
 
-## Introduction
+## Prerequisites
 
-DroneBuddy envisions empowering everyone with the ability to personally program their intelligent drones, enriching them with desired features. At its core, DroneBuddy offers a suite of fundamental building blocks, enabling users to seamlessly integrate these elements to bring their drone to flight.
+The installation of DroneBuddy needs the following prerequisites:
 
-Functioning as an intuitive interface, DroneBuddy simplifies complex algorithms, stripping away the intricacies to offer straightforward input-output modalities. This approach ensures that users can accomplish their objectives efficiently, without getting bogged down in technical complexities. With DroneBuddy, the focus is on user-friendliness and ease of use, making drone programming accessible and hassle-free.
+> 1. Python 3.9 or higher
+> 2. Compatible pip version
+> 3. requests 
+> 4. numpy 
+> 5. cython 
+> 6. setuptools 
+> 7. packaging 
+> 8. pyparsing
 
-## Installation
-
-DroneBuddy behaves as any other python library. You can find the library at [https://pypi.org/project/dronebuddylib/](https://pypi.org/project/dronebuddylib/) and install using pip.
+Run the following command to install the basic functionalities of the library. 
 
 ```bash
 pip install dronebuddylib
 ```
 
-The installation of DroneBuddy needs the following prerequisites:
-
-1. Python 3.9 or higher
-2. Compatible pip version
-
-> **Note:**
->
-> Running `pip install dronebuddylib` will only install the drone buddy library, with only the required dependencies which are:
-> - requests
-> - numpy
-> - cython
-> - setuptools
-> - packaging
-> - pyparsing
 
 
 # Face Recognition
