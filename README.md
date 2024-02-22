@@ -535,18 +535,16 @@ Where:
 
 # Text Recognition Module Installation
 
-Currently, DroneBuddy supports several algorithms for text recognition:
+Currently, DroneBuddy supports these algorithms for text recognition:
 
-1. pyttsx3 - Offline package
+1. Google OCR
 
 To use each of these, you can customize the installation according to your needs.
 
-## Submodules
+## Installation
 
-### Google Vision Integration
+To install GOOGLE OCR Integration, run the following snippet, which will install the required dependencies:
 
-For integrating Google Vision into DroneBuddy for text recognition capabilities, please follow the specific instructions outlined in the "Google Vision Integration" guide. This module allows for robust text detection and recognition functionalities leveraging Google's cloud-based vision APIs.
-
-For detailed installation and usage instructions, refer to the separate guide dedicated to Google Vision Integration within DroneBuddy's documentation.
-
-(Note: The actual content and commands for the "google_text_rec_installation_guide" are not provided, hence not included in this Markdown conversion.)
+```bash
+pip install dronebuddylib[TEXT_RECOGNITION]
+```

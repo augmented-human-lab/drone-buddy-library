@@ -25,7 +25,7 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
     """
 
     def introduce_new_intents(self, new_intents: dict) -> bool:
-        self.set_custom_actions_to_system_prompt(new_intents)
+        self.set_custom_actions_to_system_prompt(SYSTEM_PROMPT_INTENT_CLASSIFICATION, new_intents)
         return True
 
     def get_class_name(self) -> str:
@@ -79,20 +79,50 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
                                            AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION))
         )
 
+        overriden_system_prompt = configs.get(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT.name,
+                                              configs.get(
+                                                  AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT))
+        overriden_list_path = configs.get(
+            AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH.name,
+            configs.get(
+                AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH))
+
         # Initialize GPT engine
         self.gpt_engine = GPTEngine(gpt_configs)
 
-        # Set system prompt
-        if configs.get(AtomicEngineConfigurations.INTENT_RECOGNITION_SYSTEM_PROMPT.name, None) is not None:
-            self.override_system_prompt(configs.get(AtomicEngineConfigurations.INTENT_RECOGNITION_SYSTEM_PROMPT.name))
+        system_action_string = ""
+        overriden_list = {}
+
+        if overriden_list_path is not None:
+            # read the actions from the file and add it to a dictionary
+            #  the file has the format action=value
+            #  the file is at overriden_list_path
+            with open(overriden_list_path, 'r') as file:
+                for line in file:
+                    action, value = line.split('=')
+                    overriden_list[action] = value
+
+        if overriden_system_prompt is not None:
+            system_action_string = create_custom_drone_action_list(overriden_list)
         else:
-            drone_actions = create_system_drone_action_list()
-            modified_prompt = SYSTEM_PROMPT_INTENT_CLASSIFICATION.replace("#list", "\'" + drone_actions + "\'")
-            self.gpt_engine.set_system_prompt(modified_prompt)
+            system_action_string = create_system_drone_action_list()
+
+        current_system_prompt = ""
+
+        # Set system prompt
+        if configs.get(AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT.name, None) is not None:
+            current_system_prompt = configs.get(
+                AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT.name)
+        else:
+            current_system_prompt = SYSTEM_PROMPT_INTENT_CLASSIFICATION
+
+        modified_prompt = current_system_prompt.replace("#list", "\'" + system_action_string + "\'")
+
+        self.gpt_engine.set_system_prompt(modified_prompt)
 
         logger.log_debug(self.get_class_name(), 'Completed initializing the GPT intent recognition')
 
-    def set_custom_actions_to_system_prompt(self, custom_actions: dict):
+    def set_custom_actions_to_system_prompt(self, prompt: str, custom_actions: dict):
         """
         Updates the system prompt with custom drone actions.
 
@@ -100,7 +130,7 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
             custom_actions (list): List of custom drone actions.
         """
         drone_actions = create_custom_drone_action_list(custom_actions)
-        modified_prompt = SYSTEM_PROMPT_INTENT_CLASSIFICATION.replace("#list", "\'" + drone_actions + "\'")
+        modified_prompt = prompt.replace("#list", "\'" + drone_actions + "\'")
         self.gpt_engine.set_system_prompt(modified_prompt)
 
     def get_system_prompt(self) -> str:
@@ -153,8 +183,11 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
 
                                                 addressee)
             try:
-                for entity in json_result['entities']:
-                    formatted_result.entities.append(RecognizedEntities(entity['entity_type'], entity['value']))
+                if json_result['entities'] is not None:
+                    for entity in json_result['entities']:
+                        formatted_result.entities.append(RecognizedEntities(entity['entity_type'], entity['value']))
+                else:
+                    formatted_result.entities = []
             except KeyError:
                 pass
             logger.log_debug(self.get_class_name(), ' Recognition completed.')
@@ -183,4 +216,5 @@ class GPTIntentRecognitionImpl(IIntentRecognition):
         Returns:
             list: List of optional configuration parameters.
         """
-        return [AtomicEngineConfigurations.INTENT_RECOGNITION_SYSTEM_PROMPT]
+        return [AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT,
+                AtomicEngineConfigurations.INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH]

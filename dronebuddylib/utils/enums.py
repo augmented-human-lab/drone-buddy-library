@@ -13,28 +13,6 @@ class ObjectDetectionReturnTypes(enum.Enum):
     ALL = "ALL"
 
 
-class DroneCommands(enum.Enum):
-    NONE = None
-    TAKE_OFF = "TAKE_OFF",
-    LAND = "LAND",
-    FORWARD = "FORWARD",
-    BACKWARD = "BACKWARD",
-    LEFT = "LEFT",
-    RIGHT = "RIGHT",
-    UP = "UP",
-    DOWN = "DOWN",
-    ROTATE_CLOCKWISE = "ROTATE_CLOCKWISE",
-    ROTATE_COUNTER_CLOCKWISE = "ROTATE_COUNTER_CLOCKWISE",
-    BATTERY = "BATTERY",
-    SPEED = "SPEED",
-    HEIGHT = "HEIGHT",
-    STOP = "STOP",
-    RECOGNIZE_PEOPLE = "RECOGNIZE_PEOPLE",
-    RECOGNIZE_OBJECTS = "RECOGNIZE_OBJECTS",
-    RECOGNIZE_TEXT = "RECOGNIZE_TEXT",
-    FLIP = "FLIP",
-
-
 class Language(enum.Enum):
     ENGLISH = 'en-gb',
     FRENCH = 'FR',

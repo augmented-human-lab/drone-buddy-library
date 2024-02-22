@@ -1,4 +1,4 @@
-__version__ = "2.0.25"
+__version__ = "2.0.27"
 
 from .facerecognition.face_recognition_engine import FaceRecognitionEngine
 

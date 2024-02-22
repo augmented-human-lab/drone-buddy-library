@@ -14,25 +14,30 @@ class ObjectDetectionReturnTypes(enum.Enum):
 
 
 class DroneCommands(enum.Enum):
-    NONE = "NONE"
-    TAKE_OFF = "TAKE_OFFy"
-    LAND = "LAND"
-    FORWARD = "FORWARD"
-    BACKWARD = "BACKWARD"
-    LEFT = "LEFT"
-    RIGHT = "RIGHT"
-    UP = "UP"
-    DOWN = "DOWN"
-    ROTATE_CLOCKWISE = "ROTATE_CLOCKWISE"
-    ROTATE_COUNTER_CLOCKWISE = "ROTATE_COUNTER_CLOCKWISE"
-    BATTERY = "BATTERY"
-    SPEED = "SPEED"
-    HEIGHT = "HEIGHT"
-    STOP = "STOP"
-    RECOGNIZE_PEOPLE = "RECOGNIZE_PEOPLE"
-    RECOGNIZE_OBJECTS = "RECOGNIZE_OBJECTS"
-    RECOGNIZE_TEXT = "RECOGNIZE_TEXT"
-    FLIP = "FLIP"
+    NONE = None
+    TAKE_OFF = "start flying the drone",
+    LAND = "land the drone",
+    FORWARD = "move the drone forward",
+    BACKWARD = "move the drone backward",
+    LEFT = "move to the left",
+    RIGHT = "move to the right",
+    UP = "go up",
+    DOWN = "go down",
+    ROTATE_CLOCKWISE = "rotate the drone clockwise",
+    ROTATE_COUNTER_CLOCKWISE = "rotate the drone counter clockwise",
+    BATTERY = "BATTERY",
+    SPEED = "SPEED",
+    HEIGHT = "HEIGHT",
+    STOP = "STOP",
+    RECOGNIZE_PEOPLE = "recognize the people in the image",
+    RECOGNIZE_OBJECTS = "recognize the objects in the image",
+    RECOGNIZE_TEXT = "recognize a text from the image",
+    FLIP = "do a flip",
+    #  = "TURN_RIGHT_AND_RECOGNIZE_OBJECTS",
+    FOLLOW_ME = "follow a person",
+    LOCATE_OBJECTS_AND_RECOGNIZE = "find the objects and recognize them",
+    MOVE_AROUND = "move around the room",
+    TAKE_A_PHOTO = "take a photo",
 
 
 class LoggerColors(enum.Enum):
@@ -92,7 +97,8 @@ class AtomicEngineConfigurations(enum.Enum):
     INTENT_RECOGNITION_OPEN_AI_API_URL = "INTENT_RECOGNITION_OPEN_AI_API_URL"
     INTENT_RECOGNITION_OPEN_AI_TEMPERATURE = "INTENT_RECOGNITION_OPEN_AI_TEMPERATURE"
     INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION = "INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION"
-    INTENT_RECOGNITION_SYSTEM_PROMPT = "INTENT_RECOGNITION_SYSTEM_PROMPT"
+    INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT = "INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT"
+    INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH = "INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH"
 
     INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH = "INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH"
     INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG = "INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG"
