@@ -39,6 +39,6 @@ def change_setup_version(new_version):
 
 
 if __name__ == '__main__':
-    new_version = '2.0.27'
+    new_version = '2.0.28'
     change_init_version(new_version)
     change_setup_version(new_version)

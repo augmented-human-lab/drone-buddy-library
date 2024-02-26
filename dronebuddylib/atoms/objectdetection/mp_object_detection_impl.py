@@ -71,7 +71,7 @@ class MPObjectDetectionImpl(IObjectDetection):
         self.detector = detector
         logger.log_debug(self.get_class_name() ,'Completed initializing the mediapipe object detection')
 
-    def get_detected_objects(self, image) -> ObjectDetectionResult:
+    def  get_detected_objects(self, image) -> ObjectDetectionResult:
         """
         Detects objects in the provided image and returns a result containing a list of detected objects.
 

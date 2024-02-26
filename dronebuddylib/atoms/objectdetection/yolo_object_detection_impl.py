@@ -46,7 +46,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         if model_name is None:
             model_name = "yolov8n.pt"
 
-        logger.log_info(self.get_class_name() , ':Initializing with model with ' + model_name + '')
+        logger.log_info(self.get_class_name(), ':Initializing with model with ' + model_name + '')
 
         self.detector = YOLO(model_name)
         self.object_names = self.detector.names
@@ -71,12 +71,14 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         detected_names = []
         # Save predictions as labels
         for result in results:
-            for res in result.boxes.cls:
-                detected = DetectedObject([], BoundingBox(0, 0, 0, 0))
-                detected.add_category(self.object_names[int(res)], 0.0)
+            for idx, res in enumerate(result.boxes.cls):
+                box_c = result.boxes.xywh.tolist()[idx]
+                conf_c = result.boxes.conf.tolist()[idx]
+                detected = DetectedObject([], BoundingBox(box_c[0], box_c[1], box_c[2], box_c[3]))
+                detected.add_category(self.object_names[int(res)], conf_c)
                 detected_objects.append(detected)
                 detected_names.append(self.object_names[int(res)])
-        logger.log_debug(self.get_class_name(), 'Detection completed.')
+                logger.log_debug(self.get_class_name(), 'Detection completed.')
 
         return ObjectDetectionResult(detected_names, detected_objects)
 
