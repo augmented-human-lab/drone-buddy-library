@@ -1,0 +1,9 @@
+
+
+trained_place_knn_model20.clf with accuracy: 0.984 : precision: 0.985111111111111 : f1_score: (0.985111111111111, 0.984, 0.9838437543133195, None)
+
+trained_place_knn_model21.clf with accuracy: 0.984 : precision: 0.985111111111111 : f1_score: (0.985111111111111, 0.984, 0.9838437543133195, None)
+
+trained_place_knn_model24.clf trained for Using resnet 50 with accuracy: 1.0 : precision: 1.0 : f1_score: (1.0, 1.0, 1.0, None)
+
+model name: 25.clf: reason : Using densenet121 with accuracy: 0.992 : precision: 0.9924 : f1_score: (0.9924, 0.992, 0.9919120879120878, None)

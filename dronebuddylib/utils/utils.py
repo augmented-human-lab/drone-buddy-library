@@ -1,3 +1,5 @@
+import os
+
 import pkg_resources
 
 from dronebuddylib.models.enums import DroneCommands
@@ -37,20 +39,71 @@ def get_current_intents() -> dict:
 def create_custom_drone_action_list(custom_actions: dict) -> str:
     action_string = ""
     for action in custom_actions:
-        action_string = action_string + action + "\n"
+        action_string = action_string + action + " = \'" + custom_actions[action] + "\'" + "\n"
 
     return action_string
 
 
 def config_validity_check(class_requirements: list, provided_configs: dict, algo_name: str):
-    if len(provided_configs) == 0 and len(class_requirements) > 0:
-        logger.log_error("Utils",
-            'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + "All")
-        raise MissingConfigurationException(algo_name, "All")
-    for req_key in class_requirements:
-        try:
-            provided_configs.pop(req_key, None)
-        except KeyError:
-            logger.log_error(
-              "UTILS",  'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + req_key)
-            raise MissingConfigurationException(algo_name, req_key)
+    if class_requirements is not None:
+        if len(provided_configs) == 0 and len(class_requirements) > 0:
+            logger.log_error("Utils",
+                             'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + "All")
+            raise MissingConfigurationException(algo_name, "All")
+        if class_requirements is not None:
+            for req_key in class_requirements:
+                try:
+                    provided_configs.pop(req_key, None)
+                except KeyError:
+                    logger.log_error(
+                        "UTILS",
+                        'Missing configuration to initialize the algorithm: ' + algo_name + ' : configuration: ' + req_key)
+                    raise MissingConfigurationException(algo_name, req_key)
+
+
+def write_to_file(filename, integer):
+    """Write an integer to a file."""
+    try:
+        with open(filename, 'w') as file:  # 'w' mode will create the file if it doesn't exist
+            file.write(str(integer))
+            return True
+    except IOError:
+        logger.log_error("Utils", "Error while writing to the file : " + filename)
+        return False
+
+
+def write_to_file_longer(filename, integer):
+    """Write an integer to a file."""
+    """Appends an integer to a file on a new line. For the first entry, it does not prepend a newline."""
+    try:
+        # Check if file exists and get its size
+        should_prepend_newline = os.path.exists(filename) and os.path.getsize(filename) > 0
+
+        with open(filename, 'a') as file:  # Open file in append mode
+            # If file exists and is not empty, prepend newline, otherwise just write the integer
+            file.write(f"\n{integer}" if should_prepend_newline else f"{integer}")
+            return True
+    except IOError as e:
+        logger.log_error("Utils", f"Error while writing to the file: {filename}. Error: {e}")
+        return False
+
+
+def overwrite_file(filename, integer):
+    """Overwrite the file with a new integer."""
+    try:
+        with open(filename, 'w') as file:  # 'w' mode will also overwrite the file if it already exists
+            file.write(str(integer))
+            return True
+    except IOError:
+        logger.log_error("Utils", "Error while writing to the file : " + filename)
+        return False
+
+
+def read_from_file(filename):
+    """Read an integer from a file."""
+    try:
+        with open(filename, 'r') as file:  # 'r' mode is for reading
+            return int(file.read().strip())
+    except IOError:
+        logger.log_error("Utils", "Error while reading from the file : " + filename)
+        return -1

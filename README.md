@@ -96,7 +96,7 @@ In order to proceed with the face recognition, the algorithm needs encodings of 
 ```python
 engine_configs = EngineConfigurations({})
 image = cv2.imread('test_clear.jpg')
-engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECC, engine_configs)
+engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECOGNITION_EUCLIDEAN, engine_configs)
 result = engine.remember_face(image, "Jane")
 ```
 
@@ -111,7 +111,7 @@ venv/Lib/site-packages/dronebuddylib/atoms/resources
 ```python
 engine_configs = EngineConfigurations({})
 image = cv2.imread('test_jane.jpg')
-engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECC, engine_configs)
+engine = FaceRecognitionEngine(FaceRecognitionAlgorithm.FACE_RECOGNITION_EUCLIDEAN, engine_configs)
 result = engine.recognize_face(image)
 ```
 

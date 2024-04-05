@@ -16,9 +16,12 @@ class FaceRecognitionEngine:
         """
         self.face_recognition_model = algorithm
 
-        if algorithm == FaceRecognitionAlgorithm.FACE_RECC or algorithm == FaceRecognitionAlgorithm.FACE_RECC.name:
+        if algorithm == FaceRecognitionAlgorithm.FACE_RECOGNITION_EUCLIDEAN or algorithm == FaceRecognitionAlgorithm.FACE_RECOGNITION_EUCLIDEAN.name:
             from dronebuddylib.atoms.facerecognition.face_recognition_impl import FaceRecognitionImpl
             self.face_recognition_engine = FaceRecognitionImpl(config)
+        elif algorithm == FaceRecognitionAlgorithm.FACE_RECOGNITION_KNN or algorithm == FaceRecognitionAlgorithm.FACE_RECOGNITION_KNN.name:
+            from dronebuddylib.atoms.facerecognition.face_recognition_knn_impl import FaceRecognitionKNNImpl
+            self.face_recognition_engine = FaceRecognitionKNNImpl(config)
         else:
             # Optionally handle other algorithms if you have any.
             raise ValueError("Unsupported face recognition algorithm")
@@ -47,3 +50,21 @@ class FaceRecognitionEngine:
             True if the operation was successful, False otherwise.
         """
         return self.face_recognition_engine.remember_face(image, name)
+
+    def create_memory(self):
+        """
+        Create a memory for the face recognition engine.
+
+        Returns:
+            A memory for the face recognition engine.
+        """
+        return self.face_recognition_engine.create_memory()
+
+    def get_current_status(self):
+        """
+        Get the current status of the face recognition engine.
+
+        Returns:
+            The current status of the face recognition engine.
+        """
+        return self.face_recognition_engine.get_current_status()

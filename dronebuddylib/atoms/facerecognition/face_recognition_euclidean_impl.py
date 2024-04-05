@@ -2,8 +2,10 @@ import cv2
 import numpy as np
 import pkg_resources
 
+from dronebuddylib.atoms.facerecognition.face_recognition_result import RecognizedFaces, RecognizedFaceObject
 from dronebuddylib.atoms.facerecognition.i_face_recognition import IFaceRecognition
 from dronebuddylib.models.engine_configurations import EngineConfigurations
+from dronebuddylib.models.execution_status import ExecutionStatus
 from dronebuddylib.utils import FileWritingException
 from dronebuddylib.utils.logger import Logger
 
@@ -12,10 +14,16 @@ logger = Logger()
 import face_recognition
 
 
-class FaceRecognitionImpl(IFaceRecognition):
+class FaceRecognitionEuclideanImpl(IFaceRecognition):
     """
     Implementation of the IFaceRecognition interface using face_recognition library.
+    The recognition is carried on using the Euclidean distance between the face encodings.
     """
+    current_status = None
+
+    def test_memory(self) -> dict:
+        pass
+
     KNOWN_NAMES_FILE_PATH = pkg_resources.resource_filename(__name__, "resources/known_names.txt")
     IMAGE_PATH = "resources/images/"
 
@@ -26,9 +34,11 @@ class FaceRecognitionImpl(IFaceRecognition):
         Args:
             engine_configurations (EngineConfigurations): The configurations for the engine.
         """
+        self.current_status = ExecutionStatus(self.get_class_name(), "INIT", "INITIALIZATION", "COMPLETED")
+
         super().__init__(engine_configurations)
 
-    def recognize_face(self, image) -> list:
+    def recognize_face(self, image) -> RecognizedFaces:
         """
         Recognize faces in an image.
 
@@ -38,6 +48,8 @@ class FaceRecognitionImpl(IFaceRecognition):
         Returns:
             list: A list of recognized faces.
         """
+        self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "initializing", "STARTED")
+
         processed_frame = self.process_frame_for_recognition(image)
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(processed_frame)
@@ -47,8 +59,12 @@ class FaceRecognitionImpl(IFaceRecognition):
         face_names = self.load_known_face_names()
         # load the encodings
         known_face_encodings = self.load_known_face_encodings(face_names)
+        self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "load_known_face_encodings",
+                                              "COMPLETED")
 
         recognized_faces = []
+        self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "matching_face_encodings",
+                                              "STARTED")
 
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
@@ -65,9 +81,9 @@ class FaceRecognitionImpl(IFaceRecognition):
             if matches[best_match_index]:
                 name = face_names[best_match_index]
 
-            recognized_faces.append(name)
+            recognized_faces.append(RecognizedFaceObject(name, face_encoding))
 
-        return recognized_faces
+        return RecognizedFaces(recognized_faces)
 
     def process_frame_for_recognition(self, frame):
         """
@@ -84,7 +100,12 @@ class FaceRecognitionImpl(IFaceRecognition):
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
-        logger.log_debug(self.get_class_name(), "Face Recognition : shape of the frame : " + rgb_small_frame.shape.__str__())
+        logger.log_debug(self.get_class_name(),
+                         "Face Recognition : shape of the frame : " + rgb_small_frame.shape.__str__())
+
+        self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "process_frame_for_recognition",
+                                              "COMPLETED")
+
         return rgb_small_frame
 
     def load_known_face_names(self):
@@ -96,6 +117,8 @@ class FaceRecognitionImpl(IFaceRecognition):
         """
         path = self.KNOWN_NAMES_FILE_PATH
         known_face_names = self.read_file_into_list(path)
+        self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "load_known_face_names",
+                                              "COMPLETED")
         return known_face_names
 
     def load_known_face_encodings(self, known_face_names):
@@ -114,6 +137,9 @@ class FaceRecognitionImpl(IFaceRecognition):
             face_image = face_recognition.load_image_file(face_path)
             face_encoding = face_recognition.face_encodings(face_image)[0]
             known_face_encodings.append(face_encoding)
+
+            self.current_status = ExecutionStatus(self.get_class_name(), "recognize_face", "load_known_face_encodings",
+                                                  "COMPLETED")
         return known_face_encodings
 
     def read_file_into_list(self, filename):
@@ -135,7 +161,7 @@ class FaceRecognitionImpl(IFaceRecognition):
         except FileNotFoundError as e:
             raise FileNotFoundError("The specified file is not found.", e) from e
 
-    def remember_face(self, image_path, name) -> bool:
+    def remember_face(self, image_path=None, name=None) -> bool:
         """
         Associate a name with a face in an image.
 
@@ -146,6 +172,9 @@ class FaceRecognitionImpl(IFaceRecognition):
         Returns:
             bool: True if the association was successful, False otherwise.
         """
+
+        self.current_status = ExecutionStatus(self.get_class_name(), "remember_face", "remember_face",
+                                              "STARTED")
         try:
             text_file_path = self.KNOWN_NAMES_FILE_PATH
             with open(text_file_path, 'a') as file:
@@ -159,7 +188,8 @@ class FaceRecognitionImpl(IFaceRecognition):
                                                             self.IMAGE_PATH + name + ".jpg")
             loaded_image = cv2.imread(image_path)
             cv2.imwrite(new_file_name, loaded_image)
-
+            self.current_status = ExecutionStatus(self.get_class_name(), "remember_face", "remember_face",
+                                                  "COMPLETED")
         except IOError:
             raise FileWritingException("Error while writing to the file : ", new_file_name)
         return True
@@ -189,7 +219,7 @@ class FaceRecognitionImpl(IFaceRecognition):
         Returns:
             str: The class name.
         """
-        return 'FACE_RECOGNITION'
+        return 'FACE_RECOGNITION_EUCLIDEAN'
 
     def get_algorithm_name(self) -> str:
         """
@@ -199,3 +229,12 @@ class FaceRecognitionImpl(IFaceRecognition):
             str: The algorithm name.
         """
         return 'Face Recognition'
+
+    def get_current_status(self) -> dict:
+        """
+        Get the current status of the FaceRecognitionImpl class.
+
+        Returns:
+            dict: The current status.
+        """
+        pass

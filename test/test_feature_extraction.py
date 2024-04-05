@@ -40,7 +40,8 @@ class TestFeatureExtraction(unittest.TestCase):
 
     def test_hand_feature_extraction_get_detected_pose(self):
         # Load the image
-        image_path = r'C:\Users\Public\projects\drone-buddy-library\test\test_images\thumbsup.jpg'
+        # image_path = r'C:\Users\Public\projects\drone-buddy-library\test\test_images\thumbs_up.jpeg'
+        image_path = r'C:\Users\Public\projects\drone-buddy-library\test\test_images\frame_with_person456.jpg'
         image = cv2.imread(image_path)
 
         # Ensure the image is loaded

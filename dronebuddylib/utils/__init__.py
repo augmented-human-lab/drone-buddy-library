@@ -1,3 +1,3 @@
-__version__ = "2.0.25"
+__version__ = "2.0.32"
 
 from .exceptions import FileWritingException
