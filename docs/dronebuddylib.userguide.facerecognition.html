@@ -21,7 +21,7 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
-  <link rel="next" title="Supported models" href="dronebuddylib.userguide.objectdetection.html" />
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.placerecognition.html" />
   <link rel="prev" title="Supported models" href="dronebuddylib.userguide.intentrecognition.html" /> 
   </head>
 
@@ -84,7 +84,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
             
 
             
@@ -142,7 +142,7 @@
        title="previous chapter">← Supported models</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.userguide.objectdetection.html"
+    <a href="dronebuddylib.userguide.placerecognition.html"
        title="next chapter">Supported models →</a>
   </li>
 </ul>
@@ -153,8 +153,8 @@
             
   <section id="supported-models">
 <h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
-<section id="face-recognition">
-<h2>Face-recognition<a class="headerlink" href="#face-recognition" title="Link to this heading">¶</a></h2>
+<section id="face-recognition-euclidean-distance-matching">
+<h2>Face-recognition (Euclidean distance matching)<a class="headerlink" href="#face-recognition-euclidean-distance-matching" title="Link to this heading">¶</a></h2>
 <p>Face-recognition is an open-source Python library that provides face detection, face alignment, and face recognition capabilities.</p>
 <p>Here’s a simplified explanation of how the “face_recognition” library works:</p>
 <ol class="arabic simple">
@@ -192,6 +192,45 @@
 <p>In summary, dlib plays a critical role in providing the underlying functionality for face detection, facial landmark detection, and face alignment in the “face_recognition” library. It enables accurate and efficient face recognition by handling the low-level details of these tasks, allowing developers to work with face recognition in a more accessible manner using the “face_recognition” library.</p>
 </section>
 </section>
+<section id="face-recognition-knn-classification">
+<h2>Face-recognition (KNN classification)<a class="headerlink" href="#face-recognition-knn-classification" title="Link to this heading">¶</a></h2>
+<p>The KNN (k-nearest neighbors) classification approach for face recognition is an efficient method particularly suited for scenarios where the goal is to identify a person from a large database of known individuals, ensuring swift and accurate recognition even as the dataset grows.</p>
+<p>Understanding KNN Classification for Face Recognition</p>
+<ol class="arabic">
+<li><p>Purpose: This technique is optimal when you need to recognize and distinguish among a vast number of known faces. It’s especially effective when the goal is to accurately identify an unknown individual by comparing their facial features with a database of faces whose identities are already known.</p></li>
+<li><p>Algorithm Overview:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Training Phase: The KNN classifier is initially trained with a dataset comprising faces of known individuals. Each face in the training set is labeled with the person’s identity and characterized by a set of facial features extracted through deep learning models. These features are essentially high-dimensional data points that uniquely represent each face.</p></li>
+<li><p>Prediction Phase: To identify an unknown face, the algorithm analyzes its facial features and searches the trained dataset for the k nearest neighbors, i.e., the k most similar faces based on Euclidean distance metrics between their feature vectors.</p></li>
+<li><p>Decision Making: The final identification is made through a majority vote among these neighbors. The unknown face is assigned the identity most common among its nearest neighbors. This process can be weighted by the distance, giving closer neighbors more influence on the decision.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>When to Use KNN for Face Recognition:</p></li>
+</ol>
+<ul class="simple">
+<li><p>This method shines when the dataset of known individuals is large and varied.</p></li>
+<li><p>It’s particularly advantageous for applications requiring the capability to easily add new individuals to the database without retraining the entire model.</p></li>
+<li><p>Suitable for systems where computational efficiency and speed are crucial, as the method allows for relatively quick searches through the dataset for matching faces.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Advantages:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Flexibility: Easily accommodates additional data without significant retraining.</p></li>
+<li><p>Efficiency: Capable of handling large datasets with reasonable accuracy and speed.</p></li>
+<li><p>Simplicity: The algorithm’s straightforward nature makes it easy to implement and understand.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Considerations:</p></li>
+</ol>
+<ul class="simple">
+<li><p>The choice of k (number of neighbors) can significantly impact accuracy. A too-small k may be overly sensitive to noise in the dataset, while a too-large k may blur the boundaries between distinct classes.</p></li>
+<li><p>The method’s effectiveness is dependent on the quality and diversity of the training dataset. Adequate representation of different individuals under various conditions is crucial for robust recognition.</p></li>
+</ul>
+<p>By leveraging the KNN classification technique for face recognition, developers can implement a system that is not only accurate but also scalable and adaptable to the evolving requirements of face identification tasks.</p>
+</section>
 </section>
 
 
@@ -203,7 +242,7 @@
        title="previous chapter">← Supported models</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.userguide.objectdetection.html"
+    <a href="dronebuddylib.userguide.placerecognition.html"
        title="next chapter">Supported models →</a>
   </li>
 </ul><div class="footer" role="contentinfo">

@@ -84,7 +84,7 @@
         
           <li class="toctree-l1 current">
             
-              <a href="#" class="reference internal current">User Guide</a>
+              <a href="#" class="reference internal current">Algorithm Details</a>
             
 
             
@@ -97,6 +97,8 @@
                   <li class="toctree-l2"><a href="#intent-recognition" class="reference internal">Intent Recognition</a></li>
                 
                   <li class="toctree-l2"><a href="#face-recognition" class="reference internal">Face Recognition</a></li>
+                
+                  <li class="toctree-l2"><a href="#place-recognition" class="reference internal">Place Recognition</a></li>
                 
                   <li class="toctree-l2"><a href="#object-detection" class="reference internal">Object detection</a></li>
                 
@@ -260,11 +262,44 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html">Supported models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html#face-recognition">Face-recognition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html#face-recognition-euclidean-distance-matching">Face-recognition (Euclidean distance matching)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html#dlib">dlib</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html#why-do-we-need-dlib">Why do we need dlib</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.facerecognition.html#face-recognition-knn-classification">Face-recognition (KNN classification)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="place-recognition">
+<h2>Place Recognition<a class="headerlink" href="#place-recognition" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>General<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>Place recognition technology identifies or verifies a location by analyzing visual cues or features from an environment. It plays a crucial role in various applications, including autonomous navigation for robots and vehicles, geolocating images in mapping services, and augmenting virtual and augmented reality experiences.</p>
+<p>Here’s a simplified explanation of how place recognition works:</p>
+<ol class="arabic simple">
+<li><p><strong>Image Capture</strong>: The process starts with capturing images or video streams of a place. This can involve cameras mounted on vehicles, drones, or handheld devices that take photographs or videos of the surroundings.</p></li>
+<li><p><strong>Feature Detection</strong>: The next step is to detect distinct features within the captured images. Algorithms search for unique visual elements that can be reliably identified across different images, such as corners, edges, or specific patterns and textures. These features need to be detectable under various conditions and viewpoints.</p></li>
+<li><p><strong>Feature Description</strong>: Once features are detected, the system describes them using numerical vectors, known as descriptors. These descriptors capture the essential characteristics of the features, allowing them to be matched with features from other images. Techniques like SIFT (Scale-Invariant Feature Transform), ORB (Oriented FAST and Rotated BRIEF), and deep learning-based methods are used for robust feature description.</p></li>
+<li><p><strong>Database Matching</strong>: For place recognition, a database of known locations and their corresponding feature descriptors is required. When recognizing a place, the system compares the descriptors from the current image to those in the database to find matches.</p></li>
+<li><p><strong>Geometric Verification</strong>: After potential matches are found, geometric verification checks the spatial consistency of matching features. This step ensures that the matches are not random and that they fit a plausible model of the camera’s movement or the scene’s geometry.</p></li>
+<li><p><strong>Recognition Decision</strong>: The system makes a recognition decision based on the outcome of the matching and verification steps. If enough matches are found and they satisfy geometric constraints, the system identifies the place as a known location. Otherwise, the place may be considered unknown or prompt further analysis.</p></li>
+</ol>
+<p>Place recognition systems can vary in their approach based on the application’s requirements. Some systems prioritize speed and efficiency for real-time navigation, while others focus on accuracy and the ability to recognize places under significant changes in appearance, such as different weather conditions or times of day. The technology’s effectiveness can be influenced by the diversity of the database, the choice of features and descriptors, and the algorithms’ ability to handle variations in viewpoint, illumination, and environmental changes.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html">Supported models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#placerecognitionknnimpl-documentation">PlaceRecognitionKNNImpl Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#id1">Supported Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#place-recognition-knn-classification">Place Recognition (KNN Classification)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#id2">Place Recognition (KNN Classification)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#understanding-knn-classification-for-place-recognition">Understanding KNN Classification for Place Recognition</a></li>
 </ul>
 </li>
 </ul>
@@ -273,8 +308,8 @@
 </section>
 <section id="object-detection">
 <h2>Object detection<a class="headerlink" href="#object-detection" title="Link to this heading">¶</a></h2>
-<section id="id3">
-<h3>General<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<section id="id4">
+<h3>General<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <p>Object detection is a computer vision technique that involves locating and classifying objects within images or video frames. It goes beyond simple image classification by not only identifying the presence of objects but also providing information about their precise locations within the scene.</p>
 <p>Here’s a simplified explanation of how object detection works:</p>
 <ol class="arabic simple">
@@ -302,8 +337,8 @@
 </section>
 <section id="voice-generation">
 <h2>Voice generation<a class="headerlink" href="#voice-generation" title="Link to this heading">¶</a></h2>
-<section id="id4">
-<h3>General<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<section id="id5">
+<h3>General<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <p>Text-to-speech (TTS) is a technology that converts written text into spoken words. It enables computers and other devices to generate human-like speech by processing and synthesizing text input.</p>
 <p>Here’s a simplified explanation of how text-to-speech works:</p>
 <p>Text Processing: The input text is processed to remove any unwanted characters, punctuation, or formatting. It may also involve tokenization, which breaks the text into smaller units such as words or phonemes for further analysis.</p>

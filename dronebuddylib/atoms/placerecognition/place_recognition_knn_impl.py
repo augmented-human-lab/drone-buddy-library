@@ -1,3 +1,41 @@
+"""
+This class implements place recognition using the k-nearest-neighbors (KNN) algorithm, leveraging image features
+extracted via a pre-trained ResNet model.
+
+When should I use this class?
+This implementation is ideal when you need to identify specific places or landmarks within a large dataset of known
+locations efficiently. It's particularly useful for applications in robotics, drones, or any system requiring
+geographical awareness from visual cues.
+
+Algorithm Description:
+The KNN classifier is trained on a dataset of images labeled with their corresponding places. For an unknown image,
+ the classifier predicts the place by finding the k most similar images in its training set
+  (based on the closest feature vectors under Euclidean distance) and performing a majority vote on their labels.
+
+For instance, if k=3 and the three closest images in the training set to the given image are two images
+of the Eiffel Tower and one image of the Statue of Liberty, the result would be 'Eiffel Tower'.
+
+* This implementation can weight the votes according to the distance of neighbors,
+ giving closer neighbors more influence on the final outcome.
+
+Usage:
+
+1. Prepare a dataset of images for the places you want to recognize.
+Organize the images so that there is a sub-directory for each place within a main directory.
+
+2. Use the 'train' method of this class to train the classifier on your dataset.
+ You can save the trained model to disk by specifying a 'model_save_path', allowing you to reuse the model without retraining.
+
+3. To recognize the place depicted in a new, unknown image, call the 'recognize_place' method with the image as input.
+
+NOTE: This implementation requires scikit-learn, NumPy, PyTorch, torchvision,
+ and PIL to be installed for machine learning operations and image processing.
+ Ensure these packages are installed in your environment:
+
+$ pip install scikit-learn numpy torch torchvision Pillow
+
+"""
+
 import threading
 import time
 from asyncio import Future
@@ -127,12 +165,23 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         ])
         super().__init__(engine_configurations)
 
+    def init_place_net(self):
+        # Instantiate the model architecture
+        # load the pre-trained weights
+
+        model = models.resnet50(num_classes=365)  # Ensure the number of classes matches Places365
+        # model.load_state_dict(torch.load(weight_url, map_location='cpu'))
+        model.eval()  # Set the model to evaluation mode
+
     def test_memory(self) -> dict:
         """
-               Tests the memory of the classifier.
+                Tests the memory capabilities of the classifier by evaluating its performance
+                on a predefined test dataset. This method serves as a diagnostic tool to ensure
+                the classifier is functioning as expected.
 
-               Returns:
-                   dict: A dictionary containing the test results.
+                Returns:
+                    dict: A dictionary containing key performance metrics such as accuracy,
+                    precision, and F1 score of the classifier on the test dataset.
                """
         return self.test_classifier()
 
@@ -227,14 +276,16 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
 
     def feature_extractor(self, img):
         """
-              Extracts features from the specified image using the provided model and preprocessing steps.
+           Extracts feature vectors from the given image using a pre-defined neural network model.
+            This method is crucial for converting raw images into a form that can be effectively
+            used by the KNN classifier for place recognition.
 
-              Args:
+            Args:
+                img: The image from which to extract features, expected to be in a format compatible
+                     with the pre-processing transformations.
 
-                  img: The image file.
-
-              Returns:
-                  numpy.ndarray: The extracted features as a flat array.
+            Returns:
+                numpy.ndarray: The extracted features as a flat array.
         """
         img = self.preprocess_image(img)
         #     model: The pre-trained model to use for feature extraction.
@@ -251,7 +302,25 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
     def train(self, train_dir, model_save_path=None, n_neighbors=3, knn_algo='auto', weights='distance',
               classifier_index=0, changes=None, verbose=False,
               future=None):
+        """
+           Trains the KNN classifier on a set of labeled images stored in a directory structure.
+           Each sub-directory within the train directory should represent a class (place), and contain
+           images corresponding to that place.
 
+           Args:
+               train_dir (str): The directory containing the training dataset.
+               model_save_path (str, optional): Path to save the trained model.
+               n_neighbors (int, optional): Number of neighbors to use for k-nearest neighbors voting.
+               knn_algo (str, optional): Underlying algorithm to compute the nearest neighbors.
+               weights (str, optional): Weight function used in prediction.
+               classifier_index (int, optional): An index to uniquely identify the classifier.
+               changes (str, optional): Description of any changes or versioning info.
+               verbose (bool, optional): Enables verbose output during the training process.
+               future (Future, optional): A Future object for asynchronous execution.
+
+           Returns:
+               dict: A dictionary containing performance metrics such as accuracy and precision of the trained model.
+           """
         X = []
         y = []
 
@@ -378,7 +447,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                                                                  classifier_path_name, self.custom_knn_neighbors,
                                                                  self.custom_knn_algorithm_name,
                                                                  self.custom_knn_weights,
-                                                                 classifier_index,changes,
+                                                                 classifier_index, changes,
                                                                  True, future))
 
         train_thread.start()
@@ -494,6 +563,16 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         return features, labels, le.classes_
 
     def create_data_set(self, place_name, data_mode, drone_instance=None):
+        """
+                Generates a dataset for a given place name, optionally using a drone for image collection.
+                Different modes support training, validation, and testing data collection.
+
+                Args:
+                    place_name (str): The name of the place for which to create the dataset.
+                    data_mode (int): The mode of dataset creation (e.g., training, validation).
+                    drone_instance: An optional drone instance to use for collecting images.
+
+                """
         # if drone_instance is not None:
         if True:
             count = 00

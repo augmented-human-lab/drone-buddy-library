@@ -38,6 +38,20 @@ Face Recognition module
 
    dronebuddylib.atoms.facerecognition
 
+Place Recognition module
+-------------------------------------------
+
+.. automodule:: dronebuddylib.atoms.placerecognition
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 2
+
+   dronebuddylib.atoms.placerecognition
+
 
 Intent Recognition module
 -------------------------------------------

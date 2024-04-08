@@ -1,7 +1,7 @@
 Supported models
 ==========
 
-Face-recognition
+Face-recognition (Euclidean distance matching)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Face-recognition is an open-source Python library that provides face detection, face alignment, and face recognition capabilities.
@@ -51,3 +51,38 @@ Here's a breakdown of dlib's role in the face recognition process:
 
 In summary, dlib plays a critical role in providing the underlying functionality for face detection, facial landmark detection, and face alignment in the "face_recognition" library. It enables accurate and efficient face recognition by handling the low-level details of these tasks, allowing developers to work with face recognition in a more accessible manner using the "face_recognition" library.
 
+Face-recognition (KNN classification)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The KNN (k-nearest neighbors) classification approach for face recognition is an efficient method particularly suited for scenarios where the goal is to identify a person from a large database of known individuals, ensuring swift and accurate recognition even as the dataset grows.
+
+Understanding KNN Classification for Face Recognition
+
+#. Purpose: This technique is optimal when you need to recognize and distinguish among a vast number of known faces. It's especially effective when the goal is to accurately identify an unknown individual by comparing their facial features with a database of faces whose identities are already known.
+
+#. Algorithm Overview:
+
+    -   Training Phase: The KNN classifier is initially trained with a dataset comprising faces of known individuals. Each face in the training set is labeled with the person's identity and characterized by a set of facial features extracted through deep learning models. These features are essentially high-dimensional data points that uniquely represent each face.
+
+    -   Prediction Phase: To identify an unknown face, the algorithm analyzes its facial features and searches the trained dataset for the k nearest neighbors, i.e., the k most similar faces based on Euclidean distance metrics between their feature vectors.
+
+    -   Decision Making: The final identification is made through a majority vote among these neighbors. The unknown face is assigned the identity most common among its nearest neighbors. This process can be weighted by the distance, giving closer neighbors more influence on the decision.
+
+#. When to Use KNN for Face Recognition:
+
+-   This method shines when the dataset of known individuals is large and varied.
+-   It's particularly advantageous for applications requiring the capability to easily add new individuals to the database without retraining the entire model.
+-   Suitable for systems where computational efficiency and speed are crucial, as the method allows for relatively quick searches through the dataset for matching faces.
+
+#. Advantages:
+
+-   Flexibility: Easily accommodates additional data without significant retraining.
+-   Efficiency: Capable of handling large datasets with reasonable accuracy and speed.
+-   Simplicity: The algorithm's straightforward nature makes it easy to implement and understand.
+
+#. Considerations:
+
+-   The choice of k (number of neighbors) can significantly impact accuracy. A too-small k may be overly sensitive to noise in the dataset, while a too-large k may blur the boundaries between distinct classes.
+-   The method's effectiveness is dependent on the quality and diversity of the training dataset. Adequate representation of different individuals under various conditions is crucial for robust recognition.
+
+By leveraging the KNN classification technique for face recognition, developers can implement a system that is not only accurate but also scalable and adaptable to the evolving requirements of face identification tasks.

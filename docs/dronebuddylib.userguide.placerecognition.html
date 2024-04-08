@@ -21,8 +21,8 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
-  <link rel="next" title="atoms packages" href="dronebuddylib.atoms.html" />
-  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.objectdetection.html" /> 
+  <link rel="next" title="Supported models" href="dronebuddylib.userguide.objectdetection.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.facerecognition.html" /> 
   </head>
 
   <body>
@@ -138,12 +138,12 @@
 
   <ul class="page-nav">
   <li class="prev">
-    <a href="dronebuddylib.userguide.objectdetection.html"
+    <a href="dronebuddylib.userguide.facerecognition.html"
        title="previous chapter">← Supported models</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.atoms.html"
-       title="next chapter">atoms packages →</a>
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="next chapter">Supported models →</a>
   </li>
 </ul>
   
@@ -153,15 +153,60 @@
             
   <section id="supported-models">
 <h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
-<section id="pyttsx3">
-<h2>Pyttsx3<a class="headerlink" href="#pyttsx3" title="Link to this heading">¶</a></h2>
-<p>pyttsx3 is a Python library that provides a simple and convenient interface for performing text-to-speech synthesis. It allows you to convert text into spoken words using various speech synthesis engines available on your system.</p>
-<p>Here’s a brief explanation of pyttsx3’s key features and how it works:</p>
+</section>
+<section id="placerecognitionknnimpl-documentation">
+<h1>PlaceRecognitionKNNImpl Documentation<a class="headerlink" href="#placerecognitionknnimpl-documentation" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2>Supported Models<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<section id="place-recognition-knn-classification">
+<h3>Place Recognition (KNN Classification)<a class="headerlink" href="#place-recognition-knn-classification" title="Link to this heading">¶</a></h3>
+<p>This section describes the implementation of place recognition using the k-nearest-neighbors (KNN) algorithm, leveraging image features extracted via a pre-trained ResNet model.</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h3>
+<p>This implementation requires specific Python packages for machine learning operations and image processing. Ensure the following packages are installed in your environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>scikit-learn<span class="w"> </span>numpy<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>Pillow
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Place Recognition (KNN Classification)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>The KNN classification approach for place recognition is efficient for identifying specific places or landmarks within a large dataset of known locations, useful for applications requiring geographical awareness from visual cues.</p>
+</section>
+</section>
+<section id="understanding-knn-classification-for-place-recognition">
+<h2>Understanding KNN Classification for Place Recognition<a class="headerlink" href="#understanding-knn-classification-for-place-recognition" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Multi-Platform Support: pyttsx3 is designed to work on multiple platforms, including Windows, macOS, and Linux, providing cross-platform compatibility for text-to-speech functionality in Python.</p></li>
-<li><p>Text-to-Speech Engines: pyttsx3 supports different speech synthesis engines, allowing you to choose the one that best suits your needs. By default, it uses the SAPI5 on Windows, NSSpeechSynthesizer on macOS, and eSpeak on Linux. Additionally, pyttsx3 can be configured to work with other third-party speech synthesis engines available on your system.</p></li>
-<li><p>Installation: To install pyttsx3, you can use pip, the Python package manager, by running the following command in your terminal or command prompt:</p></li>
+<li><p><strong>Purpose</strong>: Ideal for recognizing a vast number of known places, effectively identifying an unknown location by comparing its visual features with a known database.</p></li>
+<li><p><strong>Algorithm Overview</strong>:</p>
+<ul class="simple">
+<li><p><strong>Training Phase</strong>: Trains with images labeled with their places, characterized by features extracted through ResNet.</p></li>
+<li><p><strong>Prediction Phase</strong>: Identifies an unknown place by analyzing its features and searching for the k nearest neighbors based on Euclidean distances.</p></li>
+<li><p><strong>Decision Making</strong>: The final decision is made through a majority vote among neighbors, potentially weighted by distance.</p></li>
+</ul>
+</li>
+<li><p><strong>When to Use KNN for Place Recognition</strong>:</p>
+<ul class="simple">
+<li><p>Suitable for large and varied datasets.</p></li>
+<li><p>Allows easy addition of new places without retraining the entire model.</p></li>
+<li><p>Ideal where computational efficiency and speed are crucial.</p></li>
+</ul>
+</li>
+<li><p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p><strong>Flexibility</strong>: Accommodates new data easily without significant retraining.</p></li>
+<li><p><strong>Efficiency</strong>: Handles large datasets with reasonable accuracy and speed.</p></li>
+<li><p><strong>Simplicity</strong>: Straightforward algorithm for easy implementation and understanding.</p></li>
+</ul>
+</li>
+<li><p><strong>Considerations</strong>:</p>
+<ul class="simple">
+<li><p>Choice of <cite>k</cite> (number of neighbors) impacts accuracy.</p></li>
+<li><p>Effectiveness depends on the training dataset’s quality and diversity.</p></li>
+</ul>
+</li>
 </ol>
+<p>By leveraging KNN classification for place recognition, developers can create systems that are accurate, scalable, and adaptable to geographical identification tasks.</p>
 </section>
 </section>
 
@@ -170,12 +215,12 @@
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
   <li class="prev">
-    <a href="dronebuddylib.userguide.objectdetection.html"
+    <a href="dronebuddylib.userguide.facerecognition.html"
        title="previous chapter">← Supported models</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.atoms.html"
-       title="next chapter">atoms packages →</a>
+    <a href="dronebuddylib.userguide.objectdetection.html"
+       title="next chapter">Supported models →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2023, NUS.

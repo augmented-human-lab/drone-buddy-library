@@ -109,6 +109,37 @@ Face recognition systems can be designed for different purposes, such as one-to-
 
    dronebuddylib.userguide.facerecognition
 
+Place Recognition
+-----------------
+
+General
+~~~~~~~
+
+
+Place recognition technology identifies or verifies a location by analyzing visual cues or features from an environment. It plays a crucial role in various applications, including autonomous navigation for robots and vehicles, geolocating images in mapping services, and augmenting virtual and augmented reality experiences.
+
+Here's a simplified explanation of how place recognition works:
+
+1. **Image Capture**: The process starts with capturing images or video streams of a place. This can involve cameras mounted on vehicles, drones, or handheld devices that take photographs or videos of the surroundings.
+
+2. **Feature Detection**: The next step is to detect distinct features within the captured images. Algorithms search for unique visual elements that can be reliably identified across different images, such as corners, edges, or specific patterns and textures. These features need to be detectable under various conditions and viewpoints.
+
+3. **Feature Description**: Once features are detected, the system describes them using numerical vectors, known as descriptors. These descriptors capture the essential characteristics of the features, allowing them to be matched with features from other images. Techniques like SIFT (Scale-Invariant Feature Transform), ORB (Oriented FAST and Rotated BRIEF), and deep learning-based methods are used for robust feature description.
+
+4. **Database Matching**: For place recognition, a database of known locations and their corresponding feature descriptors is required. When recognizing a place, the system compares the descriptors from the current image to those in the database to find matches.
+
+5. **Geometric Verification**: After potential matches are found, geometric verification checks the spatial consistency of matching features. This step ensures that the matches are not random and that they fit a plausible model of the camera's movement or the scene's geometry.
+
+6. **Recognition Decision**: The system makes a recognition decision based on the outcome of the matching and verification steps. If enough matches are found and they satisfy geometric constraints, the system identifies the place as a known location. Otherwise, the place may be considered unknown or prompt further analysis.
+
+Place recognition systems can vary in their approach based on the application's requirements. Some systems prioritize speed and efficiency for real-time navigation, while others focus on accuracy and the ability to recognize places under significant changes in appearance, such as different weather conditions or times of day. The technology's effectiveness can be influenced by the diversity of the database, the choice of features and descriptors, and the algorithms' ability to handle variations in viewpoint, illumination, and environmental changes.
+
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.placerecognition
+
 Object detection
 -----------------
 
