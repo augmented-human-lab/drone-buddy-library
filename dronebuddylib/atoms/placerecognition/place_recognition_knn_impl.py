@@ -1,52 +1,15 @@
-"""
-This class implements place recognition using the k-nearest-neighbors (KNN) algorithm, leveraging image features
-extracted via a pre-trained ResNet model.
-
-When should I use this class?
-This implementation is ideal when you need to identify specific places or landmarks within a large dataset of known
-locations efficiently. It's particularly useful for applications in robotics, drones, or any system requiring
-geographical awareness from visual cues.
-
-Algorithm Description:
-The KNN classifier is trained on a dataset of images labeled with their corresponding places. For an unknown image,
- the classifier predicts the place by finding the k most similar images in its training set
-  (based on the closest feature vectors under Euclidean distance) and performing a majority vote on their labels.
-
-For instance, if k=3 and the three closest images in the training set to the given image are two images
-of the Eiffel Tower and one image of the Statue of Liberty, the result would be 'Eiffel Tower'.
-
-* This implementation can weight the votes according to the distance of neighbors,
- giving closer neighbors more influence on the final outcome.
-
-Usage:
-
-1. Prepare a dataset of images for the places you want to recognize.
-Organize the images so that there is a sub-directory for each place within a main directory.
-
-2. Use the 'train' method of this class to train the classifier on your dataset.
- You can save the trained model to disk by specifying a 'model_save_path', allowing you to reuse the model without retraining.
-
-3. To recognize the place depicted in a new, unknown image, call the 'recognize_place' method with the image as input.
-
-NOTE: This implementation requires scikit-learn, NumPy, PyTorch, torchvision,
- and PIL to be installed for machine learning operations and image processing.
- Ensure these packages are installed in your environment:
-
-$ pip install scikit-learn numpy torch torchvision Pillow
-
-"""
-
 import threading
 import time
 from asyncio import Future
 
 import numpy as np
 import pkg_resources
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
 from dronebuddylib.atoms.placerecognition.i_place_recognition import IPlaceRecognition
-from dronebuddylib.atoms.placerecognition.place_recognition_result import RecognizedPlaces
+from dronebuddylib.atoms.placerecognition.place_recognition_result import RecognizedPlaces, RecognizedPlaceObject
 from dronebuddylib.exceptions.PlaceRecognitionException import PlaceRecognitionException
 from dronebuddylib.models import AtomicEngineConfigurations, EngineConfigurations
 from dronebuddylib.models.execution_status import ExecutionStatus
@@ -77,6 +40,41 @@ logger = Logger()
 
 class PlaceRecognitionKNNImpl(IPlaceRecognition):
     """
+        This class implements place recognition using the k-nearest-neighbors (KNN) algorithm, leveraging image features
+        extracted via a pre-trained ResNet model.
+
+        When should I use this class?
+        This implementation is ideal when you need to identify specific places or landmarks within a large dataset of known
+        locations efficiently. It's particularly useful for applications in robotics, drones, or any system requiring
+        geographical awareness from visual cues.
+
+        Algorithm Description:
+        The KNN classifier is trained on a dataset of images labeled with their corresponding places. For an unknown image,
+         the classifier predicts the place by finding the k most similar images in its training set
+          (based on the closest feature vectors under Euclidean distance) and performing a majority vote on their labels.
+
+        For instance, if k=3 and the three closest images in the training set to the given image are two images
+        of the Eiffel Tower and one image of the Statue of Liberty, the result would be 'Eiffel Tower'.
+
+        * This implementation can weight the votes according to the distance of neighbors,
+         giving closer neighbors more influence on the final outcome.
+
+        Usage:
+
+        1. Prepare a dataset of images for the places you want to recognize.
+        Organize the images so that there is a sub-directory for each place within a main directory.
+
+        2. Use the 'train' method of this class to train the classifier on your dataset.
+         You can save the trained model to disk by specifying a 'model_save_path', allowing you to reuse the model without retraining.
+
+        3. To recognize the place depicted in a new, unknown image, call the 'recognize_place' method with the image as input.
+
+        NOTE: This implementation requires scikit-learn, NumPy, PyTorch, torchvision,
+         and PIL to be installed for machine learning operations and image processing.
+         Ensure these packages are installed in your environment:
+
+        $ pip install scikit-learn numpy torch torchvision Pillow
+
        A class implementing KNN-based place recognition.
 
        This class uses k-nearest neighbors algorithm to recognize places by comparing
@@ -95,6 +93,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
     # Event to signal when the training is done
     progress_event = threading.Event()
     current_status = None
+    classifier_path = "resources/models/classifiers/knn/trained_place_knn_model"
 
     def __init__(self, engine_configurations: EngineConfigurations):
         """
@@ -141,11 +140,40 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         self.threshold = configs.get(AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_MODEL_THRESHOLD.name,
                                      configs.get(
                                          AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_MODEL_THRESHOLD))
+        self.custom_classifier_location = configs.get(
+            AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION.name,
+            configs.get(AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION))
+
         self.current_status = ExecutionStatus(self.get_class_name(), "INIT", "INITIALIZATION", "COMPLETED")
 
-        # Load a pre-trained ResNet model
-        self.model = models.densenet121(pretrained=True)
-        self.model.eval()  # Set the model to evaluation mode
+        # # Initialize the model
+        self.extractor = configs.get(
+            AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_EXTRACTOR.name,
+            configs.get(AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_EXTRACTOR))
+
+        if self.extractor is None:
+            self.model = models.densenet121(pretrained=True)
+            self.extractor = "Densenet121"
+        elif self.extractor == "GoogLeNet":
+            # Load a pre-trained ResNet model
+            self.model = models.googlenet(pretrained=True)
+            self.model.eval()
+        elif self.extractor == "GoogLeNetPlaces365":
+            from dronebuddylib.atoms.placerecognition.resources.common.googlenet.googlenet_places365 import \
+                GoogLeNetPlaces365
+            self.model = GoogLeNetPlaces365()
+            model_path = pkg_resources.resource_filename(__name__, "resources/common/googlenet/googlenet_places365.pth")
+            # Load the pre-trained weights
+            self.model.load_state_dict(torch.load(model_path, map_location='cpu'))
+        elif self.extractor == "ResNet50":
+            self.model = models.resnet50(pretrained=True)
+        elif self.extractor == "Densenet121":
+            self.model = models.densenet121(pretrained=True)
+        elif self.extractor == "ResNet18":
+            self.model = models.resnet18(pretrained=True)
+
+        # # Put the model in evaluation mode
+        self.model.eval()
 
         # Define a transform to convert images to the format expected by ResNet
         self.preprocess = transforms.Compose([
@@ -157,21 +185,43 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
 
         # Define a transformation pipeline with rotation and color jitter
         self.transform = transforms.Compose([
-            transforms.RandomRotation(degrees=15),  # Rotate the image up to 15 degrees
-            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),  # Adjust color settings
-            # Include any additional transformations here
+            # Convert the NumPy array to PIL Image first to use torchvision transforms
+            transforms.ToPILImage(),
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
-            # Make sure to include normalization if you're using a pre-trained model
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
         super().__init__(engine_configurations)
 
-    def init_place_net(self):
-        # Instantiate the model architecture
-        # load the pre-trained weights
+    def preprocess_image(self, image) -> np.ndarray:
 
-        model = models.resnet50(num_classes=365)  # Ensure the number of classes matches Places365
-        # model.load_state_dict(torch.load(weight_url, map_location='cpu'))
-        model.eval()  # Set the model to evaluation mode
+        # Resize the image
+        image_resized = cv2.resize(image, (224, 224))
+
+        # Convert BGR to RGB
+        image_rgb = cv2.cvtColor(image_resized, cv2.COLOR_BGR2RGB)
+
+        # Convert the image to a float tensor and normalize
+        image_tensor = np.transpose(image_rgb, (2, 0, 1)).astype(np.float32)
+        image_tensor /= 255.0  # Normalize to [0, 1]
+        image_tensor = (image_tensor - np.array([0.485, 0.456, 0.406]).reshape((3, 1, 1))) / np.array(
+            [0.229, 0.224, 0.225]).reshape((3, 1, 1))
+
+        # Add a batch dimension
+        image_tensor = np.expand_dims(image_tensor, axis=0)
+        return image_tensor
+
+    def extract_features_with_specified_models(self, image) -> str:
+        img_transformed = self.transform(image)
+
+        # Add a batch dimension since PyTorch models expect a batch of images as input
+        img_batch = img_transformed.unsqueeze(0)
+
+        # Make prediction
+        with torch.no_grad():
+            output = self.model(img_batch)
+            return output
 
     def test_memory(self) -> dict:
         """
@@ -200,34 +250,34 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
 
         image_features = self.feature_extractor(image)
 
+        # image_features = self.feature_extractor_place(image)
+
         # Check if features were successfully extracted
         if image_features is None:
             logger.log_info(self.get_class_name(), "No features extracted from image.")
             return None
 
-        classifier_index = read_from_file(
-            pkg_resources.resource_filename(__name__, "resources/models/classifiers/classifier_index.txt"))
-        model_path = pkg_resources.resource_filename(__name__,
-                                                     "resources/models/classifiers/trained_place_knn_model" + str(
-                                                         classifier_index) + ".clf")
+        if self.custom_classifier_location is not None:
+            model_path = self.custom_classifier_location
+        else:
+            classifier_index = read_from_file(
+                pkg_resources.resource_filename(__name__, "resources/models/classifiers/classifier_index.txt"))
+            model_path = pkg_resources.resource_filename(__name__,
+                                                         self.classifier_path + str(classifier_index) + ".clf")
 
         # Load the trained KNN model
         with open(model_path, 'rb') as f:
             model = pickle.load(f)
 
-        # Predict the place using the KNN model
-        # Note: reshape image_features to match the expected input format of the model
-
         predicted_place = model.predict([image_features])
+
 
         probabilities = model.predict_proba([image_features])[
             0]  # Get the probabilities of the first (and only) example
-        print(probabilities)
         max_probability = max(probabilities)
         predicted_index = probabilities.argmax()
         predicted_label = model.classes_[predicted_index]
 
-        print(max_probability, predicted_label)
         # You can also retrieve the probabilities or distances if your application needs that
         # For example, to get probabilities: probabilities = model.predict_proba([image_features])
 
@@ -235,15 +285,20 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         logger.log_info(self.get_class_name(),
                         f"Recognized place: {predicted_label} with confidence: {max_probability}")
 
-        # Check if the maximum probability is below the threshold
-        if self.threshold is None:
-            self.threshold = 0.6
+        # Predict the class probabilities
+        probabilities = model.predict_proba([image_features])[0]  # Probabilities of all classes
+        top_three_indices = np.argsort(probabilities)[::-1][:3]  # Indices of top 3 classes
+        top_three_probabilities = probabilities[top_three_indices]  # Probabilities of top 3 classes
+        top_three_labels = model.classes_[top_three_indices]  # Labels of top 3 classes
 
-        if max_probability < self.threshold:
-            logger.log_info(self.get_class_name(), "Confidence below threshold. Classifying as 'unknown'.")
-            return RecognizedPlaces('unknown')
+        recognized_places = []
+        most_probable_place = RecognizedPlaceObject(predicted_label, max_probability)
+        # Log the top three predictions
+        for i, (label, prob) in enumerate(zip(top_three_labels, top_three_probabilities)):
+            logger.log_info(self.get_class_name(), f"Top {i + 1} predicted place: {label} with confidence: {prob}")
+            recognized_places.append(RecognizedPlaceObject(label, prob))
 
-        return RecognizedPlaces(predicted_place[0])
+        return RecognizedPlaces(most_probable_place, recognized_places)
 
     def remember_place(self, image=None, name=None) -> bool:
 
@@ -287,17 +342,53 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
             Returns:
                 numpy.ndarray: The extracted features as a flat array.
         """
-        img = self.preprocess_image(img)
-        #     model: The pre-trained model to use for feature extraction.
-        #     preprocess: The preprocessing steps to apply to the image before feature extraction.
-        img_t = self.preprocess(img)
-        batch_t = torch.unsqueeze(img_t, 0)
 
+        if self.extractor == "GoogLeNetPlaces365":
+            img = self.preprocess_image(img)
+            #     model: The pre-trained model to use for feature extraction.
+            #     preprocess: The preprocessing steps to apply to the image before feature extraction.
+            img_t = self.preprocess(img)
+            batch_t = torch.unsqueeze(img_t, 0)
+
+            with torch.no_grad():
+                features = self.model(batch_t)
+
+            # Convert features to a numpy array
+            return features.numpy().flatten()
+        else:
+            img_transformed = self.transform(img)
+
+            # Add a batch dimension since PyTorch models expect a batch of images as input
+            img_batch = img_transformed.unsqueeze(0)
+
+            # Make prediction
+            with torch.no_grad():
+                output = self.model(img_batch)
+                return output.numpy().flatten()
+
+    def feature_extractor_place(self, img):
+        """
+           Extracts feature vectors from the given image using a pre-defined neural network model.
+            This method is crucial for converting raw images into a form that can be effectively
+            used by the KNN classifier for place recognition.
+
+            Args:
+                img: The image from which to extract features, expected to be in a format compatible
+                     with the pre-processing transformations.
+
+            Returns:
+                numpy.ndarray: The extracted features as a flat array.
+        """
+
+        img_transformed = self.transform(img)
+
+        # Add a batch dimension since PyTorch models expect a batch of images as input
+        img_batch = img_transformed.unsqueeze(0)
+
+        # Make prediction
         with torch.no_grad():
-            features = self.model(batch_t)
-
-        # Convert features to a numpy array
-        return features.numpy().flatten()
+            output = self.model(img_batch)
+            return output.numpy().flatten()
 
     def train(self, train_dir, model_save_path=None, n_neighbors=3, knn_algo='auto', weights='distance',
               classifier_index=0, changes=None, verbose=False,
@@ -324,6 +415,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         X = []
         y = []
 
+        class_count = 0
         if knn_algo is None:
             knn_algo = 'auto'
         if n_neighbors is None:
@@ -335,6 +427,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
 
         # Loop through each person in the training set
         for class_dir in os.listdir(train_dir):
+            class_count += 1
             if verbose:
                 logger.log_debug(self.get_class_name(), "Training for class : " + class_dir)
             if not os.path.isdir(os.path.join(train_dir, class_dir)):
@@ -389,9 +482,12 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         }
 
         # Save the trained KNN classifier
+        training_end_time = time.time()
 
         model_string = "model name: " + str(
-            classifier_index) + ".clf" + ": reason : " + changes + " with accuracy: " + str(
+            classifier_index) + ".clf" + ": reason : " + changes + " : extractor : " + self.extractor + " : no. of classes " + str(
+            class_count) + ": time taken : " + str(
+            (training_end_time - training_start_time)) + " seconds  :  accuracy: " + str(
             accuracy) + " : precision: " + str(precision) + " : f1_score: " + str(f1_score) + "\n"
         if model_save_path is not None:
             with open(model_save_path, 'wb') as f:
@@ -401,11 +497,115 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
         file_path = pkg_resources.resource_filename(__name__, "resources/models/classifiers/classifier_data.txt")
 
         write_to_file_longer(file_path, model_string)
-        training_end_time = time.time()
         logger.log_info(self.get_class_name(),
                         'Training complete. It took ' + str(
                             (training_end_time - training_start_time) / 60) + ' minutes')
         self.progress_event.set()
+        if future is not None:
+            future.set_result(result)  # Set the result of the future
+        return result
+
+    # Assume logger and other necessary functions and imports are defined elsewhere
+
+    def train_random_forest_classifier(self, train_dir, model_save_path=None, n_estimators=100,
+                                       max_depth=None, random_state=42, criterion='gini',
+                                       min_samples_split=2, classifier_index=None, changes="",
+                                       verbose=False, future=None):
+        """
+        Trains the Random Forest classifier on a set of labeled images stored in a directory structure.
+        Each sub-directory within the train directory should represent a class (place), and contain
+        images corresponding to that place.
+
+        Args:
+            train_dir (str): The directory containing the training dataset.
+            model_save_path (str, optional): Path to save the trained model.
+            n_estimators (int, optional): The number of trees in the forest.
+            max_depth (int, optional): The maximum depth of the trees.
+            random_state (int, optional): Controls both the randomness of the bootstrapping of the samples
+                                          used when building trees (if bootstrap=True) and the sampling of
+                                          the features to consider when looking for the best split at each node.
+            criterion (str, optional): The function to measure the quality of a split.
+            min_samples_split (int, optional): The minimum number of samples required to split an internal node.
+            classifier_index (int, optional): An index to uniquely identify the classifier.
+            changes (str, optional): Description of any changes or versioning info.
+            verbose (bool, optional): Enables verbose output during the training process.
+            future (Future, optional): A Future object for asynchronous execution.
+
+        Returns:
+            dict: A dictionary containing performance metrics such as accuracy and precision of the trained model.
+        """
+        X = []
+        y = []
+
+        class_count = 0
+
+        training_start_time = time.time()
+
+        # Loop through each class in the training set
+        for class_dir in os.listdir(train_dir):
+            class_count += 1
+            if verbose:
+                logger.log_debug("Training for class: " + class_dir)
+            if not os.path.isdir(os.path.join(train_dir, class_dir)):
+                continue
+
+            # Loop through each training image for the current class
+            for img_path in [os.path.join(train_dir, class_dir, f) for f in
+                             os.listdir(os.path.join(train_dir, class_dir)) if
+                             os.path.isfile(os.path.join(train_dir, class_dir, f))]:
+                img = cv2.imread(img_path)
+                features = self.feature_extractor(img)  # Assuming this is defined elsewhere
+                if features is not None and features.size > 0:
+                    X.append(features)
+                    y.append(class_dir)
+                    if verbose:
+                        logger.log_debug("Feature extraction for: " + img_path)
+                else:
+                    logger.log_error("No features extracted for: " + img_path)
+
+        X = np.array(X)
+        y = np.array(y)
+
+        if len(X) == 0:
+            logger.log_error("No features were extracted. Aborting training.")
+            return None
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
+        # Create and train the Random Forest classifier
+        rf_clf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=random_state,
+                                        criterion=criterion, min_samples_split=min_samples_split)
+        rf_clf.fit(X_train, y_train)
+
+        logger.log_debug(self.get_class_name(), "Training completed")
+
+        # Evaluate the model
+        predictions = rf_clf.predict(X_test)
+
+        logger.log_debug(self.get_class_name(), "Testing completed")
+
+        # Calculate and print the accuracy
+        accuracy = accuracy_score(y_test, predictions)
+        precision = precision_score(y_test, predictions, average='weighted')
+        f1 = precision_recall_fscore_support(y_test, predictions, average='weighted')
+        report = classification_report(y_test, predictions)
+
+        result = {
+            "accuracy": accuracy,
+            "precision": precision,
+            "f1_score": f1,
+            "report": report
+        }
+
+        # Save the trained Random Forest classifier
+        training_end_time = time.time()
+
+        if model_save_path is not None:
+            with open(model_save_path, 'wb') as f:
+                pickle.dump(rf_clf, f)
+
+        # Additional logging and file writing omitted for brevity
+
         if future is not None:
             future.set_result(result)  # Set the result of the future
         return result
@@ -426,9 +626,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
             training_path_name = pkg_resources.resource_filename(__name__, "resources/test_data/training_data")
 
         classifier_path_name = pkg_resources.resource_filename(__name__,
-                                                               "resources/models/classifiers/"
-                                                               + "trained_place_knn_model"
-                                                               + str(classifier_index) + ".clf")
+                                                               self.classifier_path + str(classifier_index) + ".clf")
 
         # ------------------------------------------------------------------------------------------------------------
         #  TRAINING THE CLASSIFIER
@@ -448,7 +646,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                                                                  self.custom_knn_algorithm_name,
                                                                  self.custom_knn_weights,
                                                                  classifier_index, changes,
-                                                                 True, future))
+                                                                 False, future))
 
         train_thread.start()
 
@@ -573,6 +771,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                     drone_instance: An optional drone instance to use for collecting images.
 
                 """
+        type = "training"
         # if drone_instance is not None:
         if True:
             count = 00
@@ -581,7 +780,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                 path_name = pkg_resources.resource_filename(__name__,
                                                             "resources/test_data/training_data/" + place_name)
                 rotation_size = 5
-                height_fixer = 30
+                height_fixer = 20
 
             elif data_mode == 1:
                 drone_instance.move_forward(30)
@@ -589,11 +788,12 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                                                             "resources/test_data/validation_data/" + place_name)
                 rotation_size = 30
                 height_fixer = 30
+                type = "validation"
             else:
                 path_name = pkg_resources.resource_filename(__name__,
                                                             "resources/test_data/training_data/" + place_name)
                 rotation_size = 5
-                height_fixer = 30
+                height_fixer = 20
 
             logger.log_warning(self.get_class_name(),
                                'Data set creating. ' + str(320) +
@@ -616,11 +816,15 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
             while current_height <= 150:
                 if data_mode == 0:
                     drone_instance.move_up(height_fixer)
+                    logger.log_debug(self.get_class_name(),
+                                     "going  up by " + str(height_fixer) + " , " + str(
+                                         current_height) + " cm above the ground")
                 else:
                     drone_instance.move_down(height_fixer)
 
-                logger.log_debug(self.get_class_name(),
-                                 "going  up  30 , " + str(current_height) + " cm above the ground")
+                    logger.log_debug(self.get_class_name(),
+                                     "going  down by   " + str(height_fixer) + " , " + str(
+                                         current_height) + " cm above the ground")
 
                 current_rotation = 0
                 while current_rotation <= 360:
@@ -631,11 +835,12 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                     file_name_path = (path_name + "\\" + place_name + "_" + str(count) + ".jpg")
                     cv2.imwrite(file_name_path, face)
                     # Put count on images and display live count
-                    cv2.putText(face, str(count), (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+                    cv2.putText(face, str(count) + " " + type, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
                     cv2.imshow("FaceCropper", face)
-                    logger.log_debug(self.get_class_name(), "turning 30 , " + str(current_rotation))
+                    logger.log_debug(self.get_class_name(),
+                                     "turning by " + str(rotation_size) + " , " + str(current_rotation))
                     try:
-                        drone_instance.rotate_clockwise(30)
+                        drone_instance.rotate_clockwise(rotation_size)
                     except Exception as e:
                         logger.log_error(self.get_class_name(), "Error while rotating drone: " + str(e))
                     current_rotation += rotation_size
@@ -643,6 +848,9 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                                                           "creating data set at " + str(
                                                               current_height) + " cm above the ground",
                                                           "PROGRESS", str(count) + "/" + str(320))
+                    if data_mode == 1:
+                        if drone_instance.get_height() <= 30:
+                            drone_instance.land()
                     count += 1
                     if cv2.waitKey(1) == 27:
                         break
@@ -685,6 +893,7 @@ class PlaceRecognitionKNNImpl(IPlaceRecognition):
                 AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_MODEL_THRESHOLD,
                 AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET,
                 AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_DRONE_INSTANCE,
+                AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION,
                 ]
         # return []
 

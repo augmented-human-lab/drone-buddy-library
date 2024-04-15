@@ -21,6 +21,10 @@ class PlaceRecognitionEngine:
                 algorithm == PlaceRecognitionAlgorithm.PLACE_RECOGNITION_KNN.name):
             from dronebuddylib.atoms.placerecognition.place_recognition_knn_impl import PlaceRecognitionKNNImpl
             self.place_recognition_engine = PlaceRecognitionKNNImpl(config)
+        elif (algorithm == PlaceRecognitionAlgorithm.PLACE_RECOGNITION_RF or
+              algorithm == PlaceRecognitionAlgorithm.PLACE_RECOGNITION_RF.name):
+            from dronebuddylib.atoms.placerecognition.place_recognition_rf_impl import PlaceRecognitionRFImpl
+            self.place_recognition_engine = PlaceRecognitionRFImpl(config)
         else:
             # Optionally handle other algorithms if you have any.
             raise ValueError("Unsupported place recognition algorithm")
@@ -38,7 +42,7 @@ class PlaceRecognitionEngine:
         return self.place_recognition_engine.recognize_place(image)
 
     def remember_place(self, image=None, name=None, drone_instance=None, on_start=None, on_training_set_complete=None,
-                        on_validation_set_complete=None):
+                       on_validation_set_complete=None):
         """
         Remember a place by associating it with a name, facilitating its future identification and recall.
 
@@ -51,7 +55,7 @@ class PlaceRecognitionEngine:
         """
         return self.place_recognition_engine.remember_place(image, name)
 
-    def create_memory(self ,changes=None):
+    def create_memory(self, changes=None):
         """
         Create a memory database or structure for the place recognition engine, optimizing future recognition tasks.
 
