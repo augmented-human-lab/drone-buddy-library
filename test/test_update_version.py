@@ -9,6 +9,7 @@ init_file_paths = [
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechgeneration\__init__.py',
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\speechrecognition\__init__.py',
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\textrecognition\__init__.py',
+    r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\placerecognition\__init__.py',
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\configurations\__init__.py',
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\models\__init__.py',
     r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\utils\__init__.py',
@@ -39,6 +40,6 @@ def change_setup_version(new_version):
 
 
 if __name__ == '__main__':
-    new_version = '2.0.25'
+    new_version = '2.0.33'
     change_init_version(new_version)
     change_setup_version(new_version)
