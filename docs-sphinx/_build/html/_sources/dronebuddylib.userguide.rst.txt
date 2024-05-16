@@ -8,104 +8,7 @@ Introduction
 DroneBuddy envisions empowering everyone with the ability to personally program their intelligent drones, enriching them with desired features. At its core, DroneBuddy offers a suite of fundamental building blocks, enabling users to seamlessly integrate these elements to bring their drone to flight.
 
 Functioning as an intuitive interface, DroneBuddy simplifies complex algorithms, stripping away the intricacies to offer straightforward input-output modalities. This approach ensures that users can accomplish their objectives efficiently, without getting bogged down in technical complexities. With DroneBuddy, the focus is on user-friendliness and ease of use, making drone programming accessible and hassle-free.
-Installation
-------------
-DroneBuddy behaves as any other python library. You can find the library at https://pypi.org/project/dronebuddylib/ and install using pip.
 
-.. code-block:: bash
-
-    pip install dronebuddylib
-
-
-But before the installation DroneBuddy needs some prerequisites.
-
-It is compulsory that you follow all the steps, so that they are installed correctly. These requirements are requested by some of the machine learning models that we use in DroneBuddy.
-
-#.  Python 3.9 or higher
-#.  Install visual C++ through https://visualstudio.microsoft.com/visual-cpp-build-tools/, when you are installing there is an option for CMake, select that.
-#.  Need to install rust, use https://www.rust-lang.org/tools/install. Follow all the instructions are here
-#.  Install CMake and add it to the system path as here
-.. note::
-    Note: This C++ version is required to install CMake which is required to install the face recognition model. CMake is required to install dlib which is used by the face-recognition algorithm. Not required to follow this step if you are not using face recognition.
-#.  pip install setuptools-rust
-.. note::
-    Note: Rust is required for SNIPS-NLU, the offline intent recognition which is explained further down in the documentation. Not required to follow this step if you are not using SNIPS-NLU.
-
-Installing Pre-requisites
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. toctree::
-   :maxdepth: 2
-
-   installing_visual_cpp
-   installing_cmake
-   installing_rust
-
-Installing visual C++
----------------------
-
-Windows guide
-~~~~~~~~~~~~~
-#.  Go to this link https://visualstudio.microsoft.com/visual-cpp-build-tools/.
-#.  Download Microsoft C++ Build Tools
-#.  Install it from the setup, once it is installed, you will get a pop up window, the is an option to install C++
-#.  Select Desktop development with C++
-
-Install this option.
-
-.. note::
-    Note: This C++ version is required to install CMake which is required to install the face recognition model used to recognize the people that you know.
-
-Install CMake
-~~~~~~~~~~~~~~~~~~
-CMake is required to install the dlib library which is required to install the face-recognition model. The official guidelines to install can be found here. https://github.com/ageitgey/face_recognition/issues/175#issue-257710508
-
-#. The windows installer can be found here https://cmake.org/download/
-#. Once you run it, make sure it is added to the system path. The path would look like C:\Program Files\CMake\bin
-
-Rust installation
-~~~~~~~~~~~~~~~~~~
-
-Rust is required to install the intent recognition library that is needed to understand the commands given to the drone.
-
-You can download Rust from here  https://www.rust-lang.org/tools/install
-
-The steps will differ from Windows to mac, so follow the steps on the website.
-
-Windows installation is pretty straightforward
-
-mac OS installation
-~~~~~~~~~~~~~
-
-
-If you get a permission error while installing , follow the https://stackoverflow.com/questions/45899815/could-not-write-to-bash-profile-when-installing-rust-on-macos-sierra steps given in the answer here.
-
-
-Give a try using this not using sudo:
-.. code-block:: bash
-    curl https://sh.rustup.rs -sSf | sh -s -- --help
-If that works then probably you could try:
-.. code-block:: bash
-    curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path
-
-If the command with the --no-modify-path option works, you'll have to manually update .bash_profile to include it in your path:
-.. code-block:: bash
-    source ~/.cargo/env
-
-Now you are all ready to install DroneBuddy.
-
-
-Installing DroneBuddy
-------------
-Installation is as any other library..
-
-.. code-block:: bash
-
-    pip install dronebuddylib
-
-Now let's get into detail regarding all the functionalities DroneBuddy offers.
-
-
-Once dronebuddylib is installed,
 
 Voice Recognition
 -----------------
@@ -205,6 +108,37 @@ Face recognition systems can be designed for different purposes, such as one-to-
    :maxdepth: 3
 
    dronebuddylib.userguide.facerecognition
+
+Place Recognition
+-----------------
+
+General
+~~~~~~~
+
+
+Place recognition technology identifies or verifies a location by analyzing visual cues or features from an environment. It plays a crucial role in various applications, including autonomous navigation for robots and vehicles, geolocating images in mapping services, and augmenting virtual and augmented reality experiences.
+
+Here's a simplified explanation of how place recognition works:
+
+1. **Image Capture**: The process starts with capturing images or video streams of a place. This can involve cameras mounted on vehicles, drones, or handheld devices that take photographs or videos of the surroundings.
+
+2. **Feature Detection**: The next step is to detect distinct features within the captured images. Algorithms search for unique visual elements that can be reliably identified across different images, such as corners, edges, or specific patterns and textures. These features need to be detectable under various conditions and viewpoints.
+
+3. **Feature Description**: Once features are detected, the system describes them using numerical vectors, known as descriptors. These descriptors capture the essential characteristics of the features, allowing them to be matched with features from other images. Techniques like SIFT (Scale-Invariant Feature Transform), ORB (Oriented FAST and Rotated BRIEF), and deep learning-based methods are used for robust feature description.
+
+4. **Database Matching**: For place recognition, a database of known locations and their corresponding feature descriptors is required. When recognizing a place, the system compares the descriptors from the current image to those in the database to find matches.
+
+5. **Geometric Verification**: After potential matches are found, geometric verification checks the spatial consistency of matching features. This step ensures that the matches are not random and that they fit a plausible model of the camera's movement or the scene's geometry.
+
+6. **Recognition Decision**: The system makes a recognition decision based on the outcome of the matching and verification steps. If enough matches are found and they satisfy geometric constraints, the system identifies the place as a known location. Otherwise, the place may be considered unknown or prompt further analysis.
+
+Place recognition systems can vary in their approach based on the application's requirements. Some systems prioritize speed and efficiency for real-time navigation, while others focus on accuracy and the ability to recognize places under significant changes in appearance, such as different weather conditions or times of day. The technology's effectiveness can be influenced by the diversity of the database, the choice of features and descriptors, and the algorithms' ability to handle variations in viewpoint, illumination, and environmental changes.
+
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.placerecognition
 
 Object detection
 -----------------

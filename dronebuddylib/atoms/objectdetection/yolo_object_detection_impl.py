@@ -46,7 +46,7 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         if model_name is None:
             model_name = "yolov8n.pt"
 
-        logger.log_info(self.get_class_name() , ':Initializing with model with ' + model_name + '')
+        logger.log_info(self.get_class_name(), ':Initializing with model with ' + model_name + '')
 
         self.detector = YOLO(model_name)
         self.object_names = self.detector.names
@@ -79,6 +79,25 @@ class YOLOObjectDetectionImpl(IObjectDetection):
         logger.log_debug(self.get_class_name(), 'Detection completed.')
 
         return ObjectDetectionResult(detected_names, detected_objects)
+
+    def get_detected_objects_temp(self, image) -> ObjectDetectionResult:
+
+        """
+        Detects objects in the given image using YOLO V8 object detection engine.
+
+        Args:
+            image: The image to detect objects in.
+
+        Returns:
+            ObjectDetectionResult (ObjectDetectionResult): The result of the object detection, including a list of detected objects.
+        """
+
+        logger.log_debug(self.get_class_name(), 'Detection started.')
+
+        results = self.detector.predict(source=image, save=True, save_txt=True)
+        logger.log_debug(self.get_class_name(), ' :Detection Successful.')
+
+        return results
 
     def get_bounding_boxes_of_detected_objects(self, image) -> list:
         """

@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name='dronebuddylib',
-    version='2.0.25',
+    version='2.0.33',
     packages=find_packages(),
     include_package_data=True,
     package_data={

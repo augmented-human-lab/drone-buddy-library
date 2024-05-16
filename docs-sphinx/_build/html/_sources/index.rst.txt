@@ -11,7 +11,7 @@ Welcome to Dronebuddy's documentation!
    :caption: Contents:
 
    Installation Guide <dronebuddylib.installationguide>
-   User Guide <dronebuddylib.userguide>
+   Algorithm Details <dronebuddylib.userguide>
    API Doc <dronebuddylib.atoms>
    Developer Guide <dronebuddylib.developerguide>
    Sample Program <dronebuddylib.codeexample>

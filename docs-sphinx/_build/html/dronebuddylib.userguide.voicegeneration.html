@@ -84,7 +84,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
             
 
             
@@ -162,32 +162,6 @@
 <li><p>Text-to-Speech Engines: pyttsx3 supports different speech synthesis engines, allowing you to choose the one that best suits your needs. By default, it uses the SAPI5 on Windows, NSSpeechSynthesizer on macOS, and eSpeak on Linux. Additionally, pyttsx3 can be configured to work with other third-party speech synthesis engines available on your system.</p></li>
 <li><p>Installation: To install pyttsx3, you can use pip, the Python package manager, by running the following command in your terminal or command prompt:</p></li>
 </ol>
-<section id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyttsx3
-</pre></div>
-</div>
-<ol class="arabic simple">
-<li><p>Basic Usage: Once installed, you can start using pyttsx3 in your Python scripts. The library provides a simple and consistent API for text-to-speech synthesis.</p></li>
-<li><p>Additional Features: pyttsx3 offers additional functionality to customize the speech synthesis process. You can control properties such as the speech rate, volume, voice selection, and more. The library provides methods to retrieve available voices, change voice settings, and handle events like the completion of speech.</p></li>
-</ol>
-<p>pyttsx3 provides a straightforward and user-friendly way to incorporate text-to-speech functionality into your Python applications. By leveraging pyttsx3, you can easily generate spoken output from text for various purposes, such as accessibility, interactive systems, or voice-guided applications.</p>
-</section>
-<section id="how-to-use-with-dronebuddy">
-<h3>How to use with DroneBuddy<a class="headerlink" href="#how-to-use-with-dronebuddy" title="Link to this heading">¶</a></h3>
-<p>The text to speech functionality utilizes the offline text to speech engine pyttsx3. More information about pyttsx3 can be found here: <a class="reference external" href="https://pypi.org/project/pyttsx3/">https://pypi.org/project/pyttsx3/</a></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
-
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_RATE</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOLUME</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span><span class="p">,</span> <span class="s2">&quot;com.apple.speech.synthesis.voice.Alex&quot;</span><span class="p">)</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">SpeechGenerationEngine</span><span class="p">(</span><span class="n">SpeechGenerationAlgorithm</span><span class="o">.</span><span class="n">GOOGLE_TTS_OFFLINE</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
-
-
-<span class="n">objects</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">read_phrase</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 

@@ -1,4 +1,4 @@
-__version__ = "2.0.25"
+__version__ = "2.0.33"
 
 # from .microphone_stream import MicrophoneStream
 # from .resumable_microphone_stream import ResumableMicrophoneStream

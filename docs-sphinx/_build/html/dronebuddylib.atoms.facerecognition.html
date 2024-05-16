@@ -21,7 +21,7 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
-  <link rel="next" title="Intent Recognition package" href="dronebuddylib.atoms.intentrecognition.html" />
+  <link rel="next" title="Place Recognition package" href="dronebuddylib.atoms.placerecognition.html" />
   <link rel="prev" title="Body feature extraction package" href="dronebuddylib.atoms.bodyfeatureextraction.html" /> 
   </head>
 
@@ -84,7 +84,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="dronebuddylib.userguide.html" class="reference internal ">User Guide</a>
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
             
 
             
@@ -142,8 +142,8 @@
        title="previous chapter">← Body feature extraction package</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.atoms.intentrecognition.html"
-       title="next chapter">Intent Recognition package →</a>
+    <a href="dronebuddylib.atoms.placerecognition.html"
+       title="next chapter">Place Recognition package →</a>
   </li>
 </ul>
   
@@ -163,6 +163,28 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_engine.</span></span><span class="sig-name descname"><span class="pre">FaceRecognitionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.FaceRecognitionAlgorithm" title="dronebuddylib.models.enums.FaceRecognitionAlgorithm"><span class="pre">FaceRecognitionAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_engine.html#FaceRecognitionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The FaceRecognitionEngine class handles face recognition operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.create_memory">
+<span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_engine.html#FaceRecognitionEngine.create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.create_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Create a memory for the face recognition engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A memory for the face recognition engine.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.get_current_status">
+<span class="sig-name descname"><span class="pre">get_current_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_engine.html#FaceRecognitionEngine.get_current_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.get_current_status" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current status of the face recognition engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current status of the face recognition engine.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.recognize_face">
 <span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_engine.html#FaceRecognitionEngine.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_engine.FaceRecognitionEngine.recognize_face" title="Link to this definition">¶</a></dt>
@@ -197,181 +219,6 @@
 </dd></dl>
 
 </section>
-<section id="face-recognition-impl-module">
-<h2>face_recognition_impl module<a class="headerlink" href="#face-recognition-impl-module" title="Link to this heading">¶</a></h2>
-<dl class="py class" id="module-dronebuddylib.atoms.facerecognition.face_recognition_impl">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_impl.</span></span><span class="sig-name descname"><span class="pre">FaceRecognitionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition" title="dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IFaceRecognition</span></code></a></p>
-<p>Implementation of the IFaceRecognition interface using face_recognition library.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.IMAGE_PATH">
-<span class="sig-name descname"><span class="pre">IMAGE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'resources/images/'</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.IMAGE_PATH" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.KNOWN_NAMES_FILE_PATH">
-<span class="sig-name descname"><span class="pre">KNOWN_NAMES_FILE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\facerecognition\\resources\\known_names.txt'</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.KNOWN_NAMES_FILE_PATH" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_algorithm_name">
-<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
-<dd><p>Get the algorithm name of the FaceRecognitionImpl class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The algorithm name.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_class_name">
-<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_class_name" title="Link to this definition">¶</a></dt>
-<dd><p>Get the class name of the FaceRecognitionImpl class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The class name.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_optional_params">
-<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
-<dd><p>Get the optional parameters for the FaceRecognitionImpl class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of optional parameters.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_required_params">
-<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.get_required_params" title="Link to this definition">¶</a></dt>
-<dd><p>Get the required parameters for the FaceRecognitionImpl class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of required parameters.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_encodings">
-<span class="sig-name descname"><span class="pre">load_known_face_encodings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_face_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.load_known_face_encodings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_encodings" title="Link to this definition">¶</a></dt>
-<dd><p>Load the known face encodings from files.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>known_face_names</strong> – A list of known face names.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of known face encodings.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_names">
-<span class="sig-name descname"><span class="pre">load_known_face_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.load_known_face_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.load_known_face_names" title="Link to this definition">¶</a></dt>
-<dd><p>Load the known face names from a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of known face names.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.process_frame_for_recognition">
-<span class="sig-name descname"><span class="pre">process_frame_for_recognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.process_frame_for_recognition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.process_frame_for_recognition" title="Link to this definition">¶</a></dt>
-<dd><p>Pre-process the frame for face recognition.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>frame</strong> – The frame to be processed.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The processed frame.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.read_file_into_list">
-<span class="sig-name descname"><span class="pre">read_file_into_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.read_file_into_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.read_file_into_list" title="Link to this definition">¶</a></dt>
-<dd><p>Read a file into a list.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filename</strong> – The path to the file.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of lines from the file.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.recognize_face">
-<span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.recognize_face" title="Link to this definition">¶</a></dt>
-<dd><p>Recognize faces in an image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>image</strong> – The image containing faces to be recognized.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of recognized faces.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.remember_face">
-<span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_impl.html#FaceRecognitionImpl.remember_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_impl.FaceRecognitionImpl.remember_face" title="Link to this definition">¶</a></dt>
-<dd><p>Associate a name with a face in an image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>image_path</strong> – The path to the image containing the face.</p></li>
-<li><p><strong>name</strong> – The name to be associated with the face.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the association was successful, False otherwise.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="i-face-recognition-module">
 <h2>i_face_recognition module<a class="headerlink" href="#i-face-recognition-module" title="Link to this heading">¶</a></h2>
 <dl class="py class" id="module-dronebuddylib.atoms.facerecognition.i_face_recognition">
@@ -392,25 +239,32 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.get_current_status">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_current_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.get_current_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.get_current_status" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current status of the face recognition engine.</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces"><span class="pre">RecognizedFaces</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
 <dd><p>Recognize faces in an image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>image</strong> – The image containing faces to be recognized.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of recognized faces.</p>
+<dd class="field-even"><p>An object containing a list of recognized faces with their bounding boxes.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces">RecognizedFaces</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.remember_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.remember_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
 <dd><p>Associate a name with a face in an image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -427,6 +281,491 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.test_memory">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/i_face_recognition.html#IFaceRecognition.test_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition.test_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Test the accuracy of the face recognition algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>with the accuracy related numbers for the face recognition algorithm</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="face-recognition-euclidean-impl-module">
+<h2>face_recognition_euclidean_impl module<a class="headerlink" href="#face-recognition-euclidean-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.</span></span><span class="sig-name descname"><span class="pre">FaceRecognitionEuclideanImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition" title="dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IFaceRecognition</span></code></a></p>
+<p>Implementation of the IFaceRecognition interface using face_recognition library.
+The recognition is carried on using the Euclidean distance between the face encodings.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.IMAGE_PATH">
+<span class="sig-name descname"><span class="pre">IMAGE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'resources/images/'</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.IMAGE_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.KNOWN_NAMES_FILE_PATH">
+<span class="sig-name descname"><span class="pre">KNOWN_NAMES_FILE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'C:\\Users\\Public\\projects\\drone-buddy-library\\dronebuddylib\\atoms\\facerecognition\\resources\\known_names.txt'</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.KNOWN_NAMES_FILE_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.current_status">
+<span class="sig-name descname"><span class="pre">current_status</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.current_status" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the algorithm name of the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the class name of the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_current_status">
+<span class="sig-name descname"><span class="pre">get_current_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.get_current_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_current_status" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current status of the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current status.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Get the optional parameters for the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of optional parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Get the required parameters for the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of required parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.load_known_face_encodings">
+<span class="sig-name descname"><span class="pre">load_known_face_encodings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_face_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.load_known_face_encodings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.load_known_face_encodings" title="Link to this definition">¶</a></dt>
+<dd><p>Load the known face encodings from files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>known_face_names</strong> – A list of known face names.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of known face encodings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.load_known_face_names">
+<span class="sig-name descname"><span class="pre">load_known_face_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.load_known_face_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.load_known_face_names" title="Link to this definition">¶</a></dt>
+<dd><p>Load the known face names from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of known face names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.process_frame_for_recognition">
+<span class="sig-name descname"><span class="pre">process_frame_for_recognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.process_frame_for_recognition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.process_frame_for_recognition" title="Link to this definition">¶</a></dt>
+<dd><p>Pre-process the frame for face recognition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> – The frame to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The processed frame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.read_file_into_list">
+<span class="sig-name descname"><span class="pre">read_file_into_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.read_file_into_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.read_file_into_list" title="Link to this definition">¶</a></dt>
+<dd><p>Read a file into a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – The path to the file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of lines from the file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.recognize_face">
+<span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces"><span class="pre">RecognizedFaces</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.recognize_face" title="Link to this definition">¶</a></dt>
+<dd><p>Recognize faces in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image containing faces to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of recognized faces.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.remember_face">
+<span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.remember_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.remember_face" title="Link to this definition">¶</a></dt>
+<dd><p>Associate a name with a face in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> – The path to the image containing the face.</p></li>
+<li><p><strong>name</strong> – The name to be associated with the face.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the association was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.test_memory">
+<span class="sig-name descname"><span class="pre">test_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_euclidean_impl.html#FaceRecognitionEuclideanImpl.test_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_euclidean_impl.FaceRecognitionEuclideanImpl.test_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Test the accuracy of the face recognition algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>with the accuracy related numbers for the face recognition algorithm</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="face-recognition-knn-impl-module">
+<h2>face_recognition_knn_impl module<a class="headerlink" href="#face-recognition-knn-impl-module" title="Link to this heading">¶</a></h2>
+<p id="module-dronebuddylib.atoms.facerecognition.face_recognition_knn_impl">This is uses the k-nearest-neighbors (KNN) algorithm for face recognition.</p>
+<p>When should I use this example?
+This example is useful when you wish to recognize a large set of known people,
+and make a prediction for an unknown person in a feasible computation time.</p>
+<p>Algorithm Description:
+The knn classifier is first trained on a set of labeled (known) faces and can then predict the person
+in an unknown image by finding the k most similar faces (images with closet face-features under euclidean distance)
+in its training set, and performing a majority vote (possibly weighted) on their label.</p>
+<p>For example, if k=3, and the three closest face images to the given image in the training set are one image of Biden
+and two images of Obama, The result would be ‘Obama’.</p>
+<ul class="simple">
+<li><p>This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.</p></li>
+</ul>
+<p>Usage:</p>
+<ol class="arabic simple">
+<li><p>Prepare a set of images of the known people you want to recognize. Organize the images in a single directory
+with a sub-directory for each known person.</p></li>
+<li><p>Then, call the ‘train’ function with the appropriate parameters. Make sure to pass in the ‘model_save_path’ if you
+want to save the model to disk so you can re-use the model without having to re-train it.</p></li>
+<li><p>Call ‘predict’ and pass in your trained model to recognize the people in an unknown image.</p></li>
+</ol>
+<p>NOTE: This example requires scikit-learn to be installed! You can install it with pip:</p>
+<p>$ pip3 install scikit-learn</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.</span></span><span class="sig-name descname"><span class="pre">FaceRecognitionKNNImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition" title="dronebuddylib.atoms.facerecognition.i_face_recognition.IFaceRecognition"><code class="xref py py-class docutils literal notranslate"><span class="pre">IFaceRecognition</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.create_data_set">
+<span class="sig-name descname"><span class="pre">create_data_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face_classifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">participant_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_set_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">900</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_face_not_found</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.create_data_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.create_data_set" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.create_memory">
+<span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_training_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.create_memory" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.current_status">
+<span class="sig-name descname"><span class="pre">current_status</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.current_status" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.extract_features">
+<span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.extract_features" title="Link to this definition">¶</a></dt>
+<dd><p>Extract the face encodings from the given image path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.face_extractor">
+<span class="sig-name descname"><span class="pre">face_extractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_classifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.face_extractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.face_extractor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the algorithm name of the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the class name of the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_current_status">
+<span class="sig-name descname"><span class="pre">get_current_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.get_current_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_current_status" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current status of the face recognition engine.</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Get the optional parameters for the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of optional parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Get the required parameters for the FaceRecognitionImpl class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of required parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.load_test_data">
+<span class="sig-name descname"><span class="pre">load_test_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.load_test_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.load_test_data" title="Link to this definition">¶</a></dt>
+<dd><p>Load images and true labels from the test directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.progress_bar">
+<span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done_event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Training</span> <span class="pre">Progress'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.progress_bar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.progress_event">
+<span class="sig-name descname"><span class="pre">progress_event</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;threading.Event</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.progress_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.recognize_face">
+<span class="sig-name descname"><span class="pre">recognize_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces"><span class="pre">RecognizedFaces</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.recognize_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.recognize_face" title="Link to this definition">¶</a></dt>
+<dd><p>Recognize faces in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image containing faces to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing a list of recognized faces with their bounding boxes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces">RecognizedFaces</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.remember_face">
+<span class="sig-name descname"><span class="pre">remember_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_training_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_testing_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_validation_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_face_not_found</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.remember_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.remember_face" title="Link to this definition">¶</a></dt>
+<dd><p>Associate a name with a face in an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image containing the face to be associated with a name.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name to be associated with the face.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the association was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.test_classifier">
+<span class="sig-name descname"><span class="pre">test_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">future</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.test_classifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.test_classifier" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.test_memory">
+<span class="sig-name descname"><span class="pre">test_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.test_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.test_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Test the accuracy of the face recognition algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>with the accuracy related numbers for the face recognition algorithm</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ball_tree'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_knn_impl.html#FaceRecognitionKNNImpl.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.train" title="Link to this definition">¶</a></dt>
+<dd><p>Trains a k-nearest neighbors classifier for face recognition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dir</strong> – <p>directory that contains a sub-directory for each known person, with its name.</p>
+<p>(View in source code to see train_dir example tree structure)</p>
+<dl class="simple">
+<dt>Structure:</dt><dd><p>&lt;train_dir&gt;/
+├── &lt;person1&gt;/
+│   ├── &lt;somename1&gt;.jpeg
+│   ├── &lt;somename2&gt;.jpeg
+│   ├── …
+├── &lt;person2&gt;/
+│   ├── &lt;somename1&gt;.jpeg
+│   └── &lt;somename2&gt;.jpeg
+└── …</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>model_save_path</strong> – (optional) path to save model on disk</p></li>
+<li><p><strong>n_neighbors</strong> – (optional) number of neighbors to weigh in classification. Chosen automatically if not specified</p></li>
+<li><p><strong>knn_algo</strong> – (optional) underlying data structure to support knn.default is ball_tree</p></li>
+<li><p><strong>verbose</strong> – verbosity of training</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>returns knn classifier that was trained on the given data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.use_drone">
+<span class="sig-name descname"><span class="pre">use_drone</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_knn_impl.FaceRecognitionKNNImpl.use_drone" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="face-recognition-result-module">
+<h2>face_recognition_result module<a class="headerlink" href="#face-recognition-result-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.facerecognition.face_recognition_result">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_result.</span></span><span class="sig-name descname"><span class="pre">RecognizedFaceObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_result.html#RecognizedFaceObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject.get_face_location">
+<span class="sig-name descname"><span class="pre">get_face_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_result.html#RecognizedFaceObject.get_face_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject.get_face_location" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_result.html#RecognizedFaceObject.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject.get_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.facerecognition.face_recognition_result.</span></span><span class="sig-name descname"><span class="pre">RecognizedFaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recognized_faces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject"><span class="pre">RecognizedFaceObject</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_result.html#RecognizedFaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces.get_recognized_faces">
+<span class="sig-name descname"><span class="pre">get_recognized_faces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject" title="dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaceObject"><span class="pre">RecognizedFaceObject</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/facerecognition/face_recognition_result.html#RecognizedFaces.get_recognized_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.facerecognition.face_recognition_result.RecognizedFaces.get_recognized_faces" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -445,8 +784,8 @@
        title="previous chapter">← Body feature extraction package</a>
   </li>
   <li class="next">
-    <a href="dronebuddylib.atoms.intentrecognition.html"
-       title="next chapter">Intent Recognition package →</a>
+    <a href="dronebuddylib.atoms.placerecognition.html"
+       title="next chapter">Place Recognition package →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2023, NUS.

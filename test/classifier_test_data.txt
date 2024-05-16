@@ -1,0 +1,127 @@
+ Model : rf_model_38 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 meeting room lab images :  Most probable place : i4_Lab -  211.93000000000006: possibilities : i4_meeting_room: Total Confidence = 75.73000000000002
+ i4_kitchen: Total Confidence = 8.549999999999999  
+ suranga_office: Total Confidence = 77.88999999999994  
+ unknown: Total Confidence = 45.94999999999999  
+ i4_Lab: Total Confidence = 211.93000000000006  
+  
+ 
+ Model : rf 38 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab images :  Most probable place : i4_Lab -  178.25999999999993: possibilities : unknown: Total Confidence = 160.25000000000006  
+ i4_kitchen: Total Confidence = 9.29  
+ i4_meeting_room: Total Confidence = 71.55999999999997  
+ suranga_office: Total Confidence = 33.37000000000002  
+ i4_Lab: Total Confidence = 178.25999999999993  
+
+
+ 
+ Model : rf 38 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 meeting room images :  Most probable place : unknown -  16.88: possibilities : i4_kitchen: Total Confidence = 7.35  
+ unknown: Total Confidence = 16.88  
+ i4_meeting_room: Total Confidence = 15.64  
+ suranga_office: Total Confidence = 3.54  
+ i4_Lab: Total Confidence = 12.97  
+  
+ 
+ Model : rf 38 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with suranga's room images :  Most probable place : i4_kitchen -  18.38: possibilities : i4_kitchen: Total Confidence = 18.38  
+ i4_meeting_room: Total Confidence = 11.64  
+ suranga_office: Total Confidence = 10.950000000000001  
+ unknown: Total Confidence = 8.17  
+ i4_Lab: Total Confidence = 8.720000000000002  
+  
+ 
+ Model : rf 38 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with kitchen images :  Most probable place : i4_kitchen -  28.450000000000003: possibilities : i4_kitchen: Total Confidence = 28.450000000000003  
+ unknown: Total Confidence = 15.21  
+ i4_meeting_room: Total Confidence = 6.650000000000002  
+ suranga_office: Total Confidence = 2.1199999999999997  
+ i4_Lab: Total Confidence = 3.2000000000000006  
+  
+ 
+ Model : rf 43 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with kitchen images :  Most probable place : i4_kitchen -  28.74999999999999: possibilities : unknown: Total Confidence = 15.070000000000002  
+ i4_kitchen: Total Confidence = 28.74999999999999  
+ i4_meeting_room: Total Confidence = 8.430000000000001  
+ suranga_office: Total Confidence = 0.69  
+ i4_Lab: Total Confidence = 3.3599999999999994  
+  
+ 
+ Model : rf 43 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with surangas office images :  Most probable place : i4_kitchen -  16.169999999999995: possibilities : i4_kitchen: Total Confidence = 16.169999999999995
+ i4_meeting_room: Total Confidence = 12.250000000000002  
+ unknown: Total Confidence = 8.610000000000001  
+ suranga_office: Total Confidence = 11.840000000000002  
+ i4_Lab: Total Confidence = 8.760000000000003  
+  
+ 
+ Model : KNN 44 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with surangas office images that are changed colors :  Most probable place : i4_kitchen -  16.169999999999995: possibilities : i4_kitchen: Total Confidence = 16.169999999999995
+ i4_meeting_room: Total Confidence = 12.250000000000002  
+ unknown: Total Confidence = 8.610000000000001  
+ suranga_office: Total Confidence = 11.840000000000002  
+ i4_Lab: Total Confidence = 8.760000000000003  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with suranga's office images that are changed colors :  Most probable place : suranga_office -  20.572419980103344: possibilities : i4_kitchen: Total Confidence = 19.010366383548156
+ unknown: Total Confidence = 7.073239010707385  
+ suranga_office: Total Confidence = 20.572419980103344  
+ i4_meeting_room: Total Confidence = 13.328759319282767  
+ i4_Lab: Total Confidence = 8.01521530635835  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with kitchen images that are changed colors :  Most probable place : i4_kitchen -  44.96297174069309: possibilities : i4_kitchen: Total Confidence = 44.96297174069309  
+ unknown: Total Confidence = 6.708806097298345  
+ suranga_office: Total Confidence = 2.0298263662555724  
+ i4_meeting_room: Total Confidence = 6.501257599983202  
+ i4_Lab: Total Confidence = 3.797138195769785  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with meeting room that are changed colors :  Most probable place : i4_meeting_room -  21.63312557199353: possibilities : i4_kitchen: Total Confidence = 9.594080272560353  
+ unknown: Total Confidence = 10.744325217218904  
+ suranga_office: Total Confidence = 4.677609055326566  
+ i4_Lab: Total Confidence = 16.350859882900643  
+ i4_meeting_room: Total Confidence = 21.63312557199353  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_Lab -  174.87768098574335: possibilities : i4_kitchen: Total Confidence = 11.777782282611957  
+ unknown: Total Confidence = 115.13757439857267  
+ suranga_office: Total Confidence = 50.05729001922662  
+ i4_meeting_room: Total Confidence = 155.14967231384531  
+ i4_Lab: Total Confidence = 174.87768098574335  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_Lab -  174.87768098574335: possibilities : i4_kitchen: Total Confidence = 11.777782282611957  
+ unknown: Total Confidence = 115.13757439857267  
+ suranga_office: Total Confidence = 50.05729001922662  
+ i4_meeting_room: Total Confidence = 155.14967231384531  
+ i4_Lab: Total Confidence = 174.87768098574335  
+  
+ 
+ Model : KNN 45 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_Lab -  174.87768098574335: possibilities : i4_kitchen: Total Confidence = 11.777782282611957  
+ unknown: Total Confidence = 115.13757439857267  
+ suranga_office: Total Confidence = 50.05729001922662  
+ i4_meeting_room: Total Confidence = 155.14967231384531  
+ i4_Lab: Total Confidence = 174.87768098574335  
+  
+ 
+ Model : RF  48 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_Lab -  183.43000000000018: possibilities : unknown: Total Confidence = 151.03999999999988  
+ i4_kitchen: Total Confidence = 7.82  
+ i4_meeting_room: Total Confidence = 61.650000000000034  
+ i4_Lab: Total Confidence = 183.43000000000018  
+ suranga_office: Total Confidence = 42.33  
+  
+ 
+ Model : RF  48 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_kitchen -  17.72: possibilities : i4_Lab: Total Confidence = 3.0  
+ i4_meeting_room: Total Confidence = 2.66  
+ suranga_office: Total Confidence = 7.909999999999999  
+ i4_kitchen: Total Confidence = 17.72  
+ unknown: Total Confidence = 2.09  
+  
+ 
+ Model : RF  48 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_kitchen -  24.322971844611324: possibilities : i4_Lab: Total Confidence = 1.593236678461815  
+ suranga_office: Total Confidence = 5.908026650420106  
+ i4_kitchen: Total Confidence = 24.322971844611324  
+ unknown: Total Confidence = 2.523472181871541  
+ i4_meeting_room: Total Confidence = 2.652292644635214  
+  
+ 
+ Model : RF  48 :  Extractor : GoogLeNetPlaces365 :  Changes : Testing with i4 lab that are changed colors :  Most probable place : i4_kitchen -  17.72: possibilities : i4_Lab: Total Confidence = 3.0  
+ i4_meeting_room: Total Confidence = 2.66  
+ suranga_office: Total Confidence = 7.909999999999999  
+ i4_kitchen: Total Confidence = 17.72  
+ unknown: Total Confidence = 2.09  
+  
+ 

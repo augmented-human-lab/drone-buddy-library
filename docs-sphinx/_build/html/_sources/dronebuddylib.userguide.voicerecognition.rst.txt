@@ -32,73 +32,6 @@ The way drone buddy has integrated VOSK for voice recognition is as follows.
 
 It's important to note that Vosk is a powerful tool, but like any voice recognition system, its accuracy can be influenced by factors such as audio quality, background noise, and speaker accents. Therefore, it's a good idea to test and fine-tune the system based on your specific use case to achieve the best results.
 
-How to use with drone buddy
----------------------------------
-
-Required parameters
----------------------------------
-.. important::
-    SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH: This is the path to the model that you have downloaded. This is a compulsory parameter if you are using any other language.
-    If this is not provided, the default model will be used. The default model is the english model ( vosk-model-small-en-us-0.15 ).
-
-Initialize the voice engine
-
-.. code-block:: python
-
-    from dronebuddylib.atoms.speechrecognition.speech_to_text_engine import SpeechToTextEngine
-    from dronebuddylib.models.engine_configurations import EngineConfigurations
-    from dronebuddylib.models.enums import Configurations, SpeechRecognitionAlgorithm
-
-    engine_configs = EngineConfigurations({})
-    engine_configs.add_configuration(Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH, "0.7")
-
-    engine = SpeechToTextEngine(SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION, engine_configs)
-    result = engine.recognize_speech(audio_steam=data)
-
-The result will be the recognized text.
-
-Sample code where you can use the speech to text functionality to control the drone would be as follows:
-
-.. code-block:: python
-
-    import dronebuddylib as dbl
-    import pyaudio
-    from djitellopy import Tello
-    from dronebuddylib.atoms.speechrecognition.speech_to_text_engine import SpeechToTextEngine
-    from dronebuddylib.models.engine_configurations import EngineConfigurations
-    from dronebuddylib.models.enums import Configurations, SpeechRecognitionAlgorithm
-
-    # initiating Tello instance
-    tello = Tello()
-    listening = False
-    tello.connect()
-    tello.streamon()
-
-    mic = pyaudio.PyAudio()
-
-    # initialize speech to text engine
-    engine_configs = EngineConfigurations({})
-    engine_configs.add_configuration(Configurations.SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH, "C:/users/project/resources/speechrecognition/vosk-model-small-en-us-0.15")
-
-    engine = SpeechToTextEngine(SpeechRecognitionAlgorithm.VOSK_SPEECH_RECOGNITION, engine_configs)
-
-    # this method receives the audio input from pyaudio and returns the command
-    def get_command():
-        listening = True
-        stream = mic.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=8192)
-
-        while listening:
-            try:
-                stream.start_stream()
-                # chunks the audio stream to a byte stream
-                data = stream.read(8192)
-                recognized = engine.recognize_speech(audio_steam=data)
-                if recognized is not None:
-                    listening = False
-                    stream.close()
-                    return recognized
-            except Exception as e:
-                print(e)
 
 Google Speech Recognition
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,37 +65,6 @@ Integration in Dronebuddy
 #. Handling the Output: Once Google processes the audio, it returns a text transcription. This output can be used in various ways, such as command interpretation, text analysis, or as input for other systems.
 
 #. Customization: Google Speech Recognition allows customization for specific vocabulary or industry terms, enhancing recognition accuracy for specialized applications.
-
-Using Google Speech Recognition for Command Control
----------------------------------------------------
-
-Here's a sample code snippet demonstrating how you could integrate Google Speech Recognition into an application for voice-controlled operations:
-
-.. code-block:: python
-
-    engine_configs = EngineConfigurations({})
-    engine_configs.add_configuration(Configurations.SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ, 44100)
-    engine_configs.add_configuration(Configurations.SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE, "en-US")
-    engine_configs.add_configuration(Configurations.SPEECH_RECOGNITION_GOOGLE_ENCODING, "LINEAR16")
-
-    engine = SpeechToTextEngine(SpeechRecognitionAlgorithm.GOOGLE_SPEECH_RECOGNITION, engine_configs)
-
-    with sr.Microphone() as source:
-        print("Listening for commands...")
-        audio = recognizer.listen(source)
-
-        try:
-            # Recognize speech using Google Speech Recognition
-            command = engine.recognize_speech(audio)
-            print(f"Recognized command: {command}")
-
-            # Process and execute the command
-            control_function(command)
-        except e:
-            print(e)
-
-This code captures audio through the microphone, processes it using Google Speech Recognition, and then uses the recognized command to perform an action within the application.
-
 
 Important Considerations
 ------------------------
