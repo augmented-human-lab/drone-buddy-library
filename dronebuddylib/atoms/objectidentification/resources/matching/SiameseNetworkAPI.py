@@ -23,14 +23,12 @@ model_file_path = r'C:\Users\Public\projects\drone-buddy-library\dronebuddylib\a
 
 
 class SiameseNetworkAPI():
-    def __init__(self, obj_tensor):
+    def __init__(self, obj_tensor=None):
         self.obj_tensor = obj_tensor
-        # self.obj_detection_model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
         self.obj_detection_model = YOLO('yolov8n.pt')
         # Set half precision mode
         if torch.cuda.is_available():
 
-            # self.obj_detection_model = self.obj_detection_model
             # Fuse the model first (if applicable, and fusion is a method provided by your specific model class)
             self.obj_detection_model.fuse()  # Fuse conv and bn layers before converting to half precision
 
@@ -39,18 +37,18 @@ class SiameseNetworkAPI():
         else:
             self.obj_detection_model = self.obj_detection_model
         # to capture more objects, the conf threshold was reduced
-        # self.obj_detection_model.iou = 0.45
+
         self.obj_detection_model.conf = 0.1
         self.siamese_network_model = SiameseModel(
             base_model=efficientnet_v2_s,
             base_model_weights=EfficientNet_V2_S_Weights.IMAGENET1K_V1
         )
+
         state_dict = torch.load(model_file_path)
         print(state_dict.keys())
         print(self.siamese_network_model.state_dict().keys())
         self.siamese_network_model.load_state_dict(torch.load(model_file_path))
         self.siamese_network_model.eval()
-        # Define your transformations
         # Define your transformations
         self.transform = transforms.Compose([
             transforms.Resize((416, 416)),  # Resize the image, works with PIL Images
@@ -66,6 +64,13 @@ class SiameseNetworkAPI():
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize the tensor
         ])
         self.reference_images = load_images_from_folder(path, transform=transform)
+
+    def get_embeddings(self, img):
+        image_1_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        t_i_1 = self.transform(Image.fromarray(image_1_rgb))
+
+        squeezed = t_i_1.unsqueeze(0)
+        return self.siamese_network_model.get_embedding(squeezed)
 
     def get_detected_objects(self, img):
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -93,15 +98,19 @@ class SiameseNetworkAPI():
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def inference(self, img):
+    def inference_1(self, img):
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         objects_in_room = self.obj_detection_model.predict(image_rgb)
-        all_xy_coords = []
-        all_conf_scores = []
+        # Initialize dictionaries to store cosine distances and similarities
+        all_cosine_distances = {}
+        all_similarities = {}
 
         print("********************************************")
 
-        for result in objects_in_room:
+        for img_idx, result in enumerate(objects_in_room):  # Use enumerate to iterate over objects_in_room
+            image_cosine_distances = {}
+            image_similarities = {}
+
             for index, cls_tensor in enumerate(result.boxes.cls):
                 print("testing for object : ", result.names[int(cls_tensor)])
 
@@ -120,48 +129,205 @@ class SiameseNetworkAPI():
                 # Compare with each reference image
                 for ref_label, ref_image in self.reference_images.items():
                     print("testing for reference object : ", ref_label)
-                    ref_image_tensor = ref_image  # Add batch dimension
-                    similarity = self.siamese_network_model(ref_image_tensor, transformed_image)
+                    class_cosine_distances = []
+                    class_similarities = []
 
-                    # Assuming similarity is a 1D tensor with shape [8]
-                    threshold = 0.3  # Define your threshold
+                    for ref_idx, image in enumerate(ref_image):
+                        image_unsqueezed = image.unsqueeze(0)
+                        similarity, cosine_distance = self.siamese_network_model(image_unsqueezed, transformed_image)
+                        # Assuming similarity is a 1D tensor with shape [8]
+                        threshold = 0.3  # Define your threshold
 
-                    # Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range
-                    similarity = torch.sigmoid(similarity)
-                    # Perform an element-wise comparison to the threshold
-                    greater_than_threshold = similarity > threshold
-                    # Now you have a tensor of booleans where each element is the result of the comparison
+                        # Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range
+                        similarity_torch = torch.sigmoid(similarity)
+                        print("Similarity torch : ", similarity_torch)
 
-                    if greater_than_threshold.any():
-                        print("Eureka for ", ref_label)
-                        print(similarity)
-                    # At least one value exceeds the threshold, handle this case
+                        # Perform an element-wise comparison to the threshold
+                        greater_than_threshold = similarity_torch > threshold
+                        # Now you have a tensor of booleans where each element is the result of the comparison
+                        # Store class cosine distances and similarities in image dictionaries
+                        image_cosine_distances[ref_label] = class_cosine_distances
+                        image_similarities[ref_label] = class_similarities
 
-                    count_above_threshold = torch.sum(similarity > threshold)
-                    final_score = count_above_threshold / similarity.shape[0]
-                    median_score = torch.median(similarity)
-                    # Low Standard Deviation: If the standard deviation of the similarity scores is low,
-                    # it means that the scores are closely clustered around the mean (average) score.
-                    # This suggests that the model is consistently returning similar values for all the comparisons between the input image and the training images.
-                    # In practical terms, a low standard deviation could indicate that the input image
-                    # either matches closely or does not match at all with the reference images,
-                    # with little variance in confidence across different comparisons.
+                        if greater_than_threshold.any():
+                            print("Eureka for ", ref_label)
+                            print(similarity)
 
-                    # High Standard Deviation: A high standard deviation indicates that there is a wide spread in the values of the similarity scores.
-                    # This can mean that while some of the training images might be very similar to the input image (resulting in high similarity scores),
-                    # others might be quite different (resulting in low scores).
-                    # High variance can suggest that the input image has some features strongly resembling only certain training images,
-                    # which might be useful for identifying specific characteristics or outliers.
+                        print("--------------------------------------")
+                        # Store image dictionaries in the main dictionaries
+                    all_cosine_distances[f"Image_{img_idx + 1}"] = image_cosine_distances
+                    all_similarities[f"Image_{img_idx + 1}"] = image_similarities
 
-                    std_deviation = torch.std(similarity)
-
-                    print("Final Score : ", final_score.item())
-                    print("Median Score : ", median_score.item())
-                    print("Standard Deviation : ", std_deviation.item())
-                    print("--------------------------------------")
                 print("==================================")
+            all_cosine_distances.append(image_cosine_distances)
+            all_similarities.append(image_similarities)
             print("##################################")
         print("********************************************")
         cv2.destroyAllWindows()
 
-        return all_xy_coords, all_conf_scores
+        return all_cosine_distances, all_similarities
+
+    def inference_2(self, img):
+        image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        objects_in_room = self.obj_detection_model.predict(image_rgb)
+        # Initialize dictionaries to store cosine distances and similarities
+        all_cosine_distances = {}
+        all_similarities = {}
+
+        print("********************************************")
+        my_index = 0
+        for img_idx, result in enumerate(objects_in_room):
+
+            image_cosine_distances = {}
+            image_similarities = {}
+
+            for index, cls_tensor in enumerate(result.boxes.cls):
+                print("testing for object : ", result.names[int(cls_tensor)])
+
+                bbox_tensor = result.boxes[index].xyxy.cpu().numpy().tolist()[0]
+                xmin, ymin, xmax, ymax = map(int, bbox_tensor)
+                cropped_image = img[ymin:ymax, xmin:xmax]
+                cropped_image_pil = Image.fromarray(cropped_image)
+                transformed_image = self.transform(cropped_image_pil)
+                # show cropped image for testing
+                # save cropped image for testing
+                cv2.imwrite("cropped_" + result.names[int(cls_tensor)] + "_" + str(index) + ".jpg", cropped_image)
+
+                # cv2.imwrite(f"cropped_{str(index)}.jpg", cropped_image)
+
+                # cv2.imshow("cropped_" + str(index), cropped_image)
+                # cv2.waitKey(0)
+
+                if len(transformed_image.shape) == 3:
+                    transformed_image = transformed_image.unsqueeze(0)
+
+                # Compare with each reference image
+                for ref_label, ref_image in self.reference_images.items():
+                    print("testing for reference object : ", ref_label)
+                    class_cosine_distances = []
+                    class_similarities = []
+
+                    for ref_idx, image in enumerate(ref_image):
+                        image_unsqueezed = image.unsqueeze(0)
+                        similarity, cosine_distance = self.siamese_network_model(image_unsqueezed, transformed_image)
+                        # Assuming similarity is a 1D tensor with shape [8]
+                        threshold = 0.3  # Define your threshold
+
+                        # Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range
+                        similarity_torch = torch.sigmoid(similarity)
+                        print("Similarity torch : ", similarity_torch)
+
+                        # Perform an element-wise comparison to the threshold
+                        greater_than_threshold = similarity_torch > threshold
+                        # Now you have a tensor of booleans where each element is the result of the comparison
+                        # Store class cosine distances and similarities in image dictionaries
+                        class_cosine_distances.append(cosine_distance.item())
+                        class_similarities.append(similarity_torch.item())
+
+                        if greater_than_threshold.any():
+                            print("Eureka for ", ref_label)
+                            print(similarity)
+
+                        print("--------------------------------------")
+                    image_cosine_distances[ref_label] = class_cosine_distances
+                    image_similarities[ref_label] = class_similarities
+                    # Store image dictionaries in the main dictionaries
+                all_cosine_distances[f"Image_{my_index}"] = image_cosine_distances
+                all_similarities[f"Image_{my_index}"] = image_similarities
+                my_index += 1
+
+                print("==================================")
+            print("##################################")
+
+        print("********************************************")
+        cv2.destroyAllWindows()
+
+        return all_cosine_distances, all_similarities
+
+    def two_image_inference(self, img_1, img_2):
+        image_1_rgb = cv2.cvtColor(img_1, cv2.COLOR_BGR2RGB)
+        image_2_rgb = cv2.cvtColor(img_2, cv2.COLOR_BGR2RGB)
+        t_i_1 = self.transform(Image.fromarray(image_1_rgb))
+        t_i_2 = self.transform(Image.fromarray(image_2_rgb))
+        t_i_2 = t_i_2.unsqueeze(0)
+        t_i_1 = t_i_1.unsqueeze(0)
+        output = self.siamese_network_model(t_i_1, t_i_2)
+        print("output : ", output)
+        return output
+
+    def two_image_inference_difference(self, img_1, img_2):
+        image_1_rgb = cv2.cvtColor(img_1, cv2.COLOR_BGR2RGB)
+        image_2_rgb = cv2.cvtColor(img_2, cv2.COLOR_BGR2RGB)
+        t_i_1 = self.transform(Image.fromarray(image_1_rgb))
+        t_i_2 = self.transform(Image.fromarray(image_2_rgb))
+        t_i_2 = t_i_2.unsqueeze(0)
+        t_i_1 = t_i_1.unsqueeze(0)
+        output = self.siamese_network_model.forward_difference(t_i_1, t_i_2)
+        print("output : ", output)
+        return output
+
+    def inference(self, img):
+        image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        objects_in_room = self.obj_detection_model.predict(image_rgb)
+
+        # Initialize dictionaries to store cosine distances and similarities
+        all_cosine_distances = {}
+        all_similarities = {}
+
+        print("********************************************")
+        my_index = 0
+
+        for img_idx, result in enumerate(objects_in_room):
+            image_cosine_distances = {}
+            image_similarities = {}
+
+            for index, cls_tensor in enumerate(result.boxes.cls):
+                print("testing for object : ", result.names[int(cls_tensor)])
+                object_class = result.names[int(cls_tensor)]
+
+                bbox_tensor = result.boxes[index].xyxy.cpu().numpy().tolist()[0]
+                xmin, ymin, xmax, ymax = map(int, bbox_tensor)
+                cropped_image = img[ymin:ymax, xmin:xmax]
+                cropped_image_pil = Image.fromarray(cropped_image)
+                transformed_image = self.transform(cropped_image_pil)
+                # show cropped image for testing
+                # save cropped image for testing
+                cv2.imwrite("cropped_" + result.names[int(cls_tensor)] + "_" + str(index) + ".jpg", cropped_image)
+
+                if len(transformed_image.shape) == 3:
+                    transformed_image = transformed_image.unsqueeze(0)
+
+                image_cosine_distances = {}
+                image_similarities = {}
+                # Compare with each reference image
+                for ref_label, ref_image in self.reference_images.items():
+                    print("testing for reference object : ", ref_label)
+                    class_cosine_distances = []
+                    class_similarities = []
+
+                    for ref_idx, image in enumerate(ref_image):
+                        image_unsqueezed = image.unsqueeze(0)
+                        similarity, cosine_distance = self.siamese_network_model(image_unsqueezed, transformed_image)
+                        # Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range
+                        similarity_torch = torch.sigmoid(similarity)
+
+                        # Store class cosine distances and similarities in image dictionaries
+                        class_cosine_distances.append(cosine_distance.item())
+                        class_similarities.append(similarity_torch.item())
+
+                    # Store class dictionaries in image dictionaries
+                    image_cosine_distances[ref_label] = class_cosine_distances
+                    image_similarities[ref_label] = class_similarities
+
+                # Store image dictionaries in the main dictionaries
+                all_cosine_distances[f"Image_{object_class}_{my_index}"] = image_cosine_distances
+                all_similarities[f"Image_{object_class}_{my_index}"] = image_similarities
+                my_index += 1
+
+                print("==================================")
+            print("##################################")
+
+        print("********************************************")
+        cv2.destroyAllWindows()
+
+        return all_cosine_distances, all_similarities

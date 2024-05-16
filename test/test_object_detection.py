@@ -18,7 +18,8 @@ from dronebuddylib.models.enums import AtomicEngineConfigurations, VisionAlgorit
 class TestObjectDetection(unittest.TestCase):
 
     def test_basic_object_detection_yolo(self):
-        image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg')
+        # image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\test_images\test_image.jpg')
+        image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\object_images\hot_bottle.jpeg')
         engine_configs = EngineConfigurations({})
         engine_configs.add_configuration(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION, "yolov8n.pt")
         object_engine = ObjectDetectionEngine(VisionAlgorithm.YOLO, engine_configs)

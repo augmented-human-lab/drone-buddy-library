@@ -66,3 +66,10 @@ class SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms(enum.Enum):
 class IntentRecognitionAlgorithm(enum.Enum):
     CHAT_GPT = 'CHAT_GPT',
     SNIPS_NLU = 'SNIPS_NLU',
+
+class FeatureExtractors(enum.Enum):
+    DENSENET121 = "DENSENET121",
+    RESNET50 = "RESNET50",
+    RESENT101 = "RESENT101",
+    EFFICIENTNETV2 = "EFFICIENTNETV2",
+    IMAGENET = "IMAGENET",

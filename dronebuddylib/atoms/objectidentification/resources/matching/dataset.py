@@ -45,6 +45,12 @@ class SiameseDataset(Dataset):
     def __len__(self):
         return self.num_samples
 
+    # image_sample_one is a sample of 100 images (path) taken from the training set folder
+    # image_sample_two is a sample of 100 images (path) taken from the training set folder
+    # image_one_class is the class of the image_sample_one
+    # image_two_class is the class of the image_sample_two
+    # same_class_details is a list of 100 elements, each element is 0 or 1, 0 means the two images are from different classes,
+    # 1 means the two images are from the same class
     def get_sample(self):
         print(self.class_names)
         get_same_class = np.random.randint(0, 2, size=self.num_samples)

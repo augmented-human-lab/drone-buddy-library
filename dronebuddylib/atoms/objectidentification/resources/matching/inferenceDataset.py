@@ -21,6 +21,7 @@ class InferenceDataset(Dataset):
         self.all_img_of_obj = all_img_of_obj
         self.crop_img_of_obj = crop_img_of_obj
 
+
     def __getitem__(self, index):
         img0 = self.all_img_of_obj[index]
         img1 = self.crop_img_of_obj

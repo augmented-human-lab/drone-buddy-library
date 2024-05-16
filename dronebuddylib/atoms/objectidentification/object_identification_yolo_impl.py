@@ -370,17 +370,17 @@ class ObjectRecognitionYOLOImpl(IObjectRecognition):
             count = 00
 
             if data_mode == 0:
-                data_set_size = 320
+                data_set_size = 50
                 path_name = pkg_resources.resource_filename(__name__,
                                                             "resources/model/data/training_data/" + object_name)
 
             elif data_mode == 1:
-                data_set_size = 80
+                data_set_size = 20
                 path_name = pkg_resources.resource_filename(__name__,
                                                             "resources/model/data/validation_data/" + object_name)
                 type = "validation"
             else:
-                data_set_size = 320
+                data_set_size = 50
                 path_name = pkg_resources.resource_filename(__name__,
                                                             "resources/model/data/training_data/" + object_name)
 
@@ -410,6 +410,9 @@ class ObjectRecognitionYOLOImpl(IObjectRecognition):
 
                             # Crop image using OpenCV (NumPy slicing)
                             cropped_image = frame[ymin:ymax, xmin:xmax]
+
+                            # convert the cropped image to RGB
+                            cropped_image = cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB)
 
                             # Save the cropped image using OpenCV
                             # Ensure the file_name_path is correct and includes the file extension, like '.jpg' or '.png'
@@ -541,4 +544,4 @@ class ObjectRecognitionYOLOImpl(IObjectRecognition):
             list: The list of optional configuration parameters.
         """
         # Additional optional parameters can be added here
-        return [AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_WEIGHTS_PATH]
+        return [AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH]

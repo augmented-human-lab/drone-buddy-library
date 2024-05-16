@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
+from sklearn.manifold import TSNE
 from torchvision.models.feature_extraction import get_graph_node_names
+import torch.nn.functional as F
 
 
 class SiameseModel(nn.Module):
@@ -14,38 +16,53 @@ class SiameseModel(nn.Module):
         self.weights = base_model_weights
         self.siamese = base_model(weights=self.weights)
         train_nodes, eval_nodes = get_graph_node_names(self.siamese)
-        print("====================================================")
-        print(train_nodes)
-        print(eval_nodes)
-        # self.classifier = nn.Sequential(
-        #     nn.Linear(self.siamese.get_submodule(train_nodes[-1]).out_features, 1),
-        #     nn.Sigmoid()
-        # )
-        # self.classifier = nn.Linear(self.siamese.get_submodule(train_nodes[-1]).out_features * 2, 1)
-        # final model
         self.classifier = nn.Linear(self.siamese.get_submodule(train_nodes[-1]).out_features, 1)
-        # model with embedding
-        # self.feature_extractor = nn.Sequential(
-        #     nn.Linear(self.siamese.get_submodule(train_nodes[-1]).out_features, 512),
-        #     nn.ReLU(inplace = True),
-        #     nn.Linear(512, self.emb_size)
-        # )
-        # self.classifier = nn.Linear(self.emb_size, 1)
+
 
     def get_embedding(self, x):
         return self.siamese(x)
+
     def forward(self, img1, img2):
         preprocess = self.weights.transforms()
         x1 = preprocess(img1)
         x2 = preprocess(img2)
         out1 = self.siamese(x1)
         out2 = self.siamese(x2)
-        # multiply to get combined feature vector representing the similarity btwn the two
-        # combined_features = torch.cat((out1, out2), 1)
-        # output = self.classifier(combined_features)
-        # model with embedding
-        # out1 = self.feature_extractor(out1)
-        # out2 = self.feature_extractor(out2)
+
         diff = torch.abs(torch.sigmoid(out1) - torch.sigmoid(out2))
+
         output = self.classifier(diff)
+        print("Similarity score: ", output)
         return output
+
+    def forward_difference(self, img1, img2):
+        preprocess = self.weights.transforms()
+        x1 = preprocess(img1)
+        x2 = preprocess(img2)
+        out1 = self.siamese(x1)
+        out2 = self.siamese(x2)
+        diff = torch.abs(torch.sigmoid(out1) - torch.sigmoid(out2))
+        return diff
+
+    def forward_difference_tsne(self, img1, img2):
+        preprocess = self.weights.transforms()
+        x1 = preprocess(img1)
+        x2 = preprocess(img2)
+        out1 = self.siamese(x1)
+        out2 = self.siamese(x2)
+
+        # get tsne difference
+        tensor_1_np = out1.detach().cpu().numpy()
+        tensor_2_np = out1.detach().cpu().numpy()
+
+        tsne = TSNE(n_components=2, perplexity=30, random_state=42)
+        tsne_1_values = tsne.fit_transform(tensor_1_np)
+        tsne_2_values = tsne.fit_transform(tensor_2_np)
+
+        # tsne_values now contains the 2D t-SNE representation of the tensor
+        print(tsne_1_values)
+        print(tsne_2_values)
+        diff = torch.abs(torch.sigmoid(out1) - torch.sigmoid(out2))
+        sigmoid_abs_diff = torch.sigmoid(torch.abs(out1 - out2))
+        abs_diff = torch.abs(tensor_1_np - tensor_2_np)
+        return abs_diff

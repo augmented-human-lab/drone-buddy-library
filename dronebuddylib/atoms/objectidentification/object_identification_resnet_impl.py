@@ -35,7 +35,7 @@ def hook_fn(module, input, output):
     intermediate_features.append(output)
 
 
-class ObjectRecognitionResnetImpl(IObjectRecognition):
+class ObjectIdentificationResnetImpl(IObjectRecognition):
     progress_event = threading.Event()
 
     def __init__(self, engine_configurations: EngineConfigurations):
@@ -52,24 +52,24 @@ class ObjectRecognitionResnetImpl(IObjectRecognition):
 
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         model_name = configs.get(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_VERSION)
-        self.weights_path = configs.get(AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_WEIGHTS_PATH.name,
+        self.weights_path = configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH.name,
                                         configs.get(
-                                            AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_WEIGHTS_PATH))
-        self.drone_instance = configs.get(AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_DRONE_INSTANCE.name,
+                                            AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH))
+        self.drone_instance = configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE.name,
                                           configs.get(
-                                              AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_DRONE_INSTANCE))
+                                              AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE))
         self.custom_knn_algorithm_name = configs.get(
-            AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_ALGORITHM_NAME.name,
-            configs.get(AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_ALGORITHM_NAME))
+            AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME.name,
+            configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME))
         self.custom_knn_neighbors = configs.get(
-            AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_ALGORITHM_NEIGHBORS.name,
+            AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS.name,
             configs.get(AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS))
         self.custom_knn_model_saving_path = configs.get(
-            AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_MODEL_SAVING_PATH.name,
-            configs.get(AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_MODEL_SAVING_PATH))
-        self.custom_knn_threshold = configs.get(AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_MODEL_THRESHOLD.name,
+            AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH.name,
+            configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH))
+        self.custom_knn_threshold = configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD.name,
                                                 configs.get(
-                                                    AtomicEngineConfigurations.OBJECT_RECOGNITION_KNN_MODEL_THRESHOLD))
+                                                    AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD))
         self.custom_knn_weights = configs.get(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH.name,
                                               configs.get(
                                                   AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH))
@@ -547,4 +547,4 @@ class ObjectRecognitionResnetImpl(IObjectRecognition):
             list: The list of optional configuration parameters.
         """
         # Additional optional parameters can be added here
-        return [AtomicEngineConfigurations.OBJECT_RECOGNITION_YOLO_WEIGHTS_PATH]
+        return [AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH]

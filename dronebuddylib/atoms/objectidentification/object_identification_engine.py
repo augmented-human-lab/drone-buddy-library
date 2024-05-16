@@ -6,7 +6,7 @@ from dronebuddylib.utils.logger import Logger
 logger = Logger()
 
 
-class ObjectRecognitionEngine:
+class ObjectIdentificationEngine:
 
     def __init__(self, algorithm: ObjectRecognitionAlgorithm, config: EngineConfigurations):
         """
@@ -28,7 +28,7 @@ class ObjectRecognitionEngine:
         Returns:
             str: The class name.
         """
-        return 'OBJECT_RECOGNITION_ENGINE'
+        return 'OBJECT_IDENTIFICATION_ENGINE'
 
     def remember_object(self, image=None, type=None, name=None, drone_instance=None, on_start=None,
                         on_training_set_complete=None,
@@ -45,9 +45,9 @@ class ObjectRecognitionEngine:
         """
         return self.vision_engine.remember_object(image, type, name)
 
-    def recognize_object(self, image):
+    def identify_object(self, image):
         """
-        Recognize objects in an image, identifying and categorizing various objects depicted in the image.
+        Identify objects in an image, identifying and categorizing various objects depicted in the image.
 
         Args:
             image: The image containing objects to be recognized.
@@ -55,4 +55,4 @@ class ObjectRecognitionEngine:
         Returns:
             A list of recognized objects, each potentially with associated metadata such as object name or coordinates.
         """
-        return self.vision_engine.recognize_object(image)
+        return self.vision_engine.identify_object(image)

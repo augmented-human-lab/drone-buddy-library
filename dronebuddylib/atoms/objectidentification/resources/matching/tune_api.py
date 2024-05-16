@@ -20,6 +20,8 @@ transforms = T.Compose([
     T.RandomAffine(degrees=(0, 45), translate=(0., 0.2)),
     T.ConvertImageDtype(torch.float)
 ])
+
+
 def dataloader(full_dataset, args, output_folder_path):
     train_size = int(args.train_val_split * args.num_samples)
     val_size = args.num_samples - train_size
@@ -62,7 +64,8 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
             # starting from PyTorch 1.7, call model or optimizer.zero_grad(set_to_none=True)
             optimizer.zero_grad(set_to_none=True)
 
-            output = model(img0, img1).squeeze(1)
+            out1 = model(img0, img1)
+            output = out1.squeeze(1)
             loss = criterion(output, label)
 
             tcorrect += torch.count_nonzero(label == (torch.sigmoid(output) > 0.5)).item()
@@ -91,8 +94,8 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
                 vimg0, vimg1, vlabel = vimg0.to(device, dtype=torch.float), vimg1.to(device,
                                                                                      dtype=torch.float), vlabel.to(
                     device, dtype=torch.float)
-
-                voutput = model(vimg0, vimg1).squeeze(1)
+                yout1 = model(vimg0, vimg1)
+                voutput = yout1.squeeze(1)
                 vloss = criterion(voutput, vlabel)
 
                 # compute embeddings for each image
@@ -105,8 +108,10 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
                 # Store embeddings and their corresponding class names
                 # reference_embeddings[valloader.dataset.dataset.class_names[class_idx0]].append(embedding_0)
 
-                reference_embeddings[valloader.dataset.dataset.class_names[class_idx0.to(device)[0]]].append(embedding_0)
-                reference_embeddings[valloader.dataset.dataset.class_names[class_idx1.to(device)[0]]].append(embedding_1)
+                reference_embeddings[valloader.dataset.dataset.class_names[class_idx0.to(device)[0]]].append(
+                    embedding_0)
+                reference_embeddings[valloader.dataset.dataset.class_names[class_idx1.to(device)[0]]].append(
+                    embedding_1)
                 # reference_embeddings[valloader.dataset.dataset.class_names[class_idx1.item()]].append(embedding_1)
 
                 # reference_embeddings[valloader.dataset.dataset.class_names[class_idx1]].append(embedding_1)
@@ -118,15 +123,15 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
 
         # Save reference images
         # Now, select the most representative image for each class based on the embeddings
-        for class_name, embeddings in reference_embeddings.items():
-            # You might choose the mean, median, or another method to find the reference
-            # Here, we'll just use the first image's embedding as an example
-            ref_embedding = embeddings[0]  # Replace this with your actual selection method
-            ref_embedding_cpu = ref_embedding.cpu().numpy()
-
-            # Save the reference embedding
-            ref_embedding_path = os.path.join(output_folder_path, f'ref_embedding_{class_name}.npy')
-            np.save(ref_embedding_path, ref_embedding_cpu)
+        # for class_name, embeddings in reference_embeddings.items():
+        #     # You might choose the mean, median, or another method to find the reference
+        #     # Here, we'll just use the first image's embedding as an example
+        #     ref_embedding = embeddings[0]  # Replace this with your actual selection method
+        #     ref_embedding_cpu = ref_embedding.cpu().numpy()
+        #
+        #     # Save the reference embedding
+        #     ref_embedding_path = os.path.join(output_folder_path, f'ref_embedding_{class_name}.npy')
+        #     np.save(ref_embedding_path, ref_embedding_cpu)
 
         # Calculate train and val loss
         avg_tloss = np.mean(tloss_history)
@@ -140,7 +145,7 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
         # Track best performance, and save the model's state
         if epoch > 0 and avg_vloss < best_vloss:
             best_vloss = avg_vloss
-            model_path = f'{output_folder_path}newmodel.pth'
+            model_path = f'{output_folder_path}newmodel_6_5.pth'
             torch.save(model.state_dict(), model_path)
 
         if (epoch + 1) % 5 == 0:
@@ -204,6 +209,9 @@ def tune():
 
     # getting the train and val dataloaders
     # image_path = pkg_resources.resource_filename(__name__, "resources/model/data/training_data/")
+    # C:\Users\Public\projects\drone - buddy - library\dronebuddylib\atoms\objectidentification\resources\model\data\benchmark
+    # images_folder_path = str(Path(__file__).resolve().parent.parent) + '\\model\\data\\training_data\\',
+
     full_dataset = SiameseDataset(
         images_folder_path=str(Path(__file__).resolve().parent.parent) + '\\model\\data\\training_data\\',
         transform=transform,
@@ -255,6 +263,8 @@ def tune():
     train(model, criterion, optimizer, trainloader, valloader, args, device, output_folder_path, lr_scheduler)
 
     print(f'[{time.ctime()}] done training the model\n')
+
+
 def loadModel():
     args = argparse.Namespace(
         batch_size=4,
@@ -332,6 +342,7 @@ def loadModel():
 
 import torch
 
+
 def plt_metric(history, metric, title, has_valid=True):
     """Plots the given 'metric' from 'history'.
 
@@ -352,26 +363,3 @@ def plt_metric(history, metric, title, has_valid=True):
     plt.ylabel(metric)
     plt.xlabel("epoch")
     plt.show()
-def validate_model(model, validation_loader, criterion, device="cpu"):
-    model.eval()
-    with torch.no_grad():
-        val_loss = 0
-        correct = 0
-        total = 0
-
-        for data in validation_loader:
-            img0, img1, labels = data
-            img0, img1, labels = img0.to(device), img1.to(device), labels.to(device)
-
-            outputs = model(img0, img1)
-            loss = criterion(outputs, labels)
-            val_loss += loss.item()
-
-            predicted = (outputs > 0.5).float()  # Assuming sigmoid activation at output
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-        avg_loss = val_loss / len(validation_loader)
-        accuracy = 100 * correct / total
-
-    return avg_loss, accuracy

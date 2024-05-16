@@ -8,7 +8,7 @@ os.environ['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'  # Use ':16:8' if you want to 
 import numpy as np
 import torch
 import torch.nn as nn
-from torchvision.models import efficientnet_v2_s, EfficientNet_V2_S_Weights
+from torchvision.models import efficientnet_v2_s, EfficientNet_V2_S_Weights, densenet121, DenseNet121_Weights
 from torchvision.models import resnet18, ResNet18_Weights
 from torchvision.models import resnet50, ResNet50_Weights
 from torchvision.models import resnet101, ResNet101_Weights
@@ -75,6 +75,11 @@ def train(model, criterion, optimizer, trainloader, valloader, args, device, out
             optimizer.zero_grad(set_to_none=True)
 
             output = model(img0, img1).squeeze(1)
+            # criterion accepts two torch tensors - one being the raw nn outputs,
+            # the other being the true class labels,
+            # then wraps the first using sigmoid -
+            # for each element in the tensor and then calculates
+            # Cross Entropy loss (-(target*log(sigmoid(pred))) for each pair and reduces it to mean.
             loss = criterion(output, label)
 
             tcorrect += torch.count_nonzero(label == (torch.sigmoid(output) > 0.5)).item()
@@ -164,8 +169,9 @@ def main():
                         help='output folder name (default: None)')
     parser.add_argument('--lr-scheduler', default=False, type=bool,
                         help='activate lr scheduler (default: False)')
-    parser.add_argument('--model', type=str, default='resnet18', metavar='S',
+    parser.add_argument('--model', type=str, default='efficientnetv2', metavar='S',
                         help='model (default: resnet18)')
+
 
     # perform the configurations
     args = parser.parse_args()
@@ -196,6 +202,16 @@ def main():
     )
     trainloader, valloader = dataloader(full_dataset, args, output_folder_path)
 
+
+    # write the number of classes, their names and the number of samples to a file
+    with open(f'{output_folder_path}progress_e{args.epochs}_b{args.batch_size}_lr{args.lr}_n{args.num_samples}_emb{args.emb_size}.txt', 'a+') as f:
+        f.write(f'[{time.ctime()}] number of classes: {len(full_dataset.class_names)}\n')
+        f.write(f'[{time.ctime()}] class names: {full_dataset.class_names}\n')
+        for i in range(len(full_dataset.class_names)):
+            f.write(f'[{time.ctime()}] number of samples in class {full_dataset.class_names[i]}: {len(full_dataset.all_images[i])}\n')
+
+        f.write(f'[{time.ctime()}] number of samples: {args.num_samples}\n')
+
     with open(f'{output_folder_path}progress_e{args.epochs}_b{args.batch_size}_lr{args.lr}_n{args.num_samples}_emb{args.emb_size}.txt', 'a+') as f:
         f.write(f'[{time.ctime()}] setting up training parameters\n')
 
@@ -215,9 +231,13 @@ def main():
     elif args.model == 'efficientnetv2':
         base_model = efficientnet_v2_s
         base_model_weights = EfficientNet_V2_S_Weights.IMAGENET1K_V1
+    elif args.model == 'densenet121':
+        base_model = densenet121
+        base_model_weights = DenseNet121_Weights.IMAGENET1K_V1
     else: # args.model == 'mobilenetv2'
         base_model = mobilenet_v2
         base_model_weights = MobileNet_V2_Weights.IMAGENET1K_V1
+
 
     with open(f'{output_folder_path}progress_e{args.epochs}_b{args.batch_size}_lr{args.lr}_n{args.num_samples}_emb{args.emb_size}.txt', 'a+') as f:
         f.write(f'[{time.ctime()}] siamese network will be based off {args.model}\n')
