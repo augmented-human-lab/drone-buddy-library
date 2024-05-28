@@ -19,9 +19,9 @@ def describe_the_retrieved_image(image, image_describer_agent: ILLMAgent):
 
 def test_object_identification_pipeline():
     model = "gpt-4o"
-    openai_api_key = ""
+    openai_ai_key = ""
 
-    agent_picker = AgentFactory(model, openai_api_key, None)
+    agent_picker = AgentFactory(model, openai_ai_key, None)
     # Initialize GPT engine
     image_describer = agent_picker.get_agent(LLMAgentNames.IMAGE_DESCRIBER)
     image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\object_images\hot_bottle.jpeg')
