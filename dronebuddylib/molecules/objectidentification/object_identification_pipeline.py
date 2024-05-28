@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from dronebuddylib.atoms.llmintegration.agent_picker_engine import AgentPickerEngine
+from dronebuddylib.atoms.llmintegration.agent_factory import AgentFactory
 from dronebuddylib.atoms.llmintegration.i_llm_agent import ILLMAgent
 from dronebuddylib.utils.enums import LLMAgentNames
 
@@ -19,9 +19,9 @@ def describe_the_retrieved_image(image, image_describer_agent: ILLMAgent):
 
 def test_object_identification_pipeline():
     model = "gpt-4o"
-    openai_api_key = "sk-proj-b4Xiugvz43TNjOvvbR6aT3BlbkFJOYuEW5pjBghRK4bAqq80"
+    openai_api_key = ""
 
-    agent_picker = AgentPickerEngine(model, openai_api_key, None)
+    agent_picker = AgentFactory(model, openai_api_key, None)
     # Initialize GPT engine
     image_describer = agent_picker.get_agent(LLMAgentNames.IMAGE_DESCRIBER)
     image = cv2.imread(r'C:\Users\Public\projects\drone-buddy-library\test\object_images\hot_bottle.jpeg')

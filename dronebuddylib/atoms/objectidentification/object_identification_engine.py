@@ -18,7 +18,7 @@ class ObjectIdentificationEngine:
         """
         if algorithm == ObjectRecognitionAlgorithm.YOLO_TRANSFER_LEARNING or algorithm == ObjectRecognitionAlgorithm.YOLO_TRANSFER_LEARNING.name:
             logger.log_info(self.get_class_name(), 'Preparing to initialize YOLO object recognition.')
-            from dronebuddylib.atoms.objectidentification.object_identification_yolo_impl import \
+            from dronebuddylib.atoms.objectidentification.object_identification_siamese_impl import \
                 ObjectRecognitionYOLOImpl
             self.vision_engine = ObjectRecognitionYOLOImpl(config)
 
