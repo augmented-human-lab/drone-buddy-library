@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dronebuddylib.atoms.llmintegration.i_llm_agent</span> <span class="kn">import</span> <span class="n">ILLMAgent</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.enums</span> <span class="kn">import</span> <span class="n">LLMAgentNames</span>
+
+
+<div class="viewcode-block" id="IntentResolverAgentImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.llmintegration.html#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">IntentResolverAgentImpl</span><span class="p">(</span><span class="n">ILLMAgent</span><span class="p">):</span>
+    <span class="n">SYSTEM_PROMPT_IMAGE_DESCRIBER</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    You are a helpful assistant.</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">logger_location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_key</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">temperature</span><span class="p">,</span> <span class="n">logger_location</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_system_prompt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SYSTEM_PROMPT_IMAGE_DESCRIBER</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IntentResolverAgentImpl.get_agent_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.llmintegration.html#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_agent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LLMAgentNames</span><span class="o">.</span><span class="n">IMAGE_DESCRIBER</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="IntentResolverAgentImpl.get_agent_description">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.llmintegration.html#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_description">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_agent_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LLMAgentNames</span><span class="o">.</span><span class="n">IMAGE_DESCRIBER</span><span class="o">.</span><span class="n">value</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

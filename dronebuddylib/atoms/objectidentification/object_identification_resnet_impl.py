@@ -20,8 +20,9 @@ from ultralytics import YOLO
 import seaborn as sns
 
 from dronebuddylib import PlaceRecognitionException
-from dronebuddylib.atoms.objectidentification.i_object_recognition import IObjectRecognition
-from dronebuddylib.atoms.objectidentification.object_recognition_result import RecognizedObjects, RecognizedObjectObject
+from dronebuddylib.atoms.objectidentification.i_object_identification import IObjectIdentification
+from dronebuddylib.atoms.objectidentification.object_identification_result import IdentifiedObjectObject, \
+    IdentifiedObjects
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.models.execution_status import ExecutionStatus
@@ -35,7 +36,7 @@ def hook_fn(module, input, output):
     intermediate_features.append(output)
 
 
-class ObjectIdentificationResnetImpl(IObjectRecognition):
+class ObjectIdentificationResnetImpl(IObjectIdentification):
     progress_event = threading.Event()
 
     def __init__(self, engine_configurations: EngineConfigurations):
@@ -67,9 +68,10 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
         self.custom_knn_model_saving_path = configs.get(
             AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH.name,
             configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH))
-        self.custom_knn_threshold = configs.get(AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD.name,
-                                                configs.get(
-                                                    AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD))
+        self.custom_knn_threshold = configs.get(
+            AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD.name,
+            configs.get(
+                AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD))
         self.custom_knn_weights = configs.get(AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH.name,
                                               configs.get(
                                                   AtomicEngineConfigurations.OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH))
@@ -293,7 +295,7 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
     def image_files_in_folder(self, folder):
         return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
 
-    def recognize_objects(self, image, top_n=3) -> RecognizedObjects:
+    def recognize_objects(self, image, top_n=3) -> IdentifiedObjects:
         """
         Recognizes objects depicted in the given image. If the confidence of the
         predictions is below a given threshold, the object is classified as 'unknown'.
@@ -311,7 +313,7 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
         # Check if features were successfully extracted
         if features is None or features.size == 0:
             logger.log_info(self.get_class_name(), "No features extracted from image.")
-            return RecognizedObjects([], None)
+            return IdentifiedObjects([], None)
 
         # Load the trained model
         if self.custom_knn_model_saving_path is not None:
@@ -349,13 +351,13 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
         top_three_labels = model.classes_[top_three_indices]  # Labels of top 3 classes
 
         recognized_places = []
-        most_probable_place = RecognizedObjectObject(predicted_label, max_probability)
+        most_probable_place = IdentifiedObjectObject(predicted_label, max_probability)
         # Log the top three predictions
         for i, (label, prob) in enumerate(zip(top_three_labels, top_three_probabilities)):
             logger.log_info(self.get_class_name(), f"Top {i + 1} predicted place: {label} with confidence: {prob}")
-            recognized_places.append(RecognizedObjectObject(label, prob))
+            recognized_places.append(IdentifiedObjectObject(label, prob))
 
-        return RecognizedObjects(most_probable_place, recognized_places)
+        return IdentifiedObjects(most_probable_place, recognized_places)
 
     def create_dataset(self, object_type, object_name, data_mode, drone_instance):
         """
@@ -519,7 +521,7 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
         Returns:
             str: The class name of the object detection implementation.
         """
-        return 'OBJECT_RECOGNITION_YOLO'
+        return 'OBJECT_IDENTIFICATION_YOLO'
 
     def get_algorithm_name(self) -> str:
         """
@@ -528,7 +530,7 @@ class ObjectIdentificationResnetImpl(IObjectRecognition):
         Returns:
             str: The algorithm name of the object detection implementation.
         """
-        return 'YOLO V8 Object Detection'
+        return 'YOLO V8 Object Identification'
 
     def get_required_params(self) -> list:
         """

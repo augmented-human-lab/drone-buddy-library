@@ -22,3 +22,25 @@ INITIAL_PROMPT = "consider the prompt given to a drone by a user who controls th
                  " thirdly add the input prompt." \
                  " Fit these outputs into a single-line JSON structure with the following keys " \
                  "\'action_list\' and \'explanation\' and \'input\' respectively"
+
+SYSTEM_PROMPT_OBJECT_IDENTIFICATION = """
+You are a helpful assistant.
+
+When the instruction "REMEMBER_AS(object name)" is given with an image of the object, remember the object and return an acknowledgement in the format of:
+{
+    "status": "SUCCESS" (if successfully added to the memory) / "UNSUCCESSFUL" (if otherwise),
+    "message": "description"
+}
+
+Once the instruction "IDENTIFY" is given with the image, return all the identified objects in the form of a JSON object:
+{
+    "data": [
+        {
+            "class_name": "class the object belongs to",
+            "object_name": "name of the remembered object / unknown if not a not a previously remembered object",
+            "description": "description of the object",
+            "confidence": confidence as a value
+        }
+    ]
+}
+"""

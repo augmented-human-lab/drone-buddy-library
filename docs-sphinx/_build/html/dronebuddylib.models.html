@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-      <title>Models package</title>
+      <title>chat_session module</title>
     
           <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
           <link rel="stylesheet" href="_static/theme.css " type="text/css" />
@@ -128,7 +128,7 @@
   <ul class="breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
     
-    <li>Models package</li>
+    <li>chat_session module</li>
   </ul>
   
 
@@ -139,11 +139,13 @@
 <hr>
           <div class="content" role="main" v-pre>
             
-  <section id="models-package">
-<h1>Models package<a class="headerlink" href="#models-package" title="Link to this heading">¶</a></h1>
+  <blockquote>
+<div><p>Models package</p>
+</div></blockquote>
+<hr class="docutils" />
 <hr class="docutils" />
 <section id="chat-session-module">
-<h2>chat_session module<a class="headerlink" href="#chat-session-module" title="Link to this heading">¶</a></h2>
+<h1>chat_session module<a class="headerlink" href="#chat-session-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.chat_session">
 <dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.chat_session.</span></span><span class="sig-name descname"><span class="pre">ChatSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dronebuddylib.models.gpt_configs.GPTConfigs" title="dronebuddylib.models.gpt_configs.GPTConfigs"><span class="pre">GPTConfigs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession" title="Link to this definition">¶</a></dt>
@@ -153,6 +155,12 @@ Each session has a unique id to associate it with the user.
 It holds the conversation history
 and provides functionality to get new response from ChatGPT
 for user query.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.encode_image_cv">
+<span class="sig-name descname"><span class="pre">encode_image_cv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.encode_image_cv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.encode_image_cv" title="Link to this definition">¶</a></dt>
+<dd><p>Encode an OpenCV image to a base64 string</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.end_session">
 <span class="sig-name descname"><span class="pre">end_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.end_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.end_session" title="Link to this definition">¶</a></dt>
@@ -166,10 +174,50 @@ get the response from ChatGPT</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.get_chatgpt_response_for_image_queries">
+<span class="sig-name descname"><span class="pre">get_chatgpt_response_for_image_queries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.get_chatgpt_response_for_image_queries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.get_chatgpt_response_for_image_queries" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.get_chatgpt_response_for_image_queries_as_encoded">
+<span class="sig-name descname"><span class="pre">get_chatgpt_response_for_image_queries_as_encoded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.get_chatgpt_response_for_image_queries_as_encoded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.get_chatgpt_response_for_image_queries_as_encoded" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.get_messages">
 <span class="sig-name descname"><span class="pre">get_messages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.get_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.get_messages" title="Link to this definition">¶</a></dt>
 <dd><p>Return the list of messages from the current conversation</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.get_response">
+<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ChatCompletionMessage</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.get_response" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.send_encoded_image_message_to_llm_queue">
+<span class="sig-name descname"><span class="pre">send_encoded_image_message_to_llm_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.send_encoded_image_message_to_llm_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.send_encoded_image_message_to_llm_queue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.send_image_message_to_llm">
+<span class="sig-name descname"><span class="pre">send_image_message_to_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.send_image_message_to_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.send_image_message_to_llm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.send_message_with_image">
+<span class="sig-name descname"><span class="pre">send_message_with_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.send_message_with_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.send_message_with_image" title="Link to this definition">¶</a></dt>
+<dd><p>Send a message with an attached image</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.send_text_message_to_llm">
+<span class="sig-name descname"><span class="pre">send_text_message_to_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/chat_session.html#ChatSession.send_text_message_to_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.chat_session.ChatSession.send_text_message_to_llm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.models.chat_session.ChatSession.set_system_prompt">
@@ -180,7 +228,7 @@ get the response from ChatGPT</p>
 
 </section>
 <section id="conversation-module">
-<h2>conversation module<a class="headerlink" href="#conversation-module" title="Link to this heading">¶</a></h2>
+<h1>conversation module<a class="headerlink" href="#conversation-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.conversation">
 <dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.conversation.</span></span><span class="sig-name descname"><span class="pre">Conversation</span></span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation" title="Link to this definition">¶</a></dt>
@@ -189,15 +237,36 @@ get the response from ChatGPT</p>
 It stores the conversation history in the form of a list of
 messages.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation.add_image_message">
+<span class="sig-name descname"><span class="pre">add_image_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation.add_image_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation.add_image_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation.add_image_message_as_encoded">
+<span class="sig-name descname"><span class="pre">add_image_message_as_encoded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation.add_image_message_as_encoded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation.add_image_message_as_encoded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation.add_message">
 <span class="sig-name descname"><span class="pre">add_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation.add_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation.add_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation.encode_image">
+<span class="sig-name descname"><span class="pre">encode_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation.encode_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation.encode_image" title="Link to this definition">¶</a></dt>
+<dd><p>Encode the image at the given path to a base64 string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.models.conversation.Conversation.get_base64_encoded_image">
+<span class="sig-name descname"><span class="pre">get_base64_encoded_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/conversation.html#Conversation.get_base64_encoded_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.conversation.Conversation.get_base64_encoded_image" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="engine-configurations-module">
-<h2>engine_configurations module<a class="headerlink" href="#engine-configurations-module" title="Link to this heading">¶</a></h2>
+<h1>engine_configurations module<a class="headerlink" href="#engine-configurations-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.engine_configurations">
 <dt class="sig sig-object py" id="dronebuddylib.models.engine_configurations.EngineConfigurations">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.engine_configurations.</span></span><span class="sig-name descname"><span class="pre">EngineConfigurations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/engine_configurations.html#EngineConfigurations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.engine_configurations.EngineConfigurations" title="Link to this definition">¶</a></dt>
@@ -231,7 +300,7 @@ messages.</p>
 
 </section>
 <section id="enums-module">
-<h2>enums module<a class="headerlink" href="#enums-module" title="Link to this heading">¶</a></h2>
+<h1>enums module<a class="headerlink" href="#enums-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.enums">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.enums.</span></span><span class="sig-name descname"><span class="pre">AtomicEngineConfigurations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/enums.html#AtomicEngineConfigurations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations" title="Link to this definition">¶</a></dt>
@@ -358,6 +427,116 @@ messages.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_GPT_API_KEY">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_GPT_API_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_GPT_API_KEY'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_GPT_API_KEY" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_GPT_MODEL">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_GPT_MODEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_GPT_MODEL'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_GPT_MODEL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_EXTRACTOR">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_EXTRACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_EXTRACTOR'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_EXTRACTOR" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_NAME">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_MODEL_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_MODEL_NAME'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_NAME" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_PATH">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_MODEL_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_MODEL_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_VERSION">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_MODEL_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_MODEL_VERSION'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_MODEL_VERSION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH">
+<span class="sig-name descname"><span class="pre">OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_ALGORITHM_NAME">
 <span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_ALGORITHM_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_ALGORITHM_NAME'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_ALGORITHM_NAME" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -373,6 +552,11 @@ messages.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_DRONE_INSTANCE">
 <span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_DRONE_INSTANCE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_DRONE_INSTANCE" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -380,6 +564,11 @@ messages.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK">
 <span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_EXTRACTOR">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_EXTRACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_EXTRACTOR'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_EXTRACTOR" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -415,6 +604,76 @@ messages.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH">
 <span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_NAME">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_ALGORITHM_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_ALGORITHM_NAME'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_NAME" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_DRONE_INSTANCE">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_DRONE_INSTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_DRONE_INSTANCE'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_DRONE_INSTANCE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_EXTRACTOR">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_EXTRACTOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_EXTRACTOR'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_EXTRACTOR" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_MODEL_SAVING_PATH">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_MODEL_SAVING_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_MODEL_SAVING_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_MODEL_SAVING_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_MODEL_THRESHOLD">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_MODEL_THRESHOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_MODEL_THRESHOLD'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_MODEL_THRESHOLD" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH'</span></em><a class="headerlink" href="#dronebuddylib.models.enums.AtomicEngineConfigurations.PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -722,6 +981,18 @@ messages.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.ObjectRecognitionAlgorithm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.enums.</span></span><span class="sig-name descname"><span class="pre">ObjectRecognitionAlgorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/enums.html#ObjectRecognitionAlgorithm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.enums.ObjectRecognitionAlgorithm" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.ObjectRecognitionAlgorithm.YOLO_TRANSFER_LEARNING">
+<span class="sig-name descname"><span class="pre">YOLO_TRANSFER_LEARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('YOLO_TRANSFER_LEARNING',)</span></em><a class="headerlink" href="#dronebuddylib.models.enums.ObjectRecognitionAlgorithm.YOLO_TRANSFER_LEARNING" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.PlaceRecognitionAlgorithm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.enums.</span></span><span class="sig-name descname"><span class="pre">PlaceRecognitionAlgorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/enums.html#PlaceRecognitionAlgorithm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.enums.PlaceRecognitionAlgorithm" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
@@ -729,6 +1000,11 @@ messages.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dronebuddylib.models.enums.PlaceRecognitionAlgorithm.PLACE_RECOGNITION_KNN">
 <span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_KNN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('PLACE_RECOGNITION_KNN',)</span></em><a class="headerlink" href="#dronebuddylib.models.enums.PlaceRecognitionAlgorithm.PLACE_RECOGNITION_KNN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.models.enums.PlaceRecognitionAlgorithm.PLACE_RECOGNITION_RF">
+<span class="sig-name descname"><span class="pre">PLACE_RECOGNITION_RF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('PLACE_RECOGNITION_RF',)</span></em><a class="headerlink" href="#dronebuddylib.models.enums.PlaceRecognitionAlgorithm.PLACE_RECOGNITION_RF" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -781,16 +1057,16 @@ messages.</p>
 
 </section>
 <section id="gpt-configs-module">
-<h2>gpt_configs module<a class="headerlink" href="#gpt-configs-module" title="Link to this heading">¶</a></h2>
+<h1>gpt_configs module<a class="headerlink" href="#gpt-configs-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.gpt_configs">
 <dt class="sig sig-object py" id="dronebuddylib.models.gpt_configs.GPTConfigs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.gpt_configs.</span></span><span class="sig-name descname"><span class="pre">GPTConfigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">open_ai_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_api_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/gpt_configs.html#GPTConfigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.gpt_configs.GPTConfigs" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.gpt_configs.</span></span><span class="sig-name descname"><span class="pre">GPTConfigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">open_ai_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_ai_temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/gpt_configs.html#GPTConfigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.gpt_configs.GPTConfigs" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 </section>
 <section id="i-dbl-function-module">
-<h2>i_dbl_function module<a class="headerlink" href="#i-dbl-function-module" title="Link to this heading">¶</a></h2>
+<h1>i_dbl_function module<a class="headerlink" href="#i-dbl-function-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.i_dbl_function">
 <dt class="sig sig-object py" id="dronebuddylib.models.i_dbl_function.IDBLFunction">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.i_dbl_function.</span></span><span class="sig-name descname"><span class="pre">IDBLFunction</span></span><a class="reference internal" href="_modules/dronebuddylib/models/i_dbl_function.html#IDBLFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.i_dbl_function.IDBLFunction" title="Link to this definition">¶</a></dt>
@@ -819,13 +1095,10 @@ messages.</p>
 
 </section>
 <section id="intent-module">
-<h2>intent module<a class="headerlink" href="#intent-module" title="Link to this heading">¶</a></h2>
-</section>
-<section id="object-detected-module">
-<h2>object_detected module<a class="headerlink" href="#object-detected-module" title="Link to this heading">¶</a></h2>
+<h1>intent module<a class="headerlink" href="#intent-module" title="Link to this heading">¶</a></h1>
 </section>
 <section id="session-logger-module">
-<h2>session_logger module<a class="headerlink" href="#session-logger-module" title="Link to this heading">¶</a></h2>
+<h1>session_logger module<a class="headerlink" href="#session-logger-module" title="Link to this heading">¶</a></h1>
 <dl class="py class" id="module-dronebuddylib.models.session_logger">
 <dt class="sig sig-object py" id="dronebuddylib.models.session_logger.SessionLogger">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.session_logger.</span></span><span class="sig-name descname"><span class="pre">SessionLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_file_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/session_logger.html#SessionLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.session_logger.SessionLogger" title="Link to this definition">¶</a></dt>
@@ -844,7 +1117,7 @@ messages.</p>
 
 </section>
 <section id="token-counter-module">
-<h2>token_counter module<a class="headerlink" href="#token-counter-module" title="Link to this heading">¶</a></h2>
+<h1>token_counter module<a class="headerlink" href="#token-counter-module" title="Link to this heading">¶</a></h1>
 <dl class="py function" id="module-dronebuddylib.models.token_counter">
 <dt class="sig sig-object py" id="dronebuddylib.models.token_counter.num_tokens_from_messages">
 <span class="sig-prename descclassname"><span class="pre">dronebuddylib.models.token_counter.</span></span><span class="sig-name descname"><span class="pre">num_tokens_from_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/models/token_counter.html#num_tokens_from_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.models.token_counter.num_tokens_from_messages" title="Link to this definition">¶</a></dt>
@@ -853,9 +1126,8 @@ messages.</p>
 
 </section>
 <section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<h1>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h1>
 <span class="target" id="module-dronebuddylib.models"></span></section>
-</section>
 
 
           </div>

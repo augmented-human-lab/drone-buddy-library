@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.object_identification_gpt_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.object_identification_gpt_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.object_identification_gpt_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">Future</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">openai</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.llmintegration.agent_factory</span> <span class="kn">import</span> <span class="n">AgentFactory</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.llmintegration.models.image_validator_results</span> <span class="kn">import</span> <span class="n">ImageValidatorResults</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.i_object_identification</span> <span class="kn">import</span> <span class="n">IObjectIdentification</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.object_identification_result</span> <span class="kn">import</span> <span class="n">IdentifiedObjects</span><span class="p">,</span> \
+    <span class="n">IdentifiedObjectObject</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.exceptions.llm_exception</span> <span class="kn">import</span> <span class="n">LLMException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.enums</span> <span class="kn">import</span> <span class="n">LLMAgentNames</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectIdentificationGPTImpl</span><span class="p">(</span><span class="n">IObjectIdentification</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to perform object identification using ResNet and GPT integration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">progress_event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the ResNet object detection engine with the given engine configurations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The engine configurations for the object detection engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+
+        <span class="n">openai_api_key</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                     <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;gpt-4o&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openai_api_key</span> <span class="o">=</span> <span class="n">openai_api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">openai_api_key</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_picker</span> <span class="o">=</span> <span class="n">AgentFactory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">openai_api_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_picker</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="n">LLMAgentNames</span><span class="o">.</span><span class="n">OBJECT_IDENTIFIER</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_validator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_picker</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="n">LLMAgentNames</span><span class="o">.</span><span class="n">IMAGE_VALIDATOR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_describer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_picker</span><span class="o">.</span><span class="n">get_agent</span><span class="p">(</span><span class="n">LLMAgentNames</span><span class="o">.</span><span class="n">IMAGE_DESCRIBER</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.create_memory_on_the_fly">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.create_memory_on_the_fly">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_memory_on_the_fly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates memory on the fly by reading known objects from a JSON file and</span>
+<span class="sd">        sending them to the object identifier for processing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            changes: Optional parameter to pass changes if any.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/known_object_list.json&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">known_object_list</span> <span class="o">=</span> <span class="n">json_content</span><span class="p">[</span><span class="s1">&#39;known_objects&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">known_object_list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">send_image_message_to_llm_queue</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;REMEMBER_AS( &quot;</span> <span class="o">+</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+                                                                       <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Memory created successfully&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.identify_object">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">identify_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IdentifiedObjects</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies the objects in the given image using the ResNet object detection engine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_path (str): The path to the image of the objects to identify.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            IdentifiedObjects: The identified objects with their associated probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">send_encoded_image_message_to_llm_queue</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;IDENTIFY&quot;</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">get_response_from_llm</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+        <span class="n">formatted_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_answers</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">formatted_result</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.identify_object_image_path">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object_image_path">[docs]</a>
+    <span class="k">def</span> <span class="nf">identify_object_image_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IdentifiedObjects</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies the objects in the given image using the ResNet object detection engine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_path (str): The path to the image of the objects to identify.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            IdentifiedObjects: The identified objects with their associated probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">send_image_message_to_llm_queue</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;IDENTIFY&quot;</span><span class="p">,</span> <span class="n">image_path</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">get_response_from_llm</span><span class="p">()</span><span class="o">.</span><span class="n">content</span>
+        <span class="n">formatted_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_answers</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">formatted_result</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.format_answers">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.format_answers">[docs]</a>
+    <span class="k">def</span> <span class="nf">format_answers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats the raw result from the object identifier into IdentifiedObjects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            result (str): The raw JSON result from the object identifier.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            IdentifiedObjects: The formatted identified objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">formatted_result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">identified_objects</span> <span class="o">=</span> <span class="n">IdentifiedObjects</span><span class="p">([],</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">formatted_result</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+            <span class="n">object_name</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;object_name&#39;</span><span class="p">]</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">IdentifiedObjectObject</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;class_name&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;object_name&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">],</span>
+                                         <span class="n">result</span><span class="p">[</span><span class="s1">&#39;confidence&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">object_name</span> <span class="o">==</span> <span class="s2">&quot;unknown&quot;</span><span class="p">:</span>
+                <span class="n">identified_objects</span><span class="o">.</span><span class="n">add_available_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">identified_objects</span><span class="o">.</span><span class="n">add_identified_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">identified_objects</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.remember_object">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.remember_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">remember_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remembers a new object by sending its image and type to the object identifier.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image of the object to remember.</span>
+<span class="sd">            type: The type of the object.</span>
+<span class="sd">            name: The name of the object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            success_result: The result from the object identifier after processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to remember object: type : &#39;</span> <span class="o">+</span> <span class="nb">type</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">validation_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_reference_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">validation_result</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+            <span class="n">success_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_identifier</span><span class="o">.</span><span class="n">send_encoded_image_message_to_llm_queue</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                                                                                            <span class="s2">&quot;REMEMBER_AS( &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+                                                                                            <span class="n">image</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">success_result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Image validation failed. Please try again with a different image.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">LLMException</span><span class="p">(</span><span class="s1">&#39;Image validation failed. Please try again with a different image.&#39;</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span>
+                                <span class="nb">str</span><span class="p">(</span><span class="n">validation_result</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.validate_reference_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.validate_reference_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">validate_reference_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">image_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageValidatorResults</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates the reference image using the object validator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image to validate.</span>
+<span class="sd">            image_type: The type of the image.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ImageValidatorResults: The result of the image validation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">validity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_validator</span><span class="o">.</span><span class="n">send_encoded_image_message_to_llm_queue</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                                                                                <span class="s2">&quot;VALIDATE( &quot;</span> <span class="o">+</span> <span class="n">image_type</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">,</span>
+                                                                                <span class="n">image</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">validity</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.describe_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.describe_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">describe_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Describes the image using the GPT model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame: The image to describe.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The description of the image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_describer</span><span class="o">.</span><span class="n">get_response_for_image_queries</span><span class="p">(</span><span class="s2">&quot;DESCRIBE&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the class name of the object detection implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name of the object detection implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;OBJECT_IDENTIFICATION_GPT&#39;</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the algorithm name of the object detection implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name of the object detection implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;Chat GPT object identification&#39;</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of required configuration parameters for the GPT object detection engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of required configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationGPTImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of optional configuration parameters for the GPT object detection engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of optional configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_MODEL</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,6 +1,6 @@
 import json
 
-from dronebuddylib.atoms.gpt_integration import GPTEngine
+from dronebuddylib.atoms.llmintegration.gpt_integration import GPTEngine
 from dronebuddylib.atoms.intentrecognition.i_intent_recognition import IIntentRecognition
 from dronebuddylib.exceptions.intent_resolution_exception import IntentResolutionException
 from dronebuddylib.models.enums import AtomicEngineConfigurations

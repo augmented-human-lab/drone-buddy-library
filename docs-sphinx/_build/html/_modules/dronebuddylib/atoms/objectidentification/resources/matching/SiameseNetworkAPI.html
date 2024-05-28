@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI</title>
+    
+          <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">efficientnet_v2_s</span><span class="p">,</span> <span class="n">EfficientNet_V2_S_Weights</span>
+<span class="kn">from</span> <span class="nn">ultralytics</span> <span class="kn">import</span> <span class="n">YOLO</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.inferenceDataset</span> <span class="kn">import</span> <span class="n">InferenceDataset</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> \
+    <span class="n">load_images_from_folder</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.model</span> <span class="kn">import</span> <span class="n">SiameseModel</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">use_deterministic_algorithms</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># tech debt: making it relative path</span>
+<span class="c1"># model_file_path = r&#39;C:\Users\wangz\drone\matching\src\siamese_model_e19_b4_lr1e-05_num100_emb20.pth&#39;</span>
+<span class="n">model_file_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\matching\latest_model\newmodel.pth&#39;</span>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI">[docs]</a>
+<span class="k">class</span> <span class="nc">SiameseNetworkAPI</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_tensor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_tensor</span> <span class="o">=</span> <span class="n">obj_tensor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span> <span class="o">=</span> <span class="n">YOLO</span><span class="p">(</span><span class="s1">&#39;yolov8n.pt&#39;</span><span class="p">)</span>
+        <span class="c1"># Set half precision mode</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+
+            <span class="c1"># Fuse the model first (if applicable, and fusion is a method provided by your specific model class)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">fuse</span><span class="p">()</span>  <span class="c1"># Fuse conv and bn layers before converting to half precision</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">half</span><span class="p">()</span>  <span class="c1"># Set to half precision only if CUDA is available</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>  <span class="c1"># Move model to GPU</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span>
+        <span class="c1"># to capture more objects, the conf threshold was reduced</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span> <span class="o">=</span> <span class="n">SiameseModel</span><span class="p">(</span>
+            <span class="n">base_model</span><span class="o">=</span><span class="n">efficientnet_v2_s</span><span class="p">,</span>
+            <span class="n">base_model_weights</span><span class="o">=</span><span class="n">EfficientNet_V2_S_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+        <span class="p">)</span>
+
+        <span class="n">state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_file_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">state_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_file_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="c1"># Define your transformations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="mi">416</span><span class="p">,</span> <span class="mi">416</span><span class="p">)),</span>  <span class="c1"># Resize the image, works with PIL Images</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>  <span class="c1"># Converts the PIL Image to a tensor</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>  <span class="c1"># Normalizes the tensor</span>
+        <span class="p">])</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&#39;</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="mi">228</span><span class="p">,</span> <span class="mi">228</span><span class="p">)),</span>  <span class="c1"># Resize the image</span>
+            <span class="c1"># transforms.ConvertImageDtype(torch.float32),  # Convert images to float tensors</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>  <span class="c1"># Convert images to tensor here, not in the inference method</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>  <span class="c1"># Normalize the tensor</span>
+        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_images</span> <span class="o">=</span> <span class="n">load_images_from_folder</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SiameseNetworkAPI.get_embeddings">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.get_embeddings">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_embeddings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">image_1_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">t_i_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image_1_rgb</span><span class="p">))</span>
+
+        <span class="n">squeezed</span> <span class="o">=</span> <span class="n">t_i_1</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span><span class="n">squeezed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.get_detected_objects">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.get_detected_objects">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+
+        <span class="c1"># Predict objects in the image using the object detection model</span>
+        <span class="n">objects_in_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+
+        <span class="c1"># Iterate through each detected object and its bounding box</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">objects_in_room</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">bbox</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">):</span>
+                <span class="c1"># Extract bounding box coordinates and convert them to integers</span>
+                <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>
+                <span class="c1"># xmin, ymin, xmax, ymax = map(int, bbox.xyxy)</span>
+                <span class="c1">#</span>
+                <span class="c1"># Draw rectangle on the image</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">),</span> <span class="p">(</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="c1"># Put the class label text on the image</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">cls</span><span class="p">)]</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="mi">10</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Display the image</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;Detected Objects&quot;</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.inference_1">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.inference_1">[docs]</a>
+    <span class="k">def</span> <span class="nf">inference_1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">objects_in_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+        <span class="c1"># Initialize dictionaries to store cosine distances and similarities</span>
+        <span class="n">all_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">img_idx</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects_in_room</span><span class="p">):</span>  <span class="c1"># Use enumerate to iterate over objects_in_room</span>
+            <span class="n">image_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">image_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls_tensor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="o">.</span><span class="n">cls</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for object : &quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)])</span>
+
+                <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>
+                <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+                <span class="n">cropped_image_pil</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">cropped_image</span><span class="p">)</span>
+                <span class="n">transformed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">cropped_image_pil</span><span class="p">)</span>
+                <span class="c1"># show cropped image for testing</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;cropped_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="n">cropped_image</span><span class="p">)</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transformed_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">transformed_image</span> <span class="o">=</span> <span class="n">transformed_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Compare with each reference image</span>
+                <span class="k">for</span> <span class="n">ref_label</span><span class="p">,</span> <span class="n">ref_image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_images</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for reference object : &quot;</span><span class="p">,</span> <span class="n">ref_label</span><span class="p">)</span>
+                    <span class="n">class_cosine_distances</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">class_similarities</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="k">for</span> <span class="n">ref_idx</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ref_image</span><span class="p">):</span>
+                        <span class="n">image_unsqueezed</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">similarity</span><span class="p">,</span> <span class="n">cosine_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="p">(</span><span class="n">image_unsqueezed</span><span class="p">,</span> <span class="n">transformed_image</span><span class="p">)</span>
+                        <span class="c1"># Assuming similarity is a 1D tensor with shape [8]</span>
+                        <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Define your threshold</span>
+
+                        <span class="c1"># Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range</span>
+                        <span class="n">similarity_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">similarity</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Similarity torch : &quot;</span><span class="p">,</span> <span class="n">similarity_torch</span><span class="p">)</span>
+
+                        <span class="c1"># Perform an element-wise comparison to the threshold</span>
+                        <span class="n">greater_than_threshold</span> <span class="o">=</span> <span class="n">similarity_torch</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+                        <span class="c1"># Now you have a tensor of booleans where each element is the result of the comparison</span>
+                        <span class="c1"># Store class cosine distances and similarities in image dictionaries</span>
+                        <span class="n">image_cosine_distances</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_cosine_distances</span>
+                        <span class="n">image_similarities</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_similarities</span>
+
+                        <span class="k">if</span> <span class="n">greater_than_threshold</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eureka for &quot;</span><span class="p">,</span> <span class="n">ref_label</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">similarity</span><span class="p">)</span>
+
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------&quot;</span><span class="p">)</span>
+                        <span class="c1"># Store image dictionaries in the main dictionaries</span>
+                    <span class="n">all_cosine_distances</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">img_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_cosine_distances</span>
+                    <span class="n">all_similarities</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">img_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_similarities</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==================================&quot;</span><span class="p">)</span>
+            <span class="n">all_cosine_distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_cosine_distances</span><span class="p">)</span>
+            <span class="n">all_similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_similarities</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##################################&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">all_cosine_distances</span><span class="p">,</span> <span class="n">all_similarities</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.inference_2">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.inference_2">[docs]</a>
+    <span class="k">def</span> <span class="nf">inference_2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">objects_in_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+        <span class="c1"># Initialize dictionaries to store cosine distances and similarities</span>
+        <span class="n">all_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+        <span class="n">my_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">img_idx</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects_in_room</span><span class="p">):</span>
+
+            <span class="n">image_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">image_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls_tensor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="o">.</span><span class="n">cls</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for object : &quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)])</span>
+
+                <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>
+                <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+                <span class="n">cropped_image_pil</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">cropped_image</span><span class="p">)</span>
+                <span class="n">transformed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">cropped_image_pil</span><span class="p">)</span>
+                <span class="c1"># show cropped image for testing</span>
+                <span class="c1"># save cropped image for testing</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;cropped_&quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">,</span> <span class="n">cropped_image</span><span class="p">)</span>
+
+                <span class="c1"># cv2.imwrite(f&quot;cropped_{str(index)}.jpg&quot;, cropped_image)</span>
+
+                <span class="c1"># cv2.imshow(&quot;cropped_&quot; + str(index), cropped_image)</span>
+                <span class="c1"># cv2.waitKey(0)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transformed_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">transformed_image</span> <span class="o">=</span> <span class="n">transformed_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Compare with each reference image</span>
+                <span class="k">for</span> <span class="n">ref_label</span><span class="p">,</span> <span class="n">ref_image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_images</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for reference object : &quot;</span><span class="p">,</span> <span class="n">ref_label</span><span class="p">)</span>
+                    <span class="n">class_cosine_distances</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">class_similarities</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="k">for</span> <span class="n">ref_idx</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ref_image</span><span class="p">):</span>
+                        <span class="n">image_unsqueezed</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">similarity</span><span class="p">,</span> <span class="n">cosine_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="p">(</span><span class="n">image_unsqueezed</span><span class="p">,</span> <span class="n">transformed_image</span><span class="p">)</span>
+                        <span class="c1"># Assuming similarity is a 1D tensor with shape [8]</span>
+                        <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Define your threshold</span>
+
+                        <span class="c1"># Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range</span>
+                        <span class="n">similarity_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">similarity</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Similarity torch : &quot;</span><span class="p">,</span> <span class="n">similarity_torch</span><span class="p">)</span>
+
+                        <span class="c1"># Perform an element-wise comparison to the threshold</span>
+                        <span class="n">greater_than_threshold</span> <span class="o">=</span> <span class="n">similarity_torch</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+                        <span class="c1"># Now you have a tensor of booleans where each element is the result of the comparison</span>
+                        <span class="c1"># Store class cosine distances and similarities in image dictionaries</span>
+                        <span class="n">class_cosine_distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cosine_distance</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                        <span class="n">class_similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">similarity_torch</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+                        <span class="k">if</span> <span class="n">greater_than_threshold</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eureka for &quot;</span><span class="p">,</span> <span class="n">ref_label</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">similarity</span><span class="p">)</span>
+
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------------&quot;</span><span class="p">)</span>
+                    <span class="n">image_cosine_distances</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_cosine_distances</span>
+                    <span class="n">image_similarities</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_similarities</span>
+                    <span class="c1"># Store image dictionaries in the main dictionaries</span>
+                <span class="n">all_cosine_distances</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">my_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_cosine_distances</span>
+                <span class="n">all_similarities</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">my_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_similarities</span>
+                <span class="n">my_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==================================&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##################################&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">all_cosine_distances</span><span class="p">,</span> <span class="n">all_similarities</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.two_image_inference">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.two_image_inference">[docs]</a>
+    <span class="k">def</span> <span class="nf">two_image_inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_1</span><span class="p">,</span> <span class="n">img_2</span><span class="p">):</span>
+        <span class="n">image_1_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img_1</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">image_2_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img_2</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">t_i_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image_1_rgb</span><span class="p">))</span>
+        <span class="n">t_i_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image_2_rgb</span><span class="p">))</span>
+        <span class="n">t_i_2</span> <span class="o">=</span> <span class="n">t_i_2</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">t_i_1</span> <span class="o">=</span> <span class="n">t_i_1</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="p">(</span><span class="n">t_i_1</span><span class="p">,</span> <span class="n">t_i_2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;output : &quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.two_image_inference_difference">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.two_image_inference_difference">[docs]</a>
+    <span class="k">def</span> <span class="nf">two_image_inference_difference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_1</span><span class="p">,</span> <span class="n">img_2</span><span class="p">):</span>
+        <span class="n">image_1_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img_1</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">image_2_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img_2</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">t_i_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image_1_rgb</span><span class="p">))</span>
+        <span class="n">t_i_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image_2_rgb</span><span class="p">))</span>
+        <span class="n">t_i_2</span> <span class="o">=</span> <span class="n">t_i_2</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">t_i_1</span> <span class="o">=</span> <span class="n">t_i_1</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="o">.</span><span class="n">forward_difference</span><span class="p">(</span><span class="n">t_i_1</span><span class="p">,</span> <span class="n">t_i_2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;output : &quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="SiameseNetworkAPI.inference">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI.SiameseNetworkAPI.inference">[docs]</a>
+    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">objects_in_room</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_detection_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+
+        <span class="c1"># Initialize dictionaries to store cosine distances and similarities</span>
+        <span class="n">all_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+        <span class="n">my_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">img_idx</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects_in_room</span><span class="p">):</span>
+            <span class="n">image_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">image_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls_tensor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="o">.</span><span class="n">cls</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for object : &quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)])</span>
+                <span class="n">object_class</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)]</span>
+
+                <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>
+                <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+                <span class="n">cropped_image_pil</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">cropped_image</span><span class="p">)</span>
+                <span class="n">transformed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">cropped_image_pil</span><span class="p">)</span>
+                <span class="c1"># show cropped image for testing</span>
+                <span class="c1"># save cropped image for testing</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;cropped_&quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="p">)]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">,</span> <span class="n">cropped_image</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transformed_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">transformed_image</span> <span class="o">=</span> <span class="n">transformed_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="n">image_cosine_distances</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">image_similarities</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="c1"># Compare with each reference image</span>
+                <span class="k">for</span> <span class="n">ref_label</span><span class="p">,</span> <span class="n">ref_image</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_images</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;testing for reference object : &quot;</span><span class="p">,</span> <span class="n">ref_label</span><span class="p">)</span>
+                    <span class="n">class_cosine_distances</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">class_similarities</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="k">for</span> <span class="n">ref_idx</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ref_image</span><span class="p">):</span>
+                        <span class="n">image_unsqueezed</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">similarity</span><span class="p">,</span> <span class="n">cosine_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese_network_model</span><span class="p">(</span><span class="n">image_unsqueezed</span><span class="p">,</span> <span class="n">transformed_image</span><span class="p">)</span>
+                        <span class="c1"># Apply a sigmoid since your values seem to be logits and you want them in the [0, 1] range</span>
+                        <span class="n">similarity_torch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">similarity</span><span class="p">)</span>
+
+                        <span class="c1"># Store class cosine distances and similarities in image dictionaries</span>
+                        <span class="n">class_cosine_distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cosine_distance</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+                        <span class="n">class_similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">similarity_torch</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+                    <span class="c1"># Store class dictionaries in image dictionaries</span>
+                    <span class="n">image_cosine_distances</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_cosine_distances</span>
+                    <span class="n">image_similarities</span><span class="p">[</span><span class="n">ref_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">class_similarities</span>
+
+                <span class="c1"># Store image dictionaries in the main dictionaries</span>
+                <span class="n">all_cosine_distances</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">object_class</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">my_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_cosine_distances</span>
+                <span class="n">all_similarities</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Image_</span><span class="si">{</span><span class="n">object_class</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">my_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">image_similarities</span>
+                <span class="n">my_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==================================&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##################################&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;********************************************&quot;</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">all_cosine_distances</span><span class="p">,</span> <span class="n">all_similarities</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

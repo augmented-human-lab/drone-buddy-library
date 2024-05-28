@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.mp_object_detection_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.mp_object_detection_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.mp_object_detection_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">mediapipe.tasks.python.vision</span> <span class="kn">import</span> <span class="n">ObjectDetectorOptions</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.i_object_detection</span> <span class="kn">import</span> <span class="n">IObjectDetection</span>
+
+<span class="kn">import</span> <span class="nn">mediapipe</span> <span class="k">as</span> <span class="nn">mp</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.detected_object</span> <span class="kn">import</span> <span class="n">DetectedObject</span><span class="p">,</span> <span class="n">BoundingBox</span><span class="p">,</span> <span class="n">ObjectDetectionResult</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span>
+
+<span class="kn">from</span> <span class="nn">mediapipe.tasks.python</span> <span class="kn">import</span> <span class="n">vision</span><span class="p">,</span> <span class="n">BaseOptions</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+
+<span class="n">VisionRunningMode</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">RunningMode</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="MPObjectDetectionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">MPObjectDetectionImpl</span><span class="p">(</span><span class="n">IObjectDetection</span><span class="p">):</span>
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the class name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;OBJECT_DETECTION_MP&#39;</span></div>
+
+
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the algorithm name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;Mediapipe Object Detection&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the object detection engine with the given configurations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The engine configurations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/efficientdet_lite0.tflite&quot;</span><span class="p">)</span>
+
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_DETECTION_MP_MODELS_PATH</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">model_path</span>
+
+        <span class="c1"># Read the model file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">model_data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;Initializing with model data from &#39;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="n">ObjectDetectorOptions</span><span class="p">(</span>
+            <span class="n">base_options</span><span class="o">=</span><span class="n">BaseOptions</span><span class="p">(</span><span class="n">model_asset_buffer</span><span class="o">=</span><span class="n">model_data</span><span class="p">),</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">running_mode</span><span class="o">=</span><span class="n">VisionRunningMode</span><span class="o">.</span><span class="n">IMAGE</span><span class="p">)</span>
+
+        <span class="n">detector</span> <span class="o">=</span> <span class="n">vision</span><span class="o">.</span><span class="n">ObjectDetector</span><span class="o">.</span><span class="n">create_from_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detector</span> <span class="o">=</span> <span class="n">detector</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;Completed initializing the mediapipe object detection&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_detected_objects">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObjectDetectionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detects objects in the provided image and returns a result containing a list of detected objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image in which to detect objects.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ObjectDetectionResult (ObjectDetectionResult) : A result containing a list of detected objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;: Detection started.&#39;</span><span class="p">)</span>
+
+        <span class="n">detection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;Detection Successful.&#39;</span><span class="p">)</span>
+        <span class="n">return_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">simple_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">detected_object</span> <span class="ow">in</span> <span class="n">detection_result</span><span class="o">.</span><span class="n">detections</span><span class="p">:</span>
+            <span class="n">formatted_object</span> <span class="o">=</span> <span class="n">DetectedObject</span><span class="p">([],</span> <span class="n">BoundingBox</span><span class="p">(</span><span class="n">detected_object</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">origin_x</span><span class="p">,</span>
+                                                              <span class="n">detected_object</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">origin_y</span><span class="p">,</span>
+                                                              <span class="n">detected_object</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                                                              <span class="n">detected_object</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+            <span class="n">highest_confidence</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">highest_confident_category</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">detected_object</span><span class="o">.</span><span class="n">categories</span><span class="p">:</span>
+                <span class="n">formatted_object</span><span class="o">.</span><span class="n">add_category</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">category_name</span><span class="p">,</span> <span class="n">label</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="n">highest_confidence</span><span class="p">:</span>
+                    <span class="n">highest_confidence</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">score</span>
+                    <span class="n">formatted_object</span><span class="o">.</span><span class="n">add_category</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">category_name</span><span class="p">,</span> <span class="n">label</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+                    <span class="n">highest_confident_category</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">category_name</span>
+
+            <span class="n">simple_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">highest_confident_category</span><span class="p">)</span>
+            <span class="n">return_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatted_object</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;Detection completed.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ObjectDetectionResult</span><span class="p">(</span><span class="n">simple_list</span><span class="p">,</span> <span class="n">return_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_bounding_boxes_of_detected_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image in which to detect objects.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of bounding boxes for the detected objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of required configuration parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of required configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="MPObjectDetectionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of optional configuration parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of optional configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_DETECTION_MP_MODELS_PATH</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

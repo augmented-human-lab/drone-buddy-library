@@ -2,15 +2,6 @@ atoms packages
 ===========================
 
 
-GPT Integration module
--------------------------------------------
-
-.. automodule:: dronebuddylib.atoms.gpt_integration
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 Body Feature Extraction module
 -------------------------------------------
 
@@ -114,5 +105,53 @@ Text Recognition module
 
    dronebuddylib.atoms.textrecognition
 
+
+
+Place Recognition module
+-------------------------------------------
+
+.. automodule:: dronebuddylib.atoms.placerecognition
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 2
+
+   dronebuddylib.atoms.placerecognition
+
+
+
+Object Identification module
+-------------------------------------------
+
+.. automodule:: dronebuddylib.atoms.objectidentification
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 2
+
+   dronebuddylib.atoms.objectidentification
+
+
+
+
+LLM integration module
+-------------------------------------------
+
+.. automodule:: dronebuddylib.atoms.llmintegration
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 2
+
+   dronebuddylib.atoms.llmintegration
 
 

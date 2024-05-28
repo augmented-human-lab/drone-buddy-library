@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.models.enums</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.models.enums</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.models.enums</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">enum</span>
+
+
+<div class="viewcode-block" id="ObjectDetectionReturnTypes">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.ObjectDetectionReturnTypes">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectDetectionReturnTypes</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum for the return types of the object detection functions.&quot;&quot;&quot;</span>
+    <span class="c1"># The object detection function returns a list of objects.</span>
+    <span class="n">LABELS</span> <span class="o">=</span> <span class="s2">&quot;LABELS&quot;</span>
+    <span class="c1"># The object detection function returns a dictionary of objects.</span>
+    <span class="n">BBOX</span> <span class="o">=</span> <span class="s2">&quot;BBOX&quot;</span>
+
+    <span class="n">CONF</span> <span class="o">=</span> <span class="s2">&quot;CONF&quot;</span>
+
+    <span class="n">ALL</span> <span class="o">=</span> <span class="s2">&quot;ALL&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="DroneCommands">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.DroneCommands">[docs]</a>
+<span class="k">class</span> <span class="nc">DroneCommands</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">TAKE_OFF</span> <span class="o">=</span> <span class="s2">&quot;start flying the drone&quot;</span><span class="p">,</span>
+    <span class="n">LAND</span> <span class="o">=</span> <span class="s2">&quot;land the drone&quot;</span><span class="p">,</span>
+    <span class="n">FORWARD</span> <span class="o">=</span> <span class="s2">&quot;move the drone forward&quot;</span><span class="p">,</span>
+    <span class="n">BACKWARD</span> <span class="o">=</span> <span class="s2">&quot;move the drone backward&quot;</span><span class="p">,</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="s2">&quot;move to the left&quot;</span><span class="p">,</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="s2">&quot;move to the right&quot;</span><span class="p">,</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="s2">&quot;go up&quot;</span><span class="p">,</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="s2">&quot;go down&quot;</span><span class="p">,</span>
+    <span class="n">ROTATE_CLOCKWISE</span> <span class="o">=</span> <span class="s2">&quot;rotate the drone clockwise&quot;</span><span class="p">,</span>
+    <span class="n">ROTATE_COUNTER_CLOCKWISE</span> <span class="o">=</span> <span class="s2">&quot;rotate the drone counter clockwise&quot;</span><span class="p">,</span>
+    <span class="n">BATTERY</span> <span class="o">=</span> <span class="s2">&quot;BATTERY&quot;</span><span class="p">,</span>
+    <span class="n">SPEED</span> <span class="o">=</span> <span class="s2">&quot;SPEED&quot;</span><span class="p">,</span>
+    <span class="n">HEIGHT</span> <span class="o">=</span> <span class="s2">&quot;HEIGHT&quot;</span><span class="p">,</span>
+    <span class="n">STOP</span> <span class="o">=</span> <span class="s2">&quot;STOP&quot;</span><span class="p">,</span>
+    <span class="n">RECOGNIZE_PEOPLE</span> <span class="o">=</span> <span class="s2">&quot;recognize the people in the image&quot;</span><span class="p">,</span>
+    <span class="n">RECOGNIZE_OBJECTS</span> <span class="o">=</span> <span class="s2">&quot;recognize the objects in the image&quot;</span><span class="p">,</span>
+    <span class="n">RECOGNIZE_TEXT</span> <span class="o">=</span> <span class="s2">&quot;recognize a text from the image&quot;</span><span class="p">,</span>
+    <span class="n">FLIP</span> <span class="o">=</span> <span class="s2">&quot;do a flip&quot;</span><span class="p">,</span>
+    <span class="c1">#  = &quot;TURN_RIGHT_AND_RECOGNIZE_OBJECTS&quot;,</span>
+    <span class="n">FOLLOW_ME</span> <span class="o">=</span> <span class="s2">&quot;follow a person&quot;</span><span class="p">,</span>
+    <span class="n">LOCATE_OBJECTS_AND_RECOGNIZE</span> <span class="o">=</span> <span class="s2">&quot;find the objects and recognize them&quot;</span><span class="p">,</span>
+    <span class="n">MOVE_AROUND</span> <span class="o">=</span> <span class="s2">&quot;move around the room&quot;</span><span class="p">,</span>
+    <span class="n">TAKE_A_PHOTO</span> <span class="o">=</span> <span class="s2">&quot;take a photo&quot;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="LoggerColors">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.LoggerColors">[docs]</a>
+<span class="k">class</span> <span class="nc">LoggerColors</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">RED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;31m&quot;</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;32m&quot;</span>
+    <span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;33m&quot;</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;34m&quot;</span>
+    <span class="n">PURPLE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;35m&quot;</span>
+    <span class="n">CYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;36m&quot;</span>
+    <span class="n">WHITE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;37m&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Language">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.Language">[docs]</a>
+<span class="k">class</span> <span class="nc">Language</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s1">&#39;en-gb&#39;</span><span class="p">,</span>
+    <span class="n">FRENCH</span> <span class="o">=</span> <span class="s1">&#39;FR&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="VisionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.VisionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">VisionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">YOLO</span> <span class="o">=</span> <span class="s1">&#39;YOLO&#39;</span><span class="p">,</span>
+    <span class="n">GOOGLE_VISION</span> <span class="o">=</span> <span class="s1">&#39;GOOGLE_VISION&#39;</span><span class="p">,</span>
+    <span class="n">MEDIA_PIPE</span> <span class="o">=</span> <span class="s1">&#39;MEDIA_PIPE&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="ObjectRecognitionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.ObjectRecognitionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectRecognitionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">YOLO_TRANSFER_LEARNING</span> <span class="o">=</span> <span class="s1">&#39;YOLO_TRANSFER_LEARNING&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="SpeechGenerationAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.SpeechGenerationAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">SpeechGenerationAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">GOOGLE_TTS_OFFLINE</span> <span class="o">=</span> <span class="s1">&#39;GOOGLE_TTS_OFFLINE&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="IntentRecognitionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.IntentRecognitionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">IntentRecognitionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">CHAT_GPT</span> <span class="o">=</span> <span class="s1">&#39;CHAT_GPT&#39;</span><span class="p">,</span>
+    <span class="n">SNIPS_NLU</span> <span class="o">=</span> <span class="s1">&#39;SNIPS_NLU&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="FaceRecognitionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.FaceRecognitionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">FaceRecognitionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">FACE_RECOGNITION_EUCLIDEAN</span> <span class="o">=</span> <span class="s1">&#39;FACE_RECOGNITION_EUCLIDEAN&#39;</span><span class="p">,</span>
+    <span class="n">FACE_RECOGNITION_KNN</span> <span class="o">=</span> <span class="s1">&#39;FACE_RECOGNITION_KNN&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="PlaceRecognitionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.PlaceRecognitionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">PlaceRecognitionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PLACE_RECOGNITION_KNN</span> <span class="o">=</span> <span class="s1">&#39;PLACE_RECOGNITION_KNN&#39;</span><span class="p">,</span>
+    <span class="n">PLACE_RECOGNITION_RF</span> <span class="o">=</span> <span class="s1">&#39;PLACE_RECOGNITION_RF&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="TextRecognitionAlgorithm">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.TextRecognitionAlgorithm">[docs]</a>
+<span class="k">class</span> <span class="nc">TextRecognitionAlgorithm</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">GOOGLE_VISION</span> <span class="o">=</span> <span class="s1">&#39;GOOGLE_VISION&#39;</span><span class="p">,</span></div>
+
+
+
+<div class="viewcode-block" id="AtomicEngineConfigurations">
+<a class="viewcode-back" href="../../../dronebuddylib.models.html#dronebuddylib.models.enums.AtomicEngineConfigurations">[docs]</a>
+<span class="k">class</span> <span class="nc">AtomicEngineConfigurations</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="c1"># The configuration for the object detection algorithm.</span>
+    <span class="n">OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH&quot;</span>
+    <span class="n">OBJECT_DETECTION_YOLO_VERSION</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_DETECTION_YOLO_VERSION&quot;</span>
+    <span class="n">OBJECT_DETECTION_MP_MODELS_PATH</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_DETECTION_MP_MODELS_PATH&quot;</span>
+
+    <span class="c1"># The configuration for the speech generation algorithm.</span>
+
+    <span class="n">SPEECH_GENERATION_TTS_RATE</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_GENERATION_TTS_RATE&quot;</span>
+    <span class="n">SPEECH_GENERATION_TTS_VOLUME</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_GENERATION_TTS_VOLUME&quot;</span>
+    <span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_GENERATION_TTS_VOICE_ID&quot;</span>
+
+    <span class="c1"># The configuration for the intent recognition algorithm.</span>
+
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_API_KEY&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_MODEL</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_MODEL&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_API_URL</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_API_URL&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_TEMPERATURE</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_TEMPERATURE&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_LOGGER_LOCATION&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_SYSTEM_PROMPT&quot;</span>
+    <span class="n">INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_OPEN_AI_SYSTEM_ACTIONS_PATH&quot;</span>
+
+    <span class="n">INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH&quot;</span>
+    <span class="n">INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG</span> <span class="o">=</span> <span class="s2">&quot;INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG&quot;</span>
+
+    <span class="c1"># The configuration for the speech recognition algorithm.</span>
+    <span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_VOSK_LANGUAGE&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_VOSK_LANGUAGE_MODEL_PATH&quot;</span>
+
+    <span class="n">SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_GOOGLE_LANGUAGE_CODE&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_GOOGLE_SAMPLE_RATE_HERTZ&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_GOOGLE_ENCODING</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_GOOGLE_ENCODING&quot;</span>
+
+    <span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGO_MIC_TIMEOUT</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_MULTI_ALGO_ALGO_MIC_TIMEOUT&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_MULTI_ALGO_ALGO_PHRASE_TIME_LIMIT</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_MULTI_ALGO_ALGO_PHRASE_TIME_LIMIT&quot;</span>
+    <span class="n">SPEECH_RECOGNITION_MULTI_ALGO_IBM_KEY</span> <span class="o">=</span> <span class="s2">&quot;SPEECH_RECOGNITION_MULTI_ALGO_IBM_KEY&quot;</span>
+
+    <span class="n">HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION</span> <span class="o">=</span> <span class="s2">&quot;HAND_FEATURE_EXTRACTION_ENABLE_GESTURE_RECOGNITION&quot;</span>
+    <span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH&quot;</span>
+
+    <span class="n">BODY_FEATURE_EXTRACTION_POSTURE_DETECTION_MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;BODY_FEATURE_EXTRACTION_POSTURE_DETECTION_MODEL_PATH&quot;</span>
+
+    <span class="n">FACE_RECOGNITION_KNN_TRAINING_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_TRAINING_DATA_SET_SIZE&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_TESTING_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_TESTING_DATA_SET_SIZE&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_VALIDATION_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_VALIDATION_DATA_SET_SIZE&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_ALGORITHM_NAME</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_ALGORITHM_NAME&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_MODEL_SAVING_PATH</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_MODEL_SAVING_PATH&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_MODEL_THRESHOLD</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_MODEL_THRESHOLD&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET&quot;</span>
+    <span class="n">FACE_RECOGNITION_KNN_DRONE_INSTANCE</span> <span class="o">=</span> <span class="s2">&quot;FACE_RECOGNITION_KNN_DRONE_INSTANCE&quot;</span>
+
+    <span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_TESTING_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_TESTING_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NAME</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_ALGORITHM_NAME&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_MODEL_SAVING_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_MODEL_SAVING_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_MODEL_THRESHOLD&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_DRONE_INSTANCE&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_START_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_START_TRAINING_CALLBACK&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_END_TRAINING_CALLBACK&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_WEIGHTS</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_ALGORITHM_WEIGHTS&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION&quot;</span>
+    <span class="n">PLACE_RECOGNITION_KNN_EXTRACTOR</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_KNN_EXTRACTOR&quot;</span>
+
+    <span class="n">PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_TESTING_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_VALIDATION_DATA_SET_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_ALGORITHM_NAME</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_ALGORITHM_NAME&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_ALGORITHM_NEIGHBORS&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_MODEL_SAVING_PATH</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_MODEL_SAVING_PATH&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_MODEL_THRESHOLD</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_MODEL_THRESHOLD&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_USE_DRONE_TO_CREATE_DATASET&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_DRONE_INSTANCE</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_DRONE_INSTANCE&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_START_TRAINING_CALLBACK&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_END_TRAINING_CALLBACK&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_ALGORITHM_WEIGHTS&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION&quot;</span>
+    <span class="n">PLACE_RECOGNITION_RF_EXTRACTOR</span> <span class="o">=</span> <span class="s2">&quot;PLACE_RECOGNITION_RF_EXTRACTOR&quot;</span>
+
+    <span class="n">OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_YOLO_WEIGHTS_PATH&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_YOLO_DRONE_INSTANCE&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_ALGORITHM_NAME&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_ALGORITHM_NEIGHBORS&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_MODEL_SAVING_PATH&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_MODEL_THRESHOLD&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_USE_DRONE_TO_CREATE_DATASET&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_DRONE_INSTANCE&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_TRAINING_DATA_SET_SIZE&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_TESTING_DATA_SET_SIZE&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_VALIDATION_DATA_SET_SIZE&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_EXTRACTOR</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_EXTRACTOR&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_START_TRAINING_CALLBACK&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_END_TRAINING_CALLBACK&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_ALGORITHM_WEIGHTS&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_CLASSIFIER_LOCATION&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_MODEL_PATH&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_MODEL_NAME&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_KNN_MODEL_VERSION</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_KNN_MODEL_VERSION&quot;</span>
+
+    <span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_GPT_API_KEY&quot;</span>
+    <span class="n">OBJECT_IDENTIFICATION_GPT_MODEL</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_GPT_MODEL&quot;</span>
+
+    <span class="n">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span> <span class="o">=</span> <span class="s2">&quot;OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION&quot;</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

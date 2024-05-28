@@ -17,5 +17,3 @@ from .facerecognition.face_recognition_engine import FaceRecognitionEngine
 # from .bodyfeatureextraction.hand_feature_extraction_impl import HandFeatureExtractionImpl
 # from .bodyfeatureextraction.body_feature_extraction_impl import BodyFeatureExtractionImpl
 # from .bodyfeatureextraction.head_feature_extraction_impl import HeadFeatureExtractionImpl
-
-from .gpt_integration import GPTEngine

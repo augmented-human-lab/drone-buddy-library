@@ -22,7 +22,7 @@
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
   <link rel="next" title="Supported models" href="dronebuddylib.userguide.voicerecognition.html" />
-  <link rel="prev" title="Google Text Recognition Module Installation" href="google_text_rec_installation_guide.html" /> 
+  <link rel="prev" title="Place Recognition using Random Forests" href="place_recognition_rf_installation_guide.html" /> 
   </head>
 
   <body>
@@ -84,7 +84,7 @@
         
           <li class="toctree-l1 current">
             
-              <a href="#" class="reference internal current">User Guide</a>
+              <a href="#" class="reference internal current">Algorithm Details</a>
             
 
             
@@ -101,6 +101,12 @@
                   <li class="toctree-l2"><a href="#object-detection" class="reference internal">Object detection</a></li>
                 
                   <li class="toctree-l2"><a href="#voice-generation" class="reference internal">Voice generation</a></li>
+                
+                  <li class="toctree-l2"><a href="#place-recognition" class="reference internal">Place Recognition</a></li>
+                
+                  <li class="toctree-l2"><a href="#object-identification" class="reference internal">Object Identification</a></li>
+                
+                  <li class="toctree-l2"><a href="#llm-integration" class="reference internal">LLM Integration</a></li>
                 
               </ul>
             
@@ -152,8 +158,8 @@
 
   <ul class="page-nav">
   <li class="prev">
-    <a href="google_text_rec_installation_guide.html"
-       title="previous chapter">← Google Text Recognition Module Installation</a>
+    <a href="place_recognition_rf_installation_guide.html"
+       title="previous chapter">← Place Recognition using Random Forests</a>
   </li>
   <li class="next">
     <a href="dronebuddylib.userguide.voicerecognition.html"
@@ -326,6 +332,127 @@
 </div>
 </section>
 </section>
+<section id="place-recognition">
+<h2>Place Recognition<a class="headerlink" href="#place-recognition" title="Link to this heading">¶</a></h2>
+<section id="id5">
+<h3>General<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>Place recognition is a computer vision technique that involves identifying and classifying specific locations or landmarks within images or video frames. This technique is essential for applications such as autonomous navigation, robotics, augmented reality, and geographic information systems. Unlike object detection, which focuses on identifying various objects, place recognition specifically targets the identification of locations based on visual cues.</p>
+<p>Here’s a simplified explanation of how place recognition works:</p>
+<ol class="arabic simple">
+<li><p><strong>Image Preprocessing</strong>: The process typically starts with preprocessing steps such as resizing, normalization, and color channel adjustment. These steps help prepare the image for further analysis and improve the accuracy of the recognition algorithms.</p></li>
+<li><p><strong>Feature Extraction</strong>: Place recognition algorithms use various techniques to extract features that capture the essential characteristics of the image. Commonly used methods include Convolutional Neural Networks (CNNs) like ResNet, DenseNet, and GoogLeNet. These features encode important information about the appearance, shape, and texture of the scene.</p></li>
+<li><p><strong>Feature Matching</strong>: Once features are extracted, the algorithm compares them with a database of known features from previously seen locations. This step involves finding the best matches between the features of the input image and those in the database.</p></li>
+<li><p><strong>Localization and Classification</strong>: After matching features, the algorithm determines the location depicted in the image. This involves identifying the best match from the database and classifying the image accordingly. The classification can be enhanced using techniques like Random Forest classifiers, which have been trained on labeled datasets.</p></li>
+<li><p><strong>Post-processing</strong>: In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering based on confidence scores, handling false positives, and ensuring robust recognition even under challenging conditions.</p></li>
+</ol>
+<p>It’s important to note that place recognition is an evolving field, with ongoing research improving the accuracy and efficiency of algorithms. Techniques such as the use of deep learning models and advanced feature extraction methods have significantly enhanced the capabilities of place recognition systems.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html">Supported models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#classification-using-random-forest">Classification using Random Forest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#general">General</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#algorithm-description">Algorithm Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.placerecognition.html#important-considerations">Important Considerations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="object-identification">
+<h2>Object Identification<a class="headerlink" href="#object-identification" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>General<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>Object identification is a computer vision technique that involves locating and classifying objects within images or video frames. This technology is essential for applications such as robotics, surveillance, image retrieval, and autonomous systems. Object identification not only recognizes the presence of objects but also provides detailed descriptions of each identified object.</p>
+<p>Here’s a simplified explanation of how object identification works:</p>
+<p>Image Preprocessing: The process typically starts with preprocessing steps such as resizing, normalization, and color adjustment. These steps help prepare the image for further analysis and improve the accuracy of the identification algorithms.</p>
+<p>Feature Extraction: Object identification algorithms use various techniques to extract features that capture the essential characteristics of the image. Commonly used methods include Convolutional Neural Networks (CNNs) like ResNet. These features encode important information about the appearance, shape, and texture of the objects.</p>
+<p>Object Identification: The extracted features are sent to a language model like GPT-4, which interprets these features to identify and describe the objects within the image. GPT-4 provides detailed descriptions based on the visual features extracted by the CNN.</p>
+<p>Concatenative Recognition: One approach is concatenative recognition, where pre-trained segments of object features are stored in a database. These segments are selected and matched to the features in the input image to form the final identification. This method can produce accurate results but requires a large database of pre-trained object features.</p>
+<p>Formant Recognition: Another approach is formant recognition, which identifies objects by modeling their features and manipulating these models to match the input image. This approach allows for more control over the identification process but may require more computational resources.</p>
+<p>Parametric Recognition: Parametric recognition uses mathematical models to represent object characteristics. It employs a set of parameters, such as shape, texture, and color, to generate feature vectors. Parametric recognition allows for efficient storage and customization of object features but may require additional processing to ensure accurate identification.</p>
+<p>Post-processing: In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering based on confidence scores, handling false positives, and ensuring robust identification even under challenging conditions. Techniques such as non-maximum suppression can be applied to remove duplicate detections and improve the final output.</p>
+<p>Output: The final output of the object identification system is the recognized objects, which can be used for various purposes such as guiding robots, monitoring security cameras, or searching for images. The output typically includes the object names, their locations within the image, and the confidence scores of the identifications.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.objectidentification.html">Object Identification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.objectidentification.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.objectidentification.html#applications">Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.objectidentification.html#advancements">Advancements</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="llm-integration">
+<h2>LLM Integration<a class="headerlink" href="#llm-integration" title="Link to this heading">¶</a></h2>
+<section id="id7">
+<h3>General<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>The LLM integration is a set of scripts that allow to run specific functions with the LLM. The implementation follows multi agent architecture, where each agent is capable of doing a specific task.
+Currently, the supported LLM is OpenAI ChatGPT. But the architecture is designed to be easily extendable to other LLMs, which can be hosted locally or on the cloud.
+Each agent has a predefined output, specific to the output expected from the LLM.</p>
+<p>The LLM integration is a comprehensive set of scripts designed to execute specific functions with a Large Language Model (LLM). The implementation employs a multi-agent architecture, where each agent is dedicated to performing a distinct task. This modular approach enhances the system’s efficiency and scalability.</p>
+<p>Currently, the supported LLM is OpenAI’s ChatGPT. However, the architecture is built with flexibility in mind, allowing for easy extension to support other LLMs. These additional LLMs can be hosted either locally or on the cloud, providing adaptability to various deployment environments.</p>
+<p>Each agent within this system has a predefined output, tailored to the expected responses from the LLM, ensuring consistency and reliability in the results.</p>
+</section>
+<section id="understanding-llms">
+<h3>Understanding LLMs<a class="headerlink" href="#understanding-llms" title="Link to this heading">¶</a></h3>
+</section>
+<section id="how-llms-work">
+<h3>How LLMs Work<a class="headerlink" href="#how-llms-work" title="Link to this heading">¶</a></h3>
+<p>Large Language Models (LLMs) are advanced artificial intelligence systems trained on vast amounts of text data. They use machine learning techniques to understand and generate human-like text based on the input they receive. These models, such as OpenAI’s GPT-3 and GPT-4, leverage deep learning algorithms, particularly transformers, to process and generate language.</p>
+</section>
+<section id="system-prompts">
+<h3>System Prompts<a class="headerlink" href="#system-prompts" title="Link to this heading">¶</a></h3>
+<p>System prompts are initial instructions provided to the LLM to guide its behavior and responses. These prompts can set the context, define the role of the AI, or instruct it to follow specific guidelines while interacting. For example, a system prompt can instruct the LLM to act as a customer service representative, ensuring its responses are aligned with customer service protocols.</p>
+</section>
+<section id="session-management">
+<h3>Session Management<a class="headerlink" href="#session-management" title="Link to this heading">¶</a></h3>
+<p>Sessions with an LLM involve maintaining context over a series of interactions. This is crucial for tasks that require continuity and coherence in conversation. Session management typically includes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>State Tracking: Keeping track of the conversation state to ensure context-aware responses.</p></li>
+<li><p>Context Preservation: Using tokens or identifiers to maintain session information across different interactions.</p></li>
+<li><p>Timeouts and Endpoints: Defining session timeouts and endpoints to manage resources effectively and ensure the system does not retain unnecessary data beyond its useful period.</p></li>
+</ul>
+</div></blockquote>
+<p>By understanding these components, users can effectively utilize LLMs for a wide range of applications, ensuring robust and coherent interactions.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html">Available Agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#object-identifier-agent">Object Identifier Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#initialization">Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#key-methods">Key Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#system-prompt">System Prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#process-summary">Process Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#image-describer-agent">Image Describer Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id2">Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id3">Key Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id4">System Prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id5">Process Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#image-validator-agent">Image Validator Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id6">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id7">Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id8">Key Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id9">System Prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.userguide.llmintegration.html#id10">Process Summary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
 </section>
 
 
@@ -333,8 +460,8 @@
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
   <li class="prev">
-    <a href="google_text_rec_installation_guide.html"
-       title="previous chapter">← Google Text Recognition Module Installation</a>
+    <a href="place_recognition_rf_installation_guide.html"
+       title="previous chapter">← Place Recognition using Random Forests</a>
   </li>
   <li class="next">
     <a href="dronebuddylib.userguide.voicerecognition.html"
