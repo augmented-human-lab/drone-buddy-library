@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Available Agents</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="atoms packages" href="dronebuddylib.atoms.html" />
+  <link rel="prev" title="Object Identification" href="dronebuddylib.userguide.objectidentification.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Available Agents</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.objectidentification.html"
+       title="previous chapter">← Object Identification</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.html"
+       title="next chapter">atoms packages →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="available-agents">
+<h1>Available Agents<a class="headerlink" href="#available-agents" title="Link to this heading">¶</a></h1>
+<section id="object-identifier-agent">
+<h2>Object Identifier Agent<a class="headerlink" href="#object-identifier-agent" title="Link to this heading">¶</a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
+<p>The <cite>ObjectIdentifierAgentImpl</cite> class is designed to implement an object identifier agent using a Large Language Model (LLM). This class enables the functionality to remember objects and identify objects in images, leveraging advanced AI capabilities.</p>
+</section>
+<section id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">¶</a></h3>
+<p>To set up an instance of <cite>ObjectIdentifierAgentImpl</cite>, you need to provide several parameters including the API key for accessing the LLM, the model name, and optionally, the temperature setting for the model’s responses and a location for logging information. Upon initialization, the system prompt specific to object identification is set up to guide the LLM’s behavior.</p>
+</section>
+<section id="key-methods">
+<h3>Key Methods<a class="headerlink" href="#key-methods" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>get_agent_name</strong></p>
+<p>This method retrieves the name of the LLM agent, which is useful for identifying which specific agent instance is being referred to in a multi-agent setup.</p>
+</li>
+<li><p><strong>get_agent_description</strong></p>
+<p>This method provides a description of the LLM agent, offering more detailed information about the agent’s purpose and functionality.</p>
+</li>
+</ol>
+</section>
+<section id="system-prompt">
+<h3>System Prompt<a class="headerlink" href="#system-prompt" title="Link to this heading">¶</a></h3>
+<p>The system prompt for the <cite>ObjectIdentifierAgentImpl</cite> is pre-defined to ensure the LLM understands and executes its tasks effectively. The prompt sets the context and instructions for the LLM to follow when interacting with the agent.</p>
+<p>The process includes two main instructions:</p>
+<ol class="arabic simple">
+<li><p><strong>Remembering Objects</strong>: When an instruction to remember an object is given, along with an image of the object, the LLM is expected to store the object in its memory and acknowledge the action. The acknowledgment includes a status indicating success or failure and a descriptive message.</p></li>
+<li><p><strong>Identifying Objects</strong>: When an instruction to identify objects is provided with an image, the LLM processes the image to identify all objects. The output is structured as a list of objects, each with details such as the class it belongs to, its name (if it was previously remembered), a description, and a confidence score indicating the reliability of the identification.</p></li>
+</ol>
+</section>
+<section id="process-summary">
+<h3>Process Summary<a class="headerlink" href="#process-summary" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Initialization</strong>: Set up the agent with the necessary parameters and define the system prompt for object identification.</p></li>
+<li><p><strong>Remember Instruction</strong>: Accepts an image and an object name, stores the object in memory, and returns a status and message.</p></li>
+<li><p><strong>Identify Instruction</strong>: Accepts an image, identifies objects, and returns a detailed list of identified objects with their attributes.</p></li>
+</ul>
+<p>This documentation explains the core functionality and workflow of the <cite>ObjectIdentifierAgentImpl</cite> class, providing an understanding of how it operates within the context of using an LLM for object identification tasks.</p>
+</section>
+</section>
+<section id="image-describer-agent">
+<h2>Image Describer Agent<a class="headerlink" href="#image-describer-agent" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>The <cite>ImageDescriberAgentImpl</cite> class is designed to implement an image describer agent using a Large Language Model (LLM). This class provides functionalities to describe images, particularly to assist visually impaired individuals by offering detailed descriptions of objects in images.</p>
+</section>
+<section id="id2">
+<h3>Initialization<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>To set up an instance of <cite>ImageDescriberAgentImpl</cite>, several parameters need to be provided, including the API key for accessing the LLM, the model name, and optionally, the temperature setting for the model’s responses and a location for logging information. Upon initialization, a system prompt specific to image description is configured to guide the LLM’s behavior.</p>
+</section>
+<section id="id3">
+<h3>Key Methods<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>get_agent_name</strong></p>
+<p>This method retrieves the name of the LLM agent, which is useful for identifying which specific agent instance is being referred to in a multi-agent setup.</p>
+</li>
+<li><p><strong>get_agent_description</strong></p>
+<p>This method provides a description of the LLM agent, offering more detailed information about the agent’s purpose and functionality.</p>
+</li>
+<li><p><strong>get_result</strong></p>
+<p>This method gets the description result from the LLM and formats it into an <cite>ImageDescriberResults</cite> object. The method processes the LLM’s response, converting it into a structured format that includes the object’s name, a detailed description, and a confidence score.</p>
+</li>
+</ol>
+</section>
+<section id="id4">
+<h3>System Prompt<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>The system prompt for the <cite>ImageDescriberAgentImpl</cite> is pre-defined to ensure the LLM understands and executes its tasks effectively. The prompt sets the context and instructions for the LLM to follow when interacting with the agent.</p>
+<p>The process includes a primary instruction:</p>
+<ol class="arabic simple">
+<li><p><strong>Describe Instruction</strong>: When an image and the instruction to describe it are given, the LLM provides a detailed explanation of the object within the image. The output is structured in a format that includes the object’s name, a full description for the person to listen to, and a confidence score indicating the reliability of the description.</p></li>
+</ol>
+</section>
+<section id="id5">
+<h3>Process Summary<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Initialization</strong>: Set up the agent with the necessary parameters and define the system prompt for image description.</p></li>
+<li><p><strong>Describe Instruction</strong>: Accepts an image and returns a detailed description, structured to assist visually impaired individuals.</p></li>
+<li><p><strong>Result Formatting</strong>: Converts the LLM’s response into a structured format, including the object’s name, description, and confidence score.</p></li>
+</ul>
+<p>This documentation explains the core functionality and workflow of the <cite>ImageDescriberAgentImpl</cite> class, providing an understanding of how it operates within the context of using an LLM for image description tasks.</p>
+</section>
+</section>
+<section id="image-validator-agent">
+<h2>Image Validator Agent<a class="headerlink" href="#image-validator-agent" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h3>Overview<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>The <cite>ImageValidatorAgentImpl</cite> class is designed to implement an image validator agent using a Large Language Model (LLM). This class provides functionalities to validate images for object identification, ensuring that the images are suitable for future recognition tasks.</p>
+</section>
+<section id="id7">
+<h3>Initialization<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>To set up an instance of <cite>ImageValidatorAgentImpl</cite>, several parameters need to be provided, including the API key for accessing the LLM, the model name, and optionally, the temperature setting for the model’s responses and a location for logging information. Upon initialization, a system prompt specific to image validation is configured to guide the LLM’s behavior.</p>
+</section>
+<section id="id8">
+<h3>Key Methods<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>get_agent_name</strong></p>
+<p>This method retrieves the name of the LLM agent, which is useful for identifying which specific agent instance is being referred to in a multi-agent setup.</p>
+</li>
+<li><p><strong>get_agent_description</strong></p>
+<p>This method provides a description of the LLM agent, offering more detailed information about the agent’s purpose and functionality.</p>
+</li>
+<li><p><strong>get_result</strong></p>
+<p>This method gets the validation result from the LLM and formats it into an <cite>ImageValidatorResults</cite> object. The method processes the LLM’s response, converting it into a structured format that includes the object type, validation status, a description, and specific instructions if the image needs improvements.</p>
+</li>
+</ol>
+</section>
+<section id="id9">
+<h3>System Prompt<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>The system prompt for the <cite>ImageValidatorAgentImpl</cite> is pre-defined to ensure the LLM understands and executes its tasks effectively. The prompt sets the context and instructions for the LLM to follow when interacting with the agent.</p>
+<p>The process includes a primary instruction:</p>
+<ol class="arabic simple">
+<li><p><strong>Validate Instruction</strong>: When an image and the instruction to validate it are given, the LLM assesses whether the image is suitable for future recognition. The output is structured in a format that includes the object type, a validation status (true if the image is good enough, false if not), a description of the object, and specific instructions for improving the image if necessary.</p></li>
+</ol>
+</section>
+<section id="id10">
+<h3>Process Summary<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Initialization</strong>: Set up the agent with the necessary parameters and define the system prompt for image validation.</p></li>
+<li><p><strong>Validate Instruction</strong>: Accepts an image and returns a validation result, structured to assist in determining the suitability of the image for recognition.</p></li>
+<li><p><strong>Result Formatting</strong>: Converts the LLM’s response into a structured format, including the object type, validation status, description, and improvement instructions.</p></li>
+</ul>
+<p>This documentation explains the core functionality and workflow of the <cite>ImageValidatorAgentImpl</cite> class, providing an understanding of how it operates within the context of using an LLM for image validation tasks.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.objectidentification.html"
+       title="previous chapter">← Object Identification</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.html"
+       title="next chapter">atoms packages →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

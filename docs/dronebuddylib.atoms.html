@@ -22,7 +22,7 @@
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
   <link rel="next" title="Body feature extraction package" href="dronebuddylib.atoms.bodyfeatureextraction.html" />
-  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.voicegeneration.html" /> 
+  <link rel="prev" title="Available Agents" href="dronebuddylib.userguide.llmintegration.html" /> 
   </head>
 
   <body>
@@ -99,8 +99,6 @@
             
               <ul>
                 
-                  <li class="toctree-l2"><a href="#gpt-integration-module" class="reference internal">GPT Integration module</a></li>
-                
                   <li class="toctree-l2"><a href="#body-feature-extraction-module" class="reference internal">Body Feature Extraction module</a></li>
                 
                   <li class="toctree-l2"><a href="#face-recognition-module" class="reference internal">Face Recognition module</a></li>
@@ -114,6 +112,12 @@
                   <li class="toctree-l2"><a href="#speech-recognition-module" class="reference internal">Speech Recognition module</a></li>
                 
                   <li class="toctree-l2"><a href="#text-recognition-module" class="reference internal">Text Recognition module</a></li>
+                
+                  <li class="toctree-l2"><a href="#place-recognition-module" class="reference internal">Place Recognition module</a></li>
+                
+                  <li class="toctree-l2"><a href="#object-identification-module" class="reference internal">Object Identification module</a></li>
+                
+                  <li class="toctree-l2"><a href="#llm-integration-module" class="reference internal">LLM integration module</a></li>
                 
               </ul>
             
@@ -156,8 +160,8 @@
 
   <ul class="page-nav">
   <li class="prev">
-    <a href="dronebuddylib.userguide.voicegeneration.html"
-       title="previous chapter">← Supported models</a>
+    <a href="dronebuddylib.userguide.llmintegration.html"
+       title="previous chapter">← Available Agents</a>
   </li>
   <li class="next">
     <a href="dronebuddylib.atoms.bodyfeatureextraction.html"
@@ -171,27 +175,6 @@
             
   <section id="atoms-packages">
 <h1>atoms packages<a class="headerlink" href="#atoms-packages" title="Link to this heading">¶</a></h1>
-<section id="gpt-integration-module">
-<h2>GPT Integration module<a class="headerlink" href="#gpt-integration-module" title="Link to this heading">¶</a></h2>
-<dl class="py class" id="module-dronebuddylib.atoms.gpt_integration">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.gpt_integration.</span></span><span class="sig-name descname"><span class="pre">GPTEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.gpt_configs.GPTConfigs" title="dronebuddylib.models.gpt_configs.GPTConfigs"><span class="pre">GPTConfigs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine.get_response">
-<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine.get_response" title="Link to this definition">¶</a></dt>
-<dd><p>For the given user_message,
-get the response from ChatGPT</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dronebuddylib.atoms.gpt_integration.GPTEngine.set_system_prompt">
-<span class="sig-name descname"><span class="pre">set_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/gpt_integration.html#GPTEngine.set_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.gpt_integration.GPTEngine.set_system_prompt" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="body-feature-extraction-module">
 <h2>Body Feature Extraction module<a class="headerlink" href="#body-feature-extraction-module" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.bodyfeatureextraction">
@@ -301,6 +284,68 @@ get the response from ChatGPT</p>
 </ul>
 </div>
 </section>
+<section id="place-recognition-module">
+<h2>Place Recognition module<a class="headerlink" href="#place-recognition-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.placerecognition">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html">Place Recognition package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#i-place-recognition-module">i_place_recognition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#place-recognition-engine-module">place_recognition_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#place-recognition-knn-impl-module">place_recognition_knn_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#place-recognition-result-module">place_recognition_result module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.placerecognition.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="object-identification-module">
+<h2>Object Identification module<a class="headerlink" href="#object-identification-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.objectidentification">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html">objectidentification package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-benchmarking-module">objectidentification.benchmarking module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-detected-object-module">objectidentification.detected_object module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-i-object-recognition-module">objectidentification.i_object_recognition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-mp-object-detection-impl-module">objectidentification.mp_object_detection_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-object-identification-engine-module">objectidentification.object_identification_engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-object-identification-gpt-impl-module">objectidentification.object_identification_gpt_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-object-identification-resnet-impl-module">objectidentification.object_identification_resnet_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-object-identification-result-module">objectidentification.object_identification_result module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-object-identification-siamese-impl-module">objectidentification.object_identification_siamese_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-plotter-module">objectidentification.plotter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-plotter-abs-module">objectidentification.plotter_abs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#objectidentification-siamese-impl-module">objectidentification.siamese_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="llm-integration-module">
+<h2>LLM integration module<a class="headerlink" href="#llm-integration-module" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="module-dronebuddylib.atoms.llmintegration">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html">LLM integration package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#agent-factory-module">agent_factory module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#agent-types-module">agent_types module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#gpt-integration-module">gpt_integration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#i-llm-agent-module">i_llm_agent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#image-describer-agent-impl-module">image_describer_agent_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#image-validator-agent-impl-class">image_validator_agent_impl class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#intent-resolver-agent-impl-module">intent_resolver_agent_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#object-identifier-agent-impl-module">object_identifier_agent_impl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 </section>
 
 
@@ -308,8 +353,8 @@ get the response from ChatGPT</p>
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
   <li class="prev">
-    <a href="dronebuddylib.userguide.voicegeneration.html"
-       title="previous chapter">← Supported models</a>
+    <a href="dronebuddylib.userguide.llmintegration.html"
+       title="previous chapter">← Available Agents</a>
   </li>
   <li class="next">
     <a href="dronebuddylib.atoms.bodyfeatureextraction.html"

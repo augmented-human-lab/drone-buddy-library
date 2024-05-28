@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.resources.matching.tune_api</title>
+    
+          <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.resources.matching.tune_api</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.resources.matching.tune_api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">torchsummary</span> <span class="kn">import</span> <span class="n">summary</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">efficientnet_v2_s</span><span class="p">,</span> <span class="n">EfficientNet_V2_S_Weights</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">resnet18</span><span class="p">,</span> <span class="n">ResNet18_Weights</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">resnet50</span><span class="p">,</span> <span class="n">ResNet50_Weights</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">resnet101</span><span class="p">,</span> <span class="n">ResNet101_Weights</span>
+<span class="kn">from</span> <span class="nn">torchvision.models</span> <span class="kn">import</span> <span class="n">mobilenet_v2</span><span class="p">,</span> <span class="n">MobileNet_V2_Weights</span>
+
+<span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.model</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">transforms</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="mi">228</span><span class="p">,</span> <span class="mi">228</span><span class="p">)),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">RandomVerticalFlip</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">RandomAffine</span><span class="p">(</span><span class="n">degrees</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">),</span> <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">ConvertImageDtype</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<span class="p">])</span>
+
+
+<div class="viewcode-block" id="dataloader">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.dataloader">[docs]</a>
+<span class="k">def</span> <span class="nf">dataloader</span><span class="p">(</span><span class="n">full_dataset</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">output_folder_path</span><span class="p">):</span>
+    <span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train_val_split</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)</span>
+    <span class="n">val_size</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="n">train_size</span>
+    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">random_split</span><span class="p">(</span><span class="n">full_dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">])</span>
+
+    <span class="c1"># note: when using a GPU it’s better to set pin_memory=True, this instructs DataLoader to use pinned memory</span>
+    <span class="c1"># and enables faster and asynchronous memory copy from the host to the GPU.</span>
+    <span class="n">trainloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">train_dataset</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">valloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">val_dataset</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">valloader</span></div>
+
+
+
+<div class="viewcode-block" id="train">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.train">[docs]</a>
+<span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">valloader</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">output_folder_path</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">best_vloss</span> <span class="o">=</span> <span class="mf">1_000_000.</span>
+
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="c1"># training</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">tloss_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tcorrect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">ttotal</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainloader</span><span class="p">):</span>
+            <span class="n">img0</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="n">img0</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">img0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">img1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">label</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span>
+                                                                                                                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+            <span class="c1"># starting from PyTorch 1.7, call model or optimizer.zero_grad(set_to_none=True)</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">(</span><span class="n">set_to_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">out1</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img0</span><span class="p">,</span> <span class="n">img1</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+            <span class="n">tcorrect</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">label</span> <span class="o">==</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">ttotal</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">tloss_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">lr_scheduler</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lr_scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># validation</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">vloss_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">vcorrect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vtotal</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">reference_embeddings</span> <span class="o">=</span> <span class="p">{</span><span class="n">class_name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">class_name</span> <span class="ow">in</span> <span class="n">valloader</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">}</span>
+
+        <span class="c1"># disable gradient calculation for validation or inference</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vdata</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valloader</span><span class="p">):</span>
+                <span class="n">vimg0</span><span class="p">,</span> <span class="n">vimg1</span><span class="p">,</span> <span class="n">class_idx0</span><span class="p">,</span> <span class="n">class_idx1</span><span class="p">,</span> <span class="n">vlabel</span> <span class="o">=</span> <span class="n">vdata</span>
+                <span class="n">vimg0</span><span class="p">,</span> <span class="n">vimg1</span><span class="p">,</span> <span class="n">vlabel</span> <span class="o">=</span> <span class="n">vimg0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">vimg1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span>
+                                                                                     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">vlabel</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+                    <span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                <span class="n">yout1</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">vimg0</span><span class="p">,</span> <span class="n">vimg1</span><span class="p">)</span>
+                <span class="n">voutput</span> <span class="o">=</span> <span class="n">yout1</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">vloss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">voutput</span><span class="p">,</span> <span class="n">vlabel</span><span class="p">)</span>
+
+                <span class="c1"># compute embeddings for each image</span>
+                <span class="c1"># embedding_0 = model.get_embedding(vimg0.cpu().numpy())</span>
+                <span class="c1"># embedding_1 = model.get_embedding(vimg1.cpu().numpy())</span>
+
+                <span class="n">embedding_0</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span><span class="n">vimg0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+                <span class="n">embedding_1</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span><span class="n">vimg1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+
+                <span class="c1"># Store embeddings and their corresponding class names</span>
+                <span class="c1"># reference_embeddings[valloader.dataset.dataset.class_names[class_idx0]].append(embedding_0)</span>
+
+                <span class="n">reference_embeddings</span><span class="p">[</span><span class="n">valloader</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">[</span><span class="n">class_idx0</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">embedding_0</span><span class="p">)</span>
+                <span class="n">reference_embeddings</span><span class="p">[</span><span class="n">valloader</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">class_names</span><span class="p">[</span><span class="n">class_idx1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">embedding_1</span><span class="p">)</span>
+                <span class="c1"># reference_embeddings[valloader.dataset.dataset.class_names[class_idx1.item()]].append(embedding_1)</span>
+
+                <span class="c1"># reference_embeddings[valloader.dataset.dataset.class_names[class_idx1]].append(embedding_1)</span>
+
+                <span class="n">vcorrect</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">vlabel</span> <span class="o">==</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">voutput</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                <span class="n">vtotal</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vlabel</span><span class="p">)</span>
+
+                <span class="n">vloss_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vloss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
+        <span class="c1"># Save reference images</span>
+        <span class="c1"># Now, select the most representative image for each class based on the embeddings</span>
+        <span class="c1"># for class_name, embeddings in reference_embeddings.items():</span>
+        <span class="c1">#     # You might choose the mean, median, or another method to find the reference</span>
+        <span class="c1">#     # Here, we&#39;ll just use the first image&#39;s embedding as an example</span>
+        <span class="c1">#     ref_embedding = embeddings[0]  # Replace this with your actual selection method</span>
+        <span class="c1">#     ref_embedding_cpu = ref_embedding.cpu().numpy()</span>
+        <span class="c1">#</span>
+        <span class="c1">#     # Save the reference embedding</span>
+        <span class="c1">#     ref_embedding_path = os.path.join(output_folder_path, f&#39;ref_embedding_{class_name}.npy&#39;)</span>
+        <span class="c1">#     np.save(ref_embedding_path, ref_embedding_cpu)</span>
+
+        <span class="c1"># Calculate train and val loss</span>
+        <span class="n">avg_tloss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tloss_history</span><span class="p">)</span>
+        <span class="n">avg_vloss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vloss_history</span><span class="p">)</span>
+        <span class="n">avg_tacc</span> <span class="o">=</span> <span class="n">tcorrect</span> <span class="o">/</span> <span class="n">ttotal</span>
+        <span class="n">avg_vacc</span> <span class="o">=</span> <span class="n">vcorrect</span> <span class="o">/</span> <span class="n">vtotal</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] [Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1">] train loss: </span><span class="si">{</span><span class="n">avg_tloss</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> val loss: </span><span class="si">{</span><span class="n">avg_vloss</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> train acc: </span><span class="si">{</span><span class="n">avg_tacc</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> val acc: </span><span class="si">{</span><span class="n">avg_vacc</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Track best performance, and save the model&#39;s state</span>
+        <span class="k">if</span> <span class="n">epoch</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">avg_vloss</span> <span class="o">&lt;</span> <span class="n">best_vloss</span><span class="p">:</span>
+            <span class="n">best_vloss</span> <span class="o">=</span> <span class="n">avg_vloss</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">output_folder_path</span><span class="si">}</span><span class="s1">newmodel_6_5.pth&#39;</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">model_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] [Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1">] train loss: </span><span class="si">{</span><span class="n">avg_tloss</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> val loss: </span><span class="si">{</span><span class="n">avg_vloss</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> train acc: </span><span class="si">{</span><span class="n">avg_tacc</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1"> val acc: </span><span class="si">{</span><span class="n">avg_vacc</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="n">model_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">output_folder_path</span><span class="si">}</span><span class="s1">newmodel.pth&#39;</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">model_path</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="predict_with_reference_images">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.predict_with_reference_images">[docs]</a>
+<span class="k">def</span> <span class="nf">predict_with_reference_images</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">reference_embeddings</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">new_image</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">new_image</span> <span class="o">=</span> <span class="n">new_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Add batch dimension</span>
+    <span class="n">new_embedding</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span><span class="n">new_image</span><span class="p">)</span>
+
+    <span class="n">closest_class</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">closest_dist</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Compare with each reference embedding</span>
+    <span class="k">for</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">ref_embedding</span> <span class="ow">in</span> <span class="n">reference_embeddings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># dist = np.linalg.norm(new_embedding.cpu().numpy() - ref_embedding)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">new_embedding</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">-</span> <span class="n">ref_embedding</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">closest_dist</span><span class="p">:</span>
+            <span class="n">closest_dist</span> <span class="o">=</span> <span class="n">dist</span>
+            <span class="n">closest_class</span> <span class="o">=</span> <span class="n">class_name</span>
+
+    <span class="k">return</span> <span class="n">closest_class</span></div>
+
+
+
+<div class="viewcode-block" id="tune">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.tune">[docs]</a>
+<span class="k">def</span> <span class="nf">tune</span><span class="p">(</span><span class="n">feature_extractor_model</span><span class="o">=</span><span class="s2">&quot;efficientnetv2&quot;</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">emb_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+         <span class="n">train_val_split</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_folder_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+         <span class="n">pretrained_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">(</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
+        <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
+        <span class="n">emb_size</span><span class="o">=</span><span class="n">emb_size</span><span class="p">,</span>
+        <span class="n">train_val_split</span><span class="o">=</span><span class="n">train_val_split</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+        <span class="n">output_folder_name</span><span class="o">=</span><span class="n">output_folder_name</span><span class="p">,</span>
+        <span class="n">lr_scheduler</span><span class="o">=</span><span class="n">lr_scheduler</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">feature_extractor_model</span><span class="p">,</span>
+        <span class="n">pretrained_weights</span><span class="o">=</span><span class="n">pretrained_weights</span>
+    <span class="p">)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
+    <span class="n">output_folder_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">latest_model</span><span class="se">\\</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_folder_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">output_folder_path</span><span class="p">)</span>
+
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># ensure reproducibility</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">use_deterministic_algorithms</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] getting the train and val dataloaders</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># getting the train and val dataloaders</span>
+    <span class="c1"># image_path = pkg_resources.resource_filename(__name__, &quot;resources/model/data/training_data/&quot;)</span>
+    <span class="c1"># C:\Users\Public\projects\drone - buddy - library\dronebuddylib\atoms\objectidentification\resources\model\data\benchmark</span>
+    <span class="c1"># images_folder_path = str(Path(__file__).resolve().parent.parent) + &#39;\\model\\data\\training_data\\&#39;,</span>
+
+    <span class="n">full_dataset</span> <span class="o">=</span> <span class="n">SiameseDataset</span><span class="p">(</span>
+        <span class="n">images_folder_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">model</span><span class="se">\\</span><span class="s1">data</span><span class="se">\\</span><span class="s1">training_data</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_samples</span>
+    <span class="p">)</span>
+    <span class="n">trainloader</span><span class="p">,</span> <span class="n">valloader</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">full_dataset</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">output_folder_path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] setting up training parameters</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># setting up training parameters</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet18&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet18</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet18_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet50&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet50</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet50v2&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet50</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V2</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet101&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet101</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet101_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;efficientnetv2&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">efficientnet_v2_s</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">EfficientNet_V2_S_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># args.model == &#39;mobilenetv2&#39;</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">mobilenet_v2</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">MobileNet_V2_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] siamese network will be based off </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># model = SiameseModel(emb_size=args.emb_size, base_model=base_model, base_model_weights=base_model_weights)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SiameseModel</span><span class="p">(</span><span class="n">base_model</span><span class="o">=</span><span class="n">base_model</span><span class="p">,</span> <span class="n">base_model_weights</span><span class="o">=</span><span class="n">base_model_weights</span><span class="p">)</span>
+
+    <span class="c1"># model_path = pkg_resources.resource_filename(__name__, &quot;resources/model/data/training_data/&quot;)</span>
+    <span class="n">trained_model_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">latest_model</span><span class="se">\\</span><span class="s2">newmodel.pth&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">trained_model_path</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="p">:</span>
+        <span class="n">lr_scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">StepLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lr_scheduler</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] training the model</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># model training</span>
+    <span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainloader</span><span class="p">,</span> <span class="n">valloader</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">output_folder_path</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] done training the model</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="loadModel">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.loadModel">[docs]</a>
+<span class="k">def</span> <span class="nf">loadModel</span><span class="p">():</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">(</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">lr</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">emb_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">train_val_split</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">output_folder_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lr_scheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="s1">&#39;efficientnetv2&#39;</span><span class="p">,</span>
+        <span class="n">pretrained_weights</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
+    <span class="n">output_folder_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">latest_model</span><span class="se">\\</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_folder_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">output_folder_path</span><span class="p">)</span>
+
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># ensure reproducibility</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">use_deterministic_algorithms</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] getting the train and val dataloaders</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># getting the train and val dataloaders</span>
+    <span class="n">full_dataset</span> <span class="o">=</span> <span class="n">SiameseDataset</span><span class="p">(</span>
+        <span class="n">images_folder_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">model</span><span class="se">\\</span><span class="s1">data</span><span class="se">\\</span><span class="s1">training_data</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+        <span class="n">num_samples</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_samples</span>
+    <span class="p">)</span>
+    <span class="n">trainloader</span><span class="p">,</span> <span class="n">valloader</span> <span class="o">=</span> <span class="n">dataloader</span><span class="p">(</span><span class="n">full_dataset</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">output_folder_path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] setting up training parameters</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># setting up training parameters</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet18&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet18</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet18_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet50&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet50</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet50v2&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet50</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V2</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;resnet101&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">resnet101</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">ResNet101_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;efficientnetv2&#39;</span><span class="p">:</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">efficientnet_v2_s</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">EfficientNet_V2_S_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># args.model == &#39;mobilenetv2&#39;</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="n">mobilenet_v2</span>
+        <span class="n">base_model_weights</span> <span class="o">=</span> <span class="n">MobileNet_V2_Weights</span><span class="o">.</span><span class="n">IMAGENET1K_V1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">}</span><span class="s1">] siamese network will be based off </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># model = SiameseModel(emb_size=args.emb_size, base_model=base_model, base_model_weights=base_model_weights)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SiameseModel</span><span class="p">(</span><span class="n">base_model</span><span class="o">=</span><span class="n">base_model</span><span class="p">,</span> <span class="n">base_model_weights</span><span class="o">=</span><span class="n">base_model_weights</span><span class="p">)</span>
+
+    <span class="c1"># model_path = pkg_resources.resource_filename(__name__, &quot;resources/model/data/training_data/&quot;)</span>
+    <span class="n">trained_model_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">latest_model</span><span class="se">\\</span><span class="s2">newmodel.pth&quot;</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">trained_model_path</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="n">summary</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">228</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">228</span><span class="p">,</span> <span class="mi">228</span><span class="p">)])</span></div>
+
+    <span class="c1"># model.forward()</span>
+
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+
+<div class="viewcode-block" id="plt_metric">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.tune_api.plt_metric">[docs]</a>
+<span class="k">def</span> <span class="nf">plt_metric</span><span class="p">(</span><span class="n">history</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">has_valid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots the given &#39;metric&#39; from &#39;history&#39;.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        history: history attribute of History object returned from Model.fit.</span>
+<span class="sd">        metric: Metric to plot, a string value present as key in &#39;history&#39;.</span>
+<span class="sd">        title: A string to be used as title of plot.</span>
+<span class="sd">        has_valid: Boolean, true if valid data was passed to Model.fit else false.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="n">metric</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">has_valid</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s2">&quot;val_&quot;</span> <span class="o">+</span> <span class="n">metric</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;validation&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;epoch&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

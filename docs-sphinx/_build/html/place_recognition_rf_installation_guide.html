@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Place Recognition using Random Forests</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="User Guide" href="dronebuddylib.userguide.html" />
+  <link rel="prev" title="Place Recognition Module Installation" href="place_recognition_installation_guide.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.installationguide.html">Installation Guide</a> &raquo;</li>
+    
+      <li><a href="place_recognition_installation_guide.html">Place Recognition Module Installation</a> &raquo;</li>
+    
+    <li>Place Recognition using Random Forests</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="place_recognition_installation_guide.html"
+       title="previous chapter">← Place Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="place-recognition-using-random-forests">
+<h1>Place Recognition using Random Forests<a class="headerlink" href="#place-recognition-using-random-forests" title="Link to this heading">¶</a></h1>
+<p>The <cite>PlaceRecognitionRFImpl</cite> class implements place recognition using the Random Forest algorithm, leveraging image features extracted via pre-trained convolutional neural networks (CNNs). This implementation is ideal for applications requiring geographical awareness from visual cues, such as in robotics and drones.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install the Place Recognition module, run the following snippet, which will install the required dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">dronebuddylib</span><span class="p">[</span><span class="n">PLACE_RECOGNITION_RF</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>The Place Recognition module requires the following configurations to function:</p>
+<ul class="simple">
+<li><p><cite>PLACE_RECOGNITION_RF_TRAINING_DATA_SET_PATH</cite>: Path to the training dataset - not required, if not used will be using the default location.</p></li>
+<li><p><cite>PLACE_RECOGNITION_RF_MODEL_SAVING_PATH</cite>: Path to save the trained model - not required, if not used will be using the default location.</p></li>
+<li><p><cite>PLACE_RECOGNITION_RF_CLASSIFIER_LOCATION</cite>: Path to the saved model for recognition purposes - not required, if not used will be using the default location.</p></li>
+</ul>
+</section>
+<section id="code-example">
+<h2>Code Example<a class="headerlink" href="#code-example" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p><strong>Training the Model</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+
+ <span class="c1"># Mark this false, if you are using the mobile to create the dataset</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span><span class="p">,</span>
+                                 <span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span><span class="p">,</span>
+                                 <span class="n">tello</span><span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">PlaceRecognitionEngine</span><span class="p">(</span><span class="n">PlaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">remember_place</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">tello</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Recognizing a Place</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">place_recognition_rf</span> <span class="kn">import</span> <span class="n">PlaceRecognitionRFImpl</span>
+
+<span class="c1"># Load your image</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;path/to/new/image.jpg&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Recognize the place</span>
+<span class="n">recognized_places</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_place</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The output will be given in the following JSON format:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;most_probable_place&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;place_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John&#39;s office&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;recognized_places&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;place_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;John&#39;s office&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;place_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Jane&#39;s office&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.10</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;place_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NUS librar&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;confidence&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="working-example">
+<h2>Working example<a class="headerlink" href="#working-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session_number</span> <span class="o">=</span> <span class="s2">&quot;unknown_session&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tello</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+    <span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({})</span>
+    <span class="n">engine_configs</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span>
+        <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_EXTRACTOR</span><span class="p">,</span>
+        <span class="s2">&quot;GoogLeNetPlaces365&quot;</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">PlaceRecognitionEngine</span><span class="p">(</span><span class="n">PlaceRecognitionAlgorithm</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN</span><span class="p">,</span> <span class="n">engine_configs</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tello</span><span class="o">.</span><span class="n">move_up</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">current_rotation</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_rotation</span> <span class="o">&gt;</span> <span class="mi">360</span><span class="p">:</span>
+            <span class="n">tello</span><span class="o">.</span><span class="n">land</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">tello</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">recognize_place</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="n">identified_place</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">most_likely</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">most_likely</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\test\test_results\session_&quot;</span> <span class="o">+</span> <span class="n">session_number</span>
+            <span class="n">file_name_path</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">most_likely</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">file_name_path</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="n">current_rotation</span> <span class="o">+=</span> <span class="mi">10</span>
+        <span class="n">tello</span><span class="o">.</span><span class="n">rotate_clockwise</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;Image&quot;</span> <span class="o">+</span> <span class="n">identified_place</span> <span class="o">+</span> <span class="s2">&quot; _ &quot;</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Count occurrences of each prefix</span>
+    <span class="n">prefix_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;possiblities&quot;</span><span class="p">,</span> <span class="n">prefix_counts</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prefix_counts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Most common prefix:&quot;</span><span class="p">,</span> <span class="n">prefix_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prefix_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unknown&quot;</span><span class="p">:</span>
+            <span class="n">could_be</span> <span class="o">=</span> <span class="n">prefix_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;this could be the : &quot;</span><span class="p">,</span> <span class="n">could_be</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;this is the place: &quot;</span><span class="p">,</span> <span class="n">prefix_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="algorithm-description">
+<h2>Algorithm Description<a class="headerlink" href="#algorithm-description" title="Link to this heading">¶</a></h2>
+<p>The <cite>PlaceRecognitionRFImpl</cite> class uses the Random Forest algorithm for place recognition by leveraging image features extracted from pre-trained CNN models such as ResNet, DenseNet, and GoogLeNet. The following steps outline the algorithm and approaches used:</p>
+<ol class="arabic simple">
+<li><ul class="simple">
+<li><p><strong>Pre-trained CNN Models</strong>: The class utilizes pre-trained CNN models (e.g., ResNet, DenseNet) to extract feature vectors from images. The algorithm currently uses model trained on Google Places 365.</p></li>
+<li><p><strong>Image Preprocessing</strong>: Images are preprocessed using transformations like resizing, center cropping, normalization, and conversion to tensors suitable for input to the CNN models.</p></li>
+</ul>
+</li>
+<li><ul class="simple">
+<li><p><strong>Training</strong>:
+- The extracted features from the training images are used to train the Random Forest classifier.
+- The classifier is configured with parameters such as the number of trees (<cite>n_estimators</cite>), maximum depth (<cite>max_depth</cite>), and splitting criterion (<cite>criterion</cite>).
+- The training dataset is split into training and validation sets using <cite>train_test_split</cite>.
+- The classifier is trained on the training set and evaluated on the validation set to measure accuracy, precision, and other performance metrics.</p></li>
+<li><p><strong>Recognition</strong>:
+- For recognizing places in new images, the same preprocessing and feature extraction steps are applied.
+- The extracted feature vector is then passed to the trained Random Forest classifier to predict the place.
+- The classifier provides probabilities for each possible place, and the place with the highest probability is selected as the recognized place.</p></li>
+</ul>
+</li>
+<li><ul class="simple">
+<li><p><strong>Confidence Scores</strong>: The class computes confidence scores based on the proportion of trees in the Random Forest that vote for each class.</p></li>
+<li><p><strong>Progress Monitoring</strong>: The training and recognition processes can be monitored using progress bars and status updates.</p></li>
+<li><p><strong>Drone Integration</strong>: Optionally, the class can use a drone to capture images for dataset creation, providing a method for creating comprehensive datasets from various heights and angles.</p></li>
+</ul>
+</li>
+</ol>
+<p>This guide provides a comprehensive overview of the installation, usage, and algorithmic approach of the <cite>PlaceRecognitionRFImpl</cite> class for place recognition using Random Forests and CNNs.</p>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="place_recognition_installation_guide.html"
+       title="previous chapter">← Place Recognition Module Installation</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.html"
+       title="next chapter">User Guide →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

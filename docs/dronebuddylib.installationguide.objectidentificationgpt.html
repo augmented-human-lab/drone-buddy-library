@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Object Identification using GPT Integration</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Object Identification using GPT Integration</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="object-identification-using-gpt-integration">
+<h1>Object Identification using GPT Integration<a class="headerlink" href="#object-identification-using-gpt-integration" title="Link to this heading">¶</a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h2>
+<p>The <cite>ObjectIdentificationGPTImpl</cite> class is designed to perform object identification using ResNet for feature extraction and GPT for natural language processing. This class integrates image recognition capabilities with GPT-4 for advanced object identification and description functionalities.</p>
+<p>Object identification involves locating and classifying objects within an image. This implementation leverages ResNet for extracting image features and GPT for interpreting these features and providing detailed descriptions.</p>
+<p><strong>Steps involved in object identification:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Image Preprocessing</strong>: Prepares the image for analysis by resizing and normalizing.</p></li>
+<li><p><strong>Feature Extraction</strong>: Uses ResNet to extract features from the image.</p></li>
+<li><p><strong>Object Identification</strong>: Sends the extracted features to GPT for identifying objects and providing descriptions.</p></li>
+<li><p><strong>Post-processing</strong>: Formats and organizes the identification results.</p></li>
+</ol>
+<p><strong>Applications:</strong></p>
+<ul class="simple">
+<li><p>Enhanced object detection and classification in images.</p></li>
+<li><p>Detailed descriptions of objects using natural language.</p></li>
+<li><p>Integration into systems requiring advanced image and object recognition capabilities.</p></li>
+</ul>
+</section>
+<section id="installation-guide">
+<h2>Installation Guide<a class="headerlink" href="#installation-guide" title="Link to this heading">¶</a></h2>
+<p>To install the required dependencies for the <cite>ObjectIdentificationGPTImpl</cite> class, follow these steps:</p>
+<ol class="arabic">
+<li><p><strong>Create a Virtual Environment</strong> (Optional but recommended)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>env
+<span class="nb">source</span><span class="w"> </span>env/bin/activate<span class="w">  </span><span class="c1"># On Windows use `env\Scripts\activate`</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install Required Packages</strong></p>
+<p>Install the necessary Python packages using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>opencv-python<span class="w"> </span>openai<span class="w"> </span>tqdm<span class="w"> </span>dronebuddylib
+</pre></div>
+</div>
+<p>Note: Ensure that <cite>dronebuddylib</cite> is installed. If it’s a private package, adjust the installation command accordingly.</p>
+</li>
+<li><p><strong>Set Up Configuration</strong></p>
+<p>The class requires specific engine configurations. Create a JSON or Python dictionary with the required configurations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({</span>
+    <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="s1">&#39;your_openai_api_key&#39;</span><span class="p">,</span>
+    <span class="c1"># Add any other configurations as needed</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="usage-example">
+<h2>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">object_identification_gpt_impl</span> <span class="kn">import</span> <span class="n">ObjectIdentificationGPTImpl</span>
+
+<span class="c1"># Create engine configurations</span>
+<span class="n">engine_configs</span> <span class="o">=</span> <span class="n">EngineConfigurations</span><span class="p">({</span>
+    <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_GPT_API_KEY</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="s1">&#39;your_openai_api_key&#39;</span><span class="p">,</span>
+    <span class="c1"># Add any other configurations as needed</span>
+<span class="p">})</span>
+
+<span class="c1"># Initialize the object identification implementation</span>
+<span class="n">object_identification</span> <span class="o">=</span> <span class="n">ObjectIdentificationGPTImpl</span><span class="p">(</span><span class="n">engine_configs</span><span class="p">)</span>
+
+<span class="c1"># Identify objects in an image</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;path/to/your/image.jpg&#39;</span>
+<span class="n">identified_objects</span> <span class="o">=</span> <span class="n">object_identification</span><span class="o">.</span><span class="n">identify_object_image_path</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Identified Objects:&quot;</span><span class="p">,</span> <span class="n">identified_objects</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="details-of-the-algorithm">
+<h2>Details of the Algorithm<a class="headerlink" href="#details-of-the-algorithm" title="Link to this heading">¶</a></h2>
+<p>The <cite>ObjectIdentificationGPTImpl</cite> class uses a combination of ResNet for feature extraction and GPT for object identification and description. Here’s a detailed explanation of the steps involved:</p>
+<ol class="arabic">
+<li><p><strong>Image Preprocessing</strong></p>
+<p>The process starts with preprocessing steps such as resizing the images to a consistent size and normalizing the pixel values to prepare the image for further analysis and improve the accuracy of the recognition algorithms.</p>
+</li>
+<li><p><strong>Feature Extraction</strong></p>
+<ul class="simple">
+<li><p><strong>Pre-trained ResNet Model</strong>: The class utilizes a pre-trained ResNet model to extract feature vectors from the input images. ResNet is a deep convolutional neural network that captures essential features of the images.</p></li>
+<li><p><strong>Image Transformation</strong>: Images are transformed using a specific preprocessing pipeline that includes resizing, center cropping, normalization, and conversion to tensors suitable for input to the ResNet model.</p></li>
+</ul>
+</li>
+<li><p><strong>Object Identification</strong></p>
+<p>The extracted features are sent to GPT for object identification. GPT interprets these features and provides detailed descriptions of the objects within the image. This step involves leveraging natural language processing capabilities to enhance the object recognition process.</p>
+</li>
+<li><p><strong>Post-processing</strong></p>
+<p>In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering out predictions with low confidence scores and handling false positives by applying additional checks. Post-processing helps to enhance the reliability of the object identification system.</p>
+</li>
+</ol>
+</section>
+<section id="important-considerations">
+<h2>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h2>
+<p>While this object identification implementation offers sophisticated capabilities, it’s important to note that its performance can vary based on environmental conditions, image quality, and the diversity of the training data. Regular testing and adjustments may be necessary to ensure the system operates effectively within the specific context of your application.</p>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

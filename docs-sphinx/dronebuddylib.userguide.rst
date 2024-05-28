@@ -176,3 +176,108 @@ It's important to note that TTS systems require training on large datasets of re
 
    dronebuddylib.userguide.voicegeneration
 
+
+Place Recognition
+-----------------
+
+General
+~~~~~~~
+
+Place recognition is a computer vision technique that involves identifying and classifying specific locations or landmarks within images or video frames. This technique is essential for applications such as autonomous navigation, robotics, augmented reality, and geographic information systems. Unlike object detection, which focuses on identifying various objects, place recognition specifically targets the identification of locations based on visual cues.
+
+Here’s a simplified explanation of how place recognition works:
+
+1. **Image Preprocessing**: The process typically starts with preprocessing steps such as resizing, normalization, and color channel adjustment. These steps help prepare the image for further analysis and improve the accuracy of the recognition algorithms.
+
+2. **Feature Extraction**: Place recognition algorithms use various techniques to extract features that capture the essential characteristics of the image. Commonly used methods include Convolutional Neural Networks (CNNs) like ResNet, DenseNet, and GoogLeNet. These features encode important information about the appearance, shape, and texture of the scene.
+
+3. **Feature Matching**: Once features are extracted, the algorithm compares them with a database of known features from previously seen locations. This step involves finding the best matches between the features of the input image and those in the database.
+
+4. **Localization and Classification**: After matching features, the algorithm determines the location depicted in the image. This involves identifying the best match from the database and classifying the image accordingly. The classification can be enhanced using techniques like Random Forest classifiers, which have been trained on labeled datasets.
+
+5. **Post-processing**: In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering based on confidence scores, handling false positives, and ensuring robust recognition even under challenging conditions.
+
+
+
+It’s important to note that place recognition is an evolving field, with ongoing research improving the accuracy and efficiency of algorithms. Techniques such as the use of deep learning models and advanced feature extraction methods have significantly enhanced the capabilities of place recognition systems.
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.placerecognition
+
+Object Identification
+---------------------
+
+General
+~~~~~~~
+
+Object identification is a computer vision technique that involves locating and classifying objects within images or video frames. This technology is essential for applications such as robotics, surveillance, image retrieval, and autonomous systems. Object identification not only recognizes the presence of objects but also provides detailed descriptions of each identified object.
+
+Here's a simplified explanation of how object identification works:
+
+Image Preprocessing: The process typically starts with preprocessing steps such as resizing, normalization, and color adjustment. These steps help prepare the image for further analysis and improve the accuracy of the identification algorithms.
+
+Feature Extraction: Object identification algorithms use various techniques to extract features that capture the essential characteristics of the image. Commonly used methods include Convolutional Neural Networks (CNNs) like ResNet. These features encode important information about the appearance, shape, and texture of the objects.
+
+Object Identification: The extracted features are sent to a language model like GPT-4, which interprets these features to identify and describe the objects within the image. GPT-4 provides detailed descriptions based on the visual features extracted by the CNN.
+
+Concatenative Recognition: One approach is concatenative recognition, where pre-trained segments of object features are stored in a database. These segments are selected and matched to the features in the input image to form the final identification. This method can produce accurate results but requires a large database of pre-trained object features.
+
+Formant Recognition: Another approach is formant recognition, which identifies objects by modeling their features and manipulating these models to match the input image. This approach allows for more control over the identification process but may require more computational resources.
+
+Parametric Recognition: Parametric recognition uses mathematical models to represent object characteristics. It employs a set of parameters, such as shape, texture, and color, to generate feature vectors. Parametric recognition allows for efficient storage and customization of object features but may require additional processing to ensure accurate identification.
+
+Post-processing: In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering based on confidence scores, handling false positives, and ensuring robust identification even under challenging conditions. Techniques such as non-maximum suppression can be applied to remove duplicate detections and improve the final output.
+
+Output: The final output of the object identification system is the recognized objects, which can be used for various purposes such as guiding robots, monitoring security cameras, or searching for images. The output typically includes the object names, their locations within the image, and the confidence scores of the identifications.
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.objectidentification
+
+LLM Integration
+---------------
+
+General
+~~~~~~~
+
+The LLM integration is a set of scripts that allow to run specific functions with the LLM. The implementation follows multi agent architecture, where each agent is capable of doing a specific task.
+Currently, the supported LLM is OpenAI ChatGPT. But the architecture is designed to be easily extendable to other LLMs, which can be hosted locally or on the cloud.
+Each agent has a predefined output, specific to the output expected from the LLM.
+
+The LLM integration is a comprehensive set of scripts designed to execute specific functions with a Large Language Model (LLM). The implementation employs a multi-agent architecture, where each agent is dedicated to performing a distinct task. This modular approach enhances the system's efficiency and scalability.
+
+Currently, the supported LLM is OpenAI's ChatGPT. However, the architecture is built with flexibility in mind, allowing for easy extension to support other LLMs. These additional LLMs can be hosted either locally or on the cloud, providing adaptability to various deployment environments.
+
+Each agent within this system has a predefined output, tailored to the expected responses from the LLM, ensuring consistency and reliability in the results.
+
+Understanding LLMs
+~~~~~~~~~~~~~~~~~~~
+
+How LLMs Work
+~~~~~~~~~~~~~
+Large Language Models (LLMs) are advanced artificial intelligence systems trained on vast amounts of text data. They use machine learning techniques to understand and generate human-like text based on the input they receive. These models, such as OpenAI's GPT-3 and GPT-4, leverage deep learning algorithms, particularly transformers, to process and generate language.
+
+System Prompts
+~~~~~~~~~~~~~~
+
+System prompts are initial instructions provided to the LLM to guide its behavior and responses. These prompts can set the context, define the role of the AI, or instruct it to follow specific guidelines while interacting. For example, a system prompt can instruct the LLM to act as a customer service representative, ensuring its responses are aligned with customer service protocols.
+
+Session Management
+~~~~~~~~~~~~~~~~~~
+
+Sessions with an LLM involve maintaining context over a series of interactions. This is crucial for tasks that require continuity and coherence in conversation. Session management typically includes:
+
+    -   State Tracking: Keeping track of the conversation state to ensure context-aware responses.
+    -   Context Preservation: Using tokens or identifiers to maintain session information across different interactions.
+    -   Timeouts and Endpoints: Defining session timeouts and endpoints to manage resources effectively and ensure the system does not retain unnecessary data beyond its useful period.
+
+By understanding these components, users can effectively utilize LLMs for a wide range of applications, ensuring robust and coherent interactions.
+
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.llmintegration

@@ -1,0 +1,14 @@
+{
+  "known_objects": [
+    {
+      "name": "Malsha's cup",
+      "type": "cup",
+      "url": "https://drone-buddy.s3.ap-southeast-1.amazonaws.com/object_identification/malsha_cup_14.jpg"
+    },
+    {
+      "name": "Dinithi's cup",
+      "type": "cup",
+      "url": "https://drone-buddy.s3.ap-southeast-1.amazonaws.com/object_identification/dinithi_cup_25.jpg"
+    }
+  ]
+}

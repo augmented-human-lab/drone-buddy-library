@@ -1,4 +1,4 @@
-Models package
+       Models package
 ============================
 
 ----------
@@ -59,13 +59,6 @@ intent module
    :undoc-members:
    :show-inheritance:
 
-object\_detected module
---------------------------------------------
-
-.. automodule:: dronebuddylib.models.detected_object
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 session\_logger module
 -------------------------------------------

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pyttsx3</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.speechgeneration.i_speech_generation</span> <span class="kn">import</span> <span class="n">ISpeechGeneration</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span>
+
+<span class="c1"># Get an instance of a logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is a wrapper for ttx.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">:param engine: The pyttsx engine that was returned by the init_text_to_speech_engine().</span>
+<span class="sd">:param text: The text to be converted to speechrecognition.</span>
+
+<span class="sd">This method will convert the text to speechrecognition and play it.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">TTSTextToSpeechGenerationImpl</span><span class="p">(</span><span class="n">ISpeechGeneration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initiates the speechrecognition to text engine.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Required to initialize the pyttsx engine before using the text to voice engine.</span>
+<span class="sd">    ( since this is the offline model, can only support this voice for the moment)</span>
+<span class="sd">    :return: The pytts engine.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;TEXT_TO_SPEECH_TTS&#39;</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;TTS Text to Speech&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Initializes and configures a text-to-speechrecognition engine for generating speechrecognition.</span>
+
+<span class="sd">         Args:</span>
+<span class="sd">             rate (int): The speechrecognition rate in words per minute (default is 150).</span>
+<span class="sd">             volume (float): The speechrecognition volume level (default is 1.0).</span>
+<span class="sd">             voice_id (str): The identifier of the desired voice (default is &#39;TTS_MS_EN-US_ZIRA_11.0&#39;).</span>
+
+<span class="sd">         Returns:</span>
+<span class="sd">             pyttsx3.Engine: The initialized text-to-speechrecognition engine instance.</span>
+
+<span class="sd">         Example:</span>
+<span class="sd">             engine = init_text_to_speech_engine(rate=200, volume=0.8, voice_id=&#39;TTS_MS_EN-US_DAVID_11.0&#39;)</span>
+<span class="sd">             generate_speech_and_play(engine, &quot;Hello, how can I assist you?&quot;)</span>
+<span class="sd">        Notes:</span>
+<span class="sd">            since this is the offline model, can only support this voice for the moment</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+
+        <span class="n">rate</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_RATE</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOLUME</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">voice_id</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span><span class="p">,</span> <span class="s1">&#39;TTS_MS_EN-US_ZIRA_11.0&#39;</span><span class="p">)</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">pyttsx3</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;voice&#39;</span><span class="p">,</span> <span class="n">voice_id</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span><span class="s2">&quot;Text to speechrecognition: Initialized Text to Speech Engine&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39; Initialized the Google TTS speech generation&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.change_voice">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_voice">[docs]</a>
+    <span class="k">def</span> <span class="nf">change_voice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voice_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;voice&#39;</span><span class="p">,</span> <span class="n">voice_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.change_volume">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_volume">[docs]</a>
+    <span class="k">def</span> <span class="nf">change_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;volume&#39;</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.change_rate">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.change_rate">[docs]</a>
+    <span class="k">def</span> <span class="nf">change_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.get_current_configs">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_current_configs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_current_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_RATE</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s1">&#39;rate&#39;</span><span class="p">),</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOLUME</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s1">&#39;volume&#39;</span><span class="p">),</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s1">&#39;voice&#39;</span><span class="p">)</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_RATE</span><span class="p">,</span> <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOLUME</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">SPEECH_GENERATION_TTS_VOICE_ID</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TTSTextToSpeechGenerationImpl.read_phrase">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.speechgeneration.html#dronebuddylib.atoms.speechgeneration.tts_speech_generation_impl.TTSTextToSpeechGenerationImpl.read_phrase">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_phrase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Generates speechrecognition from the provided text using a text-to-speechrecognition engine and plays it.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               engine (TTS Engine): The text-to-speechrecognition engine instance capable of generating speechrecognition.</span>
+<span class="sd">               text (str): The text to be converted into speechrecognition and played.</span>
+
+<span class="sd">           Returns:</span>
+<span class="sd">               None</span>
+
+<span class="sd">           Example:</span>
+<span class="sd">               engine = TextToSpeechEngine()</span>
+<span class="sd">               generate_speech_and_play(engine, &quot;Hello, how can I assist you?&quot;)</span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span> <span class="s2">&quot;Text to speechrecognition: &quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()</span> <span class="p">,</span> <span class="s2">&quot;Text to speechrecognition: Done&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">runAndWait</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">return</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

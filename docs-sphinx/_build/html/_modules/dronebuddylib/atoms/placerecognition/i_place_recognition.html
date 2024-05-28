@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.placerecognition.i_place_recognition</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.placerecognition.i_place_recognition</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.placerecognition.i_place_recognition</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.placerecognition.place_recognition_result</span> <span class="kn">import</span> <span class="n">RecognizedPlaces</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.i_dbl_function</span> <span class="kn">import</span> <span class="n">IDBLFunction</span>
+
+
+<div class="viewcode-block" id="IPlaceRecognition">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition">[docs]</a>
+<span class="k">class</span> <span class="nc">IPlaceRecognition</span><span class="p">(</span><span class="n">IDBLFunction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for place recognition functionality.</span>
+
+<span class="sd">    This interface defines the methods required for recognizing and remembering places using images. It allows for the association of names with recognized places and testing the memory of the recognition system.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        recognize_place: Recognizes places in an image.</span>
+<span class="sd">        remember_place: Associates a name with a place in an image.</span>
+<span class="sd">        test_memory: Tests the accuracy of the place recognition algorithm.</span>
+<span class="sd">        get_current_status: Retrieves the current status of the place recognition engine.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the IPlaceRecognition interface.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The configurations for the recognition engine, detailing how the place recognition should be performed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configurations</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+
+<div class="viewcode-block" id="IPlaceRecognition.recognize_place">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition.recognize_place">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">recognize_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecognizedPlaces</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recognize places in an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image containing places to be recognized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RecognizedPlaces: An object containing a list of recognized places with their details (e.g., names, bounding boxes).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IPlaceRecognition.remember_place">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition.remember_place">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">remember_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Associate a name with a place in an image.</span>
+
+<span class="sd">        This method is used to remember a place by associating it with a given name, facilitating easier identification in future recognitions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image containing the place to be associated with a name.</span>
+<span class="sd">            name (str): The name to be associated with the place.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the association was successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IPlaceRecognition.create_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition.create_memory">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">create_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a memory database or structure for the place recognition engine.</span>
+
+<span class="sd">        This method creates a memory structure or database for the place recognition engine, which can be used to optimize future recognition tasks.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A data structure or system representing the memory of the place recognition engine, useful for improving recognition efficiency and accuracy.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IPlaceRecognition.test_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition.test_memory">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">test_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the accuracy of the place recognition algorithm.</span>
+
+<span class="sd">        This method evaluates the accuracy and performance of the place recognition algorithm by returning relevant metrics.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary with accuracy-related numbers for the place recognition algorithm, including precision, recall, and F1 score, among others.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IPlaceRecognition.get_current_status">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.i_place_recognition.IPlaceRecognition.get_current_status">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_current_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current status of the place recognition engine.</span>
+
+<span class="sd">        This method provides the current operational status of the recognition engine, including any errors, operational mode, or other relevant status information.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A description or object representing the current status of the place recognition engine. The exact return type and structure can be defined as needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

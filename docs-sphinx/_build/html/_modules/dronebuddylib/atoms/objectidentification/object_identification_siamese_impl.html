@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.object_identification_siamese_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.object_identification_siamese_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.object_identification_siamese_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">Future</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_recall_fscore_support</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">ultralytics</span> <span class="kn">import</span> <span class="n">YOLO</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib</span> <span class="kn">import</span> <span class="n">PlaceRecognitionException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.i_object_identification</span> <span class="kn">import</span> <span class="n">IObjectIdentification</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.object_identification_result</span> <span class="kn">import</span> <span class="n">IdentifiedObjectObject</span><span class="p">,</span> \
+    <span class="n">IdentifiedObjects</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI</span> <span class="kn">import</span> <span class="n">SiameseNetworkAPI</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.execution_status</span> <span class="kn">import</span> <span class="n">ExecutionStatus</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span><span class="p">,</span> <span class="n">write_to_file_longer</span><span class="p">,</span> <span class="n">read_from_file</span><span class="p">,</span> <span class="n">overwrite_file</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.tune_api</span> <span class="kn">import</span> <span class="n">tune</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="hook_fn">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.hook_fn">[docs]</a>
+<span class="k">def</span> <span class="nf">hook_fn</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="n">intermediate_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectIdentificationSiameseSiamese</span><span class="p">(</span><span class="n">IObjectIdentification</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to perform object identification using YOLO V8 and Siamese Network.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">progress_event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the YOLO V8 object detection engine with the given engine configurations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The engine configurations for the object detection engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                 <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;yolov8n.pt&quot;</span>
+
+        <span class="c1"># Load YOLOv8 model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yolo_model</span> <span class="o">=</span> <span class="n">YOLO</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;:Initializing with model with &#39;</span> <span class="o">+</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">detector</span> <span class="o">=</span> <span class="n">YOLO</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detector</span><span class="o">.</span><span class="n">names</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Initialized the Siamese object identification&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.remember_object">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.remember_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">remember_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drone_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">on_training_set_complete</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_validation_set_complete</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the process to remember an object by creating a training and validation dataset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image of the object to remember.</span>
+<span class="sd">            type: The type of object.</span>
+<span class="sd">            name: The name of the object.</span>
+<span class="sd">            drone_instance: The instance of the drone used to capture images.</span>
+<span class="sd">            on_start: Callback when the process starts.</span>
+<span class="sd">            on_training_set_complete: Callback when the training set is complete.</span>
+<span class="sd">            on_validation_set_complete: Callback when the validation set is complete.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to remember object: type : &#39;</span> <span class="o">+</span> <span class="nb">type</span> <span class="o">+</span> <span class="s1">&#39; : &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Trigger start callback</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;remember_face&quot;</span><span class="p">,</span> <span class="s2">&quot;training data set creation&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;START&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully created training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create validation data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully created training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.progress_bar">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.progress_bar">[docs]</a>
+    <span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done_event</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Training Progress&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Displays a progress bar for the training process.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            done_event: Event to signal when the progress is complete.</span>
+<span class="sd">            title (str): The title of the progress bar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialize tqdm with an unknown total duration (using total=None)</span>
+        <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot; step&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">done_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># Update the progress bar by one step</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Sleep a short time before updating again</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># Ensure the progress bar completes if it hasn&#39;t already</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.create_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_memory">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drone_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates and trains a KNN classifier using the collected data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            changes: Any changes to the model or data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing performance metrics of the trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">classifier_path</span> <span class="o">=</span> <span class="s2">&quot;resources/model/model/object_classifier_&quot;</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/model/model/classifier_index.txt&quot;</span><span class="p">)</span>
+        <span class="n">classifier_index_read</span> <span class="o">=</span> <span class="n">read_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">classifier_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">classifier_index_read</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">overwrite_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">training_path_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">training_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/model/data/training_data&quot;</span><span class="p">)</span>
+
+        <span class="n">classifier_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                               <span class="n">classifier_path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.clf&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;create_memory&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;training KNN classifier&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;START&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create memory. Training KNN classifier&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Create a Future object</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="c1"># Start the training in a separate thread</span>
+        <span class="n">train_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+
+        <span class="n">train_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Start the progress bar in a separate thread</span>
+        <span class="n">progress_bar_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">progress_event</span><span class="p">,))</span>
+        <span class="n">progress_bar_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Wait for the training to finish</span>
+        <span class="n">train_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="c1"># Ensure the progress bar thread completes</span>
+        <span class="n">progress_bar_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                        <span class="s1">&#39;Successfully created memory. KNN classifier trained successfully. Model saved at: &#39;</span>
+                        <span class="o">+</span> <span class="n">classifier_path_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;create_memory&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;training KNN classifier&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;COMPLETED&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>  <span class="c1"># This will also re-raise any exception set by set_exception</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully tested the classifier&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">PlaceRecognitionException</span><span class="p">(</span><span class="s2">&quot;Error occurred while training the classifier&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.train">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.train">[docs]</a>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_extractor_model</span><span class="o">=</span><span class="s2">&quot;efficientnetv2&quot;</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">emb_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+              <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">train_val_split</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">output_folder_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">pretrained_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trains the model using the specified parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            feature_extractor_model (str): The model used for feature extraction (default is &quot;efficientnetv2&quot;).</span>
+<span class="sd">            num_samples (int): The number of samples to use for training (default is 100).</span>
+<span class="sd">            emb_size (int): The size of the embedding (default is 20).</span>
+<span class="sd">            epochs (int): The number of training epochs (default is 10).</span>
+<span class="sd">            lr (float): The learning rate for training (default is 1e-5).</span>
+<span class="sd">            batch_size (int): The batch size for training (default is 4).</span>
+<span class="sd">            train_val_split (float): The ratio for splitting training and validation data (default is 0.8).</span>
+<span class="sd">            num_workers (int): The number of worker threads to use for data loading (default is 1).</span>
+<span class="sd">            seed (int): The random seed for reproducibility (default is 0).</span>
+<span class="sd">            output_folder_name (str, optional): The folder name for saving the output.</span>
+<span class="sd">            lr_scheduler (bool): Flag to use learning rate scheduler (default is False).</span>
+<span class="sd">            pretrained_weights (str, optional): Path to pretrained weights for the model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing performance metrics such as accuracy and precision of the trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tune</span><span class="p">(</span><span class="n">feature_extractor_model</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">emb_size</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">train_val_split</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span>
+             <span class="n">output_folder_name</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">,</span> <span class="n">pretrained_weights</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.image_files_in_folder">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.image_files_in_folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">image_files_in_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Lists image files in a specified folder.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            folder: Folder to search for image files.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of image file paths.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*\.(jpg|jpeg|png)&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.recognize_objects">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.recognize_objects">[docs]</a>
+    <span class="k">def</span> <span class="nf">recognize_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recognizes objects depicted in the given image. If the confidence of the</span>
+<span class="sd">        predictions is below a given threshold, the object is classified as &#39;unknown&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image of the objects to recognize.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RecognizedObjects: The recognized objects with their associated probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the inference results</span>
+        <span class="n">all_similarities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_similarities</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.create_dataset">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_dataset">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">object_name</span><span class="p">,</span> <span class="n">data_mode</span><span class="p">,</span> <span class="n">drone_instance</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a dataset for a given place name, optionally using a drone for image collection.</span>
+<span class="sd">        Different modes support training, validation, and testing data collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            place_name (str): The name of the place for which to create the dataset.</span>
+<span class="sd">            data_mode (int): The mode of dataset creation (e.g., training, validation).</span>
+<span class="sd">            drone_instance: An optional drone instance to use for collecting images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data_set_size</span> <span class="o">=</span> <span class="mi">50</span>
+            <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                        <span class="s2">&quot;resources/model/data/training_data/&quot;</span> <span class="o">+</span> <span class="n">object_name</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">data_set_size</span> <span class="o">=</span> <span class="mi">20</span>
+            <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                        <span class="s2">&quot;resources/model/data/validation_data/&quot;</span> <span class="o">+</span> <span class="n">object_name</span><span class="p">)</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;validation&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_set_size</span> <span class="o">=</span> <span class="mi">50</span>
+            <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                        <span class="s2">&quot;resources/model/data/training_data/&quot;</span> <span class="o">+</span> <span class="n">object_name</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                           <span class="s1">&#39;Data set creating. &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">320</span><span class="p">)</span> <span class="o">+</span>
+                           <span class="s1">&#39; data collected. Data set can be found at the path: &#39;</span> <span class="o">+</span> <span class="n">path_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path_name</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+
+            <span class="n">file_name_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">path_name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">object_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yolo_model</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls_tensor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="o">.</span><span class="n">cls</span><span class="p">):</span>
+                    <span class="n">cls_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>  <span class="c1"># Convert the tensor to an integer</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_index</span><span class="p">)]</span> <span class="o">==</span> <span class="n">object_type</span><span class="p">:</span>
+                        <span class="c1"># extract the bounding box coordinates of the object</span>
+                        <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span>
+                            <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Assuming it&#39;s a PyTorch tensor</span>
+                        <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>  <span class="c1"># Convert to integer if necessary</span>
+
+                        <span class="c1"># Crop image using OpenCV (NumPy slicing)</span>
+                        <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+
+                        <span class="c1"># convert the cropped image to RGB</span>
+                        <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">cropped_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+
+                        <span class="c1"># Save the cropped image using OpenCV</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">file_name_path</span><span class="p">,</span> <span class="n">cropped_image</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">log_success</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="n">object_name</span> <span class="o">+</span> <span class="s1">&#39;Object image saved.&#39;</span><span class="p">)</span>
+                        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">break</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;remember_face&quot;</span><span class="p">,</span> <span class="s2">&quot;creating data set&quot;</span><span class="p">,</span>
+                                                  <span class="s2">&quot;PROGRESS&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">320</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span> <span class="ow">or</span> <span class="n">count</span> <span class="o">==</span> <span class="n">data_set_size</span><span class="p">:</span>  <span class="c1"># 27 is the Esc Key</span>
+                <span class="k">break</span>
+
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                           <span class="s1">&#39;Data set created successfully. &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data_set_size</span><span class="p">)</span> <span class="o">+</span>
+                           <span class="s1">&#39; data collected. Data set can be found at the path: &#39;</span> <span class="o">+</span> <span class="n">path_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.test_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.test_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tests an image for object recognition.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image_path: Path to the image file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yolo_model</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls_tensor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="o">.</span><span class="n">cls</span><span class="p">):</span>
+                <span class="n">cls_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cls_tensor</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>  <span class="c1"># Convert the tensor to an integer</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_index</span><span class="p">)])</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_names</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cls_index</span><span class="p">)]</span> <span class="o">==</span> <span class="s2">&quot;bottle&quot;</span><span class="p">:</span>
+                    <span class="n">bbox_tensor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">boxes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">xyxy</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Assuming it&#39;s a PyTorch tensor</span>
+                    <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_tensor</span><span class="p">)</span>  <span class="c1"># Convert to integer if necessary</span>
+
+                    <span class="c1"># Crop image using OpenCV (NumPy slicing)</span>
+                    <span class="n">cropped_image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">ymin</span><span class="p">:</span><span class="n">ymax</span><span class="p">,</span> <span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">]</span>
+                    <span class="k">break</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.extract_features">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts features from an image using a specific layer of the model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: The model used for feature extraction.</span>
+<span class="sd">            img: The image to extract features from.</span>
+<span class="sd">            layer_index (int): The layer index for feature extraction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Extracted features from the specified layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">intermediate_features</span>
+        <span class="n">intermediate_features</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">hook</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">layer_index</span><span class="p">]</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">hook_fn</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">hook</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">intermediate_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Access the first element of the list</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.preprocess_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.preprocess_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">preprocess_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Preprocesses an image for model input.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image to preprocess.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Preprocessed image tensor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToPILImage</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="mi">640</span><span class="p">,</span> <span class="mi">640</span><span class="p">)),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+        <span class="p">])</span>
+
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">image_tensor</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">image_tensor</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.extract_features_from_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features_from_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_features_from_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts features from an image using a specific layer of the model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            img: The image to extract features from.</span>
+<span class="sd">            layer_index (int): The layer index for feature extraction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Extracted features from the specified layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yolo_model</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="n">layer_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">features</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.extract_and_plot_features">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_and_plot_features">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_and_plot_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">layer_index</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">channel_index</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts and plots features from an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            img: The image to extract and plot features from.</span>
+<span class="sd">            layer_index (int): The layer index for feature extraction.</span>
+<span class="sd">            channel_index (int): The channel index for plotting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_features</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yolo_model</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Features shape for </span><span class="si">{</span><span class="n">img</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">channel_index</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Features for </span><span class="si">{</span><span class="n">img</span><span class="si">}</span><span class="s1"> - Layer </span><span class="si">{</span><span class="n">layer_index</span><span class="si">}</span><span class="s1"> - Channel </span><span class="si">{</span><span class="n">channel_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the class name of the object detection implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name of the object detection implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;OBJECT_IDENTIFICATION_SIAMESE&#39;</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the algorithm name of the object detection implementation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name of the object detection implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;Siamese Object Identification&#39;</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of required configuration parameters for YOLO V8 object detection engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of required configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationSiameseSiamese.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of optional configuration parameters for YOLO V8 object detection engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of optional configuration parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

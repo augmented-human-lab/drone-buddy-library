@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Supported models</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Object Identification" href="dronebuddylib.userguide.objectidentification.html" />
+  <link rel="prev" title="Supported models" href="dronebuddylib.userguide.voicegeneration.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.userguide.html">User Guide</a> &raquo;</li>
+    
+    <li>Supported models</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.voicegeneration.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.objectidentification.html"
+       title="next chapter">Object Identification →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="supported-models">
+<h1>Supported models<a class="headerlink" href="#supported-models" title="Link to this heading">¶</a></h1>
+<section id="classification-using-random-forest">
+<h2>Classification using Random Forest<a class="headerlink" href="#classification-using-random-forest" title="Link to this heading">¶</a></h2>
+<p>The <cite>PlaceRecognitionRFImpl</cite> class implements place recognition using a Random Forest classifier and features extracted via a Convolutional Neural Network (CNN) trained on the Places365 dataset. This section provides an overview of how place recognition is integrated and employed, enhancing its functionalities.</p>
+<section id="general">
+<h3>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h3>
+<p>Place recognition is a computer vision technique that involves identifying and classifying specific locations or landmarks within images or video frames. This is essential for applications like autonomous navigation, robotics, augmented reality, and geographic information systems.</p>
+<p>Please refer to the [Places365](<a class="reference external" href="http://places2.csail.mit.edu/">http://places2.csail.mit.edu/</a>) documentation for more details.</p>
+<p>Here’s a simplified explanation of how place recognition using Random Forests and CNN feature extraction works:</p>
+<ol class="arabic simple">
+<li><p><strong>Image Preprocessing</strong>: The process typically starts with preprocessing steps such as resizing, normalization, and color channel adjustment. These steps help prepare the image for further analysis and improve the accuracy of the recognition algorithms.</p></li>
+<li><p><strong>Feature Extraction</strong>: The class uses a pre-trained CNN model, such as GoogLeNet trained on the Places365 dataset, to extract feature vectors from images. This model captures essential features of the images, encoding important information about the appearance, shape, and texture of the scene.</p></li>
+<li><p><strong>Feature Matching</strong>: Once features are extracted, the algorithm compares them with a database of known features from previously seen locations. This involves finding the best matches between the features of the input image and those in the database.</p></li>
+<li><p><strong>Localization and Classification</strong>: After matching features, the algorithm determines the location depicted in the image by identifying the best match from the database and classifying the image accordingly. The classification is performed using a Random Forest classifier, which has been trained on labeled datasets.</p></li>
+<li><p><strong>Post-processing</strong>: In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering based on confidence scores, handling false positives, and ensuring robust recognition even under challenging conditions.</p></li>
+</ol>
+</section>
+<section id="algorithm-description">
+<h3>Algorithm Description<a class="headerlink" href="#algorithm-description" title="Link to this heading">¶</a></h3>
+<p>The <cite>PlaceRecognitionRFImpl</cite> class uses a combination of deep learning for feature extraction and machine learning for classification to perform place recognition. Here’s a detailed explanation of the steps involved:</p>
+<ol class="arabic">
+<li><p><strong>Image Preprocessing</strong></p>
+<p>The process starts with preprocessing steps such as resizing the images to a consistent size, normalizing the pixel values, and adjusting the color channels if necessary. These steps prepare the image for further analysis and improve the accuracy of the recognition algorithms by ensuring that the input images are in a consistent format.</p>
+</li>
+<li><p><strong>Feature Extraction</strong></p>
+<ul class="simple">
+<li><p><strong>Pre-trained CNN Model</strong>: The class utilizes a pre-trained CNN model, such as GoogLeNet, which has been trained on the Places365 dataset. This model is used to extract feature vectors from the input images. The Places365 dataset is a large-scale dataset containing images of different scenes, making the model well-suited for capturing the essential characteristics of various locations.</p></li>
+<li><p><strong>Image Transformation</strong>: Images are transformed using a specific preprocessing pipeline that includes resizing to a fixed size, center cropping to focus on the central part of the image, normalizing the pixel values to standardize the input, and converting the images to tensors suitable for input to the CNN model. This ensures that the images are in the correct format for feature extraction.</p></li>
+</ul>
+</li>
+<li><p><strong>Feature Matching</strong></p>
+<p>Once the features are extracted from the input images, the algorithm compares these features with a database of known features from previously seen locations. This step involves finding the best matches between the features of the input image and those in the database. Feature matching is typically done using distance metrics that measure the similarity between feature vectors.</p>
+</li>
+<li><p><strong>Localization and Classification</strong></p>
+<p>After matching features, the algorithm determines the location depicted in the image by identifying the best match from the database and classifying the image accordingly. The classification is performed using a Random Forest classifier, a machine learning model that consists of multiple decision trees. Each tree in the forest provides a vote for the class of the input image, and the class with the most votes is selected as the final prediction. The Random Forest classifier is trained on labeled datasets, where each image is associated with a specific location label.</p>
+</li>
+<li><p><strong>Post-processing</strong></p>
+<p>In this step, the algorithm refines the results to improve overall accuracy. This may involve filtering out predictions with low confidence scores, handling false positives by applying additional checks, and ensuring robust recognition even under challenging conditions such as variations in lighting, perspective, and occlusions. Post-processing helps to enhance the reliability of the place recognition system.</p>
+</li>
+</ol>
+</section>
+<section id="important-considerations">
+<h3>Important Considerations<a class="headerlink" href="#important-considerations" title="Link to this heading">¶</a></h3>
+<p>While this place recognition implementation offers sophisticated capabilities, it’s important to note that its performance can vary based on environmental conditions, image quality, and the diversity of the training data. Regular testing and adjustments may be necessary to ensure the system operates effectively within the specific context of your application.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.userguide.voicegeneration.html"
+       title="previous chapter">← Supported models</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.userguide.objectidentification.html"
+       title="next chapter">Object Identification →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

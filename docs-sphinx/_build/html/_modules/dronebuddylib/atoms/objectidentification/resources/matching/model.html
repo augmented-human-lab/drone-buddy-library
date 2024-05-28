@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.resources.matching.model</title>
+    
+          <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.resources.matching.model</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.resources.matching.model</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="kn">from</span> <span class="nn">torchvision.models.feature_extraction</span> <span class="kn">import</span> <span class="n">get_graph_node_names</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+
+<div class="viewcode-block" id="SiameseModel">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.model.SiameseModel">[docs]</a>
+<span class="k">class</span> <span class="nc">SiameseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+    <span class="c1"># potential configurable arguments</span>
+    <span class="c1"># channels: int, n_classes: int, dim_sizes: List[int], kernel_size: int, stride: int, padding: int, **kwargs</span>
+    <span class="c1"># pretrained model and weights</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_model</span><span class="p">,</span> <span class="n">base_model_weights</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SiameseModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_size</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">base_model_weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span> <span class="o">=</span> <span class="n">base_model</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">train_nodes</span><span class="p">,</span> <span class="n">eval_nodes</span> <span class="o">=</span> <span class="n">get_graph_node_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="o">.</span><span class="n">get_submodule</span><span class="p">(</span><span class="n">train_nodes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SiameseModel.get_embedding">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.model.SiameseModel.get_embedding">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SiameseModel.forward">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.model.SiameseModel.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">img2</span><span class="p">):</span>
+        <span class="n">preprocess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">transforms</span><span class="p">()</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img1</span><span class="p">)</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img2</span><span class="p">)</span>
+        <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+        <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out1</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out2</span><span class="p">))</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Similarity score: &quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="SiameseModel.forward_difference">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.model.SiameseModel.forward_difference">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward_difference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">img2</span><span class="p">):</span>
+        <span class="n">preprocess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">transforms</span><span class="p">()</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img1</span><span class="p">)</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img2</span><span class="p">)</span>
+        <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+        <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out1</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">diff</span></div>
+
+
+<div class="viewcode-block" id="SiameseModel.forward_difference_tsne">
+<a class="viewcode-back" href="../../../../../../dronebuddylib.atoms.objectidentification.resources.matching.html#dronebuddylib.atoms.objectidentification.resources.matching.model.SiameseModel.forward_difference_tsne">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward_difference_tsne</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img1</span><span class="p">,</span> <span class="n">img2</span><span class="p">):</span>
+        <span class="n">preprocess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">transforms</span><span class="p">()</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img1</span><span class="p">)</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">img2</span><span class="p">)</span>
+        <span class="n">out1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+        <span class="n">out2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">siamese</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+
+        <span class="c1"># get tsne difference</span>
+        <span class="n">tensor_1_np</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">tensor_2_np</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">tsne_1_values</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">tensor_1_np</span><span class="p">)</span>
+        <span class="n">tsne_2_values</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">tensor_2_np</span><span class="p">)</span>
+
+        <span class="c1"># tsne_values now contains the 2D t-SNE representation of the tensor</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tsne_1_values</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tsne_2_values</span><span class="p">)</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out1</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out2</span><span class="p">))</span>
+        <span class="n">sigmoid_abs_diff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">out1</span> <span class="o">-</span> <span class="n">out2</span><span class="p">))</span>
+        <span class="n">abs_diff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tensor_1_np</span> <span class="o">-</span> <span class="n">tensor_2_np</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">abs_diff</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

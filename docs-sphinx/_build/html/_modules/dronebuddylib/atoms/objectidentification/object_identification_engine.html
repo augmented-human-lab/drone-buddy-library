@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.object_identification_engine</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.object_identification_engine</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.object_identification_engine</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">VisionAlgorithm</span><span class="p">,</span> <span class="n">ObjectRecognitionAlgorithm</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectdetection.detected_object</span> <span class="kn">import</span> <span class="n">ObjectDetectionResult</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ObjectIdentificationEngine">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine">[docs]</a>
+<span class="k">class</span> <span class="nc">ObjectIdentificationEngine</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algorithm</span><span class="p">:</span> <span class="n">ObjectRecognitionAlgorithm</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the object detection engine with the specified algorithm and configuration.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            algorithm (VisionAlgorithm): The vision algorithm to be used for object detection.</span>
+<span class="sd">            config (EngineConfigurations): The configuration for the vision engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="n">ObjectRecognitionAlgorithm</span><span class="o">.</span><span class="n">YOLO_TRANSFER_LEARNING</span> <span class="ow">or</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="n">ObjectRecognitionAlgorithm</span><span class="o">.</span><span class="n">YOLO_TRANSFER_LEARNING</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Preparing to initialize YOLO object recognition.&#39;</span><span class="p">)</span>
+            <span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.object_identification_yolo_impl</span> <span class="kn">import</span> \
+                <span class="n">ObjectRecognitionYOLOImpl</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vision_engine</span> <span class="o">=</span> <span class="n">ObjectRecognitionYOLOImpl</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ObjectIdentificationEngine.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the class name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;OBJECT_IDENTIFICATION_ENGINE&#39;</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationEngine.remember_object">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.remember_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">remember_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drone_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">on_training_set_complete</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">on_validation_set_complete</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remember an object by associating it with a name, facilitating its future identification and recall.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image containing the object.</span>
+<span class="sd">            name (str): The name to be associated with the object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the operation was successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vision_engine</span><span class="o">.</span><span class="n">remember_object</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObjectIdentificationEngine.identify_object">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.identify_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">identify_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identify objects in an image, identifying and categorizing various objects depicted in the image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image: The image containing objects to be recognized.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of recognized objects, each potentially with associated metadata such as object name or coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vision_engine</span><span class="o">.</span><span class="n">identify_object</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

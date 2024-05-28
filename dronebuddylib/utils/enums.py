@@ -67,9 +67,17 @@ class IntentRecognitionAlgorithm(enum.Enum):
     CHAT_GPT = 'CHAT_GPT',
     SNIPS_NLU = 'SNIPS_NLU',
 
+
 class FeatureExtractors(enum.Enum):
     DENSENET121 = "DENSENET121",
     RESNET50 = "RESNET50",
     RESENT101 = "RESENT101",
     EFFICIENTNETV2 = "EFFICIENTNETV2",
     IMAGENET = "IMAGENET",
+
+
+class LLMAgentNames(enum.Enum):
+    OBJECT_IDENTIFIER = "OBJECT_IDENTIFIER",
+    IMAGE_DESCRIBER = "IMAGE_DESCRIBER",
+    INTENT_RESOLVER = "INTENT_RESOLVER",
+    IMAGE_VALIDATOR = "Validate images that needs to be used for recognition tasks",

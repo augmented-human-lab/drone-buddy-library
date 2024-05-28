@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.objectidentification.siamese_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.objectidentification.siamese_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.objectidentification.siamese_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_digits</span>
+<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
+<span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torchvision.io</span> <span class="kn">import</span> <span class="n">read_image</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.SiameseNetworkAPI</span> <span class="kn">import</span> <span class="n">SiameseNetworkAPI</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.dataset</span> <span class="kn">import</span> <span class="n">SiameseDataset</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.model</span> <span class="kn">import</span> <span class="n">SiameseModel</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.objectidentification.resources.matching.tune_api</span> <span class="kn">import</span> <span class="n">tune</span><span class="p">,</span> <span class="n">loadModel</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+
+<div class="viewcode-block" id="update_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.update_memory">[docs]</a>
+<span class="k">def</span> <span class="nf">update_memory</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;update the memory by retraining the model (it may take several minutes)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tune</span><span class="p">()</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="evaluate">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.evaluate">[docs]</a>
+<span class="k">def</span> <span class="nf">evaluate</span><span class="p">():</span>
+    <span class="n">loadModel</span><span class="p">()</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="load_model">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.load_model">[docs]</a>
+<span class="k">def</span> <span class="nf">load_model</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;load the model for object identification</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Load the model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SiameseModel</span><span class="p">()</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;path_to_your_model.pth&#39;</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># Set the model to evaluation mode</span></div>
+
+
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="mi">228</span><span class="p">,</span> <span class="mi">228</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">input: folder_path - folder of 1 or more images </span>
+<span class="sd">output: torch tensor of the images </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="load_images_from_folder">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.load_images_from_folder">[docs]</a>
+<span class="k">def</span> <span class="nf">load_images_from_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">):</span>
+    <span class="n">images_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">file_path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.jpg&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.jpeg&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">):</span>
+                <span class="n">tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">read_image</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">file_path</span> <span class="o">/</span> <span class="n">file_name</span><span class="p">)))</span>
+                <span class="n">images_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tensor</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">tensor</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">read_image</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">file_path</span> <span class="o">/</span> <span class="n">file_name</span><span class="p">)))</span>
+                <span class="n">images_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tensor</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">images_list</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="inference">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.inference">[docs]</a>
+<span class="k">def</span> <span class="nf">inference</span><span class="p">():</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\blaaa.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\random_lab_tabel.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\random_table_with_mal_bottle.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\long_distance.jpeg&quot;</span>
+    <span class="c1">#</span>
+    <span class="n">image_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\new_bottle.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data\malsha_cup\malsha_cup_6.jpg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\malsha_cup\WhatsApp Image 2024-04-19 at 4.23.36 PM (2).jpeg&quot;</span>
+
+    <span class="n">image_2</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\clock\7.jpg&quot;</span>
+    <span class="c1"># image_1 = r&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\clock\6.jpg&quot;</span>
+    <span class="n">image_1</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\cup\5.jpg&quot;</span>
+
+    <span class="n">obj_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_1</span><span class="p">)</span>
+
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">()</span>
+    <span class="c1"># Get the inference results</span>
+    <span class="n">all_similarities</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="c1"># Print similarities</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Similarities:&quot;</span><span class="p">)</span>
+    <span class="c1">#     create table to display the results</span>
+    <span class="n">table_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">last_image_name</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">image_similarities</span> <span class="ow">in</span> <span class="n">all_similarities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">for</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">similarities</span> <span class="ow">in</span> <span class="n">image_similarities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># get mean similarity</span>
+            <span class="n">mean_similarity</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span>
+            <span class="c1"># get mode similarity</span>
+            <span class="n">mode_similarity</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">similarities</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">similarities</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+            <span class="c1"># get median similarity</span>
+            <span class="n">sorted_similarities</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_similarities</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">median</span> <span class="o">=</span> <span class="p">(</span><span class="n">sorted_similarities</span><span class="p">[</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sorted_similarities</span><span class="p">[</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="n">argmax_index</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">similarities</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">similarities</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)</span>
+            <span class="n">argmin_index</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">similarities</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">similarities</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">)</span>
+            <span class="n">argmax_value</span> <span class="o">=</span> <span class="n">similarities</span><span class="p">[</span><span class="n">argmax_index</span><span class="p">]</span>
+            <span class="n">argmin_value</span> <span class="o">=</span> <span class="n">similarities</span><span class="p">[</span><span class="n">argmin_index</span><span class="p">]</span>
+            <span class="n">recog_class</span> <span class="o">=</span> <span class="n">image_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Only add the image name if it&#39;s different from the last one processed</span>
+            <span class="k">if</span> <span class="n">image_name</span> <span class="o">!=</span> <span class="n">last_image_name</span><span class="p">:</span>
+                <span class="n">current_val</span> <span class="o">=</span> <span class="p">[</span><span class="n">image_name</span><span class="p">,</span> <span class="n">recog_class</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argmax_value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argmin_value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                               <span class="n">mean_similarity</span><span class="p">,</span> <span class="n">mode_similarity</span><span class="p">,</span> <span class="n">median</span><span class="p">]</span>
+                <span class="n">last_image_name</span> <span class="o">=</span> <span class="n">image_name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If the image name is the same, leave that field empty for better readability</span>
+                <span class="n">current_val</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argmax_value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">argmin_value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mean_similarity</span><span class="p">,</span>
+                               <span class="n">mode_similarity</span><span class="p">,</span> <span class="n">median</span><span class="p">]</span>
+
+            <span class="n">table_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_val</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">table_data</span><span class="p">,</span>
+                   <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Image name&quot;</span><span class="p">,</span> <span class="s2">&quot;Recognized object class&quot;</span><span class="p">,</span> <span class="s2">&quot;Class&quot;</span><span class="p">,</span> <span class="s2">&quot;Maximum score&quot;</span><span class="p">,</span> <span class="s2">&quot;Minimum score&quot;</span><span class="p">,</span> <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;Mode&quot;</span><span class="p">,</span> <span class="s2">&quot;Median&quot;</span><span class="p">],</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="benchmark_model">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.benchmark_model">[docs]</a>
+<span class="k">def</span> <span class="nf">benchmark_model</span><span class="p">():</span>
+    <span class="n">image_2</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\clock\7.jpg&quot;</span>
+    <span class="c1"># image_1 = r&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\clock\6.jpg&quot;</span>
+    <span class="n">image_1</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\temp_dronebuddy\drone-buddy-library\dronebuddylib\offline\molecules\memorized_obj_photo\cup\5.jpg&quot;</span>
+
+    <span class="n">obj_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span>
+    <span class="n">all_img_of_obj</span> <span class="o">=</span> <span class="n">load_images_from_folder</span><span class="p">(</span><span class="n">obj_folder</span><span class="p">)</span>
+    <span class="n">image_1</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_1</span><span class="p">)</span>
+    <span class="n">image_2</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_2</span><span class="p">)</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">(</span><span class="n">all_img_of_obj</span><span class="p">)</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">two_image_inference</span><span class="p">(</span><span class="n">image_1</span><span class="p">,</span> <span class="n">image_2</span><span class="p">)</span>
+    <span class="c1">#     load images from the folder</span>
+    <span class="c1">#  compare iterations of the same image</span>
+    <span class="c1">#  compare different images</span>
+    <span class="n">data_set</span> <span class="o">=</span> <span class="n">SiameseDataset</span><span class="p">(</span><span class="n">obj_folder</span><span class="p">)</span>
+    <span class="c1"># image_sample_one is a sample of 100 images (path) taken from the training set folder</span>
+    <span class="c1"># image_sample_two is a sample of 100 images (path) taken from the training set folder</span>
+    <span class="c1"># image_one_class is the class of the image_sample_one</span>
+    <span class="c1"># image_two_class is the class of the image_sample_two</span>
+    <span class="c1"># same_class_details is a list of 100 elements, each element is 0 or 1, 0 means the two images are from different classes,</span>
+    <span class="c1"># 1 means the two images are from the same class</span>
+
+    <span class="n">image_sample_one</span><span class="p">,</span> <span class="n">image_sample_two</span><span class="p">,</span> <span class="n">image_one_class</span><span class="p">,</span> <span class="n">image_two_class</span><span class="p">,</span> <span class="n">same_class_details</span> <span class="o">=</span> <span class="n">data_set</span><span class="o">.</span><span class="n">get_sample</span><span class="p">()</span></div>
+
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;process.log&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="batch_process_images">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.batch_process_images">[docs]</a>
+<span class="k">def</span> <span class="nf">batch_process_images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">same_class</span><span class="p">,</span> <span class="n">other_class_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image1</span><span class="p">,</span> <span class="n">image2</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">image_1</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image1</span><span class="p">))</span>
+            <span class="n">image_2</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">image_1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">image_2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load one of the images: </span><span class="si">{</span><span class="n">image1</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">image2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">two_image_inference</span><span class="p">(</span><span class="n">image_1</span><span class="p">,</span> <span class="n">image_2</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;Class&quot;</span><span class="p">:</span> <span class="n">class_name</span><span class="p">,</span>
+                <span class="s2">&quot;TargetImage&quot;</span><span class="p">:</span> <span class="n">image1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;ComparedImage&quot;</span><span class="p">:</span> <span class="n">image2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;Same_Class&quot;</span><span class="p">:</span> <span class="n">same_class</span><span class="p">,</span>
+                <span class="s2">&quot;Other_Class&quot;</span><span class="p">:</span> <span class="n">other_class_name</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">same_class</span> <span class="k">else</span> <span class="n">class_name</span><span class="p">,</span>
+                <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="n">output</span>
+            <span class="p">}</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing </span><span class="si">{</span><span class="n">image1</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">image2</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+
+<div class="viewcode-block" id="compare_images_in_classes">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.compare_images_in_classes">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_images_in_classes</span><span class="p">(</span><span class="n">root_folder</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+    <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">class_folder</span> <span class="ow">in</span> <span class="n">root_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">class_folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">class_folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">))</span>
+            <span class="c1"># Process same class comparisons in batches</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+                <span class="n">batch</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="n">batch_process_images</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">class_folder</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+            <span class="c1"># Process different class comparisons</span>
+            <span class="n">other_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">cf</span> <span class="k">for</span> <span class="n">cf</span> <span class="ow">in</span> <span class="n">root_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">cf</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">cf</span> <span class="o">!=</span> <span class="n">class_folder</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">other_class</span> <span class="ow">in</span> <span class="n">other_classes</span><span class="p">:</span>
+                <span class="n">other_images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">other_class</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">image1</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_images</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+                        <span class="n">other_batch</span> <span class="o">=</span> <span class="n">other_images</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+                        <span class="n">results</span> <span class="o">=</span> <span class="n">batch_process_images</span><span class="p">([</span><span class="n">image1</span><span class="p">]</span> <span class="o">+</span> <span class="n">other_batch</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">class_folder</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span>
+                                                       <span class="n">other_class</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;image_comparison_results.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="detection">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.detection">[docs]</a>
+<span class="k">def</span> <span class="nf">detection</span><span class="p">():</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\blaaa.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\random_lab_tabel.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\random_table_with_mal_bottle.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\hot_bottle.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\long_distance.jpeg&quot;</span>
+    <span class="n">image_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\new_bottle.jpeg&quot;</span>
+    <span class="c1"># image_path = r&quot;C:\Users\Public\projects\drone-buddy-library\test\object_images\p_bottle.jpeg&quot;</span>
+
+    <span class="n">obj_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span>
+    <span class="n">all_img_of_obj</span> <span class="o">=</span> <span class="n">load_images_from_folder</span><span class="p">(</span><span class="n">obj_folder</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">(</span><span class="n">all_img_of_obj</span><span class="p">)</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">get_detected_objects</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compare_image_with_folder">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_image_with_folder</span><span class="p">(</span><span class="n">target_image_path</span><span class="p">,</span> <span class="n">folder_path</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare a specific image with all images in a given folder using a specified API and save results to a CSV file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    target_image_path (str): Path to the target image to compare.</span>
+<span class="sd">    folder_path (str): Path to the folder containing images to compare against.</span>
+<span class="sd">    api (object): An instance of the class with the `two_image_inference` method.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    DataFrame: A DataFrame containing the comparison results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">target_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">target_image_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load the target image: </span><span class="si">{</span><span class="n">target_image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>  <span class="c1"># Return an empty DataFrame if the image cannot be loaded</span>
+
+    <span class="c1"># Ensure the target folder exists and is a directory</span>
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The specified folder path is not a directory: </span><span class="si">{</span><span class="n">folder_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">image_path</span> <span class="ow">in</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>  <span class="c1"># Adjust the glob pattern if using different file types</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">comparison_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">comparison_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load comparison image: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">two_image_inference</span><span class="p">(</span><span class="n">target_image</span><span class="p">,</span> <span class="n">comparison_image</span><span class="p">)</span>
+            <span class="n">is_same_class</span> <span class="o">=</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">target_image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;TargetImage&quot;</span><span class="p">:</span> <span class="n">target_image_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;TargetClass&quot;</span><span class="p">:</span> <span class="n">target_image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;ComparedImage&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;ComparedClass&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;IsSameClass&quot;</span><span class="p">:</span> <span class="n">is_same_class</span><span class="p">,</span>
+                <span class="s2">&quot;Output&quot;</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error comparing </span><span class="si">{</span><span class="n">target_image_path</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="c1"># Save or append results to a CSV file</span>
+    <span class="n">csv_file_path</span> <span class="o">=</span> <span class="s1">&#39;resources/model/results/image_comparison_results_fine_tuned_new_data_set_50.csv&#39;</span>
+    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="compare_image_with_folder_tsne">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder_tsne">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_image_with_folder_tsne</span><span class="p">(</span><span class="n">target_image_path</span><span class="p">,</span> <span class="n">folder_path</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare a specific image with all images in a given folder using a specified API and save results to a CSV file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    target_image_path (str): Path to the target image to compare.</span>
+<span class="sd">    folder_path (str): Path to the folder containing images to compare against.</span>
+<span class="sd">    api (object): An instance of the class with the `two_image_inference` method.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    DataFrame: A DataFrame containing the comparison results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">target_image_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load the target image: </span><span class="si">{</span><span class="n">target_image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>  <span class="c1"># Return an empty DataFrame if the image cannot be loaded</span>
+
+    <span class="c1"># Ensure the target folder exists and is a directory</span>
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The specified folder path is not a directory: </span><span class="si">{</span><span class="n">folder_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image_path</span> <span class="ow">in</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>  <span class="c1"># Adjust the glob pattern if using different file types</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">comparison_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">comparison_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load comparison image: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">two_image_inference_difference</span><span class="p">(</span><span class="n">target_image</span><span class="p">,</span> <span class="n">comparison_image</span><span class="p">)</span>
+            <span class="n">is_same_class</span> <span class="o">=</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">target_image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="n">label_name</span> <span class="o">=</span> <span class="n">target_image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">image_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">is_same_class</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error comparing </span><span class="si">{</span><span class="n">target_image_path</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">labels</span></div>
+
+
+
+<div class="viewcode-block" id="compare_folder_with_others">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_folder_with_others</span><span class="p">(</span><span class="n">root_folder</span><span class="p">,</span> <span class="n">target_folder</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare each image in a target folder with images in all other folders under the root directory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    root_folder (str): The root directory containing all class folders.</span>
+<span class="sd">    target_folder (str): The specific folder within the root to compare its images against all others.</span>
+<span class="sd">    api (object): An instance of the class with the `two_image_inference` method.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    None: Results are directly saved to a CSV file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+    <span class="n">target_folder_path</span> <span class="o">=</span> <span class="n">root_folder</span> <span class="o">/</span> <span class="n">target_folder</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target_folder_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specified target folder does not exist: </span><span class="si">{</span><span class="n">target_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Iterate over each image in the target folder</span>
+    <span class="k">for</span> <span class="n">target_image</span> <span class="ow">in</span> <span class="n">target_folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">root_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="n">compare_image_with_folder</span><span class="p">(</span><span class="n">target_image</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compare_folder_with_others_tsne">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others_tsne">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_folder_with_others_tsne</span><span class="p">(</span><span class="n">root_folder</span><span class="p">,</span> <span class="n">target_folder</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compare each image in a target folder with images in all other folders under the root directory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    root_folder (str): The root directory containing all class folders.</span>
+<span class="sd">    target_folder (str): The specific folder within the root to compare its images against all others.</span>
+<span class="sd">    api (object): An instance of the class with the `two_image_inference` method.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    None: Results are directly saved to a CSV file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+    <span class="n">target_folder_path</span> <span class="o">=</span> <span class="n">root_folder</span> <span class="o">/</span> <span class="n">target_folder</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target_folder_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specified target folder does not exist: </span><span class="si">{</span><span class="n">target_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">folder_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">folder_labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Iterate over each image in the target folder</span>
+    <span class="k">for</span> <span class="n">target_image</span> <span class="ow">in</span> <span class="n">target_folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">root_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">compare_image_with_folder_tsne</span><span class="p">(</span><span class="n">target_image</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+            <span class="n">folder_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">folder_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">folder_data</span><span class="p">,</span> <span class="n">folder_labels</span></div>
+
+
+
+<div class="viewcode-block" id="plot_comparison_results">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.plot_comparison_results">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_comparison_results</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the comparison results from a CSV file where points are colored based on class similarity.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    csv_file_path (str): Path to the CSV file containing comparison results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Load the DataFrame from CSV</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">)</span>
+
+    <span class="c1"># Check if the DataFrame is not empty</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The DataFrame is empty. No data to plot.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="c1"># Create a scatter plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Plot data points where classes are the same</span>
+    <span class="n">same_class</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;IsSameClass&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">same_class</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">same_class</span><span class="p">[</span><span class="s1">&#39;Output&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Same Class&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># Plot data points where classes are different</span>
+    <span class="n">different_class</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;IsSameClass&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">different_class</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">different_class</span><span class="p">[</span><span class="s1">&#39;Output&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Different Class&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># Adding labels and title</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of Images by Class Similarity&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Comparison Index&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Output&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="c1"># Show the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="benchmarking">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.benchmarking">[docs]</a>
+<span class="k">def</span> <span class="nf">benchmarking</span><span class="p">():</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span>
+    <span class="n">target_image</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\benchmark\clock\1.jpg&quot;</span>
+    <span class="n">target_folder</span> <span class="o">=</span> <span class="s2">&quot;jane_bag&quot;</span>
+    <span class="n">all_img_of_obj</span> <span class="o">=</span> <span class="n">load_images_from_folder</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">(</span><span class="n">all_img_of_obj</span><span class="p">)</span>
+
+    <span class="n">target_root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">target_folder</span><span class="p">)</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+    <span class="n">target_image_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">target_image</span><span class="p">)</span>
+    <span class="c1"># compare_image_with_folder(target_image_path, root_folder, api)</span>
+    <span class="n">compare_folder_with_others</span><span class="p">(</span><span class="n">root_folder</span><span class="p">,</span> <span class="n">target_folder</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="tsne_plot_difference">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plot_difference">[docs]</a>
+<span class="k">def</span> <span class="nf">tsne_plot_difference</span><span class="p">():</span>
+    <span class="c1"># two_image_inference_difference</span>
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\benchmark&quot;</span>
+    <span class="n">target_folder</span> <span class="o">=</span> <span class="s2">&quot;clock&quot;</span>
+    <span class="n">all_img_of_obj</span> <span class="o">=</span> <span class="n">load_images_from_folder</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">(</span><span class="n">all_img_of_obj</span><span class="p">)</span>
+
+    <span class="n">root_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root_folder</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">compare_folder_with_others_tsne</span><span class="p">(</span><span class="n">root_folder</span><span class="p">,</span> <span class="n">target_folder</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># Encode labels to integers</span>
+    <span class="n">label_encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">labels_encoded</span> <span class="o">=</span> <span class="n">label_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="c1"># t-SNE transformation</span>
+    <span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">X_reduced</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Plotting</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">scatter</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_encoded</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;t-SNE visualization of image embeddings differences from Siamese&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="tsne_plotting">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting">[docs]</a>
+<span class="k">def</span> <span class="nf">tsne_plotting</span><span class="p">():</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">()</span>
+
+    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\benchmark</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;clock&quot;</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">image_path</span> <span class="ow">in</span> <span class="n">folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>  <span class="c1"># Adjust the glob pattern if using different file types</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">comparison_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">comparison_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load comparison image: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_embeddings</span><span class="p">(</span><span class="n">comparison_image</span><span class="p">)</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_path</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error comparing </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    <span class="n">digits</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span>
+
+    <span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">X_reduced</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">scatter</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Digits dataset visualized using t-SNE&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;t-SNE feature 1&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;t-SNE feature 2&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="tsne_plotting_all">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_all">[docs]</a>
+<span class="k">def</span> <span class="nf">tsne_plotting_all</span><span class="p">():</span>
+    <span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span><span class="p">)</span>
+    <span class="c1"># base_path = Path(r&quot;C:\path_to_your_folders&quot;)  # Modify to your actual base path</span>
+    <span class="n">class_folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">base_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
+
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">()</span>  <span class="c1"># Assuming this is your API for getting embeddings</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterate over each class folder</span>
+    <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">class_folders</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">image_path</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>  <span class="c1"># Assuming .jpg files, modify if different</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">comparison_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">comparison_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load comparison image: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="c1"># Assuming &#39;get_embeddings&#39; method returns a numpy array</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_embeddings</span><span class="p">(</span><span class="n">comparison_image</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># Encode labels to integers</span>
+    <span class="n">label_encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">labels_encoded</span> <span class="o">=</span> <span class="n">label_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="c1"># t-SNE transformation</span>
+    <span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">X_reduced</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># get all folder names</span>
+    <span class="n">folder_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">class_folders</span><span class="p">]</span>
+    <span class="c1"># Plotting</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">scatter</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_encoded</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="c1"># Create a legend with unique labels</span>
+    <span class="n">handles</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scatter</span><span class="o">.</span><span class="n">legend_elements</span><span class="p">()</span>
+    <span class="n">unique_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">([</span><span class="n">i</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">handles</span><span class="p">))]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">unique_labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Classes&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;t-SNE visualization of image embeddings for &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder_names</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="tsne_plotting_given">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.objectidentification.html#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_given">[docs]</a>
+<span class="k">def</span> <span class="nf">tsne_plotting_given</span><span class="p">(</span><span class="n">compare_folders</span><span class="p">):</span>
+    <span class="n">base_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;C:\Users\Public\projects\drone-buddy-library\dronebuddylib\atoms\objectidentification\resources\model\data\training_data&quot;</span><span class="p">)</span>
+    <span class="c1">#  select the folders which are only in the compare_floders</span>
+    <span class="n">class_folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">base_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">compare_folders</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;class folders&quot;</span><span class="p">,</span> <span class="n">class_folders</span><span class="p">)</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">SiameseNetworkAPI</span><span class="p">()</span>  <span class="c1"># Assuming this is your API for getting embeddings</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterate over each class folder</span>
+    <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">class_folders</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">image_path</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.jpg&#39;</span><span class="p">):</span>  <span class="c1"># Assuming .jpg files, modify if different</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">comparison_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">comparison_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load comparison image: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="c1"># Assuming &#39;get_embeddings&#39; method returns a numpy array</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_embeddings</span><span class="p">(</span><span class="n">comparison_image</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># Encode labels to integers</span>
+    <span class="n">label_encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">labels_encoded</span> <span class="o">=</span> <span class="n">label_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="c1"># t-SNE transformation</span>
+    <span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">X_reduced</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Plotting</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">scatter</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X_reduced</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">labels_encoded</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_encoder</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;t-SNE visualization of image embeddings for &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">compare_folders</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># forward_difference_tsne</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># update_memory()</span>
+    <span class="c1"># inference()</span>
+    <span class="c1"># evaluate()</span>
+    <span class="c1"># detection()</span>
+    <span class="c1"># benchmarking()</span>
+    <span class="c1">#</span>
+    <span class="c1"># plot_comparison_results(&#39;resources/model/results/image_comparison_results_fine_tuned_normal.csv&#39;)</span>
+    <span class="c1"># plot_comparison_results(&#39;image_comparison_results.csv&#39;)</span>
+    <span class="c1"># plot_comparison_results(&#39;resources/model/results/image_comparison_results_fine_tuned_normal.csv&#39;)</span>
+    <span class="c1"># plot_comparison_results(&#39;image_comparison_results_fine_tuned_changed_difference.csv&#39;)</span>
+    <span class="c1"># plot_comparison_results(&#39;image_comparison_results_fine_tuned_changed_difference_no_sigmoid.csv&#39;)</span>
+    <span class="c1"># plot_comparison_results(&#39;image_comparison_results_fine_tuned_changed_difference_with_sigmoid.csv&#39;)</span>
+    <span class="c1"># tsne_plotting()</span>
+    <span class="n">tsne_plotting_all</span><span class="p">()</span>
+    <span class="c1"># tsne_plot_difference()</span>
+    <span class="c1"># tsne_plotting_given([ &quot;malsha_cup&quot;, &quot;dinithi_cup&quot;])</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

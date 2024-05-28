@@ -176,20 +176,22 @@ def predict_with_reference_images(model, image_path, reference_embeddings, devic
     return closest_class
 
 
-def tune():
+def tune(feature_extractor_model="efficientnetv2", num_samples=100, emb_size=20, epochs=10, lr=1e-5, batch_size=4,
+         train_val_split=0.8, num_workers=1, seed=0, output_folder_name=None, lr_scheduler=False,
+         pretrained_weights=None):
     args = argparse.Namespace(
-        batch_size=4,
-        epochs=10,
-        lr=1e-5,
-        num_samples=100,
-        emb_size=20,
-        train_val_split=0.8,
-        num_workers=1,
-        seed=0,
-        output_folder_name=None,
-        lr_scheduler=False,
-        model='efficientnetv2',
-        pretrained_weights=None
+        batch_size=batch_size,
+        epochs=epochs,
+        lr=lr,
+        num_samples=num_samples,
+        emb_size=emb_size,
+        train_val_split=train_val_split,
+        num_workers=num_workers,
+        seed=seed,
+        output_folder_name=output_folder_name,
+        lr_scheduler=lr_scheduler,
+        model=feature_extractor_model,
+        pretrained_weights=pretrained_weights
     )
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     output_folder_path = str(Path(__file__).resolve().parent) + '\\latest_model\\'

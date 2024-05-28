@@ -6,7 +6,6 @@ import numpy as np
 import pkg_resources
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 
 from dronebuddylib.atoms.placerecognition.i_place_recognition import IPlaceRecognition
 from dronebuddylib.atoms.placerecognition.place_recognition_result import RecognizedPlaces, RecognizedPlaceObject

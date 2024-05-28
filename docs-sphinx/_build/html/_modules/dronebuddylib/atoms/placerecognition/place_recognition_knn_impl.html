@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.placerecognition.place_recognition_knn_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.placerecognition.place_recognition_knn_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.placerecognition.place_recognition_knn_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">Future</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.placerecognition.i_place_recognition</span> <span class="kn">import</span> <span class="n">IPlaceRecognition</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.placerecognition.place_recognition_result</span> <span class="kn">import</span> <span class="n">RecognizedPlaces</span><span class="p">,</span> <span class="n">RecognizedPlaceObject</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.exceptions.PlaceRecognitionException</span> <span class="kn">import</span> <span class="n">PlaceRecognitionException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span><span class="p">,</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.execution_status</span> <span class="kn">import</span> <span class="n">ExecutionStatus</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.logger</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">preprocessing</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">precision_recall_fscore_support</span><span class="p">,</span> <span class="n">classification_report</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">overwrite_file</span><span class="p">,</span> <span class="n">read_from_file</span><span class="p">,</span> <span class="n">config_validity_check</span><span class="p">,</span> <span class="n">write_to_file</span><span class="p">,</span> \
+    <span class="n">write_to_file_longer</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision.models</span> <span class="k">as</span> <span class="nn">models</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms</span> <span class="k">as</span> <span class="nn">transforms</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">PlaceRecognitionKNNImpl</span><span class="p">(</span><span class="n">IPlaceRecognition</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This class implements place recognition using the k-nearest-neighbors (KNN) algorithm, leveraging image features</span>
+<span class="sd">        extracted via a pre-trained ResNet model.</span>
+
+<span class="sd">        When should I use this class?</span>
+<span class="sd">        This implementation is ideal when you need to identify specific places or landmarks within a large dataset of known</span>
+<span class="sd">        locations efficiently. It&#39;s particularly useful for applications in robotics, drones, or any system requiring</span>
+<span class="sd">        geographical awareness from visual cues.</span>
+
+<span class="sd">        Algorithm Description:</span>
+<span class="sd">        The KNN classifier is trained on a dataset of images labeled with their corresponding places. For an unknown image,</span>
+<span class="sd">         the classifier predicts the place by finding the k most similar images in its training set</span>
+<span class="sd">          (based on the closest feature vectors under Euclidean distance) and performing a majority vote on their labels.</span>
+
+<span class="sd">        For instance, if k=3 and the three closest images in the training set to the given image are two images</span>
+<span class="sd">        of the Eiffel Tower and one image of the Statue of Liberty, the result would be &#39;Eiffel Tower&#39;.</span>
+
+<span class="sd">        * This implementation can weight the votes according to the distance of neighbors,</span>
+<span class="sd">         giving closer neighbors more influence on the final outcome.</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        1. Prepare a dataset of images for the places you want to recognize.</span>
+<span class="sd">        Organize the images so that there is a sub-directory for each place within a main directory.</span>
+
+<span class="sd">        2. Use the &#39;train&#39; method of this class to train the classifier on your dataset.</span>
+<span class="sd">         You can save the trained model to disk by specifying a &#39;model_save_path&#39;, allowing you to reuse the model without retraining.</span>
+
+<span class="sd">        3. To recognize the place depicted in a new, unknown image, call the &#39;recognize_place&#39; method with the image as input.</span>
+
+<span class="sd">        NOTE: This implementation requires scikit-learn, NumPy, PyTorch, torchvision,</span>
+<span class="sd">         and PIL to be installed for machine learning operations and image processing.</span>
+<span class="sd">         Ensure these packages are installed in your environment:</span>
+
+<span class="sd">        $ pip install scikit-learn numpy torch torchvision Pillow</span>
+
+<span class="sd">       A class implementing KNN-based place recognition.</span>
+
+<span class="sd">       This class uses k-nearest neighbors algorithm to recognize places by comparing</span>
+<span class="sd">       the feature vectors of images extracted using a pre-trained ResNet model. It is</span>
+<span class="sd">       capable of training a model with labeled images of places and predicting the</span>
+<span class="sd">       place of an unknown image.</span>
+
+<span class="sd">       Attributes:</span>
+<span class="sd">           use_drone (bool): Indicates if a drone is used to create the dataset.</span>
+<span class="sd">           progress_event (threading.Event): Signals when the training process is done.</span>
+<span class="sd">           current_status (ExecutionStatus): Holds the current status of the operation.</span>
+<span class="sd">           configs (EngineConfigurations): Configuration parameters for the engine.</span>
+<span class="sd">       &quot;&quot;&quot;</span>
+
+    <span class="n">use_drone</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Event to signal when the training is done</span>
+    <span class="n">progress_event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+    <span class="n">current_status</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">classifier_path</span> <span class="o">=</span> <span class="s2">&quot;resources/models/classifiers/knn/trained_place_knn_model&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">               Initializes the PlaceRecognitionKNNImpl class with the given engine configurations.</span>
+
+<span class="sd">               Args:</span>
+<span class="sd">                   engine_configurations (EngineConfigurations): The configurations for the engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+
+        <span class="c1"># Get configurations</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_drone</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drone_instance</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                          <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                              <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_algorithm_name</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NAME</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NAME</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_neighbors</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_model_saving_path</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_SAVING_PATH</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_SAVING_PATH</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_threshold</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                                <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                                    <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_weights</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_WEIGHTS</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                                  <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_WEIGHTS</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                     <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                         <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_classifier_location</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;INIT&quot;</span><span class="p">,</span> <span class="s2">&quot;INITIALIZATION&quot;</span><span class="p">,</span> <span class="s2">&quot;COMPLETED&quot;</span><span class="p">)</span>
+
+        <span class="c1"># # Initialize the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_EXTRACTOR</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_EXTRACTOR</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">densenet121</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="s2">&quot;Densenet121&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;GoogLeNet&quot;</span><span class="p">:</span>
+            <span class="c1"># Load a pre-trained ResNet model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">googlenet</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;GoogLeNetPlaces365&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">dronebuddylib.atoms.placerecognition.resources.common.googlenet.googlenet_places365</span> <span class="kn">import</span> <span class="n">GoogLeNetPlaces365</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">GoogLeNetPlaces365</span><span class="p">()</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/common/googlenet/googlenet_places365.pth&quot;</span><span class="p">)</span>
+            <span class="c1"># Load the pre-trained weights</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;ResNet50&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet50</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;Densenet121&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">densenet121</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;ResNet18&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet18</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># # Put the model in evaluation mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="c1"># Define a transform to convert images to the format expected by ResNet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span><span class="mi">224</span><span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]),</span>
+        <span class="p">])</span>
+
+        <span class="c1"># Define a transformation pipeline with rotation and color jitter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="c1"># Convert the NumPy array to PIL Image first to use torchvision transforms</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToPILImage</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span><span class="mi">224</span><span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]),</span>
+        <span class="p">])</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">preprocess_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+        <span class="c1"># Resize the image</span>
+        <span class="n">image_resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span>
+
+        <span class="c1"># Convert BGR to RGB</span>
+        <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image_resized</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+
+        <span class="c1"># Convert the image to a float tensor and normalize</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">image_tensor</span> <span class="o">/=</span> <span class="mf">255.0</span>  <span class="c1"># Normalize to [0, 1]</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="p">(</span><span class="n">image_tensor</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Add a batch dimension</span>
+        <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">image_tensor</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">image_tensor</span>
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.extract_features_with_specified_models">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.extract_features_with_specified_models">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_features_with_specified_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">img_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="c1"># Add a batch dimension since PyTorch models expect a batch of images as input</span>
+        <span class="n">img_batch</span> <span class="o">=</span> <span class="n">img_transformed</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Make prediction</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">img_batch</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.test_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.test_memory">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Tests the memory capabilities of the classifier by evaluating its performance</span>
+<span class="sd">                on a predefined test dataset. This method serves as a diagnostic tool to ensure</span>
+<span class="sd">                the classifier is functioning as expected.</span>
+
+<span class="sd">                Returns:</span>
+<span class="sd">                    dict: A dictionary containing key performance metrics such as accuracy,</span>
+<span class="sd">                    precision, and F1 score of the classifier on the test dataset.</span>
+<span class="sd">               &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_classifier</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.recognize_place">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.recognize_place">[docs]</a>
+    <span class="k">def</span> <span class="nf">recognize_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecognizedPlaces</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Recognizes the place depicted in the given image. If the confidence of the</span>
+<span class="sd">            prediction is below a given threshold, the place is classified as &#39;unknown&#39;.</span>
+<span class="sd">                Args:</span>
+<span class="sd">                    image: The image of the place to recognize.</span>
+
+<span class="sd">                Returns:</span>
+<span class="sd">                    RecognizedPlaces: The recognized place.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="c1"># Extract features from the provided image</span>
+        <span class="c1"># This requires a feature extraction method similar to the one discussed earlier</span>
+
+        <span class="n">image_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="c1"># image_features = self.feature_extractor_place(image)</span>
+
+        <span class="c1"># Check if features were successfully extracted</span>
+        <span class="k">if</span> <span class="n">image_features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;No features extracted from image.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_classifier_location</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_classifier_location</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">classifier_index</span> <span class="o">=</span> <span class="n">read_from_file</span><span class="p">(</span>
+                <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/models/classifiers/classifier_index.txt&quot;</span><span class="p">))</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                         <span class="bp">self</span><span class="o">.</span><span class="n">classifier_path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.clf&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load the trained KNN model</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">predicted_place</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">image_features</span><span class="p">])</span>
+
+
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">([</span><span class="n">image_features</span><span class="p">])[</span>
+            <span class="mi">0</span><span class="p">]</span>  <span class="c1"># Get the probabilities of the first (and only) example</span>
+        <span class="n">max_probability</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>
+        <span class="n">predicted_index</span> <span class="o">=</span> <span class="n">probabilities</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+        <span class="n">predicted_label</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classes_</span><span class="p">[</span><span class="n">predicted_index</span><span class="p">]</span>
+
+        <span class="c1"># You can also retrieve the probabilities or distances if your application needs that</span>
+        <span class="c1"># For example, to get probabilities: probabilities = model.predict_proba([image_features])</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Recognized place: </span><span class="si">{</span><span class="n">predicted_place</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                        <span class="sa">f</span><span class="s2">&quot;Recognized place: </span><span class="si">{</span><span class="n">predicted_label</span><span class="si">}</span><span class="s2"> with confidence: </span><span class="si">{</span><span class="n">max_probability</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Predict the class probabilities</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">([</span><span class="n">image_features</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Probabilities of all classes</span>
+        <span class="n">top_three_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Indices of top 3 classes</span>
+        <span class="n">top_three_probabilities</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">top_three_indices</span><span class="p">]</span>  <span class="c1"># Probabilities of top 3 classes</span>
+        <span class="n">top_three_labels</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classes_</span><span class="p">[</span><span class="n">top_three_indices</span><span class="p">]</span>  <span class="c1"># Labels of top 3 classes</span>
+
+        <span class="n">recognized_places</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">most_probable_place</span> <span class="o">=</span> <span class="n">RecognizedPlaceObject</span><span class="p">(</span><span class="n">predicted_label</span><span class="p">,</span> <span class="n">max_probability</span><span class="p">)</span>
+        <span class="c1"># Log the top three predictions</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">prob</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">top_three_labels</span><span class="p">,</span> <span class="n">top_three_probabilities</span><span class="p">)):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Top </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> predicted place: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> with confidence: </span><span class="si">{</span><span class="n">prob</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">recognized_places</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RecognizedPlaceObject</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">prob</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">RecognizedPlaces</span><span class="p">(</span><span class="n">most_probable_place</span><span class="p">,</span> <span class="n">recognized_places</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.remember_place">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.remember_place">[docs]</a>
+    <span class="k">def</span> <span class="nf">remember_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to remember place: &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="c1"># Trigger start callback</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;remember_face&quot;</span><span class="p">,</span> <span class="s2">&quot;training data set creation&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;START&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_data_set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drone_instance</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully created training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create validation data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_data_set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drone_instance</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully created training data set for &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="c1"># Function to update the progress bar</span>
+    <span class="c1"># deper network than KNN</span>
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.progress_bar">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.progress_bar">[docs]</a>
+    <span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">done_event</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Training Progress&quot;</span><span class="p">):</span>
+        <span class="c1"># Initialize tqdm with an unknown total duration (using total=None)</span>
+        <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot; step&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">done_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># Update the progress bar by one step</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Sleep a short time before updating again</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>  <span class="c1"># Ensure the progress bar completes if it hasn&#39;t already</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.feature_extractor">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.feature_extractor">[docs]</a>
+    <span class="k">def</span> <span class="nf">feature_extractor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Extracts feature vectors from the given image using a pre-defined neural network model.</span>
+<span class="sd">            This method is crucial for converting raw images into a form that can be effectively</span>
+<span class="sd">            used by the KNN classifier for place recognition.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                img: The image from which to extract features, expected to be in a format compatible</span>
+<span class="sd">                     with the pre-processing transformations.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                numpy.ndarray: The extracted features as a flat array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">==</span> <span class="s2">&quot;GoogLeNetPlaces365&quot;</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="c1">#     model: The pre-trained model to use for feature extraction.</span>
+            <span class="c1">#     preprocess: The preprocessing steps to apply to the image before feature extraction.</span>
+            <span class="n">img_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="n">batch_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">img_t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_t</span><span class="p">)</span>
+
+            <span class="c1"># Convert features to a numpy array</span>
+            <span class="k">return</span> <span class="n">features</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+            <span class="c1"># Add a batch dimension since PyTorch models expect a batch of images as input</span>
+            <span class="n">img_batch</span> <span class="o">=</span> <span class="n">img_transformed</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># Make prediction</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">img_batch</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.feature_extractor_place">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.feature_extractor_place">[docs]</a>
+    <span class="k">def</span> <span class="nf">feature_extractor_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Extracts feature vectors from the given image using a pre-defined neural network model.</span>
+<span class="sd">            This method is crucial for converting raw images into a form that can be effectively</span>
+<span class="sd">            used by the KNN classifier for place recognition.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                img: The image from which to extract features, expected to be in a format compatible</span>
+<span class="sd">                     with the pre-processing transformations.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                numpy.ndarray: The extracted features as a flat array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">img_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+        <span class="c1"># Add a batch dimension since PyTorch models expect a batch of images as input</span>
+        <span class="n">img_batch</span> <span class="o">=</span> <span class="n">img_transformed</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Make prediction</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">img_batch</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.train">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.train">[docs]</a>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dir</span><span class="p">,</span> <span class="n">model_save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">knn_algo</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span>
+              <span class="n">classifier_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">changes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">future</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Trains the KNN classifier on a set of labeled images stored in a directory structure.</span>
+<span class="sd">           Each sub-directory within the train directory should represent a class (place), and contain</span>
+<span class="sd">           images corresponding to that place.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               train_dir (str): The directory containing the training dataset.</span>
+<span class="sd">               model_save_path (str, optional): Path to save the trained model.</span>
+<span class="sd">               n_neighbors (int, optional): Number of neighbors to use for k-nearest neighbors voting.</span>
+<span class="sd">               knn_algo (str, optional): Underlying algorithm to compute the nearest neighbors.</span>
+<span class="sd">               weights (str, optional): Weight function used in prediction.</span>
+<span class="sd">               classifier_index (int, optional): An index to uniquely identify the classifier.</span>
+<span class="sd">               changes (str, optional): Description of any changes or versioning info.</span>
+<span class="sd">               verbose (bool, optional): Enables verbose output during the training process.</span>
+<span class="sd">               future (Future, optional): A Future object for asynchronous execution.</span>
+
+<span class="sd">           Returns:</span>
+<span class="sd">               dict: A dictionary containing performance metrics such as accuracy and precision of the trained model.</span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">class_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">knn_algo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">knn_algo</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span>
+        <span class="k">if</span> <span class="n">n_neighbors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="s1">&#39;distance&#39;</span>
+
+        <span class="n">training_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Loop through each person in the training set</span>
+        <span class="k">for</span> <span class="n">class_dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">train_dir</span><span class="p">):</span>
+            <span class="n">class_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Training for class : &quot;</span> <span class="o">+</span> <span class="n">class_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">)):</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Loop through each training image for the current person</span>
+            <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_files_in_folder</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">)):</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+                <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">features</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+                    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_dir</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;feature extraction for  : &quot;</span> <span class="o">+</span> <span class="n">img_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;No features extracted for: &quot;</span> <span class="o">+</span> <span class="n">img_path</span><span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;No features were extracted. Aborting training.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+        <span class="c1"># Create and train the KNN classifier</span>
+
+        <span class="c1"># Train the KNN model</span>
+        <span class="n">knn_clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">knn_algo</span><span class="p">,</span>
+                                       <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>  <span class="c1"># Use 3 neighbors for simplicity</span>
+        <span class="n">knn_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Training completed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate the model</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">knn_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Testing completed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Calculate and print the accuracy</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">f1_score</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;f1_score&quot;</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">,</span>
+            <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">report</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Save the trained KNN classifier</span>
+        <span class="n">training_end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">model_string</span> <span class="o">=</span> <span class="s2">&quot;model name: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">classifier_index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.clf&quot;</span> <span class="o">+</span> <span class="s2">&quot;: reason : &quot;</span> <span class="o">+</span> <span class="n">changes</span> <span class="o">+</span> <span class="s2">&quot; : extractor : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">+</span> <span class="s2">&quot; : no. of classes &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">class_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: time taken : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">training_end_time</span> <span class="o">-</span> <span class="n">training_start_time</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; seconds  :  accuracy: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">accuracy</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; : precision: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; : f1_score: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">f1_score</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">model_save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_save_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">knn_clf</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="c1"># write the model name with teh accuracy into the classifier_data.txt</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/models/classifiers/classifier_data.txt&quot;</span><span class="p">)</span>
+
+        <span class="n">write_to_file_longer</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">model_string</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                        <span class="s1">&#39;Training complete. It took &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                            <span class="p">(</span><span class="n">training_end_time</span> <span class="o">-</span> <span class="n">training_start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; minutes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">future</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># Set the result of the future</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="c1"># Assume logger and other necessary functions and imports are defined elsewhere</span>
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.train_random_forest_classifier">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.train_random_forest_classifier">[docs]</a>
+    <span class="k">def</span> <span class="nf">train_random_forest_classifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dir</span><span class="p">,</span> <span class="n">model_save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                                       <span class="n">max_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;gini&#39;</span><span class="p">,</span>
+                                       <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">classifier_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">changes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                       <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">future</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trains the Random Forest classifier on a set of labeled images stored in a directory structure.</span>
+<span class="sd">        Each sub-directory within the train directory should represent a class (place), and contain</span>
+<span class="sd">        images corresponding to that place.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            train_dir (str): The directory containing the training dataset.</span>
+<span class="sd">            model_save_path (str, optional): Path to save the trained model.</span>
+<span class="sd">            n_estimators (int, optional): The number of trees in the forest.</span>
+<span class="sd">            max_depth (int, optional): The maximum depth of the trees.</span>
+<span class="sd">            random_state (int, optional): Controls both the randomness of the bootstrapping of the samples</span>
+<span class="sd">                                          used when building trees (if bootstrap=True) and the sampling of</span>
+<span class="sd">                                          the features to consider when looking for the best split at each node.</span>
+<span class="sd">            criterion (str, optional): The function to measure the quality of a split.</span>
+<span class="sd">            min_samples_split (int, optional): The minimum number of samples required to split an internal node.</span>
+<span class="sd">            classifier_index (int, optional): An index to uniquely identify the classifier.</span>
+<span class="sd">            changes (str, optional): Description of any changes or versioning info.</span>
+<span class="sd">            verbose (bool, optional): Enables verbose output during the training process.</span>
+<span class="sd">            future (Future, optional): A Future object for asynchronous execution.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing performance metrics such as accuracy and precision of the trained model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">class_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">training_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Loop through each class in the training set</span>
+        <span class="k">for</span> <span class="n">class_dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">train_dir</span><span class="p">):</span>
+            <span class="n">class_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="s2">&quot;Training for class: &quot;</span> <span class="o">+</span> <span class="n">class_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">)):</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Loop through each training image for the current class</span>
+            <span class="k">for</span> <span class="n">img_path</span> <span class="ow">in</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span>
+                             <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">))</span> <span class="k">if</span>
+                             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_dir</span><span class="p">,</span> <span class="n">class_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">))]:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+                <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>  <span class="c1"># Assuming this is defined elsewhere</span>
+                <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">features</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+                    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_dir</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="s2">&quot;Feature extraction for: &quot;</span> <span class="o">+</span> <span class="n">img_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="s2">&quot;No features extracted for: &quot;</span> <span class="o">+</span> <span class="n">img_path</span><span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="s2">&quot;No features were extracted. Aborting training.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+        <span class="c1"># Create and train the Random Forest classifier</span>
+        <span class="n">rf_clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                                        <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">min_samples_split</span><span class="o">=</span><span class="n">min_samples_split</span><span class="p">)</span>
+        <span class="n">rf_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Training completed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate the model</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">rf_clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Testing completed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Calculate and print the accuracy</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;f1_score&quot;</span><span class="p">:</span> <span class="n">f1</span><span class="p">,</span>
+            <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">report</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Save the trained Random Forest classifier</span>
+        <span class="n">training_end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">model_save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_save_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rf_clf</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># Additional logging and file writing omitted for brevity</span>
+
+        <span class="k">if</span> <span class="n">future</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># Set the result of the future</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.image_files_in_folder">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.image_files_in_folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">image_files_in_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*\.(jpg|jpeg|png)&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.create_memory">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.create_memory">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/models/classifiers/classifier_index.txt&quot;</span><span class="p">)</span>
+        <span class="n">classifier_index_read</span> <span class="o">=</span> <span class="n">read_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">classifier_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">classifier_index_read</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">overwrite_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">training_path_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_data_set_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">training_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/test_data/training_data&quot;</span><span class="p">)</span>
+
+        <span class="n">classifier_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">classifier_path</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.clf&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
+        <span class="c1">#  TRAINING THE CLASSIFIER</span>
+        <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;create_memory&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;training KNN classifier&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;START&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Starting to create memory. Training KNN classifier&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Create a Future object</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="c1"># Start the training in a separate thread</span>
+        <span class="n">train_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">training_path_name</span><span class="p">,</span>
+                                                                 <span class="n">classifier_path_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_neighbors</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_algorithm_name</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">custom_knn_weights</span><span class="p">,</span>
+                                                                 <span class="n">classifier_index</span><span class="p">,</span> <span class="n">changes</span><span class="p">,</span>
+                                                                 <span class="kc">False</span><span class="p">,</span> <span class="n">future</span><span class="p">))</span>
+
+        <span class="n">train_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Start the progress bar in a separate thread</span>
+        <span class="n">progress_bar_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">progress_event</span><span class="p">,))</span>
+        <span class="n">progress_bar_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Wait for the training to finish</span>
+        <span class="n">train_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="c1"># Ensure the progress bar thread completes</span>
+        <span class="n">progress_bar_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                        <span class="s1">&#39;Successfully created memory. KNN classifier trained successfully. Model saved at: &#39;</span>
+                        <span class="o">+</span> <span class="n">classifier_path_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;create_memory&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;training KNN classifier&quot;</span><span class="p">,</span>
+                                              <span class="s2">&quot;COMPLETED&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>  <span class="c1"># This will also re-raise any exception set by set_exception</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Successfully tested the classifier&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">PlaceRecognitionException</span><span class="p">(</span><span class="s2">&quot;Error occurred while training the classifier&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.test_classifier">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.test_classifier">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_classifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">future</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">test_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/models/classifiers/classifier_index.txt&quot;</span><span class="p">)</span>
+
+        <span class="n">classifier_index_read</span> <span class="o">=</span> <span class="n">read_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">classifier_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">classifier_index_read</span><span class="p">)</span>
+        <span class="n">classifier_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                               <span class="s2">&quot;resources/models/classifiers/&quot;</span> <span class="o">+</span> <span class="s2">&quot;trained_place_knn_model&quot;</span>
+                                                               <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">classifier_index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.clf&quot;</span><span class="p">)</span>
+        <span class="n">testing_path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/test_data/testing_data&quot;</span><span class="p">)</span>
+        <span class="c1"># Load the trained classifier</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">classifier_path_name</span><span class="p">)</span>
+
+        <span class="c1"># Load your test data</span>
+        <span class="n">features</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">,</span> <span class="n">label_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_test_data</span><span class="p">(</span><span class="n">testing_path_name</span><span class="p">)</span>
+
+        <span class="c1"># Predict using the classifier</span>
+        <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="c1"># Calculate and print the accuracy</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">)</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">f1_score</span> <span class="o">=</span> <span class="n">precision_recall_fscore_support</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">true_labels</span><span class="p">,</span> <span class="n">predicted_labels</span><span class="p">,</span> <span class="n">target_names</span><span class="o">=</span><span class="n">label_names</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Accuracy: </span><span class="si">{</span><span class="n">accuracy</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;f1_score&quot;</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">,</span>
+            <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">report</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">future</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># Set the result of the future</span>
+        <span class="n">test_end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                        <span class="s1">&#39;Testing complete. It took &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">test_end_time</span> <span class="o">-</span> <span class="n">test_start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; minutes&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.preprocess_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.preprocess_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">preprocess_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="c1"># # Load the image with OpenCV</span>
+        <span class="c1"># img = cv2.imread(image_path)</span>
+        <span class="c1"># Convert from BGR to RGB</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+
+        <span class="c1"># Convert the image to PIL format to use the same preprocessing as before</span>
+        <span class="c1"># Alternatively, you can adjust the preprocessing pipeline to work directly with the OpenCV format</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.load_test_data">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.load_test_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_test_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Load images and true labels from the test directory.</span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">label_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Iterate over each directory in test_dir</span>
+        <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">test_dir</span><span class="p">):</span>
+            <span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">test_dir</span><span class="p">,</span> <span class="n">label_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">label_dir</span><span class="p">):</span>
+                <span class="k">continue</span>  <span class="c1"># Skip non-directory files</span>
+
+            <span class="c1"># Store the name of the label</span>
+            <span class="n">label_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
+
+            <span class="c1"># Iterate over each image in the directory</span>
+            <span class="k">for</span> <span class="n">image_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">label_dir</span><span class="p">):</span>
+                <span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_dir</span><span class="p">,</span> <span class="n">image_name</span><span class="p">)</span>
+
+                <span class="c1"># Extract features from the image (i.e., face encodings)</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+                <span class="n">face_encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">face_encoding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">face_encoding</span><span class="p">)</span>
+                    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
+
+        <span class="c1"># Convert labels to a numerical format</span>
+        <span class="n">le</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">LabelEncoder</span><span class="p">()</span>
+        <span class="n">labels_encoded</span> <span class="o">=</span> <span class="n">le</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">le</span><span class="o">.</span><span class="n">classes_</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.create_data_set">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.create_data_set">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_data_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">place_name</span><span class="p">,</span> <span class="n">data_mode</span><span class="p">,</span> <span class="n">drone_instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Generates a dataset for a given place name, optionally using a drone for image collection.</span>
+<span class="sd">                Different modes support training, validation, and testing data collection.</span>
+
+<span class="sd">                Args:</span>
+<span class="sd">                    place_name (str): The name of the place for which to create the dataset.</span>
+<span class="sd">                    data_mode (int): The mode of dataset creation (e.g., training, validation).</span>
+<span class="sd">                    drone_instance: An optional drone instance to use for collecting images.</span>
+
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;training&quot;</span>
+        <span class="c1"># if drone_instance is not None:</span>
+        <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">00</span>
+
+            <span class="k">if</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                            <span class="s2">&quot;resources/test_data/training_data/&quot;</span> <span class="o">+</span> <span class="n">place_name</span><span class="p">)</span>
+                <span class="n">rotation_size</span> <span class="o">=</span> <span class="mi">5</span>
+                <span class="n">height_fixer</span> <span class="o">=</span> <span class="mi">20</span>
+
+            <span class="k">elif</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_forward</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+                <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                            <span class="s2">&quot;resources/test_data/validation_data/&quot;</span> <span class="o">+</span> <span class="n">place_name</span><span class="p">)</span>
+                <span class="n">rotation_size</span> <span class="o">=</span> <span class="mi">30</span>
+                <span class="n">height_fixer</span> <span class="o">=</span> <span class="mi">30</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;validation&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">path_name</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                            <span class="s2">&quot;resources/test_data/training_data/&quot;</span> <span class="o">+</span> <span class="n">place_name</span><span class="p">)</span>
+                <span class="n">rotation_size</span> <span class="o">=</span> <span class="mi">5</span>
+                <span class="n">height_fixer</span> <span class="o">=</span> <span class="mi">20</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                               <span class="s1">&#39;Data set creating. &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">320</span><span class="p">)</span> <span class="o">+</span>
+                               <span class="s1">&#39; data collected. Data set can be found at the path: &#39;</span> <span class="o">+</span> <span class="n">path_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path_name</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+                <span class="c1"># first check if the drone is in the air</span>
+                <span class="c1"># if not, take off</span>
+
+            <span class="c1"># first check if the drone is in the air</span>
+            <span class="c1"># if not, take off</span>
+            <span class="c1">#  then rotate the drone 360 degrees and take pictures every 5 degrees</span>
+            <span class="c1"># after completing the rotation  go up 30 cm and repeat the process</span>
+            <span class="c1">#  according to singapore building standards the height of a floor is 3.2 meters</span>
+            <span class="c1">#  so we can take a set of pictures every 50 cm</span>
+            <span class="c1">#  and repeat the process until we reach 1.5 meters, just to be safe</span>
+            <span class="c1">#  overall for every place we will have 5*72= 360 pictures, which will be used to create the model</span>
+
+            <span class="n">current_height</span> <span class="o">=</span> <span class="mi">30</span>
+            <span class="k">while</span> <span class="n">current_height</span> <span class="o">&lt;=</span> <span class="mi">150</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_up</span><span class="p">(</span><span class="n">height_fixer</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                                     <span class="s2">&quot;going  up by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">height_fixer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; , &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                                         <span class="n">current_height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; cm above the ground&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">drone_instance</span><span class="o">.</span><span class="n">move_down</span><span class="p">(</span><span class="n">height_fixer</span><span class="p">)</span>
+
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                                     <span class="s2">&quot;going  down by   &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">height_fixer</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; , &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                                         <span class="n">current_height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; cm above the ground&quot;</span><span class="p">)</span>
+
+                <span class="n">current_rotation</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">current_rotation</span> <span class="o">&lt;=</span> <span class="mi">360</span><span class="p">:</span>
+                    <span class="n">frame</span> <span class="o">=</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_frame_read</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span>
+                    <span class="n">face</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+
+                    <span class="c1"># Save file in specified directory with unique name</span>
+                    <span class="n">file_name_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">path_name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">place_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">file_name_path</span><span class="p">,</span> <span class="n">face</span><span class="p">)</span>
+                    <span class="c1"># Put count on images and display live count</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_COMPLEX</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;FaceCropper&quot;</span><span class="p">,</span> <span class="n">face</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                                     <span class="s2">&quot;turning by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rotation_size</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; , &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">current_rotation</span><span class="p">))</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">drone_instance</span><span class="o">.</span><span class="n">rotate_clockwise</span><span class="p">(</span><span class="n">rotation_size</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Error while rotating drone: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="n">current_rotation</span> <span class="o">+=</span> <span class="n">rotation_size</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span> <span class="o">=</span> <span class="n">ExecutionStatus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;remember_place&quot;</span><span class="p">,</span>
+                                                          <span class="s2">&quot;creating data set at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                                                              <span class="n">current_height</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; cm above the ground&quot;</span><span class="p">,</span>
+                                                          <span class="s2">&quot;PROGRESS&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">320</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">data_mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">drone_instance</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span>
+                            <span class="n">drone_instance</span><span class="o">.</span><span class="n">land</span><span class="p">()</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+                <span class="n">current_height</span> <span class="o">+=</span> <span class="mi">30</span>
+
+                <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+                               <span class="s1">&#39;Data set created successfully. &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">320</span><span class="p">)</span> <span class="o">+</span>
+                               <span class="s1">&#39; data collected. Data set can be found at the path: &#39;</span> <span class="o">+</span> <span class="n">path_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.get_current_status">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.get_current_status">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_current_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_status</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the required parameters for the FaceRecognitionImpl class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of required parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the optional parameters for the FaceRecognitionImpl class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of optional parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TRAINING_DATA_SET_PATH</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_TESTING_DATA_SET_PATH</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_VALIDATION_DATA_SET_PATH</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NAME</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_ALGORITHM_NEIGHBORS</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_SAVING_PATH</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_MODEL_THRESHOLD</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_USE_DRONE_TO_CREATE_DATASET</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_DRONE_INSTANCE</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">PLACE_RECOGNITION_KNN_CLASSIFIER_LOCATION</span><span class="p">,</span>
+                <span class="p">]</span></div>
+
+        <span class="c1"># return []</span>
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the class name of the FaceRecognitionImpl class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;PLACE_RECOGNITION_KNN&#39;</span></div>
+
+
+<div class="viewcode-block" id="PlaceRecognitionKNNImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.placerecognition.html#dronebuddylib.atoms.placerecognition.place_recognition_knn_impl.PlaceRecognitionKNNImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the algorithm name of the FaceRecognitionImpl class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;Face Recognition&#39;</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

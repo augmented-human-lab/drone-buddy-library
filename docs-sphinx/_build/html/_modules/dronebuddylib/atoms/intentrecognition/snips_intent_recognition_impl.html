@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">snips_nlu</span> <span class="kn">import</span> <span class="n">SnipsNLUEngine</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.intentrecognition.i_intent_recognition</span> <span class="kn">import</span> <span class="n">IIntentRecognition</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.exceptions.intent_resolution_exception</span> <span class="kn">import</span> <span class="n">IntentResolutionException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.intentrecognition.recognized_intent_result</span> <span class="kn">import</span> <span class="n">RecognizedIntent</span><span class="p">,</span> <span class="n">RecognizedEntities</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils</span> <span class="kn">import</span> <span class="n">FileWritingException</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span><span class="p">,</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">SNIPSIntentRecognitionImpl</span><span class="p">(</span><span class="n">IIntentRecognition</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implementation of intent recognition using the Snips NLU engine.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        engine (SnipsNLUEngine): The Snips NLU engine used for intent recognition.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        get_class_name: Returns the class name.</span>
+<span class="sd">        get_algorithm_name: Returns the name of the algorithm.</span>
+<span class="sd">        get_resolved_intent: Parses text to detect intent and associated slots.</span>
+<span class="sd">        add_new_intent: Adds a new intent to the intent file.</span>
+<span class="sd">        get_required_params: Returns a list of required configuration parameters.</span>
+<span class="sd">        get_optional_params: Returns a list of optional configuration parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.introduce_new_intents">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.introduce_new_intents">[docs]</a>
+    <span class="k">def</span> <span class="nf">introduce_new_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_intents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Introduces new intents to the intent recognition system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_intents (dict): The new intents to be added.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the operation was successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">text_file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/intentrecognition/intents.txt&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">text_file_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">intent</span> <span class="ow">in</span> <span class="n">new_intents</span><span class="p">:</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">intent</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">new_intents</span><span class="p">[</span><span class="n">intent</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot;Error while writing to the file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">intent</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">FileWritingException</span><span class="p">(</span><span class="s2">&quot;Error while writing to the file: &quot;</span> <span class="o">+</span> <span class="n">intent</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the class name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;INTENT_RECOGNITION_SNIPS&#39;</span></div>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the algorithm.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;SNIPS Intent Recognition&#39;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the SNIPSIntentRecognitionImpl with the given configurations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The configurations for the engine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">engine_configurations</span><span class="p">)</span>
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+
+        <span class="c1"># Use the default dataset path if not provided</span>
+        <span class="k">if</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dataset_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;resources/intentrecognition/dataset.json&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;initialized with default dataset&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dataset_path</span> <span class="o">=</span> <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">SnipsNLUEngine</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39;Training set loaded from the json file&#39;</span><span class="p">)</span>
+
+        <span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39; Model fitted to the training set&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39; Initialized intent recognition engine&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.get_resolved_intent">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_resolved_intent">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_resolved_intent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phrase</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecognizedIntent</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses text to detect intent and associated slots.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            phrase (str): The text to be parsed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RecognizedIntent: The detected intent and associated slots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39; Detection started.&#39;</span><span class="p">)</span>
+
+        <span class="n">intent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39; Detection Successful.&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">formatted_intent</span> <span class="o">=</span> <span class="n">RecognizedIntent</span><span class="p">(</span><span class="n">intent</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">][</span><span class="s1">&#39;intentName&#39;</span><span class="p">],</span> <span class="p">[],</span> <span class="n">intent</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">][</span><span class="s1">&#39;probability&#39;</span><span class="p">],</span>
+                                                <span class="kc">False</span><span class="p">)</span>
+            <span class="n">entity_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">intent</span><span class="p">[</span><span class="s1">&#39;slots&#39;</span><span class="p">]:</span>
+                <span class="n">entity_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RecognizedEntities</span><span class="p">(</span><span class="n">slot</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">],</span> <span class="n">slot</span><span class="p">[</span><span class="s1">&#39;rawValue&#39;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">slot</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;DroneName&#39;</span><span class="p">:</span>
+                    <span class="n">formatted_intent</span><span class="o">.</span><span class="n">addressed_to</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">formatted_intent</span><span class="o">.</span><span class="n">set_entities</span><span class="p">(</span><span class="n">entity_list</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s1">&#39; Detection completed.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">formatted_intent</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IntentResolutionException</span><span class="p">(</span><span class="s2">&quot;Intent could not be resolved.&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.add_new_intent">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.add_new_intent">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_new_intent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a new intent and its description to the intent file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            intent (str): The new intent.</span>
+<span class="sd">            description (str): The description of the new intent.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the intent was successfully added, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">text_file_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;intentrecognition/resources/intents.txt&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">text_file_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">intent</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">description</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span> <span class="s2">&quot; Error while writing to the file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">intent</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">FileWritingException</span><span class="p">(</span><span class="s2">&quot;Error while writing to the file: &quot;</span> <span class="o">+</span> <span class="n">intent</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of required configuration parameters.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="SNIPSIntentRecognitionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.intentrecognition.html#dronebuddylib.atoms.intentrecognition.snips_intent_recognition_impl.SNIPSIntentRecognitionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of optional configuration parameters.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_NLU_DATASET_PATH</span><span class="p">,</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">INTENT_RECOGNITION_SNIPS_LANGUAGE_CONFIG</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

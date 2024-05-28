@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">mediapipe.tasks.python.vision</span> <span class="kn">import</span> <span class="n">PoseLandmarkerResult</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.atoms.bodyfeatureextraction.i_feature_extraction</span> <span class="kn">import</span> <span class="n">IFeatureExtraction</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.engine_configurations</span> <span class="kn">import</span> <span class="n">EngineConfigurations</span>
+<span class="kn">from</span> <span class="nn">dronebuddylib.models.enums</span> <span class="kn">import</span> <span class="n">AtomicEngineConfigurations</span>
+
+<span class="kn">import</span> <span class="nn">mediapipe</span> <span class="k">as</span> <span class="nn">mp</span>
+
+<span class="kn">from</span> <span class="nn">dronebuddylib.utils.utils</span> <span class="kn">import</span> <span class="n">config_validity_check</span>
+
+<span class="kn">from</span> <span class="nn">mediapipe</span> <span class="kn">import</span> <span class="n">solutions</span>
+<span class="kn">from</span> <span class="nn">mediapipe.framework.formats</span> <span class="kn">import</span> <span class="n">landmark_pb2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">BaseOptions</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">BaseOptions</span>
+<span class="n">PoseLandmarker</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarker</span>
+<span class="n">PoseLandmarkerOptions</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarkerOptions</span>
+<span class="n">VisionRunningMode</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">vision</span><span class="o">.</span><span class="n">RunningMode</span>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl">[docs]</a>
+<span class="k">class</span> <span class="nc">BodyFeatureExtractionImpl</span><span class="p">(</span><span class="n">IFeatureExtraction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The BodyFeatureExtractionImpl class is used to extract features related to body postures from an image.</span>
+<span class="sd">    built on top of Mediapipe&#39;s pose landmarking solution.</span>
+<span class="sd">    for more information: https://mediapipe-studio.webapps.google.com/home</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_configurations</span><span class="p">:</span> <span class="n">EngineConfigurations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for the BodyFeatureExtractionImpl class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_configurations (EngineConfigurations): The engine configurations object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hand_landmark</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gesture_recognition_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">config_validity_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_required_params</span><span class="p">(),</span>
+                              <span class="n">engine_configurations</span><span class="o">.</span><span class="n">get_configurations_for_engine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">()),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_algorithm_name</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">engine_configurations</span>
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_feature">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_feature">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstract method to get features from an image. This method should be implemented by subclasses.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image (list): The image to extract features from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The extracted features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_supported_features">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_supported_features">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_supported_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the list of supported features for the engine.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of supported features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;POSE&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_detected_pose">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_detected_pose">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_detected_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PoseLandmarkerResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the detected pose from an image.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            image : The numpy list image to detect the pose from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            PoseLandmarkerResult: The detected pose.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span>
+                <span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">HAND_FEATURE_EXTRACTION_GESTURE_RECOGNITION_MODEL_PATH</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span>
+                                                         <span class="s2">&quot;resources/pose_landmarker_heavy.task&quot;</span><span class="p">)</span>
+        <span class="c1"># Read the model file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">model_data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="n">PoseLandmarkerOptions</span><span class="p">(</span>
+            <span class="n">base_options</span><span class="o">=</span><span class="n">BaseOptions</span><span class="p">(</span><span class="n">model_asset_buffer</span><span class="o">=</span><span class="n">model_data</span><span class="p">),</span>
+            <span class="n">running_mode</span><span class="o">=</span><span class="n">VisionRunningMode</span><span class="o">.</span><span class="n">IMAGE</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">PoseLandmarker</span><span class="o">.</span><span class="n">create_from_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="k">as</span> <span class="n">landmarker</span><span class="p">:</span>
+            <span class="n">mp_image</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">image_format</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">ImageFormat</span><span class="o">.</span><span class="n">SRGB</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">landmarker</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">mp_image</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.draw_landmarks_on_image">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.draw_landmarks_on_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_landmarks_on_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rgb_image</span><span class="p">,</span> <span class="n">detection_result</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Draws pose landmarks on the given RGB image based on the detection result.</span>
+
+<span class="sd">           This method takes an RGB image and a detection result containing pose landmarks. It copies the original image and then iterates through each detected pose, drawing the landmarks on the copy of the image. The landmarks are drawn according to the specifications provided in the detection result, which includes the coordinates and connections of each landmark point.</span>
+
+<span class="sd">           Args:</span>
+<span class="sd">               rgb_image (numpy.ndarray): The original RGB image on which landmarks need to be drawn.</span>
+<span class="sd">               detection_result (object): An object containing the detected pose landmarks. It typically includes a list of pose landmarks with their x, y, z coordinates.</span>
+
+<span class="sd">           Returns:</span>
+<span class="sd">               numpy.ndarray: An annotated image with pose landmarks drawn on it.</span>
+
+<span class="sd">           The method utilizes `solutions.drawing_utils.draw_landmarks` for drawing, which requires converting the landmarks into a format compatible with the drawing utility. Each pose landmark is converted into a `NormalizedLandmark` and then drawn on the image using the specified pose connections and drawing style.</span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        <span class="n">pose_landmarks_list</span> <span class="o">=</span> <span class="n">detection_result</span><span class="o">.</span><span class="n">pose_landmarks</span>
+        <span class="n">annotated_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">rgb_image</span><span class="p">)</span>
+
+        <span class="c1"># Loop through the detected poses to visualize.</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pose_landmarks_list</span><span class="p">)):</span>
+            <span class="n">pose_landmarks</span> <span class="o">=</span> <span class="n">pose_landmarks_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+            <span class="c1"># Draw the pose landmarks.</span>
+            <span class="n">pose_landmarks_proto</span> <span class="o">=</span> <span class="n">landmark_pb2</span><span class="o">.</span><span class="n">NormalizedLandmarkList</span><span class="p">()</span>
+            <span class="n">pose_landmarks_proto</span><span class="o">.</span><span class="n">landmark</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                <span class="n">landmark_pb2</span><span class="o">.</span><span class="n">NormalizedLandmark</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">z</span><span class="p">)</span> <span class="k">for</span> <span class="n">landmark</span> <span class="ow">in</span> <span class="n">pose_landmarks</span>
+            <span class="p">])</span>
+            <span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span>
+                <span class="n">annotated_image</span><span class="p">,</span>
+                <span class="n">pose_landmarks_proto</span><span class="p">,</span>
+                <span class="n">solutions</span><span class="o">.</span><span class="n">pose</span><span class="o">.</span><span class="n">POSE_CONNECTIONS</span><span class="p">,</span>
+                <span class="n">solutions</span><span class="o">.</span><span class="n">drawing_styles</span><span class="o">.</span><span class="n">get_default_pose_landmarks_style</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">annotated_image</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_required_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_required_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_required_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the required parameters for the class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of required parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_optional_params">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_optional_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optional_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the optional parameters for the class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: The list of optional parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">AtomicEngineConfigurations</span><span class="o">.</span><span class="n">BODY_FEATURE_EXTRACTION_POSTURE_DETECTION_MODEL_PATH</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_class_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_class_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the class name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The class name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;BODY_FEATURE_EXTRACTION&quot;</span></div>
+
+
+<div class="viewcode-block" id="BodyFeatureExtractionImpl.get_algorithm_name">
+<a class="viewcode-back" href="../../../../dronebuddylib.atoms.bodyfeatureextraction.html#dronebuddylib.atoms.bodyfeatureextraction.body_feature_extraction_impl.BodyFeatureExtractionImpl.get_algorithm_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_algorithm_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the algorithm name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The algorithm name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Body Feature Extraction&quot;</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

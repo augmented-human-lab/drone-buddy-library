@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>objectidentification package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="objectidentification.resources package" href="dronebuddylib.atoms.objectidentification.resources.html" />
+  <link rel="prev" title="Place Recognition package" href="dronebuddylib.atoms.placerecognition.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>objectidentification package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.placerecognition.html"
+       title="previous chapter">← Place Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.objectidentification.resources.html"
+       title="next chapter">objectidentification.resources package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="objectidentification-package">
+<h1>objectidentification package<a class="headerlink" href="#objectidentification-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.html">objectidentification.resources package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html">objectidentification.resources.matching package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-siamesenetworkapi-module">objectidentification.resources.matching.SiameseNetworkAPI module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-dataset-module">objectidentification.resources.matching.dataset module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-inferencedataset-module">objectidentification.resources.matching.inferenceDataset module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-main-module">objectidentification.resources.matching.main module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-model-module">objectidentification.resources.matching.model module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#objectidentification-resources-matching-tune-api-module">objectidentification.resources.matching.tune_api module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.matching.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.objectidentification.resources.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="objectidentification-benchmarking-module">
+<h2>objectidentification.benchmarking module<a class="headerlink" href="#objectidentification-benchmarking-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.atoms.objectidentification.benchmarking">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.benchmarking.benchmark_feature_extractors_for_dataset">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.benchmarking.</span></span><span class="sig-name descname"><span class="pre">benchmark_feature_extractors_for_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnn_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FeatureExtractors.DENSENET121</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/benchmarking.html#benchmark_feature_extractors_for_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.benchmarking.benchmark_feature_extractors_for_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Benchmark the feature extractors for a dataset
+:param cnn_name: str, the name of the feature extractor
+:param dataset_path: str, the path to the dataset
+:return: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.benchmarking.benchmark_feature_extractors_for_dataset_all">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.benchmarking.</span></span><span class="sig-name descname"><span class="pre">benchmark_feature_extractors_for_dataset_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnn_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FeatureExtractors.DENSENET121</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/benchmarking.html#benchmark_feature_extractors_for_dataset_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.benchmarking.benchmark_feature_extractors_for_dataset_all" title="Link to this definition">¶</a></dt>
+<dd><p>Benchmark the feature extractors for a dataset
+:param cnn_name: str, the name of the feature extractor
+:param dataset_path: str, the path to the dataset
+:return: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.benchmarking.extract_features">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.benchmarking.</span></span><span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnn_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessed_img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/benchmarking.html#extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.benchmarking.extract_features" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.benchmarking.load_and_preprocess_img">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.benchmarking.</span></span><span class="sig-name descname"><span class="pre">load_and_preprocess_img</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cnn_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/benchmarking.html#load_and_preprocess_img"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.benchmarking.load_and_preprocess_img" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="objectidentification-detected-object-module">
+<h2>objectidentification.detected_object module<a class="headerlink" href="#objectidentification-detected-object-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.detected_object">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.BoundingBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.detected_object.</span></span><span class="sig-name descname"><span class="pre">BoundingBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#BoundingBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.BoundingBox" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.BoundingBox.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#BoundingBox.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.BoundingBox.to_json" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.detected_object.</span></span><span class="sig-name descname"><span class="pre">DetectedCategories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#DetectedCategories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#DetectedCategories.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories.to_json" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.DetectedObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.detected_object.</span></span><span class="sig-name descname"><span class="pre">DetectedObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detected_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories" title="dronebuddylib.atoms.objectidentification.detected_object.DetectedCategories"><span class="pre">DetectedCategories</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.detected_object.BoundingBox" title="dronebuddylib.atoms.objectidentification.detected_object.BoundingBox"><span class="pre">BoundingBox</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#DetectedObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedObject" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.DetectedObject.add_category">
+<span class="sig-name descname"><span class="pre">add_category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#DetectedObject.add_category"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedObject.add_category" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.DetectedObject.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#DetectedObject.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedObject.to_json" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.detected_object.</span></span><span class="sig-name descname"><span class="pre">ObjectDetectionResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detected_objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.detected_object.DetectedObject" title="dronebuddylib.atoms.objectidentification.detected_object.DetectedObject"><span class="pre">DetectedObject</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#ObjectDetectionResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/detected_object.html#ObjectDetectionResult.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult.to_json" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="objectidentification-i-object-recognition-module">
+<h2>objectidentification.i_object_recognition module<a class="headerlink" href="#objectidentification-i-object-recognition-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="objectidentification-mp-object-detection-impl-module">
+<h2>objectidentification.mp_object_detection_impl module<a class="headerlink" href="#objectidentification-mp-object-detection-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.mp_object_detection_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.mp_object_detection_impl.</span></span><span class="sig-name descname"><span class="pre">MPObjectDetectionImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dronebuddylib.atoms.objectdetection.html#dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection" title="dronebuddylib.atoms.objectdetection.i_object_detection.IObjectDetection"><code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectDetection</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the algorithm name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects">
+<span class="sig-name descname"><span class="pre">get_bounding_boxes_of_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_bounding_boxes_of_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a list of bounding boxes for the detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of bounding boxes for the detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects">
+<span class="sig-name descname"><span class="pre">get_detected_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ObjectDetectionResult</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_detected_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_detected_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Detects objects in the provided image and returns a result containing a list of detected objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image in which to detect objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A result containing a list of detected objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult" title="dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult">ObjectDetectionResult</a> (<a class="reference internal" href="#dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult" title="dronebuddylib.atoms.objectidentification.detected_object.ObjectDetectionResult">ObjectDetectionResult</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of optional configuration parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/mp_object_detection_impl.html#MPObjectDetectionImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.mp_object_detection_impl.MPObjectDetectionImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of required configuration parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="objectidentification-object-identification-engine-module">
+<h2>objectidentification.object_identification_engine module<a class="headerlink" href="#objectidentification-object-identification-engine-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.object_identification_engine">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_engine.</span></span><span class="sig-name descname"><span class="pre">ObjectIdentificationEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.enums.ObjectRecognitionAlgorithm" title="dronebuddylib.models.enums.ObjectRecognitionAlgorithm"><span class="pre">ObjectRecognitionAlgorithm</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_engine.html#ObjectIdentificationEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_engine.html#ObjectIdentificationEngine.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the class name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.identify_object">
+<span class="sig-name descname"><span class="pre">identify_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_engine.html#ObjectIdentificationEngine.identify_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.identify_object" title="Link to this definition">¶</a></dt>
+<dd><p>Identify objects in an image, identifying and categorizing various objects depicted in the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image containing objects to be recognized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of recognized objects, each potentially with associated metadata such as object name or coordinates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.remember_object">
+<span class="sig-name descname"><span class="pre">remember_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_training_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_validation_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_engine.html#ObjectIdentificationEngine.remember_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_engine.ObjectIdentificationEngine.remember_object" title="Link to this definition">¶</a></dt>
+<dd><p>Remember an object by associating it with a name, facilitating its future identification and recall.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image containing the object.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name to be associated with the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the operation was successful, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="objectidentification-object-identification-gpt-impl-module">
+<h2>objectidentification.object_identification_gpt_impl module<a class="headerlink" href="#objectidentification-object-identification-gpt-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.object_identification_gpt_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.</span></span><span class="sig-name descname"><span class="pre">ObjectIdentificationGPTImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectIdentification</span></code></p>
+<p>A class to perform object identification using ResNet and GPT integration.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.create_memory_on_the_fly">
+<span class="sig-name descname"><span class="pre">create_memory_on_the_fly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.create_memory_on_the_fly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.create_memory_on_the_fly" title="Link to this definition">¶</a></dt>
+<dd><p>Creates memory on the fly by reading known objects from a JSON file and
+sending them to the object identifier for processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>changes</strong> – Optional parameter to pass changes if any.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.describe_image">
+<span class="sig-name descname"><span class="pre">describe_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.describe_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.describe_image" title="Link to this definition">¶</a></dt>
+<dd><p>Describes the image using the GPT model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> – The image to describe.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The description of the image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.format_answers">
+<span class="sig-name descname"><span class="pre">format_answers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.format_answers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.format_answers" title="Link to this definition">¶</a></dt>
+<dd><p>Formats the raw result from the object identifier into IdentifiedObjects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>str</em>) – The raw JSON result from the object identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted identified objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects">IdentifiedObjects</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the algorithm name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the class name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of optional configuration parameters for the GPT object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of required configuration parameters for the GPT object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object">
+<span class="sig-name descname"><span class="pre">identify_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects"><span class="pre">IdentifiedObjects</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.identify_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object" title="Link to this definition">¶</a></dt>
+<dd><p>Identifies the objects in the given image using the ResNet object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_path</strong> (<em>str</em>) – The path to the image of the objects to identify.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The identified objects with their associated probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects">IdentifiedObjects</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object_image_path">
+<span class="sig-name descname"><span class="pre">identify_object_image_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects"><span class="pre">IdentifiedObjects</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.identify_object_image_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.identify_object_image_path" title="Link to this definition">¶</a></dt>
+<dd><p>Identifies the objects in the given image using the ResNet object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_path</strong> (<em>str</em>) – The path to the image of the objects to identify.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The identified objects with their associated probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects">IdentifiedObjects</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.progress_event">
+<span class="sig-name descname"><span class="pre">progress_event</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;threading.Event</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.progress_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.remember_object">
+<span class="sig-name descname"><span class="pre">remember_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.remember_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.remember_object" title="Link to this definition">¶</a></dt>
+<dd><p>Remembers a new object by sending its image and type to the object identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image of the object to remember.</p></li>
+<li><p><strong>type</strong> – The type of the object.</p></li>
+<li><p><strong>name</strong> – The name of the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result from the object identifier after processing.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>success_result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.validate_reference_image">
+<span class="sig-name descname"><span class="pre">validate_reference_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults" title="dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults"><span class="pre">ImageValidatorResults</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_gpt_impl.html#ObjectIdentificationGPTImpl.validate_reference_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_gpt_impl.ObjectIdentificationGPTImpl.validate_reference_image" title="Link to this definition">¶</a></dt>
+<dd><p>Validates the reference image using the object validator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image to validate.</p></li>
+<li><p><strong>image_type</strong> – The type of the image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of the image validation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults" title="dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults">ImageValidatorResults</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="objectidentification-object-identification-resnet-impl-module">
+<h2>objectidentification.object_identification_resnet_impl module<a class="headerlink" href="#objectidentification-object-identification-resnet-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.object_identification_resnet_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.</span></span><span class="sig-name descname"><span class="pre">ObjectIdentificationResnetImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectIdentification</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.create_dataset">
+<span class="sig-name descname"><span class="pre">create_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.create_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.create_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a dataset for a given place name, optionally using a drone for image collection.
+Different modes support training, validation, and testing data collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>place_name</strong> (<em>str</em>) – The name of the place for which to create the dataset.</p></li>
+<li><p><strong>data_mode</strong> (<em>int</em>) – The mode of dataset creation (e.g., training, validation).</p></li>
+<li><p><strong>drone_instance</strong> – An optional drone instance to use for collecting images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.create_memory">
+<span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.create_memory" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_and_plot_features">
+<span class="sig-name descname"><span class="pre">extract_and_plot_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.extract_and_plot_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_and_plot_features" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_features">
+<span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_features" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_features_from_image">
+<span class="sig-name descname"><span class="pre">extract_features_from_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.extract_features_from_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.extract_features_from_image" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the algorithm name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the class name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of optional configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of required configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.image_files_in_folder">
+<span class="sig-name descname"><span class="pre">image_files_in_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.image_files_in_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.image_files_in_folder" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.preprocess_image">
+<span class="sig-name descname"><span class="pre">preprocess_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.preprocess_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.preprocess_image" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.progress_bar">
+<span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done_event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Training</span> <span class="pre">Progress'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.progress_bar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.progress_event">
+<span class="sig-name descname"><span class="pre">progress_event</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;threading.Event</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.progress_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.recognize_objects">
+<span class="sig-name descname"><span class="pre">recognize_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects"><span class="pre">IdentifiedObjects</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.recognize_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.recognize_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes objects depicted in the given image. If the confidence of the
+predictions is below a given threshold, the object is classified as ‘unknown’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image of the objects to recognize.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The recognized objects with their associated probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RecognizedObjects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.remember_object">
+<span class="sig-name descname"><span class="pre">remember_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_training_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_validation_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.remember_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.remember_object" title="Link to this definition">¶</a></dt>
+<dd><p>Remembers an object by associating it with a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image containing the object.</p></li>
+<li><p><strong>object_name</strong> (<em>str</em>) – The name to be associated with the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the operation was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.test_image">
+<span class="sig-name descname"><span class="pre">test_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.test_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.test_image" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn_algo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">future</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#ObjectIdentificationResnetImpl.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.ObjectIdentificationResnetImpl.train" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.hook_fn">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.</span></span><span class="sig-name descname"><span class="pre">hook_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_resnet_impl.html#hook_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_resnet_impl.hook_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="objectidentification-object-identification-result-module">
+<h2>objectidentification.object_identification_result module<a class="headerlink" href="#objectidentification-object-identification-result-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.object_identification_result">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_result.</span></span><span class="sig-name descname"><span class="pre">IdentifiedObjectObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjectObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjectObject.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_class_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_confidence">
+<span class="sig-name descname"><span class="pre">get_confidence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjectObject.get_confidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_confidence" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjectObject.get_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_object_name">
+<span class="sig-name descname"><span class="pre">get_object_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjectObject.get_object_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject.get_object_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_result.</span></span><span class="sig-name descname"><span class="pre">IdentifiedObjects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identified_objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available_objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.add_available_object">
+<span class="sig-name descname"><span class="pre">add_available_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">available_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjects.add_available_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.add_available_object" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.add_identified_object">
+<span class="sig-name descname"><span class="pre">add_identified_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identified_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjects.add_identified_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.add_identified_object" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.get_available_objects">
+<span class="sig-name descname"><span class="pre">get_available_objects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjects.get_available_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.get_available_objects" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.get_identified_objects">
+<span class="sig-name descname"><span class="pre">get_identified_objects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject" title="dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjectObject"><span class="pre">IdentifiedObjectObject</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_result.html#IdentifiedObjects.get_identified_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_result.IdentifiedObjects.get_identified_objects" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="objectidentification-object-identification-siamese-impl-module">
+<h2>objectidentification.object_identification_siamese_impl module<a class="headerlink" href="#objectidentification-object-identification-siamese-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.objectidentification.object_identification_siamese_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.</span></span><span class="sig-name descname"><span class="pre">ObjectIdentificationSiameseSiamese</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine_configurations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.engine_configurations.EngineConfigurations" title="dronebuddylib.models.engine_configurations.EngineConfigurations"><span class="pre">EngineConfigurations</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IObjectIdentification</span></code></p>
+<p>A class to perform object identification using YOLO V8 and Siamese Network.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_dataset">
+<span class="sig-name descname"><span class="pre">create_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.create_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a dataset for a given place name, optionally using a drone for image collection.
+Different modes support training, validation, and testing data collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>place_name</strong> (<em>str</em>) – The name of the place for which to create the dataset.</p></li>
+<li><p><strong>data_mode</strong> (<em>int</em>) – The mode of dataset creation (e.g., training, validation).</p></li>
+<li><p><strong>drone_instance</strong> – An optional drone instance to use for collecting images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_memory">
+<span class="sig-name descname"><span class="pre">create_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.create_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.create_memory" title="Link to this definition">¶</a></dt>
+<dd><p>Creates and trains a KNN classifier using the collected data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>changes</strong> – Any changes to the model or data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing performance metrics of the trained model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_and_plot_features">
+<span class="sig-name descname"><span class="pre">extract_and_plot_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.extract_and_plot_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_and_plot_features" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts and plots features from an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> – The image to extract and plot features from.</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – The layer index for feature extraction.</p></li>
+<li><p><strong>channel_index</strong> (<em>int</em>) – The channel index for plotting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features">
+<span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.extract_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts features from an image using a specific layer of the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – The model used for feature extraction.</p></li>
+<li><p><strong>img</strong> – The image to extract features from.</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – The layer index for feature extraction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted features from the specified layer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features_from_image">
+<span class="sig-name descname"><span class="pre">extract_features_from_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.extract_features_from_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.extract_features_from_image" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts features from an image using a specific layer of the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> – The image to extract features from.</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – The layer index for feature extraction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted features from the specified layer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_algorithm_name">
+<span class="sig-name descname"><span class="pre">get_algorithm_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.get_algorithm_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_algorithm_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the algorithm name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The algorithm name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_class_name">
+<span class="sig-name descname"><span class="pre">get_class_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.get_class_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_class_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the class name of the object detection implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The class name of the object detection implementation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_optional_params">
+<span class="sig-name descname"><span class="pre">get_optional_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.get_optional_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_optional_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of optional configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of optional configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_required_params">
+<span class="sig-name descname"><span class="pre">get_required_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.get_required_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.get_required_params" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of required configuration parameters for YOLO V8 object detection engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of required configuration parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.image_files_in_folder">
+<span class="sig-name descname"><span class="pre">image_files_in_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.image_files_in_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.image_files_in_folder" title="Link to this definition">¶</a></dt>
+<dd><p>Lists image files in a specified folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder</strong> – Folder to search for image files.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of image file paths.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.preprocess_image">
+<span class="sig-name descname"><span class="pre">preprocess_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.preprocess_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.preprocess_image" title="Link to this definition">¶</a></dt>
+<dd><p>Preprocesses an image for model input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image to preprocess.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Preprocessed image tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.progress_bar">
+<span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done_event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Training</span> <span class="pre">Progress'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.progress_bar" title="Link to this definition">¶</a></dt>
+<dd><p>Displays a progress bar for the training process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>done_event</strong> – Event to signal when the progress is complete.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – The title of the progress bar.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.progress_event">
+<span class="sig-name descname"><span class="pre">progress_event</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;threading.Event</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.progress_event" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.recognize_objects">
+<span class="sig-name descname"><span class="pre">recognize_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.recognize_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.recognize_objects" title="Link to this definition">¶</a></dt>
+<dd><p>Recognizes objects depicted in the given image. If the confidence of the
+predictions is below a given threshold, the object is classified as ‘unknown’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> – The image of the objects to recognize.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The recognized objects with their associated probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RecognizedObjects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.remember_object">
+<span class="sig-name descname"><span class="pre">remember_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drone_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_training_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_validation_set_complete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.remember_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.remember_object" title="Link to this definition">¶</a></dt>
+<dd><p>Starts the process to remember an object by creating a training and validation dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – The image of the object to remember.</p></li>
+<li><p><strong>type</strong> – The type of object.</p></li>
+<li><p><strong>name</strong> – The name of the object.</p></li>
+<li><p><strong>drone_instance</strong> – The instance of the drone used to capture images.</p></li>
+<li><p><strong>on_start</strong> – Callback when the process starts.</p></li>
+<li><p><strong>on_training_set_complete</strong> – Callback when the training set is complete.</p></li>
+<li><p><strong>on_validation_set_complete</strong> – Callback when the validation set is complete.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.test_image">
+<span class="sig-name descname"><span class="pre">test_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.test_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.test_image" title="Link to this definition">¶</a></dt>
+<dd><p>Tests an image for object recognition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_path</strong> – Path to the image file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_extractor_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'efficientnetv2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emb_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_val_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretrained_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#ObjectIdentificationSiameseSiamese.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.ObjectIdentificationSiameseSiamese.train" title="Link to this definition">¶</a></dt>
+<dd><p>Trains the model using the specified parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature_extractor_model</strong> (<em>str</em>) – The model used for feature extraction (default is “efficientnetv2”).</p></li>
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples to use for training (default is 100).</p></li>
+<li><p><strong>emb_size</strong> (<em>int</em>) – The size of the embedding (default is 20).</p></li>
+<li><p><strong>epochs</strong> (<em>int</em>) – The number of training epochs (default is 10).</p></li>
+<li><p><strong>lr</strong> (<em>float</em>) – The learning rate for training (default is 1e-5).</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – The batch size for training (default is 4).</p></li>
+<li><p><strong>train_val_split</strong> (<em>float</em>) – The ratio for splitting training and validation data (default is 0.8).</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – The number of worker threads to use for data loading (default is 1).</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – The random seed for reproducibility (default is 0).</p></li>
+<li><p><strong>output_folder_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The folder name for saving the output.</p></li>
+<li><p><strong>lr_scheduler</strong> (<em>bool</em>) – Flag to use learning rate scheduler (default is False).</p></li>
+<li><p><strong>pretrained_weights</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to pretrained weights for the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing performance metrics such as accuracy and precision of the trained model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.hook_fn">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.</span></span><span class="sig-name descname"><span class="pre">hook_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/object_identification_siamese_impl.html#hook_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.object_identification_siamese_impl.hook_fn" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="objectidentification-plotter-module">
+<h2>objectidentification.plotter module<a class="headerlink" href="#objectidentification-plotter-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.atoms.objectidentification.plotter">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.plotter.compare_folder_with_others_tsne">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.plotter.</span></span><span class="sig-name descname"><span class="pre">compare_folder_with_others_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/plotter.html#compare_folder_with_others_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.plotter.compare_folder_with_others_tsne" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.plotter.compare_image_with_folder_tsne">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.plotter.</span></span><span class="sig-name descname"><span class="pre">compare_image_with_folder_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/plotter.html#compare_image_with_folder_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.plotter.compare_image_with_folder_tsne" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.plotter.tsne_plot_difference">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.plotter.</span></span><span class="sig-name descname"><span class="pre">tsne_plot_difference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/plotter.html#tsne_plot_difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.plotter.tsne_plot_difference" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="objectidentification-plotter-abs-module">
+<h2>objectidentification.plotter_abs module<a class="headerlink" href="#objectidentification-plotter-abs-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="objectidentification-siamese-impl-module">
+<span id="module-dronebuddylib.atoms.objectidentification.plotter_abs"></span><h2>objectidentification.siamese_impl module<a class="headerlink" href="#objectidentification-siamese-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py function" id="module-dronebuddylib.atoms.objectidentification.siamese_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.batch_process_images">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">batch_process_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">same_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_class_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#batch_process_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.batch_process_images" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.benchmark_model">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">benchmark_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#benchmark_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.benchmark_model" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.benchmarking">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">benchmarking</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#benchmarking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.benchmarking" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">compare_folder_with_others</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#compare_folder_with_others"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others" title="Link to this definition">¶</a></dt>
+<dd><p>Compare each image in a target folder with images in all other folders under the root directory.</p>
+<p>Args:
+root_folder (str): The root directory containing all class folders.
+target_folder (str): The specific folder within the root to compare its images against all others.
+api (object): An instance of the class with the <cite>two_image_inference</cite> method.</p>
+<p>Returns:
+None: Results are directly saved to a CSV file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others_tsne">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">compare_folder_with_others_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#compare_folder_with_others_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.compare_folder_with_others_tsne" title="Link to this definition">¶</a></dt>
+<dd><p>Compare each image in a target folder with images in all other folders under the root directory.</p>
+<p>Args:
+root_folder (str): The root directory containing all class folders.
+target_folder (str): The specific folder within the root to compare its images against all others.
+api (object): An instance of the class with the <cite>two_image_inference</cite> method.</p>
+<p>Returns:
+None: Results are directly saved to a CSV file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">compare_image_with_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#compare_image_with_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder" title="Link to this definition">¶</a></dt>
+<dd><p>Compare a specific image with all images in a given folder using a specified API and save results to a CSV file.</p>
+<p>Args:
+target_image_path (str): Path to the target image to compare.
+folder_path (str): Path to the folder containing images to compare against.
+api (object): An instance of the class with the <cite>two_image_inference</cite> method.</p>
+<p>Returns:
+DataFrame: A DataFrame containing the comparison results.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder_tsne">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">compare_image_with_folder_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#compare_image_with_folder_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.compare_image_with_folder_tsne" title="Link to this definition">¶</a></dt>
+<dd><p>Compare a specific image with all images in a given folder using a specified API and save results to a CSV file.</p>
+<p>Args:
+target_image_path (str): Path to the target image to compare.
+folder_path (str): Path to the folder containing images to compare against.
+api (object): An instance of the class with the <cite>two_image_inference</cite> method.</p>
+<p>Returns:
+DataFrame: A DataFrame containing the comparison results.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.compare_images_in_classes">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">compare_images_in_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#compare_images_in_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.compare_images_in_classes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.detection">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">detection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#detection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.detection" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.evaluate">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.evaluate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.inference">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">inference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.inference" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.load_images_from_folder">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">load_images_from_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform=Sequential(</span>&#160;&#160; <span class="pre">(0):</span> <span class="pre">Resize(size=(228</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">228)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation=bilinear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antialias=True)</span> <span class="pre">)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#load_images_from_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.load_images_from_folder" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.load_model">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.load_model" title="Link to this definition">¶</a></dt>
+<dd><p>load the model for object identification</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.plot_comparison_results">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#plot_comparison_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.plot_comparison_results" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the comparison results from a CSV file where points are colored based on class similarity.</p>
+<p>Args:
+csv_file_path (str): Path to the CSV file containing comparison results.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.transform">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">transform</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Sequential(</span>&#160;&#160; <span class="pre">(0):</span> <span class="pre">Resize(size=(228,</span> <span class="pre">228),</span> <span class="pre">interpolation=bilinear,</span> <span class="pre">max_size=None,</span> <span class="pre">antialias=True)</span> <span class="pre">)</span></em><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.transform" title="Link to this definition">¶</a></dt>
+<dd><p>folder_path - folder of 1 or more images
+output: torch tensor of the images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>input</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plot_difference">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">tsne_plot_difference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#tsne_plot_difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plot_difference" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">tsne_plotting</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#tsne_plotting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_all">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">tsne_plotting_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#tsne_plotting_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_all" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_given">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">tsne_plotting_given</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compare_folders</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#tsne_plotting_given"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.tsne_plotting_given" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.objectidentification.siamese_impl.update_memory">
+<span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.objectidentification.siamese_impl.</span></span><span class="sig-name descname"><span class="pre">update_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/objectidentification/siamese_impl.html#update_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.objectidentification.siamese_impl.update_memory" title="Link to this definition">¶</a></dt>
+<dd><p>update the memory by retraining the model (it may take several minutes)</p>
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.objectidentification"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.placerecognition.html"
+       title="previous chapter">← Place Recognition package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.objectidentification.resources.html"
+       title="next chapter">objectidentification.resources package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

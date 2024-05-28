@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>LLM integration package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="llmintegration.models package" href="dronebuddylib.atoms.llmintegration.models.html" />
+  <link rel="prev" title="objectidentification.resources.matching package" href="dronebuddylib.atoms.objectidentification.resources.matching.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Dronebuddy</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-dronebuddy-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.installationguide.html" class="reference internal ">Installation Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.userguide.html" class="reference internal ">Algorithm Details</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.atoms.html" class="reference internal ">API Doc</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.developerguide.html" class="reference internal ">Developer Guide</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="dronebuddylib.codeexample.html" class="reference internal ">Sample Program</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="dronebuddylib.atoms.html">atoms packages</a> &raquo;</li>
+    
+    <li>LLM integration package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.objectidentification.resources.matching.html"
+       title="previous chapter">← objectidentification.resources.matching package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.llmintegration.models.html"
+       title="next chapter">llmintegration.models package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="llm-integration-package">
+<h1>LLM integration package<a class="headerlink" href="#llm-integration-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html">llmintegration.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#llmintegration-models-image-describer-results-module">llmintegration.models.image_describer_results module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults"><code class="docutils literal notranslate"><span class="pre">ImageDescriberResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults.get_confidence"><code class="docutils literal notranslate"><span class="pre">ImageDescriberResults.get_confidence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults.get_description"><code class="docutils literal notranslate"><span class="pre">ImageDescriberResults.get_description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults.get_object_name"><code class="docutils literal notranslate"><span class="pre">ImageDescriberResults.get_object_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#llmintegration-models-image-validator-results-module">llmintegration.models.image_validator_results module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults"><code class="docutils literal notranslate"><span class="pre">ImageValidatorResults</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults.get_description"><code class="docutils literal notranslate"><span class="pre">ImageValidatorResults.get_description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults.get_instructions"><code class="docutils literal notranslate"><span class="pre">ImageValidatorResults.get_instructions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults.get_is_valid"><code class="docutils literal notranslate"><span class="pre">ImageValidatorResults.get_is_valid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults.get_object_type"><code class="docutils literal notranslate"><span class="pre">ImageValidatorResults.get_object_type()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="agent-factory-module">
+<h2>agent_factory module<a class="headerlink" href="#agent-factory-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.agent_factory">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.agent_factory.AgentFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.agent_factory.</span></span><span class="sig-name descname"><span class="pre">AgentFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/agent_factory.html#AgentFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.agent_factory.AgentFactory" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.agent_factory.AgentFactory.get_agent">
+<span class="sig-name descname"><span class="pre">get_agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.LLMAgentNames" title="dronebuddylib.utils.enums.LLMAgentNames"><span class="pre">LLMAgentNames</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/agent_factory.html#AgentFactory.get_agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.agent_factory.AgentFactory.get_agent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="agent-types-module">
+<h2>agent_types module<a class="headerlink" href="#agent-types-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="gpt-integration-module">
+<h2>gpt_integration module<a class="headerlink" href="#gpt-integration-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.gpt_integration">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.gpt_integration.</span></span><span class="sig-name descname"><span class="pre">GPTEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.gpt_configs.GPTConfigs" title="dronebuddylib.models.gpt_configs.GPTConfigs"><span class="pre">GPTConfigs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.add_message_with_image">
+<span class="sig-name descname"><span class="pre">add_message_with_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine.add_message_with_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.add_message_with_image" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response">
+<span class="sig-name descname"><span class="pre">get_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine.get_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response_for_image_queries">
+<span class="sig-name descname"><span class="pre">get_response_for_image_queries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine.get_response_for_image_queries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response_for_image_queries" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response_for_image_queries_as_files">
+<span class="sig-name descname"><span class="pre">get_response_for_image_queries_as_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine.get_response_for_image_queries_as_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.get_response_for_image_queries_as_files" title="Link to this definition">¶</a></dt>
+<dd><p>For the given user_message,
+get the response from ChatGPT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.set_system_prompt">
+<span class="sig-name descname"><span class="pre">set_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/gpt_integration.html#GPTEngine.set_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.gpt_integration.GPTEngine.set_system_prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="i-llm-agent-module">
+<h2>i_llm_agent module<a class="headerlink" href="#i-llm-agent-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.i_llm_agent">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.i_llm_agent.</span></span><span class="sig-name descname"><span class="pre">ILLMAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_agent_description">
+<span class="sig-name descname"><span class="pre">get_agent_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.LLMAgentNames" title="dronebuddylib.utils.enums.LLMAgentNames"><span class="pre">LLMAgentNames</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.get_agent_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_agent_description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_agent_name">
+<span class="sig-name descname"><span class="pre">get_agent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.utils.html#dronebuddylib.utils.enums.LLMAgentNames" title="dronebuddylib.utils.enums.LLMAgentNames"><span class="pre">LLMAgentNames</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.get_agent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_agent_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_llm_session">
+<span class="sig-name descname"><span class="pre">get_llm_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.models.html#dronebuddylib.models.chat_session.ChatSession" title="dronebuddylib.models.chat_session.ChatSession"><span class="pre">ChatSession</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.get_llm_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_llm_session" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_response_from_llm">
+<span class="sig-name descname"><span class="pre">get_response_from_llm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ChatCompletionMessage</span></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.get_response_from_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_response_from_llm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.get_result" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_encoded_image_message_to_llm_queue">
+<span class="sig-name descname"><span class="pre">send_encoded_image_message_to_llm_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.send_encoded_image_message_to_llm_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_encoded_image_message_to_llm_queue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_image_message_to_llm_queue">
+<span class="sig-name descname"><span class="pre">send_image_message_to_llm_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.send_image_message_to_llm_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_image_message_to_llm_queue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_text_message_to_llm_queue">
+<span class="sig-name descname"><span class="pre">send_text_message_to_llm_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.send_text_message_to_llm_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.send_text_message_to_llm_queue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.set_system_prompt">
+<span class="sig-name descname"><span class="pre">set_system_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/i_llm_agent.html#ILLMAgent.set_system_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent.set_system_prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="image-describer-agent-impl-module">
+<h2>image_describer_agent_impl module<a class="headerlink" href="#image-describer-agent-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.image_describer_agent_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.image_describer_agent_impl.</span></span><span class="sig-name descname"><span class="pre">ImageDescriberAgentImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_describer_agent_impl.html#ImageDescriberAgentImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent" title="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILLMAgent</span></code></a></p>
+<p>A class to implement an image describer agent using an LLM (Large Language Model).
+This class provides functionalities to describe images to help visually impaired individuals.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.SYSTEM_PROMPT_IMAGE_DESCRIBER">
+<span class="sig-name descname"><span class="pre">SYSTEM_PROMPT_IMAGE_DESCRIBER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">You</span> <span class="pre">are</span> <span class="pre">a</span> <span class="pre">helpful</span> <span class="pre">assistant</span> <span class="pre">helping</span> <span class="pre">a</span> <span class="pre">visually</span> <span class="pre">impaired</span> <span class="pre">person</span> <span class="pre">navigate</span> <span class="pre">in</span> <span class="pre">their</span> <span class="pre">day</span> <span class="pre">to</span> <span class="pre">day</span> <span class="pre">life.\n\n</span>&#160;&#160;&#160; <span class="pre">When</span> <span class="pre">an</span> <span class="pre">image</span> <span class="pre">and</span> <span class="pre">the</span> <span class="pre">instruction</span> <span class="pre">DESCRIBE</span> <span class="pre">is</span> <span class="pre">given,</span> <span class="pre">explain</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">as</span> <span class="pre">much</span> <span class="pre">as</span> <span class="pre">possible</span> <span class="pre">and</span> <span class="pre">only</span> <span class="pre">explain</span> <span class="pre">the</span> <span class="pre">object.\n\n</span>&#160;&#160;&#160; <span class="pre">Give</span> <span class="pre">the</span> <span class="pre">result</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">format\n\n</span>&#160;&#160;&#160; <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;object_name&quot;:</span> <span class="pre">&quot;what</span> <span class="pre">kind</span> <span class="pre">of</span> <span class="pre">object</span> <span class="pre">it</span> <span class="pre">is&quot;,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;what</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">is,</span> <span class="pre">a</span> <span class="pre">full</span> <span class="pre">description</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">person</span> <span class="pre">to</span> <span class="pre">listen</span> <span class="pre">to&quot;,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;confidence&quot;:</span> <span class="pre">a</span> <span class="pre">numerical</span> <span class="pre">value</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">confidence\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">'</span></em><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.SYSTEM_PROMPT_IMAGE_DESCRIBER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_agent_description">
+<span class="sig-name descname"><span class="pre">get_agent_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_describer_agent_impl.html#ImageDescriberAgentImpl.get_agent_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_agent_description" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the description of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The description of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_agent_name">
+<span class="sig-name descname"><span class="pre">get_agent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_describer_agent_impl.html#ImageDescriberAgentImpl.get_agent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_agent_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the name of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults" title="dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults"><span class="pre">ImageDescriberResults</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_describer_agent_impl.html#ImageDescriberAgentImpl.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_describer_agent_impl.ImageDescriberAgentImpl.get_result" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the description result from the LLM and formats it into an ImageDescriberResults object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The formatted result of the image description.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults" title="dronebuddylib.atoms.llmintegration.models.image_describer_results.ImageDescriberResults">ImageDescriberResults</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="image-validator-agent-impl-class">
+<h2>image_validator_agent_impl class<a class="headerlink" href="#image-validator-agent-impl-class" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.image_validator_agent_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.image_validator_agent_impl.</span></span><span class="sig-name descname"><span class="pre">ImageValidatorAgentImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_validator_agent_impl.html#ImageValidatorAgentImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent" title="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILLMAgent</span></code></a></p>
+<p>A class to implement an image validator agent using an LLM (Large Language Model).
+This class provides functionalities to validate images for object identification.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.SYSTEM_PROMPT_IMAGE_VALIDATOR">
+<span class="sig-name descname"><span class="pre">SYSTEM_PROMPT_IMAGE_VALIDATOR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">You</span> <span class="pre">are</span> <span class="pre">a</span> <span class="pre">helpful</span> <span class="pre">assistant,</span> <span class="pre">capable</span> <span class="pre">of</span> <span class="pre">deciding</span> <span class="pre">whether</span> <span class="pre">a</span> <span class="pre">given</span> <span class="pre">image</span> <span class="pre">is</span> <span class="pre">suitable</span> <span class="pre">for</span> <span class="pre">remembering</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">recognized</span> <span class="pre">in</span> <span class="pre">future</span> <span class="pre">cases.</span> <span class="pre">The</span> <span class="pre">image</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">clear,</span> <span class="pre">and</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">full</span> <span class="pre">object</span> <span class="pre">that</span> <span class="pre">need</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">focused.\n\n</span>&#160;&#160;&#160; <span class="pre">When</span> <span class="pre">given</span> <span class="pre">the</span> <span class="pre">image,</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">instruction</span> <span class="pre">VALIDATE(type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">object),\n\n</span>&#160;&#160;&#160; <span class="pre">return</span> <span class="pre">the</span> <span class="pre">result</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">format\n\n</span>&#160;&#160;&#160; <span class="pre">{</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">&quot;data&quot;:\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{</span> <span class="pre">\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;object_type&quot;:</span> <span class="pre">&quot;type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">object&quot;,</span> <span class="pre">\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;is_valid&quot;:</span> <span class="pre">&quot;true</span> <span class="pre">if</span> <span class="pre">the</span> <span class="pre">image</span> <span class="pre">is</span> <span class="pre">good</span> <span class="pre">enough/</span> <span class="pre">false</span> <span class="pre">if</span> <span class="pre">not&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;description</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">object&quot;,</span> <span class="pre">\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;instructions&quot;:</span> <span class="pre">\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">the</span> <span class="pre">area</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">image</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">higher</span> <span class="pre">-</span> <span class="pre">INCREASE,\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">the</span> <span class="pre">lighting</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">improved</span> <span class="pre">-</span> <span class="pre">LIGHTING_IMPROVE,\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">is</span> <span class="pre">incomplete</span> <span class="pre">:</span> <span class="pre">INCOMPLETE,</span> <span class="pre">\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">in</span> <span class="pre">focus</span> <span class="pre">:</span> <span class="pre">NOT_FOCUSED\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">}</span> <span class="pre">\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">]</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">'</span></em><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.SYSTEM_PROMPT_IMAGE_VALIDATOR" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_agent_description">
+<span class="sig-name descname"><span class="pre">get_agent_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_validator_agent_impl.html#ImageValidatorAgentImpl.get_agent_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_agent_description" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the description of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The description of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_agent_name">
+<span class="sig-name descname"><span class="pre">get_agent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_validator_agent_impl.html#ImageValidatorAgentImpl.get_agent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_agent_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the name of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults" title="dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults"><span class="pre">ImageValidatorResults</span></a></span></span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/image_validator_agent_impl.html#ImageValidatorAgentImpl.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.image_validator_agent_impl.ImageValidatorAgentImpl.get_result" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the validation result from the LLM and formats it into an ImageValidatorResults object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The formatted result of the image validation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="dronebuddylib.atoms.llmintegration.models.html#dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults" title="dronebuddylib.atoms.llmintegration.models.image_validator_results.ImageValidatorResults">ImageValidatorResults</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="intent-resolver-agent-impl-module">
+<h2>intent_resolver_agent_impl module<a class="headerlink" href="#intent-resolver-agent-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.</span></span><span class="sig-name descname"><span class="pre">IntentResolverAgentImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/intent_resolver_agent_impl.html#IntentResolverAgentImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent" title="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILLMAgent</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.SYSTEM_PROMPT_IMAGE_DESCRIBER">
+<span class="sig-name descname"><span class="pre">SYSTEM_PROMPT_IMAGE_DESCRIBER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">You</span> <span class="pre">are</span> <span class="pre">a</span> <span class="pre">helpful</span> <span class="pre">assistant.\n</span>&#160;&#160;&#160; <span class="pre">'</span></em><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.SYSTEM_PROMPT_IMAGE_DESCRIBER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_description">
+<span class="sig-name descname"><span class="pre">get_agent_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/intent_resolver_agent_impl.html#IntentResolverAgentImpl.get_agent_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_name">
+<span class="sig-name descname"><span class="pre">get_agent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/intent_resolver_agent_impl.html#IntentResolverAgentImpl.get_agent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.intent_resolver_agent_impl.IntentResolverAgentImpl.get_agent_name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="object-identifier-agent-impl-module">
+<h2>object_identifier_agent_impl module<a class="headerlink" href="#object-identifier-agent-impl-module" title="Link to this heading">¶</a></h2>
+<dl class="py class" id="module-dronebuddylib.atoms.llmintegration.object_identifier_agent_impl">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.</span></span><span class="sig-name descname"><span class="pre">ObjectIdentifierAgentImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/object_identifier_agent_impl.html#ObjectIdentifierAgentImpl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent" title="dronebuddylib.atoms.llmintegration.i_llm_agent.ILLMAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ILLMAgent</span></code></a></p>
+<p>A class to implement an object identifier agent using an LLM (Large Language Model).
+This class provides functionalities to remember objects and identify objects in images.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.SYSTEM_PROMPT_OBJECT_IDENTIFICATION">
+<span class="sig-name descname"><span class="pre">SYSTEM_PROMPT_OBJECT_IDENTIFICATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">You</span> <span class="pre">are</span> <span class="pre">a</span> <span class="pre">helpful</span> <span class="pre">assistant.\n\n</span>&#160;&#160;&#160; <span class="pre">When</span> <span class="pre">the</span> <span class="pre">instruction</span> <span class="pre">&quot;REMEMBER_AS(object</span> <span class="pre">name)&quot;</span> <span class="pre">is</span> <span class="pre">given</span> <span class="pre">with</span> <span class="pre">an</span> <span class="pre">image</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">object,</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">remember</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">and</span> <span class="pre">return</span> <span class="pre">an</span> <span class="pre">acknowledgement</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">format</span> <span class="pre">of:\n\n</span>&#160;&#160;&#160; <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;status&quot;:</span> <span class="pre">&quot;SUCCESS&quot;</span> <span class="pre">(if</span> <span class="pre">successfully</span> <span class="pre">added</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">memory)</span> <span class="pre">/</span> <span class="pre">&quot;UNSUCCESSFUL&quot;</span> <span class="pre">(if</span> <span class="pre">otherwise),\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;message&quot;:</span> <span class="pre">&quot;description&quot;\n</span>&#160;&#160;&#160; <span class="pre">}\n\n</span>&#160;&#160;&#160; <span class="pre">Once</span> <span class="pre">the</span> <span class="pre">instruction</span> <span class="pre">&quot;IDENTIFY&quot;</span> <span class="pre">is</span> <span class="pre">given</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">image,</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">return</span> <span class="pre">all</span> <span class="pre">the</span> <span class="pre">identified</span> <span class="pre">objects</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">form</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">JSON</span> <span class="pre">object:\n</span>&#160;&#160;&#160; <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;data&quot;:</span> <span class="pre">[\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;class_name&quot;:</span> <span class="pre">&quot;class</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">belongs</span> <span class="pre">to&quot;,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;object_name&quot;:</span> <span class="pre">&quot;name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">remembered</span> <span class="pre">object</span> <span class="pre">/</span> <span class="pre">unknown</span> <span class="pre">if</span> <span class="pre">not</span> <span class="pre">a</span> <span class="pre">previously</span> <span class="pre">remembered</span> <span class="pre">object&quot;,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;description</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">object&quot;,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">&quot;confidence&quot;:</span> <span class="pre">confidence</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">value\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">]\n</span>&#160;&#160;&#160; <span class="pre">}\n</span>&#160;&#160;&#160; <span class="pre">'</span></em><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.SYSTEM_PROMPT_OBJECT_IDENTIFICATION" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.get_agent_description">
+<span class="sig-name descname"><span class="pre">get_agent_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/object_identifier_agent_impl.html#ObjectIdentifierAgentImpl.get_agent_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.get_agent_description" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the description of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The description of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.get_agent_name">
+<span class="sig-name descname"><span class="pre">get_agent_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dronebuddylib/atoms/llmintegration/object_identifier_agent_impl.html#ObjectIdentifierAgentImpl.get_agent_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dronebuddylib.atoms.llmintegration.object_identifier_agent_impl.ObjectIdentifierAgentImpl.get_agent_name" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the name of the LLM agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the LLM agent.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<span class="target" id="module-dronebuddylib.atoms.llmintegration"></span></section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="dronebuddylib.atoms.objectidentification.resources.matching.html"
+       title="previous chapter">← objectidentification.resources.matching package</a>
+  </li>
+  <li class="next">
+    <a href="dronebuddylib.atoms.llmintegration.models.html"
+       title="next chapter">llmintegration.models package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, NUS.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
