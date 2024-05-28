@@ -301,7 +301,8 @@ The library uses Sphinx to generate documentation. The documentation is generate
 
 #. Go to the `docs-sphinx` folder and run the following command
 .. code-block:: bash
-     sphinx-build -b html . _build -v
+     sphinx-apidoc -o C:\path\to\the\docs\folder\docs-sphinx C:\path\to\the\dronebuddylib
+
 
 This will generate the .rst files in the `docs-sphinx` folder
 
