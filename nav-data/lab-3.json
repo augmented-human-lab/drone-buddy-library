@@ -1,0 +1,32 @@
+{
+  "room_config": {
+    "name": "ISA Lab 3",
+    "origin": "door_entrance",
+    "dimensions": {
+      "width": 500,
+      "length": 600, 
+      "height": 250
+    },
+    "coordinate_system": "door_as_origin_cm"
+  },
+  "obstacles": [
+    {
+      "name": "table 1",
+      "bottom_left": {"x": 150, "y": 200, "z": 0},
+      "dimensions": {"width": 120, "length": 80, "height": 75},
+      "safety_margin": 30
+    },
+    {
+      "name": "long work desk",
+      "bottom_left": {"x": 300, "y": 400, "z": 0},
+      "dimensions": {"width": 180, "length": 700, "height": 85},
+      "safety_margin": 40
+    },
+    {
+      "name": "coffee_table", 
+      "bottom_left": {"x": 320, "y": 300, "z": 0},
+      "dimensions": {"width": 100, "length": 60, "height": 45},
+      "safety_margin": 25
+    }
+  ]
+}
