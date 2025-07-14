@@ -31,8 +31,25 @@ class NavigationWaypointImpl(INavigation):
                                                   self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "navigation")
         return coordinator.run()
 
-    def navigate_to_waypoint(self, location, destination_waypoint) -> list:
-        pass
+    def navigate_to_waypoint(self, destination_waypoint, instruction) -> list:
+        """
+        Navigates to a specific waypoint with the given instruction.
+
+        Args:
+            destination_waypoint (str): The waypoint to navigate to.
+            instruction (str): The instruction for navigation.
+
+        Returns:
+            list: Containing the drone's current waypoint
+        """
+        create_new = False
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
+        
+        if coordinator_instance is None: 
+            create_new = True
+
+        coordinator = TelloWaypointNavCoordinator.get_instance(self.waypoint_dir, self.vertical_factor, self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "goto", destination_waypoint, instruction, create_new)
+        return coordinator.run()
 
     def get_required_params(self) -> list:
         return []
