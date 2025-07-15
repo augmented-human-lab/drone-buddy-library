@@ -197,6 +197,12 @@ class WaypointNavigationManager:
         Returns:
             True if navigation successful, False otherwise
         """
+        # Check for emergency shutdown (only for goto mode with coordinator reference)
+        if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
+            if self.coordinator._emergency_shutdown:
+                print("🚨 Emergency shutdown detected - aborting navigation")
+                return False
+                
         if target_waypoint_id not in self.waypoints:
             print(f"❌ Waypoint {target_waypoint_id} not found")
             return False
@@ -240,6 +246,12 @@ class WaypointNavigationManager:
         drone_instance.set_speed(self.nav_speed)  # Set navigation speed
         try: 
             for i, movement in enumerate(movements, 1):
+                # Check for emergency shutdown before each movement (only for goto mode)
+                if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
+                    if self.coordinator._emergency_shutdown:
+                        print("🚨 Emergency shutdown detected - stopping navigation execution")
+                        return False
+                        
                 print(f"  Step {i}/{len(movements)}: {movement.type} ")
                 distance = movement.distance if movement.distance is not None and movement.distance >= 20 else 20  # Ensure minimum valid distance for movement
                 if movement.type == "move":
@@ -267,6 +279,14 @@ class WaypointNavigationManager:
                         drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
 
                     drone_instance.move_forward(int(distance))
+                    
+                    # Check for emergency shutdown during movement execution
+                    if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
+                        if self.coordinator._emergency_shutdown:
+                            print("🚨 Emergency shutdown detected during movement - stopping immediately")
+                            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
+                            return False
+                    
                     time.sleep(0.5)  # Allow some time for the drone to stabilize
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
                     print(f"  Moved forward {distance} cm at yaw {yaw} degrees")
@@ -288,6 +308,13 @@ class WaypointNavigationManager:
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_down(int(actual_distance))
                             print(f"  Lowered down {actual_distance} cm")
+                    
+                    # Check for emergency shutdown after vertical movement
+                    if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
+                        if self.coordinator._emergency_shutdown:
+                            print("🚨 Emergency shutdown detected during vertical movement - stopping immediately")
+                            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
+                            return False
                     
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
             

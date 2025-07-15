@@ -6,7 +6,7 @@ from typing import Optional
 
 import select
 from typing import Optional
-from waypoint_navigation import WaypointNavigationManager
+from .waypoint_navigation import WaypointNavigationManager
 
 class NavigationInterface:
     """User interface for waypoint navigation."""

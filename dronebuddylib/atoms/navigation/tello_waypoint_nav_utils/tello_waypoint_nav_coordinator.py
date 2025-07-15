@@ -1,5 +1,9 @@
 from djitellopy import Tello
 import time
+import threading
+import os
+import glob
+import sys
 
 from .realtime_drone_control import RealTimeDroneController
 from .navigation_interface import NavigationInterface
@@ -10,6 +14,9 @@ class TelloWaypointNavCoordinator:
     """
 
     _active_instance = None # Class-level instance tracker
+    _battery_thread = None # Background battery monitoring thread
+    _battery_thread_running = False # Flag to control battery thread
+    _emergency_shutdown = False # Flag to trigger emergency program termination
 
     @classmethod
     def get_instance(cls, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: str = None, create_new: bool = False):
@@ -35,6 +42,7 @@ class TelloWaypointNavCoordinator:
             cls._active_instance = instance
             return instance
         else: 
+            # Update parameters of existing instance
             instance = cls._active_instance
             instance.waypoint_dest = waypoint_dest
             instance.instruction = instruction
@@ -73,12 +81,89 @@ class TelloWaypointNavCoordinator:
         self.is_running = False
         self.current_waypoint = "WP_001"
     
+    def _start_battery_monitoring(self):
+        """Start background battery monitoring thread for goto mode."""
+        if not TelloWaypointNavCoordinator._battery_thread_running:
+            TelloWaypointNavCoordinator._battery_thread_running = True
+            TelloWaypointNavCoordinator._battery_thread = threading.Thread(target=self._battery_monitor_loop, daemon=True)
+            TelloWaypointNavCoordinator._battery_thread.start()
+            print("🔋 Battery monitoring thread started")
+    
+    def _stop_battery_monitoring(self):
+        """Stop background battery monitoring thread."""
+        if TelloWaypointNavCoordinator._battery_thread_running:
+            TelloWaypointNavCoordinator._battery_thread_running = False
+            if TelloWaypointNavCoordinator._battery_thread and TelloWaypointNavCoordinator._battery_thread.is_alive():
+                TelloWaypointNavCoordinator._battery_thread.join(timeout=2)
+            print("🔋 Battery monitoring thread stopped")
+    
+    def _battery_monitor_loop(self):
+        """Background battery monitoring loop."""
+        while TelloWaypointNavCoordinator._battery_thread_running:
+            try:
+                # Get the active instance to access the drone
+                if TelloWaypointNavCoordinator._active_instance is None:
+                    break
+                
+                instance = TelloWaypointNavCoordinator._active_instance
+                if not instance.is_flying:
+                    break
+                
+                battery_str = instance.tello.send_command_with_return("battery?", timeout=3)
+                battery = int(battery_str)
+                
+                if battery < 20:
+                    print(f"\r⚠️  Low battery ({battery}%)               ")
+                    if battery < 10:
+                        print("\r❗ CRITICAL: Battery too low, emergency landing...")
+                        # Set emergency shutdown flag for graceful shutdown path
+                        TelloWaypointNavCoordinator._emergency_shutdown = True
+                        # Force stop all operations
+                        instance.is_running = False
+                        instance.is_mapping_mode = False
+                        instance.is_navigation_mode = False
+                        
+                        # Stop any ongoing movement and land
+                        try:
+                            instance.tello.send_rc_control(0, 0, 0, 0)  # Stop immediately
+                            time.sleep(0.5)  # Brief pause to ensure stop command is processed
+
+                            if instance.is_flying:
+                                print("Landing drone due to critical battery level...")
+                                instance.land()
+                        except Exception as e:
+                            print(f"Error sending stop command: {e}")
+                        
+                        if instance.is_connected:
+                            try:
+                                print("Disconnecting from drone...")
+                                instance.tello.end()
+                                instance.is_connected = False
+                            except Exception as e:
+                                print(f"Error during disconnection: {e}")
+                        
+                        # Clear active instance
+                        TelloWaypointNavCoordinator._active_instance = None
+                        # Stop battery monitoring
+                        TelloWaypointNavCoordinator._battery_thread_running = False
+                        print("🚨 EMERGENCY SHUTDOWN: Program terminating due to critical battery level")
+                        # Force exit the entire program
+                        sys.exit(1)
+                        break
+                
+                # Sleep for 5 seconds before next check
+                time.sleep(5)
+                
+            except Exception as e:
+                print(f"\r⚠️  Battery check failed: {e}")
+                time.sleep(5)
+                continue
+    
     def run(self):
         """Run the main application."""
         summary = []
         land = True  # Default to landing at the end
         try:
-
             if self.mode == "mapping":
                 summary = self._run_mapping_mode()
             elif self.mode == "navigation":
@@ -91,6 +176,7 @@ class TelloWaypointNavCoordinator:
             self.is_running = False
             self.is_mapping_mode = False
             self.is_navigation_mode = False
+            self._stop_battery_monitoring()  # Safe cleanup - only stops if running
             TelloWaypointNavCoordinator._active_instance = None
             land = True  # Ensure we land on exit
         except Exception as e:
@@ -98,6 +184,7 @@ class TelloWaypointNavCoordinator:
             self.is_running = False
             self.is_mapping_mode = False
             self.is_navigation_mode = False
+            self._stop_battery_monitoring()  # Safe cleanup - only stops if running
             TelloWaypointNavCoordinator._active_instance = None
             land = True  # Ensure we land on error
         finally:
@@ -184,83 +271,121 @@ class TelloWaypointNavCoordinator:
         Run the application in 'goto' mode to navigate to a specific waypoint.
         
         Returns:
-            list: A list of waypoints navigated to.
+            tuple: (land_flag, waypoint_list)
         """
         print("\n🚀 GOTO MODE ACTIVATED")
         
-        if not self.is_connected: 
-            if not self.connect_drone():
-                print("Failed to connect to drone. Exiting...")
-                TelloWaypointNavCoordinator._active_instance = None
-                return True, [self.current_waypoint]
-        
-        if not self.is_flying:
-            if not self.takeoff():
-                print("Failed to take off. Exiting...")
-                TelloWaypointNavCoordinator._active_instance = None
-                return True, [self.current_waypoint]
-        
-        if not hasattr(self, 'nav_manager'):
-            from .waypoint_navigation import WaypointNavigationManager
-            self.nav_manager = WaypointNavigationManager(nav_speed=self.navigation_speed, vertical_factor=self.vertical_factor)
-
-            waypoint_files = self._find_waypoint_files()
-            if not waypoint_files:
-                print("❌ No waypoint files found. Please run mapping mode first.")
-                TelloWaypointNavCoordinator._active_instance = None
-                return True, [self.current_waypoint]
-
-            latest_file = waypoint_files[0]
-            if not self.nav_manager.load_waypoint_file(latest_file):
-                print(f"❌ Failed to load waypoint file: {latest_file}")
-                TelloWaypointNavCoordinator._active_instance = None
+        try:
+            # Check for emergency shutdown at the start
+            if TelloWaypointNavCoordinator._emergency_shutdown:
+                print("🚨 Emergency shutdown detected - aborting goto mode")
                 return True, [self.current_waypoint]
             
-            self.current_waypoint = "WP_001"  
-            self.nav_manager.current_waypoint_id = self.current_waypoint
-        
-        if not self.waypoint_dest.startswith("WP_"):
-            # Convert to waypoint ID if necessary
-            for wp_id, waypoint in self.nav_manager.waypoints.items():
-                if waypoint.name.lower() == self.waypoint_dest.lower():
-                    self.waypoint_dest = wp_id
-                    break
-        
-        if self.waypoint_dest not in self.nav_manager.waypoints:
-            print(f"❌ Waypoint '{self.waypoint_dest}' not found")
-            if self.instruction.lower() == "halt":
-                print(f"Stopping at current waypoint '{self.current_waypoint}'")
-                TelloWaypointNavCoordinator._active_instance = None
+            if not self.is_connected: 
+                if not self.connect_drone():
+                    print("Failed to connect to drone. Exiting...")
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+            
+            if not self.is_flying:
+                if not self.takeoff():
+                    print("Failed to take off. Exiting...")
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+            
+            # Start battery monitoring if not already running
+            if not TelloWaypointNavCoordinator._battery_thread_running:
+                self._start_battery_monitoring()
+            
+            # Check for emergency shutdown after battery monitoring start
+            if TelloWaypointNavCoordinator._emergency_shutdown:
+                print("🚨 Emergency shutdown detected during setup")
                 return True, [self.current_waypoint]
-            else:
-                print(f"Still at current waypoint '{self.current_waypoint}'")
-                TelloWaypointNavCoordinator._active_instance = self
-                return False, [self.current_waypoint]
-        
-        print(f"Navigating to waypoint: {self.waypoint_dest}")
-        success = self.nav_manager.navigate_to_waypoint(self.waypoint_dest, self.tello)
-    
-        if success:
-            # Update current waypoint after navigation
-            self.current_waypoint = self.waypoint_dest
-            print(f"✅ Reached waypoint '{self.current_waypoint}'")
+            
+            if not hasattr(self, 'nav_manager'):
+                from .waypoint_navigation import WaypointNavigationManager
+                self.nav_manager = WaypointNavigationManager(nav_speed=self.navigation_speed, vertical_factor=self.vertical_factor)
+                self.nav_manager.coordinator = self  # Set coordinator reference for emergency shutdown
 
-            if self.instruction.lower() == "halt":
-                print(f"Stopping at waypoint '{self.current_waypoint}'")
+                waypoint_files = self._find_waypoint_files()
+                if not waypoint_files:
+                    print("❌ No waypoint files found. Please run mapping mode first.")
+                    self._stop_battery_monitoring()
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+
+                latest_file = waypoint_files[0]
+                if not self.nav_manager.load_waypoint_file(latest_file):
+                    print(f"❌ Failed to load waypoint file: {latest_file}")
+                    self._stop_battery_monitoring()
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+                
+                self.current_waypoint = "WP_001"  
+                self.nav_manager.current_waypoint_id = self.current_waypoint
+            
+            if not self.waypoint_dest.startswith("WP_"):
+                # Convert to waypoint ID if necessary
+                for wp_id, waypoint in self.nav_manager.waypoints.items():
+                    if waypoint.name.lower() == self.waypoint_dest.lower():
+                        self.waypoint_dest = wp_id
+                        break
+            
+            if self.waypoint_dest not in self.nav_manager.waypoints:
+                print(f"❌ Waypoint '{self.waypoint_dest}' not found")
+                if self.instruction.lower() == "halt":
+                    print(f"Stopping at current waypoint '{self.current_waypoint}'")
+                    self._stop_battery_monitoring()
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+                else:
+                    print(f"Still at current waypoint '{self.current_waypoint}'")
+                    # Keep battery monitoring running
+                    TelloWaypointNavCoordinator._active_instance = self
+                    return False, [self.current_waypoint]
+            
+            print(f"Navigating to waypoint: {self.waypoint_dest}")
+            # Check for emergency shutdown before navigation
+            if TelloWaypointNavCoordinator._emergency_shutdown:
+                print("🚨 Emergency shutdown detected before navigation")
+                return True, [self.current_waypoint]
+            
+            success = self.nav_manager.navigate_to_waypoint(self.waypoint_dest, self.tello)
+            
+            # Check for emergency shutdown after navigation
+            if TelloWaypointNavCoordinator._emergency_shutdown:
+                print("🚨 Emergency shutdown detected after navigation")
+                return True, [self.current_waypoint]
+        
+            if success:
+                # Update current waypoint after navigation
+                self.current_waypoint = self.waypoint_dest
+                print(f"✅ Reached waypoint '{self.current_waypoint}'")
+
+                if self.instruction.lower() == "halt":
+                    print(f"Stopping at waypoint '{self.current_waypoint}'")
+                    self._stop_battery_monitoring()
+                    TelloWaypointNavCoordinator._active_instance = None
+                    return True, [self.current_waypoint]
+                else:
+                    print(f"Continuing at waypoint '{self.current_waypoint}'")
+                    # Keep battery monitoring running
+                    TelloWaypointNavCoordinator._active_instance = self
+                    return False, [self.current_waypoint]
+            else:
+                print(f"❌ Failed to reach waypoint '{self.waypoint_dest}'")
+                self._stop_battery_monitoring()
                 TelloWaypointNavCoordinator._active_instance = None
                 return True, [self.current_waypoint]
-            else:
-                TelloWaypointNavCoordinator._active_instance = self
-                return False, [self.current_waypoint]
-        else:
-            print(f"❌ Failed to reach waypoint '{self.waypoint_dest}'")
+                
+        except Exception as e:
+            print(f"❌ Error in goto mode: {e}")
+            self._stop_battery_monitoring()
             TelloWaypointNavCoordinator._active_instance = None
             return True, [self.current_waypoint]
             
     def _find_waypoint_files(self) -> list:
         """Find all available waypoint JSON files."""
-        import glob
-        import os
         pattern = os.path.join(self.waypoint_dir, "drone_movements_*.json")
         files = glob.glob(pattern)
         return sorted(files, reverse=True)  # Newest first
@@ -343,6 +468,9 @@ class TelloWaypointNavCoordinator:
         """Cleanup resources and land drone."""
         print("\n🧹 Cleaning up...")
 
+        # Stop battery monitoring if running
+        self._stop_battery_monitoring()
+
         if self.is_flying:
             try: 
                 print("Landing drone...")
@@ -358,5 +486,8 @@ class TelloWaypointNavCoordinator:
                 self.is_connected = False
             except Exception as e:
                 print(f"Error during disconnection: {e}")
+        
+        if TelloWaypointNavCoordinator._active_instance is not None:
+            TelloWaypointNavCoordinator._active_instance = None
 
         print("👋 Application closed successfully")
