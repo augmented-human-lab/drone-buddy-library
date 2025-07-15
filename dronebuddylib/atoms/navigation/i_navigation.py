@@ -24,5 +24,5 @@ class INavigation(IDBLFunction):
         pass
 
     @abstractmethod
-    def navigate_to_waypoint(self, location, destination_waypoint) -> list:
+    def navigate_to_waypoint(self, destination_waypoint, instruction) -> list:
         pass
