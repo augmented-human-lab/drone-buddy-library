@@ -8,20 +8,27 @@ import select
 from typing import Optional
 from .waypoint_navigation import WaypointNavigationManager
 
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
+
 class NavigationInterface:
     """User interface for waypoint navigation."""
     
     def __init__(self, waypoint_dir: str, vertical_factor: float, nav_speed: int):
+        logger.log_info('NavigationInterface', 'Initializing navigation interface.')
         self.nav_manager = WaypointNavigationManager(nav_speed=nav_speed, vertical_factor=vertical_factor)
         self.is_running = True
         self.waypoint_dir = waypoint_dir
+        logger.log_debug('NavigationInterface', f'Initialized with waypoint_dir={waypoint_dir}, vertical_factor={vertical_factor}, nav_speed={nav_speed}')
     
     def run(self, drone_instance=None) -> list:
         """Run the navigation interface."""
+        logger.log_info('NavigationInterface', 'Starting navigation interface.')
         history = []
         try:
             if drone_instance is None:
-                print("❌ No drone instance provided. Please initialize the drone first.")
+                logger.log_error('NavigationInterface', 'No drone instance provided.')
                 return
             
             print("\n🧭 WAYPOINT NAVIGATION SYSTEM")
@@ -35,29 +42,32 @@ class NavigationInterface:
             history = self._navigation_loop(drone_instance=drone_instance)
             
         except KeyboardInterrupt:
-            print("\n🛑 Navigation interrupted by user")
+            logger.log_warning('NavigationInterface', 'Navigation interrupted by user.')
         except Exception as e:
-            print(f"\n❌ Navigation error: {e}")
+            logger.log_error('NavigationInterface', f'Navigation error: {e}')
         finally:
             drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
-            print("\n👋 Navigation system closed")
+            logger.log_info('NavigationInterface', 'Navigation system closed.')
             return history
     
     def _load_waypoint_file(self, drone_instance=None) -> bool:
         """Load waypoint file with user selection."""
+        logger.log_info('NavigationInterface', 'Loading waypoint file.')
+        
         # Find available waypoint files
         waypoint_files = self._find_waypoint_files()
         
         if not waypoint_files:
-            print("❌ No waypoint files found. Please run mapping mode first.")
+            logger.log_error('NavigationInterface', 'No waypoint files found.')
             return False
         
         if len(waypoint_files) == 1:
             # Only one file, load it automatically
             selected_file = waypoint_files[0]
-            print(f"📁 Found waypoint file: {selected_file}")
+            logger.log_info('NavigationInterface', f'Found single waypoint file: {selected_file}')
         else:
             # Multiple files, let user choose
+            logger.log_info('NavigationInterface', f'Found {len(waypoint_files)} waypoint files, requesting user selection.')
             selected_file = self._select_waypoint_file(waypoint_files, drone_instance=drone_instance)
             if not selected_file:
                 return False
@@ -86,12 +96,12 @@ class NavigationInterface:
                     battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                     battery = int(battery_str)
                     if battery < 20:
-                        print(f"\r⚠️  Low battery ({battery}%)               ")
+                        logger.log_warning('NavigationInterface', f'Low battery detected: {battery}%')
                         if battery < 10:
-                            print("\r❗ CRITICAL: Battery too low, landing...")
+                            logger.log_error('NavigationInterface', f'CRITICAL: Battery too low ({battery}%), landing...')
                             return None
                 except Exception as e:
-                    print(f"\rError checking battery: {e}")
+                    logger.log_error('NavigationInterface', f'Error checking battery: {e}')
                     return None
                 
                 prompt = f"\nSelect waypoint file (1-{len(files)}) or 'q' to quit: "
@@ -120,7 +130,7 @@ class NavigationInterface:
                     continue
                     
             except Exception as e:
-                print(f"❌ Error reading input: {e}")
+                logger.log_error('NavigationInterface', f'Error reading input: {e}')
                 return None
     
     def _navigation_loop(self, drone_instance=None):
@@ -133,32 +143,35 @@ class NavigationInterface:
                 destinations = self.nav_manager.print_navigation_options()
                 
                 if not destinations:
-                    print("ℹ️  No other waypoints to navigate to.")
+                    logger.log_info('NavigationInterface', 'No other waypoints to navigate to.')
                     break
                 
                 # Get user choice
                 choice = self._get_navigation_choice(destinations, loop_count, drone_instance=drone_instance)
                 
                 if choice == 'quit':
+                    logger.log_info('NavigationInterface', 'User chose to quit navigation.')
                     break
                 elif choice == 'reload':
+                    logger.log_info('NavigationInterface', 'User chose to reload waypoint file.')
                     if self._load_waypoint_file(drone_instance=drone_instance):
                         continue
                     else:
                         break
                 elif isinstance(choice, str):
                     # Navigate to selected waypoint
+                    logger.log_info('NavigationInterface', f'User selected waypoint: {choice}')
                     success = self.nav_manager.navigate_to_waypoint(choice, drone_instance=drone_instance)
                     if success:
-                        print(f"\n🎯 Navigation completed!")
+                        logger.log_success('NavigationInterface', f'Navigation to {choice} completed!')
                         waypoints_history.append(choice)
                         loop_count += 1
                     else:
-                        print(f"\n❌ Navigation failed!")
+                        logger.log_error('NavigationInterface', f'Navigation to {choice} failed!')
                         break
                 
         except Exception as e:
-            print(f"❌ Error in navigation loop: {e}")
+            logger.log_error('NavigationInterface', f'Error in navigation loop: {e}')
         finally: 
             return waypoints_history
     
@@ -179,12 +192,12 @@ class NavigationInterface:
                     battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                     battery = int(battery_str)
                     if battery < 20:
-                        print(f"\r⚠️  Low battery ({battery}%)               ")
+                        logger.log_warning('NavigationInterface', f'Low battery detected: {battery}%')
                         if battery < 10:
-                            print("\r❗ CRITICAL: Battery too low, landing...")
+                            logger.log_error('NavigationInterface', f'CRITICAL: Battery too low ({battery}%), landing...')
                             return 'quit'
                 except Exception as e:
-                    print(f"\rError checking battery: {e}")
+                    logger.log_error('NavigationInterface', f'Error checking battery: {e}')
                     return 'quit'
 
                 if loopCount == 0:
@@ -227,5 +240,5 @@ class NavigationInterface:
             except KeyboardInterrupt:
                 return 'quit'
             except Exception as e:
-                print(f"❌ Error reading input: {e}")
+                logger.log_error('NavigationInterface', f'Error reading input: {e}')
                 return 'quit'

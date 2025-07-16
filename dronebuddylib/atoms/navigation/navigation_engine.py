@@ -18,7 +18,9 @@ class NavigationEngine:
             logger.log_info(self.get_class_name(), 'Preparing to initialize Tello Waypoint navigation engine.')
             from dronebuddylib.atoms.navigation.tello_navigation_impl import NavigationWaypointImpl
             self.navigation_engine = NavigationWaypointImpl(config)
+            logger.log_debug(self.get_class_name(), 'Tello Waypoint navigation engine initialized successfully.')
         else:
+            logger.log_error(self.get_class_name(), f'Unsupported navigation algorithm: {algorithm}')
             raise ValueError(f"Unsupported navigation algorithm: {algorithm}")
 
     def get_class_name(self) -> str:
@@ -37,7 +39,10 @@ class NavigationEngine:
         Returns:
             list: The current map location.
         """
-        return self.navigation_engine.map_location()
+        logger.log_debug(self.get_class_name(), 'Starting map location operation.')
+        result = self.navigation_engine.map_location()
+        logger.log_debug(self.get_class_name(), f'Map location operation completed. Mapped {len(result)} waypoints.')
+        return result
 
     def navigate(self) -> list:
         """
@@ -46,7 +51,10 @@ class NavigationEngine:
         Returns:
             list: The result of the navigation operation.
         """
-        return self.navigation_engine.navigate()
+        logger.log_info(self.get_class_name(), 'Starting navigation operation.')
+        result = self.navigation_engine.navigate()
+        logger.log_debug(self.get_class_name(), f'Navigation operation completed with {len(result)} results.')
+        return result
 
     def navigate_to_waypoint(self, destination_waypoint, instruction) -> list:
         """
@@ -59,4 +67,10 @@ class NavigationEngine:
         Returns:
             list: The result of the navigation to the specified waypoint.
         """
-        return self.navigation_engine.navigate_to_waypoint(destination_waypoint, instruction)
+        logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
+        logger.log_debug(self.get_class_name(), f'Navigation instruction: {instruction}')
+        
+        result = self.navigation_engine.navigate_to_waypoint(destination_waypoint, instruction)
+        
+        logger.log_debug(self.get_class_name(), f'Navigate to waypoint operation completed with drone at current waypoint: {result[0]}.')
+        return result

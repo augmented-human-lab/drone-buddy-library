@@ -6,6 +6,10 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
+
 class NavigationDirection(Enum):
     FORWARD = "forward"    # Top-down in waypoint file
     REVERSE = "reverse"    # Bottom-up in waypoint file
@@ -61,6 +65,8 @@ class WaypointNavigationManager:
     """Manages waypoint navigation and pathfinding."""
     
     def __init__(self, nav_speed: int, vertical_factor: float):
+        logger.log_info('WaypointNavigationManager', 'Initializing waypoint navigation manager.')
+        
         self.waypoints: Dict[str, Waypoint] = {}
         self.waypoint_order: List[str] = []  # Ordered list of waypoint IDs
         self.current_waypoint_id: str = "WP_001"  # Always start at START
@@ -68,11 +74,13 @@ class WaypointNavigationManager:
         self.json_file_path: str = ""
         self.nav_speed = nav_speed  # Speed for navigation movements
         self.vertical_factor = vertical_factor  # Airflow factor for vertical movements
+        
+        logger.log_debug('WaypointNavigationManager', f'Initialized with nav_speed={nav_speed}, vertical_factor={vertical_factor}')
     
     def load_waypoint_file(self, json_file_path: str) -> bool:
         """Load waypoints from JSON file into memory."""
         try:
-            print(f"📖 Loading waypoint file: {json_file_path}")
+            logger.log_info('WaypointNavigationManager', f'Loading waypoint file: {json_file_path}')
             
             with open(json_file_path, 'r') as file:
                 data = json.load(file)
@@ -111,13 +119,13 @@ class WaypointNavigationManager:
             # Reset to start position
             self.current_waypoint_id = "WP_001"
             
-            print(f"✅ Loaded {len(self.waypoints)} waypoints successfully")
+            logger.log_success('WaypointNavigationManager', f'Loaded {len(self.waypoints)} waypoints successfully.')
             self._print_waypoint_summary()
             
             return True
             
         except Exception as e:
-            print(f"❌ Error loading waypoint file: {e}")
+            logger.log_error('WaypointNavigationManager', f'Error loading waypoint file: {e}')
             return False
     
     def _print_waypoint_summary(self):
@@ -200,15 +208,15 @@ class WaypointNavigationManager:
         # Check for emergency shutdown (only for goto mode with coordinator reference)
         if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
             if self.coordinator._emergency_shutdown:
-                print("🚨 Emergency shutdown detected - aborting navigation")
+                logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - aborting navigation')
                 return False
                 
         if target_waypoint_id not in self.waypoints:
-            print(f"❌ Waypoint {target_waypoint_id} not found")
+            logger.log_error('WaypointNavigationManager', f'Waypoint {target_waypoint_id} not found')
             return False
         
         if target_waypoint_id == self.current_waypoint_id:
-            print(f"ℹ️  Already at waypoint {target_waypoint_id}")
+            logger.log_info('WaypointNavigationManager', f'Already at waypoint {target_waypoint_id}')
             return True
         
         try:
@@ -216,6 +224,8 @@ class WaypointNavigationManager:
             movements, direction = self.calculate_navigation_path(target_waypoint_id)
             target_name = self.waypoints[target_waypoint_id].name
             current_name = self.waypoints[self.current_waypoint_id].name
+            
+            logger.log_info('WaypointNavigationManager', f'Navigation plan: From {self.current_waypoint_id} ("{current_name}") to {target_waypoint_id} ("{target_name}") using {direction.value} direction with {len(movements)} movements')
             
             print(f"\n🧭 NAVIGATION PLAN")
             print(f"From: {self.current_waypoint_id} ('{current_name}')")
@@ -229,30 +239,30 @@ class WaypointNavigationManager:
             if success:
                 # Update current position
                 self.current_waypoint_id = target_waypoint_id
-                print(f"✅ Successfully navigated to {target_waypoint_id} ('{target_name}')")
+                logger.log_success('WaypointNavigationManager', f'Successfully navigated to {target_waypoint_id} ("{target_name}")')
                 return True
             else:
-                print(f"❌ Navigation to {target_waypoint_id} failed")
+                logger.log_error('WaypointNavigationManager', f'Navigation to {target_waypoint_id} failed')
                 return False
                 
         except Exception as e:
-            print(f"❌ Navigation error: {e}")
+            logger.log_error('WaypointNavigationManager', f'Navigation error: {e}')
             return False
 
     def _execute_navigation(self, movements: List[NavigationMovement], direction: NavigationDirection, drone_instance=None) -> bool:
         """Execute the navigation movements."""
         
-        print(f"\n🚁 Executing {len(movements)} movements ({direction.value})...")
+        logger.log_info('WaypointNavigationManager', f'Executing {len(movements)} movements ({direction.value})')
         drone_instance.set_speed(self.nav_speed)  # Set navigation speed
         try: 
             for i, movement in enumerate(movements, 1):
                 # Check for emergency shutdown before each movement (only for goto mode)
                 if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
                     if self.coordinator._emergency_shutdown:
-                        print("🚨 Emergency shutdown detected - stopping navigation execution")
+                        logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - stopping navigation execution')
                         return False
                         
-                print(f"  Step {i}/{len(movements)}: {movement.type} ")
+                logger.log_debug('WaypointNavigationManager', f'Step {i}/{len(movements)}: {movement.type} movement')
                 distance = movement.distance if movement.distance is not None and movement.distance >= 20 else 20  # Ensure minimum valid distance for movement
                 if movement.type == "move":
                     yaw = movement.yaw if movement.yaw is not None else 0
@@ -260,22 +270,22 @@ class WaypointNavigationManager:
                     
                     turn_degree = abs(yaw - current_yaw)
                     if current_yaw > yaw:
-                        print(f"  Adjusting yaw from {current_yaw} to {yaw} degrees")
+                        logger.log_debug('WaypointNavigationManager', f'Adjusting yaw from {current_yaw} to {yaw} degrees')
                         if turn_degree > 180 and turn_degree < 360: 
                             drone_instance.rotate_clockwise(360 - turn_degree)
                         elif turn_degree <= 180 and turn_degree > 0: 
                             drone_instance.rotate_counter_clockwise(turn_degree)
                         else: 
-                            print("  No yaw adjustment needed")
+                            logger.log_debug('WaypointNavigationManager', 'No yaw adjustment needed')
                         drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
                     else: 
-                        print(f"  Adjusting yaw from {current_yaw} to {yaw} degrees")
+                        logger.log_debug('WaypointNavigationManager', f'Adjusting yaw from {current_yaw} to {yaw} degrees')
                         if turn_degree > 180 and turn_degree < 360: 
                             drone_instance.rotate_counter_clockwise(360 - turn_degree)
                         elif turn_degree <= 180 and turn_degree > 0: 
                             drone_instance.rotate_clockwise(turn_degree)
                         else: 
-                            print("  No yaw adjustment needed")
+                            logger.log_debug('WaypointNavigationManager', 'No yaw adjustment needed')
                         drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
 
                     drone_instance.move_forward(int(distance))
@@ -283,52 +293,52 @@ class WaypointNavigationManager:
                     # Check for emergency shutdown during movement execution
                     if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
                         if self.coordinator._emergency_shutdown:
-                            print("🚨 Emergency shutdown detected during movement - stopping immediately")
+                            logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected during movement - stopping immediately')
                             drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
                             return False
                     
                     time.sleep(0.5)  # Allow some time for the drone to stabilize
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
-                    print(f"  Moved forward {distance} cm at yaw {yaw} degrees")
+                    logger.log_debug('WaypointNavigationManager', f'Moved forward {distance} cm at yaw {yaw} degrees')
 
                 else:
                     match (movement.direction, direction): 
                         case ("up", NavigationDirection.FORWARD):
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_up(int(actual_distance))
-                            print(f"  Lifted up {actual_distance} cm")
+                            logger.log_debug('WaypointNavigationManager', f'Lifted up {actual_distance} cm')
                         case ("down", NavigationDirection.FORWARD):
                             drone_instance.move_down(int(distance))
-                            print(f"  Lowered down {distance} cm")
+                            logger.log_debug('WaypointNavigationManager', f'Lowered down {distance} cm')
                         ############# REVERSE MOVEMENT HANDLING #############
                         case ("up", NavigationDirection.REVERSE):
                             drone_instance.move_up(int(distance))
-                            print(f"  Lifted up {distance} cm")
+                            logger.log_debug('WaypointNavigationManager', f'Lifted up {distance} cm')
                         case ("down", NavigationDirection.REVERSE):
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_down(int(actual_distance))
-                            print(f"  Lowered down {actual_distance} cm")
+                            logger.log_debug('WaypointNavigationManager', f'Lowered down {actual_distance} cm')
                     
                     # Check for emergency shutdown after vertical movement
                     if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
                         if self.coordinator._emergency_shutdown:
-                            print("🚨 Emergency shutdown detected during vertical movement - stopping immediately")
+                            logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected during vertical movement - stopping immediately')
                             drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
                             return False
                     
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
             
-            print("✅ Navigation movements completed")
+            logger.log_success('WaypointNavigationManager', 'Navigation movements completed')
             return True
         except Exception as e:
-            print(f"❌ Error during navigation execution: {e}")
+            logger.log_error('WaypointNavigationManager', f'Error during navigation execution: {e}')
             drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
             return False
     
     def get_yaw(self, drone_instance=None) -> int:
         try:
             attitude_str = drone_instance.send_command_with_return("attitude?", timeout=3)
-            print(f"Raw attitude response: '{attitude_str}'")  # Debug line
+            logger.log_debug('WaypointNavigationManager', f'Raw attitude response: {attitude_str}')
             
             # Parse attitude string like "pitch:0;roll:0;yaw:45;"
             yaw = 0  # Default value
@@ -341,11 +351,11 @@ class WaypointNavigationManager:
                             if yaw_value:
                                 yaw = int(yaw_value)
                         except (ValueError, IndexError) as e:
-                            print(f"⚠️  Failed to parse yaw from '{part}': {e}")
+                            logger.log_warning('WaypointNavigationManager', f'Failed to parse yaw from "{part}": {e}')
                             continue
             return yaw
         except Exception as e:
-            print(f"⚠️  Attitude query failed: {e}")
+            logger.log_warning('WaypointNavigationManager', f'Attitude query failed: {e}')
             return 0
     
     def get_current_waypoint_info(self) -> Tuple[str, str]:

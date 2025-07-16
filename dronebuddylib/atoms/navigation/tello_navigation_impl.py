@@ -16,9 +16,15 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             list: A list of waypoints representing the mapped location.
         """
+        logger.log_info(self.get_class_name(), 'Starting location mapping operation.')
+        logger.log_debug(self.get_class_name(), f'Using waypoint directory: {self.waypoint_dir}')
+        
         coordinator = TelloWaypointNavCoordinator(self.waypoint_dir, self.vertical_factor,
                                                   self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "mapping")
-        return coordinator.run()
+        result = coordinator.run()
+        
+        logger.log_info(self.get_class_name(), f'Location mapping session closed with {len(result)} waypoints.')
+        return result
 
     def navigate(self) -> list:
         """
@@ -27,9 +33,15 @@ class NavigationWaypointImpl(INavigation):
         Returns: 
          list: A list of navigated waypoints.
         """
+        logger.log_info(self.get_class_name(), 'Starting navigation between waypoints.')
+        logger.log_debug(self.get_class_name(), f'Using waypoint directory: {self.waypoint_dir}')
+        
         coordinator = TelloWaypointNavCoordinator(self.waypoint_dir, self.vertical_factor,
                                                   self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "navigation")
-        return coordinator.run()
+        result = coordinator.run()
+        
+        logger.log_info(self.get_class_name(), f'Navigation session closed with drone travelled to {len(result)} waypoints.')
+        return result
 
     def navigate_to_waypoint(self, destination_waypoint, instruction) -> list:
         """
@@ -42,6 +54,9 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             list: Containing the drone's current waypoint
         """
+        logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
+        logger.log_debug(self.get_class_name(), f'Navigation instruction: {instruction}')
+        
         create_new = False
         coordinator_instance = TelloWaypointNavCoordinator._active_instance
         
@@ -49,7 +64,10 @@ class NavigationWaypointImpl(INavigation):
             create_new = True
 
         coordinator = TelloWaypointNavCoordinator.get_instance(self.waypoint_dir, self.vertical_factor, self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "goto", destination_waypoint, instruction, create_new)
-        return coordinator.run()
+        result = coordinator.run()
+        
+        logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[0]}.')
+        return result
 
     def get_required_params(self) -> list:
         return []
@@ -84,6 +102,8 @@ class NavigationWaypointImpl(INavigation):
         Args:
             engine_configurations (EngineConfigurations): The engine configurations.
         """
+        logger.log_info(self.get_class_name(), 'Initializing Tello navigation engine.')
+        
         super().__init__(engine_configurations)
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
@@ -101,4 +121,7 @@ class NavigationWaypointImpl(INavigation):
         self.mapping_movement_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 38)
         self.mapping_rotation_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 70)
         self.nav_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 55)
+        
+        logger.log_info(self.get_class_name(), 'Tello navigation engine initialized successfully.')
+        logger.log_debug(self.get_class_name(), f'Configuration: vertical_factor={self.vertical_factor}, mapping_movement_speed={self.mapping_movement_speed}, mapping_rotation_speed={self.mapping_rotation_speed}, nav_speed={self.nav_speed}')
 
