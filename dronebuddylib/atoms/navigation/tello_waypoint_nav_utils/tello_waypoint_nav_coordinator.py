@@ -19,6 +19,7 @@ class TelloWaypointNavCoordinator:
     _active_instance = None # Class-level instance tracker
     _battery_thread = None # Background battery monitoring thread
     _battery_thread_running = False # Flag to control battery thread
+    _battery_monitoring_paused = False # Flag to pause battery monitoring during navigation
     _emergency_shutdown = False # Flag to trigger emergency program termination
 
     @classmethod
@@ -105,10 +106,27 @@ class TelloWaypointNavCoordinator:
                 TelloWaypointNavCoordinator._battery_thread.join(timeout=2)
             logger.log_info('TelloWaypointNavCoordinator', 'Battery monitoring thread stopped.')
     
+    @classmethod
+    def _pause_battery_monitoring(cls):
+        """Pause battery monitoring during navigation operations."""
+        cls._battery_monitoring_paused = True
+        logger.log_debug('TelloWaypointNavCoordinator', 'Battery monitoring paused.')
+    
+    @classmethod
+    def _resume_battery_monitoring(cls):
+        """Resume battery monitoring after navigation operations."""
+        cls._battery_monitoring_paused = False
+        logger.log_debug('TelloWaypointNavCoordinator', 'Battery monitoring resumed.')
+    
     def _battery_monitor_loop(self):
         """Background battery monitoring loop."""
         while TelloWaypointNavCoordinator._battery_thread_running:
             try:
+                # Check if battery monitoring is paused
+                if TelloWaypointNavCoordinator._battery_monitoring_paused:
+                    time.sleep(1)  # Short sleep when paused
+                    continue
+                    
                 # Get the active instance to access the drone
                 if TelloWaypointNavCoordinator._active_instance is None:
                     break

@@ -253,6 +253,11 @@ class WaypointNavigationManager:
         """Execute the navigation movements."""
         
         logger.log_info('WaypointNavigationManager', f'Executing {len(movements)} movements ({direction.value})')
+        
+        # Pause battery monitoring during navigation to prevent command conflicts
+        if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_pause_battery_monitoring'):
+            self.coordinator._pause_battery_monitoring()
+        
         drone_instance.set_speed(self.nav_speed)  # Set navigation speed
         try: 
             for i, movement in enumerate(movements, 1):
@@ -334,6 +339,10 @@ class WaypointNavigationManager:
             logger.log_error('WaypointNavigationManager', f'Error during navigation execution: {e}')
             drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
             return False
+        finally:
+            # Resume battery monitoring after navigation
+            if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_resume_battery_monitoring'):
+                self.coordinator._resume_battery_monitoring()
     
     def get_yaw(self, drone_instance=None) -> int:
         try:
