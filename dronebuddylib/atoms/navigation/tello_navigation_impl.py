@@ -4,7 +4,7 @@ from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.utils.logger import Logger
 from dronebuddylib.utils.utils import config_validity_check
 from dronebuddylib.models.engine_configurations import EngineConfigurations
-from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_waypoint_nav_coordinator import TelloWaypointNavCoordinator
+from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_waypoint_nav_coordinator import TelloWaypointNavCoordinator, NavigationInstruction
 
 logger = Logger()
 
@@ -43,17 +43,22 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), f'Navigation session closed with drone travelled to {len(result)} waypoints.')
         return result
 
-    def navigate_to_waypoint(self, destination_waypoint, instruction) -> list:
+    def navigate_to_waypoint(self, destination_waypoint: str, instruction: NavigationInstruction) -> list:
         """
-        Navigates to a specific waypoint with the given instruction.
+        Navigates to a specific waypoint with strict NavigationInstruction enum enforcement.
 
         Args:
             destination_waypoint (str): The waypoint to navigate to.
-            instruction (str): The instruction for navigation.
+            instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
 
         Returns:
             list: Containing the drone's current waypoint
+            
+        Raises:
+            TypeError: If instruction is not a NavigationInstruction enum.
+            ValueError: If instruction is not CONTINUE or HALT.
         """
+        
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
         logger.log_debug(self.get_class_name(), f'Navigation instruction: {instruction}')
         

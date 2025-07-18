@@ -257,7 +257,9 @@ class WaypointNavigationManager:
         # Pause battery monitoring during navigation to prevent command conflicts
         if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_pause_battery_monitoring'):
             self.coordinator._pause_battery_monitoring()
-        
+
+        time.sleep(0.3) # Allow time for battery monitoring to pause
+
         drone_instance.set_speed(self.nav_speed)  # Set navigation speed
         try: 
             for i, movement in enumerate(movements, 1):
@@ -266,7 +268,16 @@ class WaypointNavigationManager:
                     if self.coordinator._emergency_shutdown:
                         logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - stopping navigation execution')
                         return False
-                        
+
+                battery_str = drone_instance.send_command_with_return("battery?", timeout=3)
+                logger.log_debug('WaypointNavigationManager', 'checking battery status')
+                battery = int(battery_str)
+                if battery < 20:
+                    logger.log_warning('TelloWaypointNavCoordinator', f'Low battery detected: {battery}%')
+                    if battery < 10:
+                        logger.log_error('TelloWaypointNavCoordinator', f'CRITICAL: Battery too low ({battery}%), initiating emergency landing.')
+                        return False
+                
                 logger.log_debug('WaypointNavigationManager', f'Step {i}/{len(movements)}: {movement.type} movement')
                 distance = movement.distance if movement.distance is not None and movement.distance >= 20 else 20  # Ensure minimum valid distance for movement
                 if movement.type == "move":
@@ -294,15 +305,6 @@ class WaypointNavigationManager:
                         drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
 
                     drone_instance.move_forward(int(distance))
-                    
-                    # Check for emergency shutdown during movement execution
-                    if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
-                        if self.coordinator._emergency_shutdown:
-                            logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected during movement - stopping immediately')
-                            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
-                            return False
-                    
-                    time.sleep(0.5)  # Allow some time for the drone to stabilize
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
                     logger.log_debug('WaypointNavigationManager', f'Moved forward {distance} cm at yaw {yaw} degrees')
 
@@ -323,13 +325,6 @@ class WaypointNavigationManager:
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_down(int(actual_distance))
                             logger.log_debug('WaypointNavigationManager', f'Lowered down {actual_distance} cm')
-                    
-                    # Check for emergency shutdown after vertical movement
-                    if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
-                        if self.coordinator._emergency_shutdown:
-                            logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected during vertical movement - stopping immediately')
-                            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop immediately
-                            return False
                     
                     drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
             
