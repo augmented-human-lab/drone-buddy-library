@@ -56,7 +56,6 @@ class NavigationWaypointImpl(INavigation):
             
         Raises:
             TypeError: If instruction is not a NavigationInstruction enum.
-            ValueError: If instruction is not CONTINUE or HALT.
         """
         
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
@@ -64,6 +63,16 @@ class NavigationWaypointImpl(INavigation):
         
         create_new = False
         coordinator_instance = TelloWaypointNavCoordinator._active_instance
+
+        # Strict type enforcement
+        if not isinstance(instruction, NavigationInstruction):
+            error_msg = f"instruction must be a NavigationInstruction enum, got {type(instruction).__name__}: {instruction}"
+            logger.log_error(self.get_class_name(), error_msg)
+            if coordinator_instance is not None:
+                coordinator_instance.is_goto_mode = False
+                coordinator_instance.is_running = False
+                coordinator_instance.cleanup()
+            raise TypeError(error_msg)
         
         if coordinator_instance is None: 
             create_new = True

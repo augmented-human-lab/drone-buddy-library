@@ -7,7 +7,14 @@ import sys
 import select
 import termios
 import tty
+import threading
+import traceback
+import cv2
 from datetime import datetime
+
+from dronebuddylib.utils.logger import Logger
+
+logger = Logger()
 
 
 class RealTimeDroneController:
@@ -24,6 +31,11 @@ class RealTimeDroneController:
         
         # Control flags
         self.add_movement = False
+        
+        # Video streaming
+        self.video_thread = None
+        self.video_running = False
+        self.frame_read = None
         
         # JSON file path for storing movement data
         filename = f"drone_movements_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -292,6 +304,126 @@ class RealTimeDroneController:
             # Return a summary list of all waypoint ids and names 
             return summary
     
+    def start_video_stream(self, drone_instance=None):
+        """Start video streaming from drone camera."""
+        try:
+            logger.log_info('RealTimeDroneController', 'Starting video stream...')
+            print("📹 Initializing video stream...")
+            
+            # Start video stream
+            drone_instance.streamon()
+            time.sleep(3)  # Wait a bit longer for stream to initialize properly
+            
+            # Get frame reader
+            self.frame_read = drone_instance.get_frame_read()
+            
+            # Wait for first frame to be available
+            retry_count = 0
+            max_retries = 10
+            while retry_count < max_retries:
+                try:
+                    test_frame = self.frame_read.frame
+                    if test_frame is not None and test_frame.size > 0:
+                        break
+                except:
+                    pass
+                retry_count += 1
+                time.sleep(0.5)
+                print(f"⏳ Waiting for video stream... ({retry_count}/{max_retries})")
+            
+            if retry_count >= max_retries:
+                raise Exception("Video stream failed to initialize - no frames received")
+            
+            # Start video display thread
+            self.video_running = True
+            self.video_thread = threading.Thread(target=self._video_display_loop, daemon=True)
+            self.video_thread.start()
+            
+            logger.log_success('RealTimeDroneController', 'Video stream started successfully.')
+            print("📹 Video stream window opened - you can see what the drone sees!")
+            print("📹 Keep the video window visible to see the drone's perspective during mapping.")
+            
+        except Exception as e:
+            logger.log_error('RealTimeDroneController', f'Failed to start video stream: {e}')
+            print(f"❌ Failed to start video stream: {e}")
+            print("⚠️  Mapping will continue without video feed.")
+
+            self.stop_video_stream(drone_instance=drone_instance)
+
+    def stop_video_stream(self, drone_instance=None):
+        """Stop video streaming."""
+        try:
+            logger.log_info('RealTimeDroneController', 'Stopping video stream...')
+            
+            # Stop video thread
+            self.video_running = False
+            self.frame_read = None
+            if self.video_thread and self.video_thread.is_alive():
+                self.video_thread.join(timeout=2)
+            
+            # Close OpenCV windows
+            cv2.destroyAllWindows()
+            
+            # Stop drone video stream
+            if drone_instance:
+                drone_instance.streamoff()
+            
+            logger.log_success('RealTimeDroneController', 'Video stream stopped.')
+            
+        except Exception as e:
+            logger.log_error('RealTimeDroneController', f'Error stopping video stream: {e}')
+    
+    def _video_display_loop(self):
+        """Video display loop running in separate thread."""
+        try:
+            logger.log_debug('RealTimeDroneController', 'Video display thread started.')
+            
+            while self.video_running and self.frame_read:
+                try:
+                    # Get current frame
+                    frame = self.frame_read.frame
+                    
+                    if frame is not None and frame.size > 0:
+                        # Resize frame for better display (optional)
+                        height, width = frame.shape[:2]
+                        if width > 960:  # Resize if too large
+                            scale = 960 / width
+                            new_width = int(width * scale)
+                            new_height = int(height * scale)
+                            frame = cv2.resize(frame, (new_width, new_height))
+                        
+                        # Add overlay text with background for better visibility
+                        overlay = frame.copy()
+                        
+                        # Header background
+                        cv2.rectangle(overlay, (0, 0), (width, 110), (0, 0, 0), -1)
+                        cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
+                        
+                        # Title and instructions
+                        cv2.putText(frame, 'Drone Camera View - Mapping Mode', 
+                                  (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+                        cv2.putText(frame, 'Use terminal for controls - Press Q in terminal to quit', 
+                                  (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                        
+                        # Display frame
+                        cv2.imshow('Drone Camera - Mapping Mode', frame)
+                        
+                        # Handle window events (but don't wait for key presses)
+                        cv2.waitKey(1)
+                    
+                    # Small delay to prevent excessive CPU usage
+                    time.sleep(0.033)  # ~30 FPS
+                    
+                except Exception as e:
+                    logger.log_warning('RealTimeDroneController', f'Frame display error: {e}')
+                    time.sleep(0.1)  # Wait before retry
+            
+            logger.log_debug('RealTimeDroneController', 'Video display thread ended.')
+            
+        finally:
+            # Ensure window is closed
+            cv2.destroyAllWindows()
+    
     def get_key(self):
         """Get a single key press without blocking."""
         if select.select([sys.stdin], [], [], 0.5) == ([sys.stdin], [], []):
@@ -448,6 +580,9 @@ class RealTimeDroneController:
         self.mark_waypoint("START", auto_generated=True)
         print("First waypoint marked: START")
 
+        # Start video streaming
+        self.start_video_stream(drone_instance=drone_instance)
+
         try:
             self.handle_keypress(drone_instance=drone_instance)
         except KeyboardInterrupt:
@@ -455,6 +590,9 @@ class RealTimeDroneController:
         except Exception as e:
             print(f"\n❌ Error during drone control: {e}")
         finally:
+            # Stop video streaming first
+            self.stop_video_stream(drone_instance=drone_instance)
+            
             # Ensure the last waypoint is marked if there are movements
             try: 
                 if self.current_movement:
