@@ -37,7 +37,7 @@ class NavigationWaypointImpl(INavigation):
         logger.log_debug(self.get_class_name(), f'Using waypoint directory: {self.waypoint_dir}')
         
         coordinator = TelloWaypointNavCoordinator(self.waypoint_dir, self.vertical_factor,
-                                                  self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "navigation")
+                                                  self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "navigation", waypoint_file=self.waypoint_file)
         result = coordinator.run()
         
         logger.log_info(self.get_class_name(), f'Navigation session closed with drone travelled to {len(result)} waypoints.')
@@ -77,7 +77,7 @@ class NavigationWaypointImpl(INavigation):
         if coordinator_instance is None: 
             create_new = True
 
-        coordinator = TelloWaypointNavCoordinator.get_instance(self.waypoint_dir, self.vertical_factor, self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "goto", destination_waypoint, instruction, create_new)
+        coordinator = TelloWaypointNavCoordinator.get_instance(self.waypoint_dir, self.vertical_factor, self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "goto", destination_waypoint, instruction, self.waypoint_file, create_new)
         result = coordinator.run()
         
         logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[0]}.')
