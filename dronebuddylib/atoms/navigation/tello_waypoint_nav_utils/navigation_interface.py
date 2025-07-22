@@ -15,11 +15,12 @@ logger = Logger()
 class NavigationInterface:
     """User interface for waypoint navigation."""
     
-    def __init__(self, waypoint_dir: str, vertical_factor: float, nav_speed: int):
+    def __init__(self, waypoint_dir: str, vertical_factor: float, nav_speed: int, waypoint_file: str = None):
         logger.log_info('NavigationInterface', 'Initializing navigation interface.')
         self.nav_manager = WaypointNavigationManager(nav_speed=nav_speed, vertical_factor=vertical_factor)
         self.is_running = True
         self.waypoint_dir = waypoint_dir
+        self.waypoint_file = waypoint_file
         logger.log_debug('NavigationInterface', f'Initialized with waypoint_dir={waypoint_dir}, vertical_factor={vertical_factor}, nav_speed={nav_speed}')
     
     def run(self, drone_instance=None) -> list:
@@ -53,6 +54,20 @@ class NavigationInterface:
     def _load_waypoint_file(self, drone_instance=None) -> bool:
         """Load waypoint file with user selection."""
         logger.log_info('NavigationInterface', 'Loading waypoint file.')
+        
+        # Check if specific waypoint_file is specified
+        if self.waypoint_file is not None:
+            # Construct the full path to the specified waypoint file
+            specified_file_path = os.path.join(self.waypoint_dir, self.waypoint_file)
+            
+            # Check if the specified file exists
+            if os.path.exists(specified_file_path):
+                logger.log_info('NavigationInterface', f'Found specified waypoint file: {specified_file_path}')
+                return self.nav_manager.load_waypoint_file(specified_file_path)
+            else:
+                logger.log_warning('NavigationInterface', f'Specified waypoint file not found: {specified_file_path}, proceeding with file selection.')
+                self.waypoint_file = None  # Reset
+                # Fall through to normal file selection process
         
         # Find available waypoint files
         waypoint_files = self._find_waypoint_files()

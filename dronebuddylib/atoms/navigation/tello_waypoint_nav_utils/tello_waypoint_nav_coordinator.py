@@ -29,7 +29,7 @@ class TelloWaypointNavCoordinator:
     _emergency_shutdown = False # Flag to trigger emergency program termination
 
     @classmethod
-    def get_instance(cls, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None, create_new: bool = False):
+    def get_instance(cls, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None, waypoint_file: str = None, create_new: bool = False):
         """
         Factory method to get the existing or new TelloWaypointNavCoordinator instance.
         
@@ -48,7 +48,7 @@ class TelloWaypointNavCoordinator:
             TelloWaypointNavCoordinator instance.
         """
         if create_new: 
-            instance = cls(waypoint_dir, vertical_factor, movement_speed, rotation_speed, navigation_speed, mode, waypoint_dest, instruction)
+            instance = cls(waypoint_dir, vertical_factor, movement_speed, rotation_speed, navigation_speed, mode, waypoint_dest, instruction, waypoint_file)
             cls._active_instance = instance
             return instance
         else: 
@@ -58,7 +58,7 @@ class TelloWaypointNavCoordinator:
             instance.instruction = instruction
             return instance 
 
-    def __init__(self, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None):
+    def __init__(self, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None, waypoint_file: str = None):
         """
         Initializes the TelloWaypointNavCoordinator with the given parameters.
 
@@ -81,6 +81,7 @@ class TelloWaypointNavCoordinator:
         self.mode = mode
         self.waypoint_dest = waypoint_dest
         self.instruction = instruction
+        self.waypoint_file = waypoint_file
 
         # Initialize Tello drone
         logger.log_debug('TelloWaypointNavCoordinator', 'Initializing Tello drone.')
@@ -294,7 +295,7 @@ class TelloWaypointNavCoordinator:
             return []
         
         # Initialize navigation interface
-        self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed)
+        self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
         
         self.is_navigation_mode = True
         self.is_running = True
@@ -352,16 +353,34 @@ class TelloWaypointNavCoordinator:
                 self.nav_manager = WaypointNavigationManager(nav_speed=self.navigation_speed, vertical_factor=self.vertical_factor)
                 self.nav_manager.coordinator = self  # Set coordinator reference for emergency shutdown
 
-                waypoint_files = self._find_waypoint_files()
-                if not waypoint_files:
-                    logger.log_error('TelloWaypointNavCoordinator', 'No waypoint files found. Please run mapping mode first.')
-                    self._stop_battery_monitoring()
-                    TelloWaypointNavCoordinator._active_instance = None
-                    return True, [self.current_waypoint]
+                # Check if specific waypoint_file is specified
+                selected_file = None
+                if self.waypoint_file is not None:
+                    # Construct the full path to the specified waypoint file
+                    specified_file_path = os.path.join(self.waypoint_dir, self.waypoint_file)
+                    
+                    # Check if the specified file exists
+                    if os.path.exists(specified_file_path):
+                        logger.log_info('TelloWaypointNavCoordinator', f'Found specified waypoint file: {specified_file_path}')
+                        selected_file = specified_file_path
+                    else:
+                        logger.log_warning('TelloWaypointNavCoordinator', f'Specified waypoint file not found: {specified_file_path}, using latest file.')
+                        self.waypoint_file = None  # Reset
 
-                latest_file = waypoint_files[0]
-                if not self.nav_manager.load_waypoint_file(latest_file):
-                    logger.log_error('TelloWaypointNavCoordinator', f'Failed to load waypoint file: {latest_file}')
+                # If no specific file or file not found, use latest file
+                if selected_file is None:
+                    waypoint_files = self._find_waypoint_files()
+                    if not waypoint_files:
+                        logger.log_error('TelloWaypointNavCoordinator', 'No waypoint files found. Please run mapping mode first.')
+                        self._stop_battery_monitoring()
+                        TelloWaypointNavCoordinator._active_instance = None
+                        return True, [self.current_waypoint]
+                    
+                    selected_file = waypoint_files[0]  # Latest file
+                    logger.log_info('TelloWaypointNavCoordinator', f'Using latest waypoint file: {selected_file}')
+
+                if not self.nav_manager.load_waypoint_file(selected_file):
+                    logger.log_error('TelloWaypointNavCoordinator', f'Failed to load waypoint file: {selected_file}')
                     self._stop_battery_monitoring()
                     TelloWaypointNavCoordinator._active_instance = None
                     return True, [self.current_waypoint]
