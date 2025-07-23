@@ -13,6 +13,7 @@ import cv2
 from datetime import datetime
 
 from dronebuddylib.utils.logger import Logger
+from video_grabber import TelloVideoGrabber
 
 logger = Logger()
 
@@ -35,7 +36,7 @@ class RealTimeDroneController:
         # Video streaming
         self.video_thread = None
         self.video_running = False
-        self.frame_read = None
+        self.video_grab = None
         
         # JSON file path for storing movement data
         filename = f"drone_movements_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -310,30 +311,6 @@ class RealTimeDroneController:
             logger.log_info('RealTimeDroneController', 'Starting video stream...')
             print("📹 Initializing video stream...")
             
-            # Start video stream
-            drone_instance.streamon()
-            time.sleep(3)  # Wait a bit longer for stream to initialize properly
-            
-            # Get frame reader
-            self.frame_read = drone_instance.get_frame_read()
-            
-            # Wait for first frame to be available
-            retry_count = 0
-            max_retries = 10
-            while retry_count < max_retries:
-                try:
-                    test_frame = self.frame_read.frame
-                    if test_frame is not None and test_frame.size > 0:
-                        break
-                except:
-                    pass
-                retry_count += 1
-                time.sleep(0.5)
-                print(f"⏳ Waiting for video stream... ({retry_count}/{max_retries})")
-            
-            if retry_count >= max_retries:
-                raise Exception("Video stream failed to initialize - no frames received")
-            
             # Start video display thread
             self.video_running = True
             self.video_thread = threading.Thread(target=self._video_display_loop, daemon=True)
@@ -357,9 +334,10 @@ class RealTimeDroneController:
             
             # Stop video thread
             self.video_running = False
-            self.frame_read = None
             if self.video_thread and self.video_thread.is_alive():
                 self.video_thread.join(timeout=2)
+
+            self.video_grab = None
             
             # Close OpenCV windows
             cv2.destroyAllWindows()
@@ -372,16 +350,25 @@ class RealTimeDroneController:
             
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error stopping video stream: {e}')
-    
-    def _video_display_loop(self):
+
+    def _video_display_loop(self, drone_instance=None):
         """Video display loop running in separate thread."""
         try:
             logger.log_debug('RealTimeDroneController', 'Video display thread started.')
+
+            # Start video stream
+            drone_instance.streamon()
+            time.sleep(3)  # Wait a bit longer for stream to initialize properly
             
-            while self.video_running and self.frame_read:
+            # Get frame reader
+            self.video_grab = TelloVideoGrabber()
+
+            self.video_grab.start()
+            
+            while self.video_running:
                 try:
                     # Get current frame
-                    frame = self.frame_read.frame
+                    frame = self.video_grab.frame
                     
                     if frame is not None and frame.size > 0:
                         # Resize frame for better display (optional)
@@ -419,8 +406,13 @@ class RealTimeDroneController:
                     time.sleep(0.1)  # Wait before retry
             
             logger.log_debug('RealTimeDroneController', 'Video display thread ended.')
-            
+        
+        except Exception as e:
+            logger.log_error('RealTimeDroneController', f'Video display thread error: {e}')
+            print(f"❌ Video display thread error: {e}")
+            traceback.print_exc()
         finally:
+            self.video_grab.stop()
             # Ensure window is closed
             cv2.destroyAllWindows()
     
