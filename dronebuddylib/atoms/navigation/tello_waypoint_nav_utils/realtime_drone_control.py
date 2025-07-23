@@ -13,7 +13,7 @@ import cv2
 from datetime import datetime
 
 from dronebuddylib.utils.logger import Logger
-from video_grabber import TelloVideoGrabber
+from .video_grabber import TelloVideoGrabber
 
 logger = Logger()
 
@@ -313,7 +313,7 @@ class RealTimeDroneController:
             
             # Start video display thread
             self.video_running = True
-            self.video_thread = threading.Thread(target=self._video_display_loop, daemon=True)
+            self.video_thread = threading.Thread(target=self._video_display_loop, args=(drone_instance,), daemon=True)
             self.video_thread.start()
             
             logger.log_success('RealTimeDroneController', 'Video stream started successfully.')
