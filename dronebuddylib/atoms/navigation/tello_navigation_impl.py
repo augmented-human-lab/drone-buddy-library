@@ -80,8 +80,76 @@ class NavigationWaypointImpl(INavigation):
         coordinator = TelloWaypointNavCoordinator.get_instance(self.waypoint_dir, self.vertical_factor, self.mapping_movement_speed, self.mapping_rotation_speed, self.nav_speed, "goto", destination_waypoint, instruction, self.waypoint_file, create_new)
         result = coordinator.run()
         
-        logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[0]}.')
+        logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[1]}.')
         return result
+
+    def navigate_to(self, waypoints: list, final_instruction: NavigationInstruction) -> list:
+        """
+        Navigates to a sequence of waypoints with strict NavigationInstruction enum enforcement.
+
+        Args:
+            waypoints (list): List of waypoints to navigate to.
+            final_instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
+            file_name (str): Name of the file to save the navigation data.
+
+        Returns:
+            list: The result of the navigation operation.
+            
+        Raises:
+            TypeError: If final_instruction is not a NavigationInstruction enum.
+        """
+        
+        logger.log_info(self.get_class_name(), f'Starting navigation to waypoints: {waypoints}')
+        logger.log_debug(self.get_class_name(), f'Final navigation instruction: {final_instruction}')
+        
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
+
+        # Strict type enforcement
+        if not isinstance(final_instruction, NavigationInstruction):
+            error_msg = f"final_instruction must be a NavigationInstruction enum, got {type(final_instruction).__name__}: {final_instruction}"
+            logger.log_error(self.get_class_name(), error_msg)
+            if coordinator_instance is not None:
+                coordinator_instance.is_goto_mode = False
+                coordinator_instance.is_running = False
+                coordinator_instance.cleanup()
+            raise TypeError(error_msg)
+        
+        # Validate waypoints list
+        if not waypoints:
+            error_msg = "waypoints list cannot be empty"
+            logger.log_error(self.get_class_name(), error_msg)
+            raise ValueError(error_msg)
+
+        accumulated_results = []
+
+        for i, waypoint in enumerate(waypoints):
+            is_last_waypoint = (i == len(waypoints) - 1)
+            
+            # Use CONTINUE for all waypoints except the last one
+            if is_last_waypoint:
+                current_instruction = final_instruction
+                logger.log_debug(self.get_class_name(), f'Final waypoint {waypoint}: using {final_instruction}')
+            else:
+                current_instruction = NavigationInstruction.CONTINUE
+                logger.log_debug(self.get_class_name(), f'Intermediate waypoint {waypoint}: using CONTINUE')
+            
+            # Navigate to current waypoint
+            logger.log_info(self.get_class_name(), f'Navigating to waypoint {i+1}/{len(waypoints)}: {waypoint}')
+            
+            try:
+                result = self.navigate_to_waypoint(waypoint, current_instruction)
+                if result[0] and current_instruction == NavigationInstruction.CONTINUE: 
+                    logger.log_error(self.get_class_name(), f"Navigation to waypoint {waypoint} failed, drone landed unexpectedly.")
+                    break
+                accumulated_results.extend([result[1]])
+                logger.log_info(self.get_class_name(), f'Drone currently at waypoint {result[1]}')
+            except Exception as e:
+                logger.log_error(self.get_class_name(), f'Failed to reach waypoint {waypoint}: {e}')
+                # You can choose to break here or continue to next waypoint
+                break  # Stop navigation on first failure
+
+        logger.log_info(self.get_class_name(), f'Navigation to waypoints session closed with drone at current waypoint: {accumulated_results[len(accumulated_results) - 1]}.')
+        return accumulated_results
 
     def get_required_params(self) -> list:
         return []

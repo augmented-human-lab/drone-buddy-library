@@ -22,19 +22,28 @@ def test_navigate_to_waypoint():
     """Test the navigate_to_waypoint function with proper NavigationInstruction enum usage."""
     # Configure navigation engine
     config = EngineConfigurations({})
-    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 'drone_movements_20250717_143431')
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 'drone_movements_20250717_143431.json')
     engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, config)
     
     logger.log_info("Main", "Navigation engine initialized successfully")
 
     # Using proper NavigationInstruction enum values
-    result1 = engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE)
-    time.sleep(2)  # Wait for the first navigation to complete
-    result2 = engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT)
+    # result1 = engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE)
+    # time.sleep(2)  # Wait for the first navigation to complete
+    # result2 = engine.navigate_to_waypoint("WP_001", NavigationInstruction.CONTINUE)
+    time.sleep(1)  # Wait for the second navigation to complete
     # time.sleep(5)  # Wait for the second navigation to complete
     # result3 = engine.navigate_to_waypoint("WP_001", 1)
 
-    return result1, result2
+    result1 = engine.navigate_to(["WP_002", "WP_003", "Kitchen", "WP_001", "WP_002"], NavigationInstruction.CONTINUE)
+
+    # result2 = engine.navigate_to(["WP_001", "WP_002"], NavigationInstruction.HALT)
+
+    # result = result1.extend(result2)
+
+    return result1
+
+    # return result1, result2
 
     # return engine.navigate()
 

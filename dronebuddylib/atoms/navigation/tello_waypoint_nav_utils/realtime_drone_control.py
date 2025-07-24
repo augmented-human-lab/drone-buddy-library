@@ -572,8 +572,8 @@ class RealTimeDroneController:
         self.mark_waypoint("START", auto_generated=True)
         print("First waypoint marked: START")
 
-        # Start video streaming
-        self.start_video_stream(drone_instance=drone_instance)
+        # # Start video streaming
+        # self.start_video_stream(drone_instance=drone_instance)
 
         try:
             self.handle_keypress(drone_instance=drone_instance)
@@ -582,8 +582,8 @@ class RealTimeDroneController:
         except Exception as e:
             print(f"\n❌ Error during drone control: {e}")
         finally:
-            # Stop video streaming first
-            self.stop_video_stream(drone_instance=drone_instance)
+            # # Stop video streaming first
+            # self.stop_video_stream(drone_instance=drone_instance)
             
             # Ensure the last waypoint is marked if there are movements
             try: 

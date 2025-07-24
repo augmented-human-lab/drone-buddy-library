@@ -79,3 +79,28 @@ class NavigationEngine:
         
         logger.log_debug(self.get_class_name(), f'Navigate to waypoint operation completed with drone at current waypoint: {result[0]}.')
         return result
+    
+    def navigate_to(self, waypoints, final_instruction): 
+        """
+        Navigates to a sequence of waypoints with strict NavigationInstruction enum enforcement.
+
+        Args:
+            waypoints (list): List of waypoints to navigate to.
+            final_instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
+            file_name (str): Name of the file to save the navigation data.
+
+        Returns:
+            list: The result of the navigation operation.
+            
+        Raises:
+            TypeError: If final_instruction is not a NavigationInstruction enum.
+            ValueError: If final_instruction is not CONTINUE or HALT.
+        """
+        
+        logger.log_info(self.get_class_name(), f'Starting navigation to waypoints: {waypoints}')
+        logger.log_debug(self.get_class_name(), f'Final navigation instruction: {final_instruction}')
+        
+        result = self.navigation_engine.navigate_to(waypoints, final_instruction)
+        
+        logger.log_debug(self.get_class_name(), f'Navigate to waypoints operation completed with drone at current waypoint: {result[0]}.')
+        return result
