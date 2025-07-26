@@ -4,12 +4,20 @@ something...
 import sys
 import os
 import time
+import platform
 from djitellopy import Tello
 
-os.environ['QT_QPA_PLATFORM'] = 'xcb'
+# Set platform-specific environment variables
+if platform.system() == 'Linux':
+    os.environ['QT_QPA_PLATFORM'] = 'xcb'
+
 import cv2
 
-sys.path.insert(0, '/home/zen/drone-buddy-library') 
+# Use cross-platform path
+if platform.system() == 'Windows':
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+else:
+    sys.path.insert(0, '/home/zen/drone-buddy-library') 
 
 
 from dronebuddylib import EngineConfigurations, NavigationAlgorithm, NavigationEngine, AtomicEngineConfigurations

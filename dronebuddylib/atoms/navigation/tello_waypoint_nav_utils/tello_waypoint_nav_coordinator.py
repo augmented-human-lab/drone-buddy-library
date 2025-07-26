@@ -4,10 +4,13 @@ import threading
 import os
 import glob
 import sys
+import platform
 from enum import Enum
 
 from .realtime_drone_control import RealTimeDroneController
+from .realtime_drone_control_windows import RealTimeDroneControllerWindows
 from .navigation_interface import NavigationInterface
+from .navigation_interface_windows import NavigationInterfaceWindows
 from dronebuddylib.utils.logger import Logger
 
 logger = Logger()
@@ -256,8 +259,14 @@ class TelloWaypointNavCoordinator:
             logger.log_error('TelloWaypointNavCoordinator', 'Failed to take off. Exiting...')
             return []
         
-        # Initialize drone controller
-        self.drone_controller = RealTimeDroneController(self.waypoint_dir, self.movement_speed, self.rotation_speed)
+        # Initialize drone controller based on OS
+        current_os = platform.system()
+        if current_os == 'Windows':
+            logger.log_info('TelloWaypointNavCoordinator', 'Detected Windows OS - using Windows controller with video streaming')
+            self.drone_controller = RealTimeDroneControllerWindows(self.waypoint_dir, self.movement_speed, self.rotation_speed)
+        else:
+            logger.log_info('TelloWaypointNavCoordinator', f'Detected {current_os} OS - using Linux controller')
+            self.drone_controller = RealTimeDroneController(self.waypoint_dir, self.movement_speed, self.rotation_speed)
         
         self.is_mapping_mode = True
         self.is_running = True
@@ -295,8 +304,14 @@ class TelloWaypointNavCoordinator:
             logger.log_error('TelloWaypointNavCoordinator', 'Failed to take off. Exiting...')
             return []
         
-        # Initialize navigation interface
-        self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
+        # Initialize navigation interface based on OS
+        current_os = platform.system()
+        if current_os == 'Windows':
+            logger.log_info('TelloWaypointNavCoordinator', 'Detected Windows OS - using Windows navigation interface')
+            self.nav_interface = NavigationInterfaceWindows(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
+        else:
+            logger.log_info('TelloWaypointNavCoordinator', f'Detected {current_os} OS - using Linux navigation interface')
+            self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
         
         self.is_navigation_mode = True
         self.is_running = True
