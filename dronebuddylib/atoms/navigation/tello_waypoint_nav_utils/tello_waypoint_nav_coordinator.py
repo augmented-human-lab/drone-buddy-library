@@ -7,10 +7,13 @@ import sys
 import platform
 from enum import Enum
 
-from .realtime_drone_control import RealTimeDroneController
-from .realtime_drone_control_windows import RealTimeDroneControllerWindows
-from .navigation_interface import NavigationInterface
-from .navigation_interface_windows import NavigationInterfaceWindows
+if platform.system() == 'Linux':
+    from .realtime_drone_control import RealTimeDroneController
+    from .navigation_interface import NavigationInterface
+if platform.system() == 'Windows':
+    from .realtime_drone_control_windows import RealTimeDroneControllerWindows
+    from .navigation_interface_windows import NavigationInterfaceWindows
+    
 from dronebuddylib.utils.logger import Logger
 
 logger = Logger()
