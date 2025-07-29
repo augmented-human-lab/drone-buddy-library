@@ -439,8 +439,8 @@ class RealTimeDroneControllerWindows:
     def get_key(self):
         """Get a single key press without blocking - Windows version."""
         start_time = time.time()
-        # Use 0.5 second timeout like Linux version
-        while time.time() - start_time < 0.5:
+        # Use 0.2 second timeout like Linux version
+        while time.time() - start_time < 0.2:
             if msvcrt.kbhit():
                 key = msvcrt.getch()
                 
@@ -565,7 +565,7 @@ class RealTimeDroneControllerWindows:
                         activeMovementKey = None
                     continue
                 
-                time.sleep(0.05)  # Fast responsive loop - same as Linux version
+                time.sleep(0.02)  # Fast responsive loop - same as Linux version
                 
         except Exception as e:
             print(f"\rError in keyboard handling: {e}")
