@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import os
 import glob
-import sys
 import time
-import threading
 from typing import Optional
 
 import msvcrt

@@ -52,8 +52,8 @@ class NavigationWaypointImpl(INavigation):
             instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
 
         Returns:
-            list: Containing the drone's current waypoint
-            
+            list: Result of the navigation operation, first element is a boolean indicating if the drone has landed or not (True if landed, False if still flying), second element is the current waypoint of the drone. Can be used to determine if the drone has successfully navigated to the destination waypoint.
+
         Raises:
             TypeError: If instruction is not a NavigationInstruction enum.
         """
@@ -90,10 +90,9 @@ class NavigationWaypointImpl(INavigation):
         Args:
             waypoints (list): List of waypoints to navigate to.
             final_instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
-            file_name (str): Name of the file to save the navigation data.
 
         Returns:
-            list: The result of the navigation operation.
+            list: Contains the list of waypoints the drone has navigated to. 
             
         Raises:
             TypeError: If final_instruction is not a NavigationInstruction enum.

@@ -36,7 +36,7 @@ class RealTimeDroneController:
         # Video streaming
         self.video_thread = None
         self.video_running = False
-        self.video_grab = None
+        self.frame_read = None
         
         # JSON file path for storing movement data
         filename = f"drone_movements_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -306,14 +306,38 @@ class RealTimeDroneController:
             return summary
     
     def start_video_stream(self, drone_instance=None):
-        """Start video streaming from drone camera."""
+        """Start video streaming from drone camera using Tello's built-in function."""
         try:
             logger.log_info('RealTimeDroneController', 'Starting video stream...')
             print("📹 Initializing video stream...")
             
+            # Start video stream
+            drone_instance.streamon()
+            time.sleep(3)  # Wait a bit longer for stream to initialize properly
+            
+            # Get frame reader using Tello's built-in function
+            self.frame_read = drone_instance.get_frame_read()
+            
+            # Wait for first frame to be available
+            retry_count = 0
+            max_retries = 10
+            while retry_count < max_retries:
+                try:
+                    test_frame = self.frame_read.frame
+                    if test_frame is not None and test_frame.size > 0:
+                        break
+                except:
+                    pass  # Ignore errors, just retry
+                retry_count += 1
+                time.sleep(0.5)
+                print(f"⏳ Waiting for video stream... ({retry_count}/{max_retries})")
+            
+            if retry_count >= max_retries:
+                raise Exception("Video stream failed to initialize - no frames received")
+            
             # Start video display thread
             self.video_running = True
-            self.video_thread = threading.Thread(target=self._video_display_loop, args=(drone_instance,), daemon=True)
+            self.video_thread = threading.Thread(target=self._video_display_loop, daemon=True)
             self.video_thread.start()
             
             logger.log_success('RealTimeDroneController', 'Video stream started successfully.')
@@ -337,7 +361,7 @@ class RealTimeDroneController:
             if self.video_thread and self.video_thread.is_alive():
                 self.video_thread.join(timeout=2)
 
-            self.video_grab = None
+            self.frame_read = None
             
             # Close OpenCV windows
             cv2.destroyAllWindows()
@@ -351,27 +375,18 @@ class RealTimeDroneController:
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error stopping video stream: {e}')
 
-    def _video_display_loop(self, drone_instance=None):
+    def _video_display_loop(self):
         """Video display loop running in separate thread."""
         try:
             logger.log_debug('RealTimeDroneController', 'Video display thread started.')
-
-            # Start video stream
-            drone_instance.streamon()
-            time.sleep(3)  # Wait a bit longer for stream to initialize properly
             
-            # Get frame reader
-            self.video_grab = TelloVideoGrabber()
-
-            self.video_grab.start()
-            
-            while self.video_running:
+            while self.video_running and self.frame_read:
                 try:
                     # Get current frame
-                    frame = self.video_grab.frame
+                    frame = self.frame_read.frame
                     
                     if frame is not None and frame.size > 0:
-                        # Resize frame for better display (optional)
+                        # Resize frame 
                         height, width = frame.shape[:2]
                         if width > 960:  # Resize if too large
                             scale = 960 / width
@@ -387,13 +402,13 @@ class RealTimeDroneController:
                         cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
                         
                         # Title and instructions
-                        cv2.putText(frame, 'Drone Camera View - Mapping Mode', 
+                        cv2.putText(frame, 'Drone Camera View - Mapping Mode (Windows)', 
                                   (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
                         cv2.putText(frame, 'Use terminal for controls - Press Q in terminal to quit', 
                                   (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                         
                         # Display frame
-                        cv2.imshow('Drone Camera - Mapping Mode', frame)
+                        cv2.imshow('Drone Camera - Mapping Mode (Windows)', frame)
                         
                         # Handle window events (but don't wait for key presses)
                         cv2.waitKey(1)
@@ -406,13 +421,8 @@ class RealTimeDroneController:
                     time.sleep(0.1)  # Wait before retry
             
             logger.log_debug('RealTimeDroneController', 'Video display thread ended.')
-        
-        except Exception as e:
-            logger.log_error('RealTimeDroneController', f'Video display thread error: {e}')
-            print(f"❌ Video display thread error: {e}")
-            traceback.print_exc()
+            
         finally:
-            self.video_grab.stop()
             # Ensure window is closed
             cv2.destroyAllWindows()
     
@@ -470,7 +480,7 @@ class RealTimeDroneController:
                         battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                         battery = int(battery_str)
                         if battery < 20:
-                            print(f"\r⚠️  Low battery ({battery}%)               ")
+                            print(f"\r⚠️  Low battery ({battery}%)")
                             if battery < 10:
                                 print("\r❗ CRITICAL: Battery too low, landing...")
                                 break
@@ -482,7 +492,7 @@ class RealTimeDroneController:
                 key = self.get_key()
                 
                 if key:
-                    print(f"\r🎮 Key: '{key}'                    ")
+                    print(f"\r🎮 Key: '{key}'")
                     
                     if key == 'q':  
                         print("\r--- Finishing mapping session ---")
@@ -509,12 +519,12 @@ class RealTimeDroneController:
                         if key != activeMovementKey:
                             # Stop current movement if any
                             if activeMovementKey:
-                                print(f"\r🛑 Stopping movement: {activeMovementKey}        ")
+                                print(f"\r🛑 Stopping movement: {activeMovementKey}")
                                 self.stop_movement(drone_instance=drone_instance)
 
                             # Start new movement
                             activeMovementKey = key
-                            print(f"\r🚀 Starting movement: {key}        ")
+                            print(f"\r🚀 Starting movement: {key}")
                             
                             match key:
                                 case 'w': 
@@ -535,11 +545,11 @@ class RealTimeDroneController:
                                     self.start_movement('clockwise', 'rotate', drone_instance)
                         else: 
                             # Same movement continues
-                            print(f"\r🚀 Continuing movement: {activeMovementKey}    ")
+                            print(f"\r🚀 Continuing movement: {activeMovementKey}")
                             continue
                     else:
                         # Stop movement or remain still on other keys
-                        print(f"\r🎮 Unrecognized key: '{key}'                  ")
+                        print(f"\r🎮 Unrecognized key: '{key}'")
                         if self.current_movement:
                             print("\r🛑 Stopping current movement due to unrecognized key")
                             self.stop_movement(drone_instance=drone_instance)
@@ -548,7 +558,7 @@ class RealTimeDroneController:
                 else:
                     # No key pressed, stop any movement
                     if self.current_movement:
-                        print("\r🛑 No key pressed, stopping current movement    ")
+                        print("\r🛑 No key pressed, stopping current movement")
                         self.stop_movement(drone_instance=drone_instance)
                         activeMovementKey = None
                     continue
@@ -560,7 +570,7 @@ class RealTimeDroneController:
         finally:
             # Restore terminal settings
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-            print("\r🎮 Keyboard controls ended            ")
+            print("\r🎮 Keyboard controls ended")
     
     
     def run(self, drone_instance=None) -> list:
@@ -573,7 +583,7 @@ class RealTimeDroneController:
         print("First waypoint marked: START")
 
         # # Start video streaming
-        # self.start_video_stream(drone_instance=drone_instance)
+        self.start_video_stream(drone_instance=drone_instance)
 
         try:
             self.handle_keypress(drone_instance=drone_instance)
@@ -583,7 +593,7 @@ class RealTimeDroneController:
             print(f"\n❌ Error during drone control: {e}")
         finally:
             # # Stop video streaming first
-            # self.stop_video_stream(drone_instance=drone_instance)
+            self.stop_video_stream(drone_instance=drone_instance)
             
             # Ensure the last waypoint is marked if there are movements
             try: 

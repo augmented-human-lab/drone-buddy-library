@@ -325,7 +325,7 @@ class RealTimeDroneControllerWindows:
                     if test_frame is not None and test_frame.size > 0:
                         break
                 except:
-                    pass
+                    pass  # Ignore errors, just retry
                 retry_count += 1
                 time.sleep(0.5)
                 print(f"⏳ Waiting for video stream... ({retry_count}/{max_retries})")
@@ -356,9 +356,10 @@ class RealTimeDroneControllerWindows:
             
             # Stop video thread
             self.video_running = False
-            self.frame_read = None
             if self.video_thread and self.video_thread.is_alive():
                 self.video_thread.join(timeout=2)
+
+            self.frame_read = None
             
             # Close OpenCV windows
             cv2.destroyAllWindows()
@@ -383,7 +384,7 @@ class RealTimeDroneControllerWindows:
                     frame = self.frame_read.frame
                     
                     if frame is not None and frame.size > 0:
-                        # Resize frame for better display (optional)
+                        # Resize frame 
                         height, width = frame.shape[:2]
                         if width > 960:  # Resize if too large
                             scale = 960 / width
@@ -403,19 +404,6 @@ class RealTimeDroneControllerWindows:
                                   (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
                         cv2.putText(frame, 'Use terminal for controls - Press Q in terminal to quit', 
                                   (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-                        
-                        # Status information
-                        waypoint_count = len(self.waypoints)
-                        movement_count = len(self.current_waypoint_movements)
-                        status_text = f'Waypoints: {waypoint_count} | Current movements: {movement_count}'
-                        cv2.putText(frame, status_text, 
-                                  (10, 85), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 1)
-                        
-                        # Movement indicator
-                        if self.current_movement:
-                            movement_text = f'MOVING: {self.current_movement["type"].upper()} {self.current_movement["direction"].upper()}'
-                            cv2.putText(frame, movement_text, 
-                                      (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
                         
                         # Display frame
                         cv2.imshow('Drone Camera - Mapping Mode (Windows)', frame)
@@ -487,7 +475,7 @@ class RealTimeDroneControllerWindows:
                         battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                         battery = int(battery_str)
                         if battery < 20:
-                            print(f"\r⚠️  Low battery ({battery}%)               ")
+                            print(f"\r⚠️  Low battery ({battery}%)")
                             if battery < 10:
                                 print("\r❗ CRITICAL: Battery too low, landing...")
                                 break
@@ -499,7 +487,7 @@ class RealTimeDroneControllerWindows:
                 key = self.get_key()
                 
                 if key:
-                    print(f"\r🎮 Key: '{key}'                    ")
+                    print(f"\r🎮 Key: '{key}'")
                     
                     if key == 'q':  
                         print("\r--- Finishing mapping session ---")
@@ -522,12 +510,12 @@ class RealTimeDroneControllerWindows:
                         if key != activeMovementKey:
                             # Stop current movement if any
                             if activeMovementKey:
-                                print(f"\r🛑 Stopping movement: {activeMovementKey}        ")
+                                print(f"\r🛑 Stopping movement: {activeMovementKey}")
                                 self.stop_movement(drone_instance=drone_instance)
 
                             # Start new movement
                             activeMovementKey = key
-                            print(f"\r🚀 Starting movement: {key}        ")
+                            print(f"\r🚀 Starting movement: {key}")
                             
                             if key == 'w':
                                 self.start_movement('forward', 'move', drone_instance)
@@ -547,11 +535,11 @@ class RealTimeDroneControllerWindows:
                                 self.start_movement('clockwise', 'rotate', drone_instance)
                         else: 
                             # Same movement continues
-                            print(f"\r🚀 Continuing movement: {activeMovementKey}    ")
+                            print(f"\r🚀 Continuing movement: {activeMovementKey}")
                             continue
                     else:
                         # Stop movement or remain still on other keys
-                        print(f"\r🎮 Unrecognized key: '{key}'                  ")
+                        print(f"\r🎮 Unrecognized key: '{key}'")
                         if self.current_movement:
                             print("\r🛑 Stopping current movement due to unrecognized key")
                             self.stop_movement(drone_instance=drone_instance)
@@ -560,7 +548,7 @@ class RealTimeDroneControllerWindows:
                 else:
                     # No key pressed, stop any movement
                     if self.current_movement:
-                        print("\r🛑 No key pressed, stopping current movement    ")
+                        print("\r🛑 No key pressed, stopping current movement")
                         self.stop_movement(drone_instance=drone_instance)
                         activeMovementKey = None
                     continue
@@ -570,7 +558,7 @@ class RealTimeDroneControllerWindows:
         except Exception as e:
             print(f"\rError in keyboard handling: {e}")
         finally:
-            print("\r🎮 Keyboard controls ended            ")
+            print("\r🎮 Keyboard controls ended")
     
     
     def run(self, drone_instance=None) -> list:

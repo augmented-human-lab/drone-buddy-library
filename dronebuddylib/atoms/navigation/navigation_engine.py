@@ -34,10 +34,10 @@ class NavigationEngine:
 
     def map_location(self) -> list:
         """
-        Retrieves the current map location.
+        Allows user to map the current location and returns a list of waypoints.
 
         Returns:
-            list: The current map location.
+            list: A list of waypoints representing the mapped location.
         """
         logger.log_debug(self.get_class_name(), 'Starting map location operation.')
         result = self.navigation_engine.map_location()
@@ -46,10 +46,10 @@ class NavigationEngine:
 
     def navigate(self) -> list:
         """
-        Initiates navigation.
-
-        Returns:
-            list: The result of the navigation operation.
+        Provides navigation interface to the user to navigate between known waypoints
+        
+        Returns: 
+         list: A list of navigated waypoints.
         """
         logger.log_info(self.get_class_name(), 'Starting navigation operation.')
         result = self.navigation_engine.navigate()
@@ -65,11 +65,10 @@ class NavigationEngine:
             instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
 
         Returns:
-            list: The result of the navigation to the specified waypoint.
-            
+            list: Result of the navigation operation, first element is a boolean indicating if the drone has landed or not (True if landed, False if still flying), second element is the current waypoint of the drone. Can be used to determine if the drone has successfully navigated to the destination waypoint.
+
         Raises:
             TypeError: If instruction is not a NavigationInstruction enum.
-            ValueError: If instruction is not CONTINUE or HALT.
         """
         
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
@@ -87,14 +86,12 @@ class NavigationEngine:
         Args:
             waypoints (list): List of waypoints to navigate to.
             final_instruction (NavigationInstruction): Must be NavigationInstruction.CONTINUE or NavigationInstruction.HALT.
-            file_name (str): Name of the file to save the navigation data.
 
         Returns:
-            list: The result of the navigation operation.
+            list: Contains the list of waypoints the drone has navigated to. 
             
         Raises:
             TypeError: If final_instruction is not a NavigationInstruction enum.
-            ValueError: If final_instruction is not CONTINUE or HALT.
         """
         
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoints: {waypoints}')
