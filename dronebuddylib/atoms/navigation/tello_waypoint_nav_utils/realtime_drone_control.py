@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Linux-specific real-time drone controller for waypoint mapping.
+
+Provides real-time manual control of Tello drones for creating waypoint maps
+using Linux-compatible input handling (termios/select). Records all movements,
+tracks waypoints, and generates JSON files for navigation.
+"""
 import json
 import os
 import time
@@ -19,40 +26,42 @@ logger = Logger()
 
 
 class RealTimeDroneController:
+    """Linux real-time controller for drone waypoint mapping through manual flight."""
+    
     def __init__(self, waypoint_dir: str, movement_speed: int, rotation_speed: int):
-        """Initialize the drone controller with recording capabilities."""
-        self.movement_speed = movement_speed  # cm/s
-        self.rotation_speed = rotation_speed  # degrees/s
+        """Initialize controller with movement speeds and recording setup."""
+        self.movement_speed = movement_speed  # cm/s for linear movements
+        self.rotation_speed = rotation_speed  # degrees/s for rotations
         
-        # Movement tracking
-        self.current_movement = None
-        self.waypoints = []
-        self.current_waypoint_movements = []
-        self.waypoint_counter = 0
+        # Movement tracking state
+        self.current_movement = None  # Active movement being recorded
+        self.waypoints = []  # Complete waypoint list
+        self.current_waypoint_movements = []  # Movements since last waypoint
+        self.waypoint_counter = 0  # Sequential waypoint numbering
         
         # Control flags
-        self.add_movement = False
+        self.add_movement = False  # Whether to record current movement
         
-        # Video streaming
+        # Video streaming components
         self.video_thread = None
         self.video_running = False
         self.frame_read = None
         
-        # JSON file path for storing movement data
+        # JSON output file with timestamp
         filename = f"drone_movements_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         self.data_file = os.path.join(waypoint_dir, filename)
     
     def get_drone_state(self, drone_instance=None):
-        """Get current drone state including position and yaw."""
+        """Get current drone telemetry data for movement recording."""
         try:
             state = {}
 
-            # Get yaw (facing direction)
+            # Get yaw (facing direction) from attitude command
             try:
                 attitude_str = drone_instance.send_command_with_return("attitude?", timeout=3)
                 logger.log_debug('RealTimeDroneController', f'Raw attitude response: {attitude_str}')
                 
-                # Parse attitude string like "pitch:0;roll:0;yaw:45;"
+                # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
                 state['yaw'] = 0  # Default value
                 if attitude_str and ':' in attitude_str:
                     attitude_parts = attitude_str.split(';')
@@ -70,17 +79,16 @@ class RealTimeDroneController:
                 logger.log_warning('RealTimeDroneController', f'Attitude query failed: {e}')
                 state['yaw'] = 0
 
-            # Get height
+            # Get height in centimeters (converted from decimeters)
             try:
                 height_str = self.tello.send_command_with_return("height?", timeout=3)
-                # Height returns like "10dm" (decimeters), convert to cm
-                height_dm = int(height_str.replace('dm', ''))
+                height_dm = int(height_str.replace('dm', ''))  # Remove 'dm' suffix
                 state['height'] = height_dm * 10  # Convert dm to cm
             except Exception as e:
                 logger.log_warning('RealTimeDroneController', f'Height query failed: {e}')
                 state['height'] = 0
             
-            # Get battery level
+            # Get battery percentage
             try:
                 battery_str = self.tello.send_command_with_return("battery?", timeout=3)
                 state['battery'] = int(battery_str)
@@ -92,23 +100,25 @@ class RealTimeDroneController:
             return state
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
-            return {'height': 0, 'yaw': 0, 'battery': 0}
+            return {'height': 0, 'yaw': 0, 'battery': 0}  # Safe defaults
 
     def start_movement(self, direction, movement_type="move", drone_instance=None):
-        """Start a movement in the specified direction."""
+        """Begin drone movement in specified direction and record movement data."""
         logger.log_debug('RealTimeDroneController', f'Starting movement: {movement_type} {direction}')
         
         if self.current_movement is not None:
             logger.log_warning('RealTimeDroneController', "Already moving, ignoring new movement")
-            return  # Already moving
+            return  # Prevent overlapping movements
         
+        # Get initial drone state for movement recording
         try: 
             drone_state = self.get_drone_state(drone_instance)
-            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if not available
+            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if unavailable
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
             start_yaw = 0
 
+        # Create movement record with timing and orientation
         self.current_movement = {
             'type': movement_type,
             'direction': direction,
@@ -118,10 +128,10 @@ class RealTimeDroneController:
 
         logger.log_debug('RealTimeDroneController', f'Created movement record: {self.current_movement}')
 
-        # Start the actual drone movement
+        # Send appropriate RC control commands to drone
         try:
             if movement_type == "move":
-                self.add_movement = True
+                self.add_movement = True  # Linear movements are recorded
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for {direction}')
                 if direction == "forward":
@@ -135,7 +145,7 @@ class RealTimeDroneController:
                 logger.log_debug('RealTimeDroneController', f'RC control sent for {direction}')
 
             elif movement_type == "lift":
-                self.add_movement = True
+                self.add_movement = True  # Vertical movements are recorded
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for lift {direction}')
                 if direction == "up":
@@ -145,7 +155,7 @@ class RealTimeDroneController:
                 logger.log_debug('RealTimeDroneController', f'RC control sent for lift {direction}')
                     
             elif movement_type == "rotate":
-                self.add_movement = False
+                self.add_movement = False  # Rotations are not recorded as waypoint movements
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for rotate {direction}')
                 if direction == "anticlockwise":
@@ -161,15 +171,15 @@ class RealTimeDroneController:
             self.current_movement = None
     
     def stop_movement(self, drone_instance=None):
-        """Stop current movement and record the event."""
+        """Stop current movement, calculate distance, and record movement event."""
         if self.current_movement is None:
             return
         
         if not self.add_movement:
+            # Handle rotation movements (not recorded as waypoint data)
             logger.log_debug('RealTimeDroneController', 'Stopping rotation movement...')
-            # Stop drone rotation
             try:
-                drone_instance.send_rc_control(0, 0, 0, 0)
+                drone_instance.send_rc_control(0, 0, 0, 0)  # Stop all RC control
             except Exception as e:
                 logger.log_error('RealTimeDroneController', f'Error stopping rotation movement: {e}')
 
@@ -178,18 +188,17 @@ class RealTimeDroneController:
         
         # Stop drone movement
         try:
-            drone_instance.send_rc_control(0, 0, 0, 0)
+            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop all movement
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error stopping movement: {e}')
 
-        # Calculate movement duration and distance
+        # Calculate movement duration and distance for recording
         end_time = time.time()
-        duration = end_time - self.current_movement['start_time'] + 0.5 # Add a small buffer to account for halt delay
+        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for deceleration
         
-        # Calculate distance moved
         distance = self.movement_speed * duration  # cm
         
-        # Create movement event record
+        # Create movement event record for waypoint file
         movement_event = {
             'id': str(uuid.uuid4()),
             'type': self.current_movement['type'],
@@ -199,7 +208,7 @@ class RealTimeDroneController:
             'timestamp': datetime.now().isoformat()
         }
         
-        # Add to current waypoint movements
+        # Add to current waypoint's movement list
         self.current_waypoint_movements.append(movement_event)
 
         logger.log_info('RealTimeDroneController', f"Recorded {movement_event['type']} {movement_event['direction']} at {movement_event['start_yaw']} degree(s): "
@@ -208,14 +217,14 @@ class RealTimeDroneController:
         self.current_movement = None
     
     def mark_waypoint(self, name=None, auto_generated=False):
-        """Mark a waypoint and save current movement cluster."""
+        """Create a new waypoint with current movement cluster and reset for next waypoint."""
         if not auto_generated and not name:
             name = input("Enter waypoint name: ").strip()
             if not name:
                 name = f"Waypoint_{self.waypoint_counter + 1}"
         
         self.waypoint_counter += 1
-        waypoint_id = f"WP_{self.waypoint_counter:03d}"
+        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format: WP_001, WP_002, etc.
         
         waypoint = {
             'id': waypoint_id,
@@ -228,19 +237,20 @@ class RealTimeDroneController:
         logger.log_info('RealTimeDroneController', f"Waypoint marked: {waypoint['name']} (ID: {waypoint_id})")
         logger.log_info('RealTimeDroneController', f"Movements recorded: {len(self.current_waypoint_movements)} events")
 
-        # Reset movements for next waypoint cluster
+        # Reset movement list for next waypoint cluster
         self.current_waypoint_movements = []
     
     def save_to_json(self) -> list:
-        """Save all waypoints and movements to JSON file."""
+        """Process movement data and save complete waypoint map to JSON file."""
         processed_waypoints = []
         for waypoint in self.waypoints: 
             processed_movements = []
 
-            # Movement type is either 'move', or 'lift' only
+            # Process movements - convert directions to yaw angles for 'move' type
             for movement in waypoint['movements_to_here']:
                 if movement['type'] == 'move':
                     yaw = movement['start_yaw']
+                    # Adjust yaw based on movement direction
                     if movement['direction'] == 'forward':
                         yaw += 0
                     elif movement['direction'] == 'backward':
@@ -267,7 +277,7 @@ class RealTimeDroneController:
                     processed_movements.append(processed_movement)
                 
                 else: 
-                    # For 'lift' movements, we can just record the type distance and direction
+                    # For 'lift' movements, keep direction and distance
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
@@ -285,6 +295,7 @@ class RealTimeDroneController:
 
             processed_waypoints.append(processed_waypoint)
 
+        # Create final JSON structure
         data = {
             'session_info': {
                 'total_waypoints': len(self.waypoints),
@@ -302,8 +313,7 @@ class RealTimeDroneController:
             logger.log_error('RealTimeDroneController', f"Error saving data: {e}")
             summary = []
         finally: 
-            # Return a summary list of all waypoint ids and names 
-            return summary
+            return summary  # Return summary of waypoint IDs and names
     
     def start_video_stream(self, drone_instance=None):
         """Start video streaming from drone camera using Tello's built-in function."""
@@ -424,12 +434,12 @@ class RealTimeDroneController:
             cv2.destroyAllWindows()
     
     def get_key(self):
-        """Get a single key press without blocking."""
+        """Linux keyboard input with arrow key detection using select and termios."""
         if select.select([sys.stdin], [], [], 0.5) == ([sys.stdin], [], []):
-            # Read a single character from stdin
+            # Read single character from stdin
             key = sys.stdin.read(1).lower()
             
-            if key == '\x1b':
+            if key == '\x1b':  # Escape sequence (arrow keys start with ESC)
 
                 time.sleep(0.02)  # Allow time for escape sequence
                 if select.select([sys.stdin], [], [], 0.1)[0]: 
@@ -445,7 +455,7 @@ class RealTimeDroneController:
                         return arrow_map.get(arrow, 'unknown_key')
                 return 'incomplete'
             elif key == '[': 
-                # Ignore the alphebet key character that follows
+                # Ignore alphabet character that follows
                 if select.select([sys.stdin], [], [], 0.1)[0]:
                     sys.stdin.read(1)
                 return 'ignored_key'  
@@ -454,9 +464,9 @@ class RealTimeDroneController:
         return None
 
     def handle_keypress(self, drone_instance=None):
-        """Handle keyboard input for drone control using termios."""
+        """Main keyboard control loop using Linux termios for real-time input."""
         
-        # Save original terminal settings
+        # Save original terminal settings for restoration
         old_settings = termios.tcgetattr(sys.stdin)
         
         try:
@@ -470,7 +480,7 @@ class RealTimeDroneController:
             print("🎮 Keyboard controls active!")
             
             while True:
-                # Battery check every 5 seconds
+                # Battery monitoring every 5 seconds
                 current_time = time.time()
                 if current_time - last_battery_check > 5:
                     try:
@@ -485,7 +495,7 @@ class RealTimeDroneController:
                     except Exception as e:
                         logger.log_error('RealTimeDroneController', f'Error checking battery: {e}')
 
-                # Get key input
+                # Get keyboard input
                 key = self.get_key()
                 
                 if key:
@@ -501,20 +511,20 @@ class RealTimeDroneController:
                                 activeMovementKey = None
 
                             logger.log_info('RealTimeDroneController', 'Marking waypoint...')
-                            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+                            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)  # Restore for input
 
                             self.mark_waypoint()
 
-                            old_settings = termios.tcgetattr(sys.stdin)
-                            tty.setraw(sys.stdin)
+                            old_settings = termios.tcgetattr(sys.stdin)  # Save again
+                            tty.setraw(sys.stdin)  # Return to raw mode
                             x_pressed = True
                         else:
                             logger.log_info('RealTimeDroneController', 'Waypoint already marked')
                             continue
                     elif key in ['w', 'a', 's', 'd', 'up', 'down', 'left', 'right']:
-                        x_pressed = False  # Reset x_pressed flag
+                        x_pressed = False  # Reset waypoint flag
                         if key != activeMovementKey:
-                            # Stop current movement if any
+                            # Stop current movement before starting new one
                             if activeMovementKey:
                                 logger.log_info('RealTimeDroneController', f'Stopping movement: {activeMovementKey}')
                                 self.stop_movement(drone_instance=drone_instance)
@@ -523,6 +533,7 @@ class RealTimeDroneController:
                             activeMovementKey = key
                             logger.log_info('RealTimeDroneController', f'Starting movement: {key}')
                             
+                            # Map keys to movements using match-case (Python 3.10+)
                             match key:
                                 case 'w': 
                                     self.start_movement('forward', 'move', drone_instance)
@@ -545,7 +556,7 @@ class RealTimeDroneController:
                             logger.log_info('RealTimeDroneController', f'Continuing movement: {activeMovementKey}')
                             continue
                     else:
-                        # Stop movement or remain still on other keys
+                        # Unrecognized key - stop movement for safety
                         logger.log_info('RealTimeDroneController', f'Unrecognized key: {key}')
                         if self.current_movement:
                             logger.log_info('RealTimeDroneController', 'Stopping current movement due to unrecognized key')
@@ -553,33 +564,33 @@ class RealTimeDroneController:
                             activeMovementKey = None
                         continue
                 else:
-                    # No key pressed, stop any movement
+                    # No key pressed - stop any active movement
                     if self.current_movement:
                         logger.log_info('RealTimeDroneController', 'No key pressed, stopping current movement')
                         self.stop_movement(drone_instance=drone_instance)
                         activeMovementKey = None
                     continue
                 
-                time.sleep(0.05)  # Fast responsive loop
+                time.sleep(0.05)  # Fast responsive loop (50ms)
                 
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error in keyboard handling: {e}')
         finally:
-            # Restore terminal settings
+            # Always restore terminal settings
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
             logger.log_info('RealTimeDroneController', 'Keyboard controls ended')
 
     
     def run(self, drone_instance=None) -> list:
-        """Main control loop."""
+        """Main entry point - initialize mapping session and handle complete workflow."""
         
         print("Starting keyboard control... Press Q to exit")
         
-        # Mark the first waypoint automatically
+        # Auto-create START waypoint
         self.mark_waypoint("START", auto_generated=True)
         logger.log_info('RealTimeDroneController', 'First waypoint marked: START')
 
-        # # Start video streaming
+        # Start video feed for visual reference
         self.start_video_stream(drone_instance=drone_instance)
 
         try:
@@ -589,19 +600,19 @@ class RealTimeDroneController:
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error during drone control: {e}')
         finally:
-            # # Stop video streaming first
+            # Cleanup and finalization
             self.stop_video_stream(drone_instance=drone_instance)
             
-            # Ensure the last waypoint is marked if there are movements
+            # Complete any pending movements and save session
             try: 
                 if self.current_movement:
                     self.stop_movement(drone_instance=drone_instance)
                 
-                # Mark final waypoint if there are pending movements 
+                # Auto-create END waypoint if movements exist
                 if self.current_waypoint_movements:
                     self.mark_waypoint("END", auto_generated=True)
 
-                # Save data to JSON file
+                # Save complete mapping session to JSON
                 summary = self.save_to_json()
 
                 print(f"\nSession complete! Data saved to: {self.data_file}")
@@ -609,4 +620,4 @@ class RealTimeDroneController:
                 logger.log_error('RealTimeDroneController', f'Error finalizing session: {e}')
                 summary = []
 
-            return summary  # Return summary of waypoints
+            return summary  # Return list of waypoint summaries

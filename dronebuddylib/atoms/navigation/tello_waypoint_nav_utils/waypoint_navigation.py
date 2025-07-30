@@ -1,4 +1,24 @@
 #!/usr/bin/env python3
+"""
+Core waypoint navigation engine for autonomous drone movement.
+
+This module provides the central navigation logic for executing waypoint-based drone navigation.
+It loads waypoint maps created during manual flight sessions, calculates optimal paths between
+waypoints, and executes precise movement sequences with yaw orientation and distance control.
+
+Key Features:
+- Bidirectional pathfinding (forward/reverse navigation)
+- Movement reversal algorithms for return trips
+- Yaw angle calculations for precise drone orientation
+- Battery monitoring integration during navigation
+- Emergency shutdown support for safety
+
+Navigation Flow:
+1. Load waypoint JSON file with movement sequences
+2. Calculate path between current and target waypoint
+3. Execute movement sequence with drone orientation control
+4. Update current position after successful navigation
+"""
 import json
 import time
 import uuid
@@ -11,42 +31,50 @@ from dronebuddylib.utils.logger import Logger
 logger = Logger()
 
 class NavigationDirection(Enum):
-    FORWARD = "forward"    # Top-down in waypoint file
-    REVERSE = "reverse"    # Bottom-up in waypoint file
+    """Direction enum for waypoint navigation pathfinding."""
+    FORWARD = "forward"    # Top-down navigation in waypoint sequence
+    REVERSE = "reverse"    # Bottom-up navigation with reversed movements
 
 @dataclass
 class NavigationMovement:
-    """Represents a single movement instruction."""
-    id: str
-    type: str  # "move" or "lift"
-    distance: float  
-    direction: Optional[str] = None  # Only for lift type ("up" or "down")
-    yaw: Optional[int] = None  # Only for move type
+    """
+    Represents a single drone movement instruction with reversal capability.
+    
+    This class encapsulates individual movement commands (linear or vertical) with the ability
+    to generate reversed movements for bidirectional navigation. Each movement includes distance,
+    direction, and orientation data needed for precise drone control.
+    """
+    id: str                              # Unique identifier for the movement
+    type: str                           # Movement type: "move" (horizontal) or "lift" (vertical)
+    distance: float                     # Movement distance in centimeters
+    direction: Optional[str] = None     # For "lift" type: "up" or "down"
+    yaw: Optional[int] = None          # For "move" type: target yaw angle (-180 to 180)
     
     def reverse(self) -> 'NavigationMovement':
-        """Create a reversed version of this movement."""
+        """Generate a reversed version of this movement for return navigation."""
         reversed_movement = NavigationMovement(
-            id=str(uuid.uuid4()),
+            id=str(uuid.uuid4()),        # New unique ID for reversed movement
             type=self.type,
-            distance=self.distance, 
+            distance=self.distance,      # Same distance for reversed movement
             direction=self._reverse_direction(),
             yaw=self._reverse_yaw(),
         )
         return reversed_movement
     
     def _reverse_direction(self) -> Optional[str]:  
-        """Reverse the lift direction."""
+        """Reverse vertical movement direction (up <-> down)."""
         if self.type == "lift" and self.direction is not None:
             return "down" if self.direction == "up" else "up"
         else: 
-            # For move type, we'll reverse based on yaw angle
-            return self.direction  # Keep same (None for move type), yaw handles the direction
+            # For horizontal movements, direction is handled by yaw reversal
+            return self.direction  # Keep same (None for move type)
     
     def _reverse_yaw(self) -> Optional[int]:
-        """Reverse the yaw angle for move type."""
+        """Calculate reverse yaw angle by adding 180 degrees."""
         if self.type == "move" and self.yaw is not None:
-            # Reverse yaw by adding 180 degrees and keeping it within -180 to 180 range
+            # Reverse direction by adding 180 degrees
             reversed_raw = (self.yaw + 180)
+            # Normalize to standard -180 to 180 degree range
             reversed_yaw = reversed_raw if reversed_raw <= 180 else reversed_raw - 360
             return reversed_yaw
         else:
@@ -55,33 +83,66 @@ class NavigationMovement:
 
 @dataclass
 class Waypoint:
-    """Represents a waypoint with its movements."""
-    id: str
-    name: str
-    movements_to_here: List[NavigationMovement]
-    index: int  # Position in the waypoint sequence
+    """
+    Represents a named waypoint with its associated movement sequence.
+    
+    Each waypoint contains the sequence of movements required to reach it from the previous
+    waypoint, along with metadata for identification and sequencing.
+    """
+    id: str                                    # Unique waypoint identifier (e.g., "WP_001")
+    name: str                                  # Human-readable waypoint name
+    movements_to_here: List[NavigationMovement]  # Movement sequence to reach this waypoint
+    index: int                                 # Position in the waypoint sequence
 
 class WaypointNavigationManager:
-    """Manages waypoint navigation and pathfinding."""
+    """
+    Core navigation engine for autonomous waypoint-based drone navigation.
+    
+    This class manages the complete navigation workflow from waypoint file loading through
+    path calculation and movement execution. It provides bidirectional navigation capabilities,
+    allowing the drone to travel between any waypoints in either direction using optimized
+    path planning algorithms.
+    
+    Features:
+    - Waypoint file loading and parsing from JSON format
+    - Forward and reverse pathfinding between waypoints
+    - Movement sequence execution with precise yaw control
+    - Battery monitoring integration during navigation
+    - Emergency shutdown support for safety
+    """
     
     def __init__(self, nav_speed: int, vertical_factor: float):
+        """Initialize navigation manager with speed and vertical compensation settings."""
         logger.log_info('WaypointNavigationManager', 'Initializing waypoint navigation manager.')
         
-        self.waypoints: Dict[str, Waypoint] = {}
-        self.waypoint_order: List[str] = []  # Ordered list of waypoint IDs
-        self.current_waypoint_id: str = "WP_001"  # Always start at START
-        self.session_info: Dict = {}
-        self.json_file_path: str = ""
-        self.nav_speed = nav_speed  # Speed for navigation movements
-        self.vertical_factor = vertical_factor  # Airflow factor for vertical movements
+        self.waypoints: Dict[str, Waypoint] = {}      # Waypoint storage by ID
+        self.waypoint_order: List[str] = []           # Ordered sequence of waypoint IDs
+        self.current_waypoint_id: str = "WP_001"     # Always start at first waypoint
+        self.session_info: Dict = {}                  # Metadata from waypoint file
+        self.json_file_path: str = ""                # Path to loaded waypoint file
+        self.nav_speed = nav_speed                    # Movement speed for navigation
+        self.vertical_factor = vertical_factor        # Compensation factor for vertical movements
         
         logger.log_debug('WaypointNavigationManager', f'Initialized with nav_speed={nav_speed}, vertical_factor={vertical_factor}')
     
     def load_waypoint_file(self, json_file_path: str) -> bool:
-        """Load waypoints from JSON file into memory."""
+        """
+        Load waypoint data from JSON file created during mapping sessions.
+        
+        Parses waypoint file generated by real-time drone controllers, converting movement
+        data into NavigationMovement objects and organizing waypoints by sequence. Validates
+        data integrity and sets up navigation state for path planning.
+        
+        Args:
+            json_file_path: Path to JSON file containing waypoint and movement data
+            
+        Returns:
+            True if file loaded successfully, False on error
+        """
         try:
             logger.log_info('WaypointNavigationManager', f'Loading waypoint file: {json_file_path}')
             
+            # Read and parse JSON waypoint data
             with open(json_file_path, 'r') as file:
                 data = json.load(file)
             
@@ -89,34 +150,37 @@ class WaypointNavigationManager:
             self.session_info = data.get('session_info', {})
             waypoints_data = data.get('waypoints', [])
             
-            # Clear existing data
+            # Clear existing waypoint data
             self.waypoints.clear()
             self.waypoint_order.clear()
             
-            # Load waypoints in order
+            # Process waypoints in sequential order
             for index, wp_data in enumerate(waypoints_data):
                 movements = []
+                
+                # Convert movement data to NavigationMovement objects
                 for mov_data in wp_data.get('movements_to_here', []):
                     movement = NavigationMovement(
                         id=mov_data['id'],
                         type=mov_data['type'],
-                        direction=mov_data.get('direction', None),
+                        direction=mov_data.get('direction', None),  # For lift movements
                         distance=mov_data['distance'],
-                        yaw=mov_data.get('yaw', None)
+                        yaw=mov_data.get('yaw', None)              # For horizontal movements
                     )
                     movements.append(movement)
                 
+                # Create waypoint object with movement sequence
                 waypoint = Waypoint(
                     id=wp_data['id'],
                     name=wp_data['name'],
                     movements_to_here=movements,
-                    index=index
+                    index=index  # Sequence position for pathfinding
                 )
                 
                 self.waypoints[waypoint.id] = waypoint
                 self.waypoint_order.append(waypoint.id)
             
-            # Reset to start position
+            # Reset navigation to starting position
             self.current_waypoint_id = "WP_001"
             
             logger.log_success('WaypointNavigationManager', f'Loaded {len(self.waypoints)} waypoints successfully.')
@@ -129,7 +193,7 @@ class WaypointNavigationManager:
             return False
     
     def _print_waypoint_summary(self):
-        """Print a summary of loaded waypoints."""
+        """Display formatted summary of all loaded waypoints."""
         print("\n📍 WAYPOINT SUMMARY")
         print("=" * 50)
         for wp_id in self.waypoint_order:
@@ -139,7 +203,7 @@ class WaypointNavigationManager:
         print("=" * 50)
     
     def get_available_destinations(self) -> List[Tuple[str, str]]:
-        """Get list of waypoints drone can navigate to (excluding current)."""
+        """Get list of waypoints available for navigation (excluding current position)."""
         destinations = []
         for wp_id in self.waypoint_order:
             if wp_id != self.current_waypoint_id:
@@ -149,10 +213,22 @@ class WaypointNavigationManager:
     
     def calculate_navigation_path(self, target_waypoint_id: str) -> Tuple[List[NavigationMovement], NavigationDirection]:
         """
-        Calculate the movement sequence to navigate from current to target waypoint.
+        Calculate optimal movement sequence between current and target waypoint.
         
+        Analyzes waypoint positions to determine navigation direction (forward or reverse)
+        and generates appropriate movement sequence. Forward navigation follows recorded
+        movements in sequence, while reverse navigation inverts movements for return trips.
+        
+        Args:
+            target_waypoint_id: ID of destination waypoint
+            
         Returns:
-            Tuple of (movements_list, direction)
+            Tuple containing:
+            - List of NavigationMovement objects for execution
+            - NavigationDirection enum indicating path direction
+            
+        Raises:
+            ValueError: If target waypoint ID is not found
         """
         if target_waypoint_id not in self.waypoints:
             raise ValueError(f"Target waypoint {target_waypoint_id} not found")
@@ -164,17 +240,17 @@ class WaypointNavigationManager:
         target_index = target_waypoint.index
         
         if target_index > current_index:
-            # Forward navigation (top-down)
+            # Forward navigation: follow waypoint sequence top-down
             return self._calculate_forward_path(current_index, target_index), NavigationDirection.FORWARD
         else:
-            # Reverse navigation (bottom-up)
+            # Reverse navigation: use inverted movements bottom-up
             return self._calculate_reverse_path(current_index, target_index), NavigationDirection.REVERSE
     
     def _calculate_forward_path(self, current_waypoint_index: int, target_waypoint_index: int) -> List[NavigationMovement]:
-        """Calculate forward navigation path (normal order)."""
+        """Generate movement sequence for forward navigation (normal order)."""
         movements = []
         
-        # Collect all movements from next waypoint to target waypoint
+        # Collect movements from next waypoint through target waypoint
         for i in range(current_waypoint_index + 1, target_waypoint_index + 1):
             waypoint_id = self.waypoint_order[i]
             waypoint = self.waypoints[waypoint_id]
@@ -183,16 +259,16 @@ class WaypointNavigationManager:
         return movements
     
     def _calculate_reverse_path(self, current_waypoint_index: int, target_waypoint_index: int) -> List[NavigationMovement]:
-        """Calculate reverse navigation path (reversed movements)."""
+        """Generate movement sequence for reverse navigation with inverted movements."""
         movements = []
         
-        # Collect all movements from current waypoint back to target waypoint
-        # Reverse the order AND reverse each individual movement
+        # Process waypoints in reverse order from current back to target
+        # Each movement is individually reversed (direction and yaw inverted)
         for i in range(current_waypoint_index, target_waypoint_index, -1):
             waypoint_id = self.waypoint_order[i]
             waypoint = self.waypoints[waypoint_id]
             
-            # Reverse each movement and add to list in reverse order
+            # Reverse each movement and add in reverse order for proper sequencing
             reversed_movements = [mov.reverse() for mov in reversed(waypoint.movements_to_here)]
             movements.extend(reversed_movements)
         
@@ -200,44 +276,55 @@ class WaypointNavigationManager:
     
     def navigate_to_waypoint(self, target_waypoint_id: str, drone_instance=None) -> bool:
         """
-        Navigate to target waypoint and update current position.
+        Execute complete navigation sequence to reach target waypoint.
         
+        Orchestrates the full navigation workflow: path calculation, movement execution,
+        and position tracking. Includes safety checks for emergency shutdown and
+        validates waypoint existence before navigation.
+        
+        Args:
+            target_waypoint_id: ID of destination waypoint
+            drone_instance: DJI Tello drone object for movement commands
+            
         Returns:
-            True if navigation successful, False otherwise
+            True if navigation completed successfully, False on error or emergency
         """
-        # Check for emergency shutdown (only for goto mode with coordinator reference)
+        # Safety check for emergency shutdown (goto mode only)
         if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
             if self.coordinator._emergency_shutdown:
                 logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - aborting navigation')
                 return False
                 
+        # Validate target waypoint exists
         if target_waypoint_id not in self.waypoints:
             logger.log_error('WaypointNavigationManager', f'Waypoint {target_waypoint_id} not found')
             return False
         
+        # Check if already at target position
         if target_waypoint_id == self.current_waypoint_id:
             logger.log_info('WaypointNavigationManager', f'Already at waypoint {target_waypoint_id}')
             return True
         
         try:
-            # Calculate navigation path
+            # Generate navigation plan with path calculation
             movements, direction = self.calculate_navigation_path(target_waypoint_id)
             target_name = self.waypoints[target_waypoint_id].name
             current_name = self.waypoints[self.current_waypoint_id].name
             
             logger.log_info('WaypointNavigationManager', f'Navigation plan: From {self.current_waypoint_id} ("{current_name}") to {target_waypoint_id} ("{target_name}") using {direction.value} direction with {len(movements)} movements')
             
+            # Display navigation plan to user
             print(f"\n🧭 NAVIGATION PLAN")
             print(f"From: {self.current_waypoint_id} ('{current_name}')")
             print(f"To: {target_waypoint_id} ('{target_name}')")
             print(f"Direction: {direction.value}")
             print(f"Total movements: {len(movements)}")
             
-            # Execute navigation
+            # Execute navigation movement sequence
             success = self._execute_navigation(movements, direction, drone_instance=drone_instance)
             
             if success:
-                # Update current position
+                # Update current position after successful navigation
                 self.current_waypoint_id = target_waypoint_id
                 logger.log_success('WaypointNavigationManager', f'Successfully navigated to {target_waypoint_id} ("{target_name}")')
                 return True
@@ -250,25 +337,41 @@ class WaypointNavigationManager:
             return False
 
     def _execute_navigation(self, movements: List[NavigationMovement], direction: NavigationDirection, drone_instance=None) -> bool:
-        """Execute the navigation movements."""
+        """
+        Execute sequence of movement commands with precise drone control.
+        
+        Processes movement list sequentially, handling yaw orientation, distance control,
+        and safety monitoring. Supports both horizontal movements (with yaw adjustment)
+        and vertical movements (with compensation factors).
+        
+        Args:
+            movements: List of NavigationMovement objects to execute
+            direction: Navigation direction for vertical movement compensation
+            drone_instance: DJI Tello drone object for command execution
+            
+        Returns:
+            True if all movements completed successfully, False on error
+        """
         
         logger.log_info('WaypointNavigationManager', f'Executing {len(movements)} movements ({direction.value})')
         
-        # Pause battery monitoring during navigation to prevent command conflicts
+        # Pause battery monitoring to prevent command conflicts during navigation
         if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_pause_battery_monitoring'):
             self.coordinator._pause_battery_monitoring()
 
-        time.sleep(0.3) # Allow time for battery monitoring to pause
+        time.sleep(0.3)  # Allow battery monitoring to pause
 
-        drone_instance.set_speed(self.nav_speed)  # Set navigation speed
+        drone_instance.set_speed(self.nav_speed)  # Configure navigation speed
+        
         try: 
             for i, movement in enumerate(movements, 1):
-                # Check for emergency shutdown before each movement (only for goto mode)
+                # Emergency shutdown check before each movement (goto mode only)
                 if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_emergency_shutdown'):
                     if self.coordinator._emergency_shutdown:
                         logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - stopping navigation execution')
                         return False
 
+                # Battery safety check before each movement
                 battery_str = drone_instance.send_command_with_return("battery?", timeout=3)
                 logger.log_debug('WaypointNavigationManager', 'checking battery status')
                 battery = int(battery_str)
@@ -279,38 +382,46 @@ class WaypointNavigationManager:
                         return False
                 
                 logger.log_debug('WaypointNavigationManager', f'Step {i}/{len(movements)}: {movement.type} movement')
-                distance = movement.distance if movement.distance is not None and movement.distance >= 20 else 20  # Ensure minimum valid distance for movement
+                
+                # Ensure minimum movement distance for drone command validity
+                distance = movement.distance if movement.distance is not None and movement.distance >= 20 else 20
+                
                 if movement.type == "move":
+                    # Handle horizontal movement with yaw orientation
                     yaw = movement.yaw if movement.yaw is not None else 0
                     current_yaw = self.get_yaw(drone_instance=drone_instance)
                     
+                    # Calculate required yaw adjustment
                     turn_degree = abs(yaw - current_yaw)
                     if current_yaw > yaw:
                         logger.log_debug('WaypointNavigationManager', f'Adjusting yaw from {current_yaw} to {yaw} degrees')
                         if turn_degree > 180 and turn_degree < 360: 
-                            drone_instance.rotate_clockwise(360 - turn_degree)
+                            drone_instance.rotate_clockwise(360 - turn_degree)  # Shorter rotation path
                         elif turn_degree <= 180 and turn_degree > 0: 
                             drone_instance.rotate_counter_clockwise(turn_degree)
                         else: 
                             logger.log_debug('WaypointNavigationManager', 'No yaw adjustment needed')
-                        drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+                        drone_instance.send_rc_control(0, 0, 0, 0)  # Stop rotation
                     else: 
                         logger.log_debug('WaypointNavigationManager', f'Adjusting yaw from {current_yaw} to {yaw} degrees')
                         if turn_degree > 180 and turn_degree < 360: 
-                            drone_instance.rotate_counter_clockwise(360 - turn_degree)
+                            drone_instance.rotate_counter_clockwise(360 - turn_degree)  # Shorter rotation path
                         elif turn_degree <= 180 and turn_degree > 0: 
                             drone_instance.rotate_clockwise(turn_degree)
                         else: 
                             logger.log_debug('WaypointNavigationManager', 'No yaw adjustment needed')
-                        drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+                        drone_instance.send_rc_control(0, 0, 0, 0)  # Stop rotation
 
+                    # Execute forward movement at target yaw
                     drone_instance.move_forward(int(distance))
-                    drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+                    drone_instance.send_rc_control(0, 0, 0, 0)  # Stop movement
                     logger.log_debug('WaypointNavigationManager', f'Moved forward {distance} cm at yaw {yaw} degrees')
 
                 else:
+                    # Handle vertical movements with direction-based compensation
                     match (movement.direction, direction): 
                         case ("up", NavigationDirection.FORWARD):
+                            # Apply vertical compensation factor for upward movement
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_up(int(actual_distance))
                             logger.log_debug('WaypointNavigationManager', f'Lifted up {actual_distance} cm')
@@ -322,30 +433,44 @@ class WaypointNavigationManager:
                             drone_instance.move_up(int(distance))
                             logger.log_debug('WaypointNavigationManager', f'Lifted up {distance} cm')
                         case ("down", NavigationDirection.REVERSE):
+                            # Apply compensation for reverse downward movement
                             actual_distance = max((distance / self.vertical_factor), 20)
                             drone_instance.move_down(int(actual_distance))
                             logger.log_debug('WaypointNavigationManager', f'Lowered down {actual_distance} cm')
                     
-                    drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+                    drone_instance.send_rc_control(0, 0, 0, 0)  # Stop vertical movement
             
             logger.log_success('WaypointNavigationManager', 'Navigation movements completed')
             return True
+            
         except Exception as e:
             logger.log_error('WaypointNavigationManager', f'Error during navigation execution: {e}')
-            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+            drone_instance.send_rc_control(0, 0, 0, 0)  # Emergency stop
             return False
         finally:
-            # Resume battery monitoring after navigation
+            # Resume battery monitoring after navigation completion
             if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_resume_battery_monitoring'):
                 self.coordinator._resume_battery_monitoring()
     
     def get_yaw(self, drone_instance=None) -> int:
+        """
+        Retrieve current drone yaw orientation from attitude telemetry.
+        
+        Queries drone attitude data and parses yaw angle for movement orientation.
+        Provides fallback handling for communication errors or parsing failures.
+        
+        Args:
+            drone_instance: DJI Tello drone object for telemetry query
+            
+        Returns:
+            Current yaw angle in degrees (-180 to 180), or 0 on error
+        """
         try:
             attitude_str = drone_instance.send_command_with_return("attitude?", timeout=3)
             logger.log_debug('WaypointNavigationManager', f'Raw attitude response: {attitude_str}')
             
-            # Parse attitude string like "pitch:0;roll:0;yaw:45;"
-            yaw = 0  # Default value
+            # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
+            yaw = 0  # Default fallback value
             if attitude_str and ':' in attitude_str:
                 attitude_parts = attitude_str.split(';')
                 for part in attitude_parts:
@@ -360,15 +485,15 @@ class WaypointNavigationManager:
             return yaw
         except Exception as e:
             logger.log_warning('WaypointNavigationManager', f'Attitude query failed: {e}')
-            return 0
+            return 0  # Return default yaw on communication error
     
     def get_current_waypoint_info(self) -> Tuple[str, str]:
-        """Get current waypoint ID and name."""
+        """Get current waypoint ID and display name."""
         waypoint = self.waypoints[self.current_waypoint_id]
         return waypoint.id, waypoint.name
     
     def print_navigation_options(self):
-        """Print available navigation destinations."""
+        """Display formatted list of available navigation destinations."""
         destinations = self.get_available_destinations()
         current_id, current_name = self.get_current_waypoint_info()
         

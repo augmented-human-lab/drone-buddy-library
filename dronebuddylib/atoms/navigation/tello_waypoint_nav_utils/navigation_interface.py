@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Linux-specific navigation interface for drone waypoint navigation.
+
+Provides user interface for navigating between recorded waypoints using Linux-compatible
+input handling (select/stdin). Manages waypoint file selection, battery monitoring,
+and interactive navigation menus.
+"""
 import os
 import glob
 import sys
@@ -13,9 +20,10 @@ from dronebuddylib.utils.logger import Logger
 logger = Logger()
 
 class NavigationInterface:
-    """User interface for waypoint navigation."""
+    """Linux navigation interface for waypoint-based drone navigation."""
     
     def __init__(self, waypoint_dir: str, vertical_factor: float, nav_speed: int, waypoint_file: str = None):
+        """Initialize navigation interface with speed and directory settings."""
         logger.log_info('NavigationInterface', 'Initializing navigation interface.')
         self.nav_manager = WaypointNavigationManager(nav_speed=nav_speed, vertical_factor=vertical_factor)
         self.is_running = True
@@ -24,7 +32,7 @@ class NavigationInterface:
         logger.log_debug('NavigationInterface', f'Initialized with waypoint_dir={waypoint_dir}, vertical_factor={vertical_factor}, nav_speed={nav_speed}')
     
     def run(self, drone_instance=None) -> list:
-        """Run the navigation interface."""
+        """Main entry point - loads waypoints and starts navigation session."""
         logger.log_info('NavigationInterface', 'Starting navigation interface.')
         history = []
         try:
@@ -35,11 +43,11 @@ class NavigationInterface:
             print("\n🧭 WAYPOINT NAVIGATION SYSTEM")
             print("=" * 50)
             
-            # Load waypoint file
+            # Load waypoint file (user selection if multiple files)
             if not self._load_waypoint_file(drone_instance=drone_instance):
                 return
             
-            # Main navigation loop
+            # Enter interactive navigation loop
             history = self._navigation_loop(drone_instance=drone_instance)
             
         except KeyboardInterrupt:
@@ -47,29 +55,26 @@ class NavigationInterface:
         except Exception as e:
             logger.log_error('NavigationInterface', f'Navigation error: {e}')
         finally:
-            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop any ongoing movement
+            drone_instance.send_rc_control(0, 0, 0, 0)  # Emergency stop
             logger.log_info('NavigationInterface', 'Navigation system closed.')
             return history
     
     def _load_waypoint_file(self, drone_instance=None) -> bool:
-        """Load waypoint file with user selection."""
+        """Load waypoint file - uses specified file or prompts user to select from available files."""
         logger.log_info('NavigationInterface', 'Loading waypoint file.')
         
-        # Check if specific waypoint_file is specified
+        # Check if specific waypoint file was provided
         if self.waypoint_file is not None:
-            # Construct the full path to the specified waypoint file
             specified_file_path = os.path.join(self.waypoint_dir, self.waypoint_file)
             
-            # Check if the specified file exists
             if os.path.exists(specified_file_path):
                 logger.log_info('NavigationInterface', f'Found specified waypoint file: {specified_file_path}')
                 return self.nav_manager.load_waypoint_file(specified_file_path)
             else:
                 logger.log_warning('NavigationInterface', f'Specified waypoint file not found: {specified_file_path}, proceeding with file selection.')
-                self.waypoint_file = None  # Reset
-                # Fall through to normal file selection process
+                self.waypoint_file = None  # Reset and fallback to selection
         
-        # Find available waypoint files
+        # Find all available waypoint files
         waypoint_files = self._find_waypoint_files()
         
         if not waypoint_files:
@@ -77,11 +82,11 @@ class NavigationInterface:
             return False
         
         if len(waypoint_files) == 1:
-            # Only one file, load it automatically
+            # Auto-load single file
             selected_file = waypoint_files[0]
             logger.log_info('NavigationInterface', f'Found single waypoint file: {selected_file}')
         else:
-            # Multiple files, let user choose
+            # Let user choose from multiple files
             logger.log_info('NavigationInterface', f'Found {len(waypoint_files)} waypoint files, requesting user selection.')
             selected_file = self._select_waypoint_file(waypoint_files, drone_instance=drone_instance)
             if not selected_file:
@@ -90,23 +95,24 @@ class NavigationInterface:
         return self.nav_manager.load_waypoint_file(selected_file)
     
     def _find_waypoint_files(self) -> list:
-        """Find all available waypoint JSON files."""
+        """Find all waypoint JSON files in directory, sorted newest first."""
         pattern = os.path.join(self.waypoint_dir, "drone_movements_*.json")
         files = glob.glob(pattern)
         return sorted(files, reverse=True)  # Newest first
     
     def _select_waypoint_file(self, files: list, drone_instance=None) -> Optional[str]:
-        """Let user select which waypoint file to use."""
+        """Display file selection menu and get user choice with battery monitoring."""
         print(f"\n📁 Found {len(files)} waypoint files:")
         print("-" * 50)
         
         for i, file in enumerate(files, 1):
-            # Extract timestamp from filename for better display
+            # Extract timestamp from filename for display
             timestamp = file.replace('drone_movements_', '').replace('.json', '')
             print(f"  {i}. {file} (Created: {timestamp})")
         
         while True:
             try:
+                # Check battery level during file selection
                 try:
                     battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                     battery = int(battery_str)
@@ -120,10 +126,9 @@ class NavigationInterface:
                     return None
                 
                 prompt = f"\nSelect waypoint file (1-{len(files)}) or 'q' to quit: "
-
                 print(prompt, end='', flush=True)
 
-                # Wait for input with 5-second timeout
+                # Linux: Use select for 5-second timeout
                 ready, _, _ = select.select([sys.stdin], [], [], 5)
 
                 if ready:
@@ -140,7 +145,7 @@ class NavigationInterface:
                     except ValueError:
                         print("❌ Invalid input. Please enter a valid option.")
                 else:
-                    # No input received within timeout
+                    # Timeout occurred - clear line and continue
                     print("\r" + " " * 50 + "\r", end='')
                     continue
                     
@@ -149,19 +154,19 @@ class NavigationInterface:
                 return None
     
     def _navigation_loop(self, drone_instance=None):
-        """Main navigation interaction loop."""
+        """Interactive loop for waypoint selection and navigation execution."""
         loop_count = 0
         waypoints_history = []
         try:
             while self.is_running:
-                # Show current position and options
+                # Display current position and available destinations
                 destinations = self.nav_manager.print_navigation_options()
                 
                 if not destinations:
                     logger.log_info('NavigationInterface', 'No other waypoints to navigate to.')
                     break
                 
-                # Get user choice
+                # Get user's navigation choice
                 choice = self._get_navigation_choice(destinations, loop_count, drone_instance=drone_instance)
                 
                 if choice == 'quit':
@@ -174,7 +179,7 @@ class NavigationInterface:
                     else:
                         break
                 elif isinstance(choice, str):
-                    # Navigate to selected waypoint
+                    # Execute navigation to selected waypoint
                     logger.log_info('NavigationInterface', f'User selected waypoint: {choice}')
                     success = self.nav_manager.navigate_to_waypoint(choice, drone_instance=drone_instance)
                     if success:
@@ -191,7 +196,7 @@ class NavigationInterface:
             return waypoints_history
     
     def _get_navigation_choice(self, destinations: list, loopCount: int, drone_instance=None) -> str:
-        """Get navigation choice from user."""
+        """Display navigation menu and get user's waypoint choice with battery monitoring."""
         print(f"\n🎮 NAVIGATION OPTIONS:")
         print("-" * 30)
         
@@ -203,6 +208,7 @@ class NavigationInterface:
         
         while True:
             try:
+                # Monitor battery level during menu
                 try:
                     battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                     battery = int(battery_str)
@@ -215,6 +221,7 @@ class NavigationInterface:
                     logger.log_error('NavigationInterface', f'Error checking battery: {e}')
                     return 'quit'
 
+                # Show different prompt based on loop count (reload only available at start)
                 if loopCount == 0:
                     prompt = f"\nEnter your choice (1-{len(destinations)}, r, q): "
                 else: 
@@ -222,7 +229,7 @@ class NavigationInterface:
 
                 print(prompt, end='', flush=True)
 
-                # Wait for input with 5-second timeout
+                # Linux: Use select for 5-second timeout
                 ready, _, _ = select.select([sys.stdin], [], [], 5)
 
                 if ready:
@@ -237,7 +244,7 @@ class NavigationInterface:
                             print("❗ You can only reload the waypoint file at the start of navigation.")
                             continue
                     else:
-                        # Try to parse as waypoint selection
+                        # Parse waypoint selection
                         try:
                             waypoint_index = int(choice) - 1
                             if 0 <= waypoint_index < len(destinations):
@@ -248,7 +255,7 @@ class NavigationInterface:
                             print("❌ Invalid input. Please enter a valid option.")
                 
                 else: 
-                    # No input received within timeout
+                    # Timeout occurred - clear line and continue
                     print("\r" + " " * 50 + "\r", end='')
                     continue
                         

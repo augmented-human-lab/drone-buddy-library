@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Windows-specific real-time drone controller for waypoint mapping.
+
+Provides real-time manual control of Tello drones for creating waypoint maps
+using Windows-compatible input handling (msvcrt). Records all movements,
+tracks waypoints, and generates JSON files for navigation.
+"""
 import json
 import os
 import time
@@ -17,40 +24,42 @@ logger = Logger()
 
 
 class RealTimeDroneControllerWindows:
+    """Windows real-time controller for drone waypoint mapping through manual flight."""
+    
     def __init__(self, waypoint_dir: str, movement_speed: int, rotation_speed: int):
-        """Initialize the drone controller with recording capabilities."""
-        self.movement_speed = movement_speed  # cm/s
-        self.rotation_speed = rotation_speed  # degrees/s
+        """Initialize controller with movement speeds and recording setup."""
+        self.movement_speed = movement_speed  # cm/s for linear movements
+        self.rotation_speed = rotation_speed  # degrees/s for rotations
         
-        # Movement tracking
-        self.current_movement = None
-        self.waypoints = []
-        self.current_waypoint_movements = []
-        self.waypoint_counter = 0
+        # Movement tracking state
+        self.current_movement = None  # Active movement being recorded
+        self.waypoints = []  # Complete waypoint list
+        self.current_waypoint_movements = []  # Movements since last waypoint
+        self.waypoint_counter = 0  # Sequential waypoint numbering
         
         # Control flags
-        self.add_movement = False
+        self.add_movement = False  # Whether to record current movement
         
-        # Video streaming (enabled for Windows)
+        # Video streaming components (enabled for Windows)
         self.video_thread = None
         self.video_running = False
         self.frame_read = None
         
-        # JSON file path for storing movement data
+        # JSON output file with timestamp
         filename = f"drone_movements_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         self.data_file = os.path.join(waypoint_dir, filename)
     
     def get_drone_state(self, drone_instance=None):
-        """Get current drone state including position and yaw."""
+        """Get current drone telemetry data for movement recording."""
         try:
             state = {}
 
-            # Get yaw (facing direction)
+            # Get yaw (facing direction) from attitude command
             try:
                 attitude_str = drone_instance.send_command_with_return("attitude?", timeout=3)
                 logger.log_debug('RealTimeDroneControllerWindows', f'Raw attitude response: {attitude_str}')
                 
-                # Parse attitude string like "pitch:0;roll:0;yaw:45;"
+                # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
                 state['yaw'] = 0  # Default value
                 if attitude_str and ':' in attitude_str:
                     attitude_parts = attitude_str.split(';')
@@ -68,17 +77,16 @@ class RealTimeDroneControllerWindows:
                 logger.log_warning('RealTimeDroneControllerWindows', f'Attitude query failed: {e}')
                 state['yaw'] = 0
 
-            # Get height
+            # Get height in centimeters (converted from decimeters)
             try:
                 height_str = drone_instance.send_command_with_return("height?", timeout=3)
-                # Height returns like "10dm" (decimeters), convert to cm
-                height_dm = int(height_str.replace('dm', ''))
+                height_dm = int(height_str.replace('dm', ''))  # Remove 'dm' suffix
                 state['height'] = height_dm * 10  # Convert dm to cm
             except Exception as e:
                 logger.log_warning('RealTimeDroneControllerWindows', f'Height query failed: {e}')
                 state['height'] = 0
             
-            # Get battery level
+            # Get battery percentage
             try:
                 battery_str = drone_instance.send_command_with_return("battery?", timeout=3)
                 state['battery'] = int(battery_str)
@@ -90,23 +98,25 @@ class RealTimeDroneControllerWindows:
             return state
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error getting drone state: {e}')
-            return {'height': 0, 'yaw': 0, 'battery': 0}
+            return {'height': 0, 'yaw': 0, 'battery': 0}  # Safe defaults
 
     def start_movement(self, direction, movement_type="move", drone_instance=None):
-        """Start a movement in the specified direction."""
+        """Begin drone movement in specified direction and record movement data."""
         logger.log_debug('RealTimeDroneControllerWindows', f'Starting movement: {movement_type} {direction}')
         
         if self.current_movement is not None:
             logger.log_warning('RealTimeDroneControllerWindows', "Already moving, ignoring new movement")
-            return  # Already moving
+            return  # Prevent overlapping movements
         
+        # Get initial drone state for movement recording
         try: 
             drone_state = self.get_drone_state(drone_instance)
-            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if not available
+            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if unavailable
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error getting drone state: {e}')
             start_yaw = 0
 
+        # Create movement record with timing and orientation
         self.current_movement = {
             'type': movement_type,
             'direction': direction,
@@ -116,10 +126,10 @@ class RealTimeDroneControllerWindows:
         
         logger.log_debug('RealTimeDroneControllerWindows', f'Created movement record: {self.current_movement}')
         
-        # Start the actual drone movement
+        # Send appropriate RC control commands to drone
         try:
             if movement_type == "move":
-                self.add_movement = True
+                self.add_movement = True  # Linear movements are recorded
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for {direction}')
                 if direction == "forward":
@@ -133,7 +143,7 @@ class RealTimeDroneControllerWindows:
                 logger.log_debug('RealTimeDroneControllerWindows', f'RC control sent for {direction}')
 
             elif movement_type == "lift":
-                self.add_movement = True
+                self.add_movement = True  # Vertical movements are recorded
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for lift {direction}')
                 if direction == "up":
@@ -143,7 +153,7 @@ class RealTimeDroneControllerWindows:
                 logger.log_debug('RealTimeDroneControllerWindows', f'RC control sent for lift {direction}')
                     
             elif movement_type == "rotate":
-                self.add_movement = False
+                self.add_movement = False  # Rotations are not recorded as waypoint movements
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for rotate {direction}')
                 if direction == "anticlockwise":
@@ -159,122 +169,127 @@ class RealTimeDroneControllerWindows:
             self.current_movement = None
     
     def stop_movement(self, drone_instance=None):
-        """Stop current movement and record the event."""
+        """Stop current drone movement and record distance traveled."""
         if self.current_movement is None:
-            return
+            return  # No movement in progress
         
+        # Handle rotation movements separately (no distance recording)
         if not self.add_movement:
             logger.log_debug('RealTimeDroneControllerWindows', 'Stopping rotation movement...')
-            # Stop drone rotation
             try:
-                drone_instance.send_rc_control(0, 0, 0, 0)
+                drone_instance.send_rc_control(0, 0, 0, 0)  # Stop all RC control
             except Exception as e:
                 logger.log_error('RealTimeDroneControllerWindows', f'Error stopping rotation movement: {e}')
                 
-            self.current_movement = None
+            self.current_movement = None  # Clear movement state
             return
         
-        # Stop drone movement
+        # Stop linear/vertical movements and record telemetry
         try:
-            drone_instance.send_rc_control(0, 0, 0, 0)
+            drone_instance.send_rc_control(0, 0, 0, 0)  # Stop all movement
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error stopping movement: {e}')
         
-        # Calculate movement duration and distance
+        # Calculate movement duration with halt delay compensation
         end_time = time.time()
-        duration = end_time - self.current_movement['start_time'] + 0.5 # Add a small buffer to account for halt delay
+        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for halt delay
         
-        # Calculate distance moved
-        distance = self.movement_speed * duration  # cm
+        # Calculate distance moved based on speed and duration
+        distance = self.movement_speed * duration  # Distance in cm
         
-        # Create movement event record
+        # Create detailed movement record with unique ID and timestamp
         movement_event = {
-            'id': str(uuid.uuid4()),
+            'id': str(uuid.uuid4()),  # Unique identifier for this movement
             'type': self.current_movement['type'],
             'direction': self.current_movement['direction'],
-            'distance': round(distance, 2),
-            'start_yaw': self.current_movement['start_yaw'],
-            'timestamp': datetime.now().isoformat()
+            'distance': round(distance, 2),  # Round to 2 decimal places
+            'start_yaw': self.current_movement['start_yaw'],  # Drone orientation at start
+            'timestamp': datetime.now().isoformat()  # ISO format timestamp
         }
         
-        # Add to current waypoint movements
+        # Add movement to current waypoint's movement cluster
         self.current_waypoint_movements.append(movement_event)
 
         logger.log_info('RealTimeDroneControllerWindows', f"Recorded {movement_event['type']} {movement_event['direction']} at {movement_event['start_yaw']} degree(s): "
               f"{movement_event['distance']:.1f}cm")
         
-        self.current_movement = None
+        self.current_movement = None  # Clear movement state
     
     def mark_waypoint(self, name=None, auto_generated=False):
-        """Mark a waypoint and save current movement cluster."""
+        """Mark current position as waypoint and save accumulated movements."""
         if not auto_generated and not name:
             name = input("Enter waypoint name: ").strip()
             if not name:
-                name = f"Waypoint_{self.waypoint_counter + 1}"
+                name = f"Waypoint_{self.waypoint_counter + 1}"  # Auto-generate name
         
-        self.waypoint_counter += 1
-        waypoint_id = f"WP_{self.waypoint_counter:03d}"
+        self.waypoint_counter += 1  # Increment waypoint counter
+        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format with leading zeros
         
+        # Create waypoint record with movement history
         waypoint = {
             'id': waypoint_id,
             'name': name or f"Waypoint_{self.waypoint_counter}",
-            'movements_to_here': self.current_waypoint_movements.copy()
+            'movements_to_here': self.current_waypoint_movements.copy()  # Copy movement list
         }
         
-        self.waypoints.append(waypoint)
+        self.waypoints.append(waypoint)  # Add to waypoint collection
 
         logger.log_info('RealTimeDroneControllerWindows', f"Waypoint marked: {waypoint['name']} (ID: {waypoint_id})")
         logger.log_info('RealTimeDroneControllerWindows', f"Movements recorded: {len(self.current_waypoint_movements)} events")
 
-        # Reset movements for next waypoint cluster
+        # Reset movement list for next waypoint cluster
         self.current_waypoint_movements = []
     
     def save_to_json(self) -> list:
-        """Save all waypoints and movements to JSON file."""
+        """Convert waypoint data to JSON format with calculated yaws and movements."""
         processed_waypoints = []
         for waypoint in self.waypoints: 
             processed_movements = []
 
-            # Movement type is either 'move', or 'lift' only
+            # Process only 'move' and 'lift' movement types for waypoint calculation
             for movement in waypoint['movements_to_here']:
                 if movement['type'] == 'move':
-                    yaw = movement['start_yaw']
-                    if movement['direction'] == 'forward':
-                        yaw += 0
-                    elif movement['direction'] == 'backward':
-                        yaw += 180
-                    elif movement['direction'] == 'left':
-                        yaw -= 90
-                    elif movement['direction'] == 'right':
-                        yaw += 90
+                    yaw = movement['start_yaw']  # Start with drone's initial orientation
                     
-                    # Normalize yaw to -180 to 180 range
+                    # Calculate yaw relative to drone's initial yaw based on drone's movement direction
+                    if movement['direction'] == 'forward':
+                        yaw += 0  # No change to yaw
+                    elif movement['direction'] == 'backward':
+                        yaw += 180  # Opposite direction
+                    elif movement['direction'] == 'left':
+                        yaw -= 90  # 90 degrees counter-clockwise
+                    elif movement['direction'] == 'right':
+                        yaw += 90  # 90 degrees clockwise
+                    
+                    # Normalize yaw to standard -180 to 180 degree range
                     if yaw > 180: 
                         yaw -= 360
                     elif yaw < -180:
                         yaw += 360
                     
+                    # Create processed movement record with absolute yaw
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
-                        'yaw': yaw, 
+                        'yaw': yaw,  # Yaw relative to the drone's start yaw
                         'distance': movement['distance'],
                         'timestamp': movement['timestamp']
                     }
 
                     processed_movements.append(processed_movement)
                 
-                else: 
-                    # For 'lift' movements, we can just record the type distance and direction
+                else:  # Handle 'lift' movements (vertical)
+                    # For vertical movements, record type, direction and distance
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
-                        'direction': movement['direction'],
+                        'direction': movement['direction'],  # 'up' or 'down'
                         'distance': movement['distance'],
                         'timestamp': movement['timestamp']
                     }
                     processed_movements.append(processed_movement)
 
+            # Create processed waypoint with movement data
             processed_waypoint = {
                 'id': waypoint['id'],
                 'name': waypoint['name'],
@@ -283,6 +298,7 @@ class RealTimeDroneControllerWindows:
 
             processed_waypoints.append(processed_waypoint)
 
+        # Create final data structure with session metadata
         data = {
             'session_info': {
                 'total_waypoints': len(self.waypoints),
@@ -290,49 +306,51 @@ class RealTimeDroneControllerWindows:
             'waypoints': processed_waypoints
         }
         
+        # Create summary for return value
         summary = [{'id': wp['id'], 'name': wp['name']} for wp in processed_waypoints]
 
+        # Save processed data to JSON file
         try:
             with open(self.data_file, 'w') as f:
                 json.dump(data, f, indent=2)
             logger.log_success('RealTimeDroneControllerWindows', f'Data saved to {self.data_file}')
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f"Error saving data: {e}")
-            summary = []
+            summary = []  # Return empty list on error
         finally: 
-            # Return a summary list of all waypoint ids and names 
-            return summary
+            return summary  # Return waypoint summary list
     
     def start_video_stream(self, drone_instance=None):
-        """Start video streaming from drone camera using Tello's built-in function."""
+        """Initialize and start video streaming from drone camera."""
         try:
             logger.log_info('RealTimeDroneControllerWindows', 'Starting video stream...')
             
-            # Start video stream
+            # Enable video streaming on drone
             drone_instance.streamon()
-            time.sleep(3)  # Wait a bit longer for stream to initialize properly
+            time.sleep(3)  # Allow stream initialization time
             
-            # Get frame reader using Tello's built-in function
+            # Get frame reader using djitellopy's built-in function
             self.frame_read = drone_instance.get_frame_read()
             
-            # Wait for first frame to be available
+            # Wait for first valid frame to confirm stream is working
             retry_count = 0
             max_retries = 10
             while retry_count < max_retries:
                 try:
                     test_frame = self.frame_read.frame
                     if test_frame is not None and test_frame.size > 0:
-                        break
+                        break  # Stream is working
                 except:
-                    pass  # Ignore errors, just retry
+                    pass  # Ignore errors during initialization
                 retry_count += 1
                 time.sleep(0.5)
                 logger.log_debug('RealTimeDroneControllerWindows', f'Waiting for video stream... ({retry_count}/{max_retries})')
             
+            # Check if stream initialization failed
             if retry_count >= max_retries:
                 raise Exception("Video stream failed to initialize - no frames received")
             
-            # Start video display thread
+            # Start background video display thread
             self.video_running = True
             self.video_thread = threading.Thread(target=self._video_display_loop, daemon=True)
             self.video_thread.start()
@@ -343,150 +361,151 @@ class RealTimeDroneControllerWindows:
 
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', 'Failed to initialize video stream, continuing mapping without video feed.')
-
-            self.stop_video_stream(drone_instance=drone_instance)
+            self.stop_video_stream(drone_instance=drone_instance)  # Clean up on failure
 
     def stop_video_stream(self, drone_instance=None):
-        """Stop video streaming."""
+        """Stop video streaming and clean up resources."""
         try:
             logger.log_info('RealTimeDroneControllerWindows', 'Stopping video stream...')
             
-            # Stop video thread
+            # Stop video display thread
             self.video_running = False
             if self.video_thread and self.video_thread.is_alive():
-                self.video_thread.join(timeout=2)
+                self.video_thread.join(timeout=2)  # Wait up to 2 seconds for thread to finish
 
-            self.frame_read = None
+            self.frame_read = None  # Clear frame reader reference
             
-            # Close OpenCV windows
+            # Close all OpenCV windows
             cv2.destroyAllWindows()
             
-            # Stop drone video stream
+            # Disable drone video stream
             if drone_instance:
                 drone_instance.streamoff()
             
-            logger.log_success('RealTimeDroneController', 'Video stream stopped.')
+            logger.log_success('RealTimeDroneControllerWindows', 'Video stream stopped.')
             
         except Exception as e:
-            logger.log_error('RealTimeDroneController', f'Error stopping video stream: {e}')
+            logger.log_error('RealTimeDroneControllerWindows', f'Error stopping video stream: {e}')
     
     def _video_display_loop(self):
-        """Video display loop running in separate thread."""
+        """Background thread for continuous video display with overlay information."""
         try:
-            logger.log_debug('RealTimeDroneController', 'Video display thread started.')
+            logger.log_debug('RealTimeDroneControllerWindows', 'Video display thread started.')
             
             while self.video_running and self.frame_read:
                 try:
-                    # Get current frame
+                    # Get current frame from drone stream
                     frame = self.frame_read.frame
                     
                     if frame is not None and frame.size > 0:
-                        # Resize frame 
+                        # Resize frame if too large for display
                         height, width = frame.shape[:2]
-                        if width > 960:  # Resize if too large
+                        if width > 960:  # Limit maximum display width
                             scale = 960 / width
                             new_width = int(width * scale)
                             new_height = int(height * scale)
                             frame = cv2.resize(frame, (new_width, new_height))
                         
-                        # Add overlay text with background for better visibility
+                        # Create overlay for UI elements with transparency
                         overlay = frame.copy()
                         
-                        # Header background
+                        # Draw header background (black with transparency)
                         cv2.rectangle(overlay, (0, 0), (width, 110), (0, 0, 0), -1)
                         cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
                         
-                        # Title and instructions
+                        # Add title and control instructions
                         cv2.putText(frame, 'Drone Camera View - Mapping Mode (Windows)', 
                                   (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
                         cv2.putText(frame, 'Use terminal for controls - Press Q in terminal to quit', 
                                   (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                         
-                        # Display frame
+                        # Display frame in OpenCV window
                         cv2.imshow('Drone Camera - Mapping Mode (Windows)', frame)
                         
-                        # Handle window events (but don't wait for key presses)
+                        # Process window events without waiting for key presses
                         cv2.waitKey(1)
                     
-                    # Small delay to prevent excessive CPU usage
-                    time.sleep(0.033)  # ~30 FPS
+                    # Control frame rate to prevent excessive CPU usage
+                    time.sleep(0.033)  # Approximately 30 FPS
                     
                 except Exception as e:
-                    logger.log_warning('RealTimeDroneController', f'Frame display error: {e}')
-                    time.sleep(0.1)  # Wait before retry
+                    logger.log_warning('RealTimeDroneControllerWindows', f'Frame display error: {e}')
+                    time.sleep(0.1)  # Brief delay before retry
             
-            logger.log_debug('RealTimeDroneController', 'Video display thread ended.')
+            logger.log_debug('RealTimeDroneControllerWindows', 'Video display thread ended.')
             
         finally:
-            # Ensure window is closed
-            cv2.destroyAllWindows()
+            cv2.destroyAllWindows()  # Ensure OpenCV window cleanup
     
     def get_key(self):
-        """Get a single key press without blocking - Windows version."""
+        """Get single keypress with timeout - Windows implementation using msvcrt."""
         start_time = time.time()
-        # Use 0.2 second timeout like Linux version
-        while time.time() - start_time < 0.2:
-            if msvcrt.kbhit():
+        timeout = 0.2  # 200ms timeout to match Linux version
+        
+        while time.time() - start_time < timeout:
+            if msvcrt.kbhit():  # Check if key is available
                 key = msvcrt.getch()
                 
-                # Handle special keys (arrows)
-                if key == b'\xe0':  # Special key prefix on Windows
-                    if msvcrt.kbhit():  # Check if another key follows
+                # Handle special keys with escape sequences
+                if key == b'\xe0':  # Windows special key prefix
+                    if msvcrt.kbhit():  # Check for following key code
                         key = msvcrt.getch()
+                        # Map Windows arrow key codes to direction strings
                         arrow_map = {
-                            b'H': 'up',    # Up arrow
-                            b'P': 'down',  # Down arrow
-                            b'M': 'right', # Right arrow
-                            b'K': 'left'   # Left arrow
+                            b'H': 'up',    # Up arrow key
+                            b'P': 'down',  # Down arrow key
+                            b'M': 'right', # Right arrow key
+                            b'K': 'left'   # Left arrow key
                         }
                         return arrow_map.get(key, 'unknown_key')
-                    return 'incomplete'
+                    return 'incomplete'  # Incomplete escape sequence
                 elif key == b'[':
-                    # Ignore the alphabet key character that follows
+                    # Ignore alphabet key that follows bracket (terminal escape)
                     if msvcrt.kbhit():
                         msvcrt.getch()
                     return 'ignored_key'
                 else:
+                    # Handle regular character keys
                     try:
-                        return key.decode('utf-8').lower()  # Regular key press
+                        return key.decode('utf-8').lower()  # Convert to lowercase string
                     except UnicodeDecodeError:
                         return 'unknown_key'
-            time.sleep(0.01)  # Small delay to prevent high CPU usage
-        return None
+            time.sleep(0.01)  # Small delay to reduce CPU usage
+        return None  # No key pressed within timeout
 
     def handle_keypress(self, drone_instance=None):
-        """Handle keyboard input for drone control using Windows msvcrt."""
+        """Main keyboard input handler for Windows drone control using msvcrt."""
         
         try:
-            activeMovementKey = None
-            x_pressed = False
-            last_battery_check = 0
+            activeMovementKey = None  # Track currently pressed movement key
+            x_pressed = False  # Track emergency stop state
+            last_battery_check = 0  # Timestamp for battery monitoring
             
-            print("🎮 Keyboard controls active!")
+            print("🎮 Keyboard controls active!")  # User feedback
             
-            while True:
-                # Battery check every 5 seconds
+            while True:  # Main control loop
+                # Periodic battery level monitoring
                 current_time = time.time()
-                if current_time - last_battery_check > 5:
+                if current_time - last_battery_check > 5:  # Check every 5 seconds
                     try:
                         battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                         battery = int(battery_str)
                         if battery < 20:
                             logger.log_warning('RealTimeDroneControllerWindows', f'Low battery: {battery}%')
-                            if battery < 10:
+                            if battery < 10:  # Critical battery level
                                 logger.log_error('RealTimeDroneControllerWindows', 'CRITICAL: Battery too low, landing...')
                                 break
                         last_battery_check = current_time
                     except Exception as e:
                         logger.log_error('RealTimeDroneControllerWindows', f'Error checking battery: {e}')
 
-                # Get key input
+                # Get keyboard input with timeout
                 key = self.get_key()
                 
-                if key:
+                if key:  # Key was pressed
                     logger.log_info('RealTimeDroneControllerWindows', f'Key: {key}')
 
-                    if key == 'q':
+                    if key == 'q':  # Quit mapping session
                         logger.log_info('RealTimeDroneControllerWindows', 'Finishing mapping session...')
                         break
                     elif key == 'x': 
