@@ -50,7 +50,7 @@ class RealTimeDroneController:
             # Get yaw (facing direction)
             try:
                 attitude_str = drone_instance.send_command_with_return("attitude?", timeout=3)
-                print(f"Raw attitude response: '{attitude_str}'")  # Debug line
+                logger.log_debug('RealTimeDroneController', f'Raw attitude response: {attitude_str}')
                 
                 # Parse attitude string like "pitch:0;roll:0;yaw:45;"
                 state['yaw'] = 0  # Default value
@@ -64,10 +64,10 @@ class RealTimeDroneController:
                                     state['yaw'] = int(yaw_value)
                                     break
                             except (ValueError, IndexError) as e:
-                                print(f"⚠️  Failed to parse yaw from '{part}': {e}")
+                                logger.log_warning('RealTimeDroneController', f'Failed to parse yaw from "{part}": {e}')
                                 continue
             except Exception as e:
-                print(f"⚠️  Attitude query failed: {e}")
+                logger.log_warning('RealTimeDroneController', f'Attitude query failed: {e}')
                 state['yaw'] = 0
 
             # Get height
@@ -77,7 +77,7 @@ class RealTimeDroneController:
                 height_dm = int(height_str.replace('dm', ''))
                 state['height'] = height_dm * 10  # Convert dm to cm
             except Exception as e:
-                print(f"⚠️  Height query failed: {e}")
+                logger.log_warning('RealTimeDroneController', f'Height query failed: {e}')
                 state['height'] = 0
             
             # Get battery level
@@ -85,28 +85,28 @@ class RealTimeDroneController:
                 battery_str = self.tello.send_command_with_return("battery?", timeout=3)
                 state['battery'] = int(battery_str)
             except Exception as e:
-                print(f"⚠️  Battery query failed: {e}")
+                logger.log_warning('RealTimeDroneController', f'Battery query failed: {e}')
                 state['battery'] = 0
             
 
             return state
         except Exception as e:
-            print(f"Error getting drone state: {e}")
+            logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
             return {'height': 0, 'yaw': 0, 'battery': 0}
 
     def start_movement(self, direction, movement_type="move", drone_instance=None):
         """Start a movement in the specified direction."""
-        print(f"🚀 start_movement called: {movement_type} {direction}")  # Debug
+        logger.log_debug('RealTimeDroneController', f'Starting movement: {movement_type} {direction}')
         
         if self.current_movement is not None:
-            print("⚠️  Already moving, ignoring new movement")
+            logger.log_warning('RealTimeDroneController', "Already moving, ignoring new movement")
             return  # Already moving
         
         try: 
             drone_state = self.get_drone_state(drone_instance)
             start_yaw = drone_state.get('yaw', 0)  # Default to 0 if not available
         except Exception as e:
-            print(f"Error getting drone state: {e}")
+            logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
             start_yaw = 0
 
         self.current_movement = {
@@ -115,15 +115,15 @@ class RealTimeDroneController:
             'start_time': time.time(),
             'start_yaw': start_yaw,
         }
-        
-        print(f"📝 Created movement record: {self.current_movement}")  # Debug
-        
+
+        logger.log_debug('RealTimeDroneController', f'Created movement record: {self.current_movement}')
+
         # Start the actual drone movement
         try:
             if movement_type == "move":
                 self.add_movement = True
 
-                print(f"📡 Sending RC control for {direction}")  # Debug
+                logger.log_debug('RealTimeDroneController', f'Sending RC control for {direction}')
                 if direction == "forward":
                     drone_instance.send_rc_control(0, self.movement_speed, 0, 0)
                 elif direction == "backward":
@@ -132,30 +132,30 @@ class RealTimeDroneController:
                     drone_instance.send_rc_control(-self.movement_speed, 0, 0, 0)
                 elif direction == "right":
                     drone_instance.send_rc_control(self.movement_speed, 0, 0, 0)
-                print(f"✅ RC control sent for {direction}")  # Debug
-                    
+                logger.log_debug('RealTimeDroneController', f'RC control sent for {direction}')
+
             elif movement_type == "lift":
                 self.add_movement = True
 
-                print(f"📡 Sending RC control for lift {direction}")  # Debug
+                logger.log_debug('RealTimeDroneController', f'Sending RC control for lift {direction}')
                 if direction == "up":
                     drone_instance.send_rc_control(0, 0, self.movement_speed, 0)
                 elif direction == "down":
                     drone_instance.send_rc_control(0, 0, -self.movement_speed, 0)
-                print(f"✅ RC control sent for lift {direction}")  # Debug
+                logger.log_debug('RealTimeDroneController', f'RC control sent for lift {direction}')
                     
             elif movement_type == "rotate":
                 self.add_movement = False
 
-                print(f"📡 Sending RC control for rotate {direction}")  # Debug
+                logger.log_debug('RealTimeDroneController', f'Sending RC control for rotate {direction}')
                 if direction == "anticlockwise":
                     drone_instance.send_rc_control(0, 0, 0, -self.rotation_speed)
                 elif direction == "clockwise":
                     drone_instance.send_rc_control(0, 0, 0, self.rotation_speed)
-                print(f"✅ RC control sent for rotate {direction}")  # Debug
+                logger.log_debug('RealTimeDroneController', f'RC control sent for rotate {direction}')
                     
         except Exception as e:
-            print(f"❌ Error starting movement: {e}")
+            logger.log_error('RealTimeDroneController', f'Error starting movement: {e}')
             import traceback
             traceback.print_exc()
             self.current_movement = None
@@ -166,13 +166,13 @@ class RealTimeDroneController:
             return
         
         if not self.add_movement:
-            print("Stopping rotation movement...")
+            logger.log_debug('RealTimeDroneController', 'Stopping rotation movement...')
             # Stop drone rotation
             try:
                 drone_instance.send_rc_control(0, 0, 0, 0)
             except Exception as e:
-                print(f"Error stopping rotation movement: {e}")
-                
+                logger.log_error('RealTimeDroneController', f'Error stopping rotation movement: {e}')
+
             self.current_movement = None
             return
         
@@ -180,8 +180,8 @@ class RealTimeDroneController:
         try:
             drone_instance.send_rc_control(0, 0, 0, 0)
         except Exception as e:
-            print(f"Error stopping movement: {e}")
-        
+            logger.log_error('RealTimeDroneController', f'Error stopping movement: {e}')
+
         # Calculate movement duration and distance
         end_time = time.time()
         duration = end_time - self.current_movement['start_time'] + 0.5 # Add a small buffer to account for halt delay
@@ -201,8 +201,8 @@ class RealTimeDroneController:
         
         # Add to current waypoint movements
         self.current_waypoint_movements.append(movement_event)
-        
-        print(f"Recorded {movement_event['type']} {movement_event['direction']} at {movement_event['start_yaw']} degree(s): "
+
+        logger.log_info('RealTimeDroneController', f"Recorded {movement_event['type']} {movement_event['direction']} at {movement_event['start_yaw']} degree(s): "
               f"{movement_event['distance']:.1f}cm")
         
         self.current_movement = None
@@ -225,9 +225,9 @@ class RealTimeDroneController:
         
         self.waypoints.append(waypoint)
         
-        print(f"Waypoint marked: {waypoint['name']} (ID: {waypoint_id})")
-        print(f"Movements recorded: {len(self.current_waypoint_movements)} events")
-        
+        logger.log_info('RealTimeDroneController', f"Waypoint marked: {waypoint['name']} (ID: {waypoint_id})")
+        logger.log_info('RealTimeDroneController', f"Movements recorded: {len(self.current_waypoint_movements)} events")
+
         # Reset movements for next waypoint cluster
         self.current_waypoint_movements = []
     
@@ -297,9 +297,9 @@ class RealTimeDroneController:
         try:
             with open(self.data_file, 'w') as f:
                 json.dump(data, f, indent=2)
-            print(f"Data saved to {self.data_file}")
+            logger.log_success('RealTimeDroneController', f'Data saved to {self.data_file}')
         except Exception as e:
-            print(f"Error saving data: {e}")
+            logger.log_error('RealTimeDroneController', f"Error saving data: {e}")
             summary = []
         finally: 
             # Return a summary list of all waypoint ids and names 
@@ -309,7 +309,6 @@ class RealTimeDroneController:
         """Start video streaming from drone camera using Tello's built-in function."""
         try:
             logger.log_info('RealTimeDroneController', 'Starting video stream...')
-            print("📹 Initializing video stream...")
             
             # Start video stream
             drone_instance.streamon()
@@ -330,7 +329,7 @@ class RealTimeDroneController:
                     pass  # Ignore errors, just retry
                 retry_count += 1
                 time.sleep(0.5)
-                print(f"⏳ Waiting for video stream... ({retry_count}/{max_retries})")
+                logger.log_debug('RealTimeDroneController', f'Waiting for video stream... ({retry_count}/{max_retries})')
             
             if retry_count >= max_retries:
                 raise Exception("Video stream failed to initialize - no frames received")
@@ -341,13 +340,11 @@ class RealTimeDroneController:
             self.video_thread.start()
             
             logger.log_success('RealTimeDroneController', 'Video stream started successfully.')
-            print("📹 Video stream window opened - you can see what the drone sees!")
-            print("📹 Keep the video window visible to see the drone's perspective during mapping.")
+            logger.log_info('RealTimeDroneController', 'Video stream window opened - you can see what the drone sees!')
+            logger.log_info('RealTimeDroneController', "Keep the video window visible to see the drone's perspective during mapping.")
             
         except Exception as e:
-            logger.log_error('RealTimeDroneController', f'Failed to start video stream: {e}')
-            print(f"❌ Failed to start video stream: {e}")
-            print("⚠️  Mapping will continue without video feed.")
+            logger.log_error('RealTimeDroneControllerWindows', 'Failed to initialize video stream, continuing mapping without video feed.')
 
             self.stop_video_stream(drone_instance=drone_instance)
 
@@ -480,22 +477,22 @@ class RealTimeDroneController:
                         battery_str = drone_instance.send_command_with_return("battery?", timeout=5)
                         battery = int(battery_str)
                         if battery < 20:
-                            print(f"\r⚠️  Low battery ({battery}%)")
+                            logger.log_warning('RealTimeDroneController', f'Low battery ({battery}%)')
                             if battery < 10:
-                                print("\r❗ CRITICAL: Battery too low, landing...")
+                                logger.log_error('RealTimeDroneController', 'CRITICAL: Battery too low, landing...')
                                 break
                         last_battery_check = current_time
                     except Exception as e:
-                        print(f"\rError checking battery: {e}")
-                
+                        logger.log_error('RealTimeDroneController', f'Error checking battery: {e}')
+
                 # Get key input
                 key = self.get_key()
                 
                 if key:
-                    print(f"\r🎮 Key: '{key}'")
-                    
-                    if key == 'q':  
-                        print("\r--- Finishing mapping session ---")
+                    logger.log_info('RealTimeDroneController', f'Key: {key}')
+
+                    if key == 'q':
+                        logger.log_info('RealTimeDroneController', 'Finishing mapping session')
                         break
                     elif key == 'x': 
                         if not x_pressed:
@@ -503,7 +500,7 @@ class RealTimeDroneController:
                                 self.stop_movement(drone_instance=drone_instance)
                                 activeMovementKey = None
 
-                            print("\r--- Marking Waypoint ---")
+                            logger.log_info('RealTimeDroneController', 'Marking waypoint...')
                             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
                             self.mark_waypoint()
@@ -512,19 +509,19 @@ class RealTimeDroneController:
                             tty.setraw(sys.stdin)
                             x_pressed = True
                         else:
-                            print("\r--- Waypoint already marked ---")
+                            logger.log_info('RealTimeDroneController', 'Waypoint already marked')
                             continue
                     elif key in ['w', 'a', 's', 'd', 'up', 'down', 'left', 'right']:
                         x_pressed = False  # Reset x_pressed flag
                         if key != activeMovementKey:
                             # Stop current movement if any
                             if activeMovementKey:
-                                print(f"\r🛑 Stopping movement: {activeMovementKey}")
+                                logger.log_info('RealTimeDroneController', f'Stopping movement: {activeMovementKey}')
                                 self.stop_movement(drone_instance=drone_instance)
 
                             # Start new movement
                             activeMovementKey = key
-                            print(f"\r🚀 Starting movement: {key}")
+                            logger.log_info('RealTimeDroneController', f'Starting movement: {key}')
                             
                             match key:
                                 case 'w': 
@@ -545,20 +542,20 @@ class RealTimeDroneController:
                                     self.start_movement('clockwise', 'rotate', drone_instance)
                         else: 
                             # Same movement continues
-                            print(f"\r🚀 Continuing movement: {activeMovementKey}")
+                            logger.log_info('RealTimeDroneController', f'Continuing movement: {activeMovementKey}')
                             continue
                     else:
                         # Stop movement or remain still on other keys
-                        print(f"\r🎮 Unrecognized key: '{key}'")
+                        logger.log_info('RealTimeDroneController', f'Unrecognized key: {key}')
                         if self.current_movement:
-                            print("\r🛑 Stopping current movement due to unrecognized key")
+                            logger.log_info('RealTimeDroneController', 'Stopping current movement due to unrecognized key')
                             self.stop_movement(drone_instance=drone_instance)
                             activeMovementKey = None
                         continue
                 else:
                     # No key pressed, stop any movement
                     if self.current_movement:
-                        print("\r🛑 No key pressed, stopping current movement")
+                        logger.log_info('RealTimeDroneController', 'No key pressed, stopping current movement')
                         self.stop_movement(drone_instance=drone_instance)
                         activeMovementKey = None
                     continue
@@ -566,21 +563,21 @@ class RealTimeDroneController:
                 time.sleep(0.05)  # Fast responsive loop
                 
         except Exception as e:
-            print(f"\rError in keyboard handling: {e}")
+            logger.log_error('RealTimeDroneController', f'Error in keyboard handling: {e}')
         finally:
             # Restore terminal settings
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-            print("\r🎮 Keyboard controls ended")
-    
+            logger.log_info('RealTimeDroneController', 'Keyboard controls ended')
+
     
     def run(self, drone_instance=None) -> list:
         """Main control loop."""
         
-        print("Starting keyboard control... Press ESC to exit")
+        print("Starting keyboard control... Press Q to exit")
         
         # Mark the first waypoint automatically
         self.mark_waypoint("START", auto_generated=True)
-        print("First waypoint marked: START")
+        logger.log_info('RealTimeDroneController', 'First waypoint marked: START')
 
         # # Start video streaming
         self.start_video_stream(drone_instance=drone_instance)
@@ -588,9 +585,9 @@ class RealTimeDroneController:
         try:
             self.handle_keypress(drone_instance=drone_instance)
         except KeyboardInterrupt:
-            print("\nKeyboard interrupt received")
+            logger.log_info('RealTimeDroneController', 'Keyboard interrupt received')
         except Exception as e:
-            print(f"\n❌ Error during drone control: {e}")
+            logger.log_error('RealTimeDroneController', f'Error during drone control: {e}')
         finally:
             # # Stop video streaming first
             self.stop_video_stream(drone_instance=drone_instance)
@@ -600,7 +597,7 @@ class RealTimeDroneController:
                 if self.current_movement:
                     self.stop_movement(drone_instance=drone_instance)
                 
-                # Mark final waypoint if there are pending movements
+                # Mark final waypoint if there are pending movements 
                 if self.current_waypoint_movements:
                     self.mark_waypoint("END", auto_generated=True)
 
@@ -609,7 +606,7 @@ class RealTimeDroneController:
 
                 print(f"\nSession complete! Data saved to: {self.data_file}")
             except Exception as e:
-                print(f"Error finalizing session: {e}")
+                logger.log_error('RealTimeDroneController', f'Error finalizing session: {e}')
                 summary = []
 
             return summary  # Return summary of waypoints
