@@ -73,3 +73,13 @@ class INavigation(IDBLFunction):
             TypeError: If final_instruction is not a NavigationInstruction enum.
         """
         pass
+
+    @abstractmethod
+    def scan_surrounding(self) -> list: 
+        """
+        Takes pictures of the surrounding of the drone while doing a 360 degree rotation.
+        
+        Returns:
+            list: A list of images captured during the scan.
+        """
+        pass

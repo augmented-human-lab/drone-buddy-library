@@ -643,6 +643,7 @@ class TelloWaypointNavCoordinator:
                         return self._stop_goto_mode()
                     
                     selected_file = waypoint_files[0]  # Latest file
+                    self.waypoint_file = os.path.basename(selected_file)  # Store file name for reference
                     logger.log_info('TelloWaypointNavCoordinator', f'Using latest waypoint file: {selected_file}')
 
                 if not self.nav_manager.load_waypoint_file(selected_file):

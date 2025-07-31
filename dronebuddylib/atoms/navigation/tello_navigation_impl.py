@@ -182,6 +182,29 @@ class NavigationWaypointImpl(INavigation):
 
         logger.log_info(self.get_class_name(), f'Navigation to waypoints session closed with drone at current waypoint: {accumulated_results[len(accumulated_results) - 1]}.')
         return accumulated_results
+    
+    def scan_surrounding(self) -> list:
+        """
+        Takes pictures of the surrounding of the drone while doing a 360 degree rotation.
+        
+        Returns:
+            list: A list of images captured during the scan.
+        """
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+        if coordinator_instance is None: 
+            logger.log_error(self.get_class_name(), 'No active drone or drone is not flying to perform surrounding scan.')
+            return []
+        
+        logger.log_info(self.get_class_name(), 'Starting surrounding scan operation.')
+        current_waypoint_file = coordinator_instance.waypoint_file  # Get current waypoint file from coordinator
+        current_waypoint = coordinator_instance.current_waypoint  # Get current waypoint from coordinator
+        
+        from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import TelloNavExtra
+        tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)  # Use existing drone instance from coordinator
+
+        result = tello_manouver.scan(current_waypoint_file, current_waypoint)
+        logger.log_info(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
+        return result
 
     def get_required_params(self) -> list:
         """
@@ -201,7 +224,7 @@ class NavigationWaypointImpl(INavigation):
         """
         return [AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR,
                 AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED,
-                AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE]
+                AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR]
 
     def get_class_name(self) -> str:
         """
@@ -257,6 +280,7 @@ class NavigationWaypointImpl(INavigation):
         self.mapping_rotation_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 70)  # Rotation speed (deg/s)
         self.nav_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 55)  # Navigation speed (cm/s)
         self.waypoint_file = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, None)  # Optional specific waypoint file
+        self.image_dir = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, None)  # Directory for captured images
         
         logger.log_info(self.get_class_name(), 'Tello navigation engine initialized successfully.')
         logger.log_debug(self.get_class_name(), f'Configuration: vertical_factor={self.vertical_factor}, mapping_movement_speed={self.mapping_movement_speed}, mapping_rotation_speed={self.mapping_rotation_speed}, nav_speed={self.nav_speed}')

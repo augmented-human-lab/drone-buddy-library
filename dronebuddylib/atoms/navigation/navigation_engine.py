@@ -101,3 +101,21 @@ class NavigationEngine:
         
         logger.log_debug(self.get_class_name(), f'Navigate to waypoints operation completed with drone at current waypoint: {result[0]}.')
         return result
+    
+    def scan_surrounding(self) -> list:
+        """
+        Performs a surrounding scan operation using the Tello drone.
+
+        Args:
+            coordinator_instance (Coordinator): The coordinator instance managing the drone and waypoints.
+
+        Returns:
+            list: A list of images captured during the scan.
+        """
+        
+        logger.log_info(self.get_class_name(), 'Starting surrounding scan operation.')
+
+        result = self.navigation_engine.scan_surrounding()
+
+        logger.log_debug(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
+        return result
