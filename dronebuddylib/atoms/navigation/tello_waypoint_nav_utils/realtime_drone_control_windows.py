@@ -255,19 +255,19 @@ class RealTimeDroneControllerWindows:
                     if movement['direction'] == 'forward':
                         yaw += 0  # No change to yaw
                     elif movement['direction'] == 'backward':
-                        yaw += 180  # Opposite direction
+                        yaw += 180  # Adjust yaw to opposite direction
                     elif movement['direction'] == 'left':
-                        yaw -= 90  # 90 degrees counter-clockwise
+                        yaw -= 90  # Adjust yaw 90 degrees counter-clockwise
                     elif movement['direction'] == 'right':
-                        yaw += 90  # 90 degrees clockwise
-                    
+                        yaw += 90  # Adjust yaw 90 degrees clockwise
+
                     # Normalize yaw to standard -180 to 180 degree range
                     if yaw > 180: 
                         yaw -= 360
                     elif yaw < -180:
                         yaw += 360
                     
-                    # Create processed movement record with absolute yaw
+                    # Create processed movement record with processed yaw
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],

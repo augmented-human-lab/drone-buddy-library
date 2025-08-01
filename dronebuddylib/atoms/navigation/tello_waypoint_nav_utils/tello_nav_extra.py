@@ -1,5 +1,4 @@
 from djitellopy import Tello
-from .tello_waypoint_nav_coordinator import TelloWaypointNavCoordinator
 
 from dronebuddylib.utils.logger import Logger
 import time
@@ -16,36 +15,36 @@ class TelloNavExtra:
         self.tello = tello
         self.image_dir = image_dir
 
-    # def forward(self, distance: float) -> bool:
-    #     """
-    #     Moves the Tello drone forward by a specified distance.
+    def forward(self, distance: float) -> bool:
+        """
+        Moves the Tello drone forward by a specified distance.
 
-    #     Args:
-    #         distance (float): The distance to move forward in centimeters.
-    #     """
-    #     if self.tello is not None: 
-    #         return self._move_forward(distance)
-    #     else:
-    #         self.tello = Tello()
-    #         if self._connect_drone():
-    #             if self._takeoff():
-    #                 if self._move_forward(distance): 
-    #                     logger.log_success('TelloNavDirect', f'Moved forward {distance} cm successfully.')
-    #                     if self._land():
-    #                         logger.log_success('TelloNavDirect', 'Drone landed successfully after moving forward.')
-    #                         return True
-    #                     else: 
-    #                         logger.log_error('TelloNavDirect', 'Landing failed after moving forward.')
-    #                         return False
-    #                 else:
-    #                     logger.log_error('TelloNavDirect', 'Moving forward failed.')
-    #                     return False
-    #             else:
-    #                 logger.log_error('TelloNavDirect', 'Takeoff failed, cannot move forward.')
-    #                 return False
-    #         else:
-    #             logger.log_error('TelloNavDirect', 'Failed to connect to Tello drone.')
-    #             return False
+        Args:
+            distance (float): The distance to move forward in centimeters.
+        """
+        if self.tello is not None: 
+            return self._move_forward(distance)
+        else:
+            self.tello = Tello()
+            if self._connect_drone():
+                if self._takeoff():
+                    if self._move_forward(distance): 
+                        logger.log_success('TelloNavDirect', f'Moved forward {distance} cm successfully.')
+                        if self._land():
+                            logger.log_success('TelloNavDirect', 'Drone landed successfully after moving forward.')
+                            return True
+                        else: 
+                            logger.log_error('TelloNavDirect', 'Landing failed after moving forward.')
+                            return False
+                    else:
+                        logger.log_error('TelloNavDirect', 'Moving forward failed.')
+                        return False
+                else:
+                    logger.log_error('TelloNavDirect', 'Takeoff failed, cannot move forward.')
+                    return False
+            else:
+                logger.log_error('TelloNavDirect', 'Failed to connect to Tello drone.')
+                return False
 
     def scan(self, current_waypoint_file: str,current_waypoint: str) -> list:
         """
@@ -57,7 +56,7 @@ class TelloNavExtra:
         
         Returns:
             list: List of dictionaries containing image info:
-                  [{'image_path': str, 'yaw': float, 'timestamp': str, 'waypoint': str}, ...]
+                  [{'image_path': str, 'filename': str, 'waypoint_file': str, 'waypoint': str, 'rotation_from_start': str, 'image_number': int, 'timestamp': str, 'format': str='JPEG'}, ...]
         """
         try:
             logger.log_info('TelloNavDirect', f'Starting 360-degree scan at waypoint: {current_waypoint}')
@@ -149,9 +148,10 @@ class TelloNavExtra:
         """
         Create directory structure for storing scan images.
         
-        Structure: ~/dronebuddylib/scans/{waypoint}_{timestamp}/
+        Structure: ~/dronebuddylib/scans/{waypoint_file_name}/{waypoint}_{timestamp}/
         
         Args:
+            waypoint_file (str): Name of the waypoint file
             waypoint (str): Current waypoint name
             
         Returns:
