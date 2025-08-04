@@ -35,12 +35,12 @@ class RealTimeDroneController:
         
         # Movement tracking state
         self.current_movement = None  # Active movement being recorded
-        self.waypoints = []  # Complete waypoint list
-        self.current_waypoint_movements = []  # Movements since last waypoint
+        self.waypoints = []  # Complete waypoint sequence
+        self.current_waypoint_movements = []  # Movements since last waypoint marker
         self.waypoint_counter = 0  # Sequential waypoint numbering
         
         # Control flags
-        self.add_movement = False  # Whether to record current movement
+        self.add_movement = False  # Whether to record current movement for waypoint data
         
         # Video streaming components
         self.video_thread = None
@@ -62,7 +62,7 @@ class RealTimeDroneController:
                 logger.log_debug('RealTimeDroneController', f'Raw attitude response: {attitude_str}')
                 
                 # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
-                state['yaw'] = 0  # Default value
+                state['yaw'] = 0  # Default fallback value
                 if attitude_str and ':' in attitude_str:
                     attitude_parts = attitude_str.split(';')
                     for part in attitude_parts:
@@ -81,7 +81,7 @@ class RealTimeDroneController:
 
             # Get height in centimeters (converted from decimeters)
             try:
-                height_str = self.tello.send_command_with_return("height?", timeout=3)
+                height_str = drone_instance.send_command_with_return("height?", timeout=3)
                 height_dm = int(height_str.replace('dm', ''))  # Remove 'dm' suffix
                 state['height'] = height_dm * 10  # Convert dm to cm
             except Exception as e:
@@ -90,7 +90,7 @@ class RealTimeDroneController:
             
             # Get battery percentage
             try:
-                battery_str = self.tello.send_command_with_return("battery?", timeout=3)
+                battery_str = drone_instance.send_command_with_return("battery?", timeout=3)
                 state['battery'] = int(battery_str)
             except Exception as e:
                 logger.log_warning('RealTimeDroneController', f'Battery query failed: {e}')
@@ -100,7 +100,7 @@ class RealTimeDroneController:
             return state
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
-            return {'height': 0, 'yaw': 0, 'battery': 0}  # Safe defaults
+            return {'height': 0, 'yaw': 0, 'battery': 0}  # Return safe defaults on error
 
     def start_movement(self, direction, movement_type="move", drone_instance=None):
         """Begin drone movement in specified direction and record movement data."""
@@ -108,12 +108,12 @@ class RealTimeDroneController:
         
         if self.current_movement is not None:
             logger.log_warning('RealTimeDroneController', "Already moving, ignoring new movement")
-            return  # Prevent overlapping movements
+            return  # Prevent overlapping movements that could cause conflicts
         
         # Get initial drone state for movement recording
         try: 
             drone_state = self.get_drone_state(drone_instance)
-            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if unavailable
+            start_yaw = drone_state.get('yaw', 0)  # Extract yaw for direction tracking
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error getting drone state: {e}')
             start_yaw = 0
@@ -131,7 +131,7 @@ class RealTimeDroneController:
         # Send appropriate RC control commands to drone
         try:
             if movement_type == "move":
-                self.add_movement = True  # Linear movements are recorded
+                self.add_movement = True  # Linear movements are recorded for waypoint navigation
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for {direction}')
                 if direction == "forward":
@@ -145,7 +145,7 @@ class RealTimeDroneController:
                 logger.log_debug('RealTimeDroneController', f'RC control sent for {direction}')
 
             elif movement_type == "lift":
-                self.add_movement = True  # Vertical movements are recorded
+                self.add_movement = True  # Vertical movements are recorded for waypoint navigation
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for lift {direction}')
                 if direction == "up":
@@ -155,7 +155,7 @@ class RealTimeDroneController:
                 logger.log_debug('RealTimeDroneController', f'RC control sent for lift {direction}')
                     
             elif movement_type == "rotate":
-                self.add_movement = False  # Rotations are not recorded as waypoint movements
+                self.add_movement = False  # Rotations change orientation but don't create waypoint movements
 
                 logger.log_debug('RealTimeDroneController', f'Sending RC control for rotate {direction}')
                 if direction == "anticlockwise":
@@ -194,9 +194,9 @@ class RealTimeDroneController:
 
         # Calculate movement duration and distance for recording
         end_time = time.time()
-        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for deceleration
+        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for deceleration timing
         
-        distance = self.movement_speed * duration  # cm
+        distance = self.movement_speed * duration  # Calculate distance in cm
         
         # Create movement event record for waypoint file
         movement_event = {
@@ -224,7 +224,7 @@ class RealTimeDroneController:
                 name = f"Waypoint_{self.waypoint_counter + 1}"
         
         self.waypoint_counter += 1
-        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format: WP_001, WP_002, etc.
+        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format as WP_001, WP_002, etc.
         
         waypoint = {
             'id': waypoint_id,
@@ -250,7 +250,7 @@ class RealTimeDroneController:
             for movement in waypoint['movements_to_here']:
                 if movement['type'] == 'move':
                     yaw = movement['start_yaw']
-                    # Adjust yaw based on movement direction
+                    # Adjust yaw based on movement direction relative to drone orientation
                     if movement['direction'] == 'forward':
                         yaw += 0
                     elif movement['direction'] == 'backward':
@@ -260,7 +260,7 @@ class RealTimeDroneController:
                     elif movement['direction'] == 'right':
                         yaw += 90
                     
-                    # Normalize yaw to -180 to 180 range
+                    # Normalize yaw to standard -180 to 180 degree range
                     if yaw > 180: 
                         yaw -= 360
                     elif yaw < -180:
@@ -277,7 +277,7 @@ class RealTimeDroneController:
                     processed_movements.append(processed_movement)
                 
                 else: 
-                    # For 'lift' movements, keep direction and distance
+                    # For 'lift' movements, preserve direction and distance (no yaw processing)
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
@@ -322,12 +322,11 @@ class RealTimeDroneController:
             
             # Start video stream
             drone_instance.streamon()
-            time.sleep(3)  # Wait a bit longer for stream to initialize properly
             
             # Get frame reader using Tello's built-in function
             self.frame_read = drone_instance.get_frame_read()
             
-            # Wait for first frame to be available
+            # Wait for first frame to ensure stream is ready
             retry_count = 0
             max_retries = 10
             while retry_count < max_retries:
@@ -336,7 +335,7 @@ class RealTimeDroneController:
                     if test_frame is not None and test_frame.size > 0:
                         break
                 except:
-                    pass  # Ignore errors, just retry
+                    pass  # Ignore frame errors during initialization
                 retry_count += 1
                 time.sleep(0.5)
                 logger.log_debug('RealTimeDroneController', f'Waiting for video stream... ({retry_count}/{max_retries})')
@@ -441,7 +440,7 @@ class RealTimeDroneController:
             
             if key == '\x1b':  # Escape sequence (arrow keys start with ESC)
 
-                time.sleep(0.02)  # Allow time for escape sequence
+                time.sleep(0.02)  # Allow time for complete escape sequence
                 if select.select([sys.stdin], [], [], 0.1)[0]: 
                     bracket = sys.stdin.read(1)
                     if bracket == '[' and select.select([sys.stdin], [], [], 0.1)[0]:
@@ -455,7 +454,7 @@ class RealTimeDroneController:
                         return arrow_map.get(arrow, 'unknown_key')
                 return 'incomplete'
             elif key == '[': 
-                # Ignore alphabet character that follows
+                # Ignore stray bracket character
                 if select.select([sys.stdin], [], [], 0.1)[0]:
                     sys.stdin.read(1)
                 return 'ignored_key'  
@@ -511,18 +510,18 @@ class RealTimeDroneController:
                                 activeMovementKey = None
 
                             logger.log_info('RealTimeDroneController', 'Marking waypoint...')
-                            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)  # Restore for input
+                            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)  # Restore terminal for input
 
                             self.mark_waypoint()
 
-                            old_settings = termios.tcgetattr(sys.stdin)  # Save again
+                            old_settings = termios.tcgetattr(sys.stdin)  # Save settings again
                             tty.setraw(sys.stdin)  # Return to raw mode
                             x_pressed = True
                         else:
                             logger.log_info('RealTimeDroneController', 'Waypoint already marked')
                             continue
                     elif key in ['w', 'a', 's', 'd', 'up', 'down', 'left', 'right']:
-                        x_pressed = False  # Reset waypoint flag
+                        x_pressed = False  # Reset waypoint flag on movement
                         if key != activeMovementKey:
                             # Stop current movement before starting new one
                             if activeMovementKey:
@@ -552,7 +551,7 @@ class RealTimeDroneController:
                                 case 'right':  
                                     self.start_movement('clockwise', 'rotate', drone_instance)
                         else: 
-                            # Same movement continues
+                            # Same movement key held - continue current movement
                             logger.log_info('RealTimeDroneController', f'Continuing movement: {activeMovementKey}')
                             continue
                     else:
@@ -571,12 +570,12 @@ class RealTimeDroneController:
                         activeMovementKey = None
                     continue
                 
-                time.sleep(0.05)  # Fast responsive loop (50ms)
+                time.sleep(0.05)  # Fast response loop (50ms cycle time)
                 
         except Exception as e:
             logger.log_error('RealTimeDroneController', f'Error in keyboard handling: {e}')
         finally:
-            # Always restore terminal settings
+            # Always restore terminal settings on exit
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
             logger.log_info('RealTimeDroneController', 'Keyboard controls ended')
 
@@ -590,7 +589,7 @@ class RealTimeDroneController:
         self.mark_waypoint("START", auto_generated=True)
         logger.log_info('RealTimeDroneController', 'First waypoint marked: START')
 
-        # Start video feed for visual reference
+        # Start video feed for visual reference during mapping
         self.start_video_stream(drone_instance=drone_instance)
 
         try:
@@ -603,7 +602,7 @@ class RealTimeDroneController:
             # Cleanup and finalization
             self.stop_video_stream(drone_instance=drone_instance)
             
-            # Complete any pending movements and save session
+            # Complete any pending movements and save session data
             try: 
                 if self.current_movement:
                     self.stop_movement(drone_instance=drone_instance)

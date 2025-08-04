@@ -38,14 +38,14 @@ class NavigationInterface:
         try:
             if drone_instance is None:
                 logger.log_error('NavigationInterface', 'No drone instance provided.')
-                return
+                return []  # Return empty list instead of None
             
             print("\n🧭 WAYPOINT NAVIGATION SYSTEM")
             print("=" * 50)
             
-            # Load waypoint file (user selection if multiple files)
+            # Load waypoint file (auto-select if single file, user selection if multiple)
             if not self._load_waypoint_file(drone_instance=drone_instance):
-                return
+                return []  # Return empty list if file loading fails
             
             # Enter interactive navigation loop
             history = self._navigation_loop(drone_instance=drone_instance)
@@ -72,7 +72,7 @@ class NavigationInterface:
                 return self.nav_manager.load_waypoint_file(specified_file_path)
             else:
                 logger.log_warning('NavigationInterface', f'Specified waypoint file not found: {specified_file_path}, proceeding with file selection.')
-                self.waypoint_file = None  # Reset and fallback to selection
+                self.waypoint_file = None  # Clear invalid file and fallback to user selection
         
         # Find all available waypoint files
         waypoint_files = self._find_waypoint_files()
@@ -106,9 +106,10 @@ class NavigationInterface:
         print("-" * 50)
         
         for i, file in enumerate(files, 1):
-            # Extract timestamp from filename for display
-            timestamp = file.replace('drone_movements_', '').replace('.json', '')
-            print(f"  {i}. {file} (Created: {timestamp})")
+            # Extract timestamp from filename for user-friendly display
+            filename = os.path.basename(file)
+            timestamp = filename.replace('drone_movements_', '').replace('.json', '')
+            print(f"  {i}. {filename} (Created: {timestamp})")
         
         while True:
             try:
@@ -143,7 +144,7 @@ class NavigationInterface:
                         else:
                             print(f"❌ Invalid choice. Please enter 1-{len(files)}")
                     except ValueError:
-                        print("❌ Invalid input. Please enter a valid option.")
+                        print("❌ Invalid input. Please enter a valid number.")
                 else:
                     # Timeout occurred - clear line and continue
                     print("\r" + " " * 50 + "\r", end='')
@@ -179,7 +180,7 @@ class NavigationInterface:
                     else:
                         break
                 elif isinstance(choice, str):
-                    # Execute navigation to selected waypoint
+                    # Execute navigation to selected waypoint (waypoint ID returned)
                     logger.log_info('NavigationInterface', f'User selected waypoint: {choice}')
                     success = self.nav_manager.navigate_to_waypoint(choice, drone_instance=drone_instance)
                     if success:
@@ -244,7 +245,7 @@ class NavigationInterface:
                             print("❗ You can only reload the waypoint file at the start of navigation.")
                             continue
                     else:
-                        # Parse waypoint selection
+                        # Parse waypoint selection (convert 1-based index to waypoint ID)
                         try:
                             waypoint_index = int(choice) - 1
                             if 0 <= waypoint_index < len(destinations):
@@ -252,7 +253,7 @@ class NavigationInterface:
                             else:
                                 print(f"❌ Invalid choice. Please enter 1-{len(destinations)}")
                         except ValueError:
-                            print("❌ Invalid input. Please enter a valid option.")
+                            print("❌ Invalid input. Please enter a valid number.")
                 
                 else: 
                     # Timeout occurred - clear line and continue

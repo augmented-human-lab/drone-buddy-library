@@ -33,12 +33,12 @@ class RealTimeDroneControllerWindows:
         
         # Movement tracking state
         self.current_movement = None  # Active movement being recorded
-        self.waypoints = []  # Complete waypoint list
-        self.current_waypoint_movements = []  # Movements since last waypoint
+        self.waypoints = []  # Complete waypoint sequence
+        self.current_waypoint_movements = []  # Movements since last waypoint marker
         self.waypoint_counter = 0  # Sequential waypoint numbering
         
         # Control flags
-        self.add_movement = False  # Whether to record current movement
+        self.add_movement = False  # Whether to record current movement for waypoint data
         
         # Video streaming components (enabled for Windows)
         self.video_thread = None
@@ -60,7 +60,7 @@ class RealTimeDroneControllerWindows:
                 logger.log_debug('RealTimeDroneControllerWindows', f'Raw attitude response: {attitude_str}')
                 
                 # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
-                state['yaw'] = 0  # Default value
+                state['yaw'] = 0  # Default fallback value
                 if attitude_str and ':' in attitude_str:
                     attitude_parts = attitude_str.split(';')
                     for part in attitude_parts:
@@ -98,7 +98,7 @@ class RealTimeDroneControllerWindows:
             return state
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error getting drone state: {e}')
-            return {'height': 0, 'yaw': 0, 'battery': 0}  # Safe defaults
+            return {'height': 0, 'yaw': 0, 'battery': 0}  # Return safe defaults on error
 
     def start_movement(self, direction, movement_type="move", drone_instance=None):
         """Begin drone movement in specified direction and record movement data."""
@@ -106,12 +106,12 @@ class RealTimeDroneControllerWindows:
         
         if self.current_movement is not None:
             logger.log_warning('RealTimeDroneControllerWindows', "Already moving, ignoring new movement")
-            return  # Prevent overlapping movements
+            return  # Prevent overlapping movements that could cause conflicts
         
         # Get initial drone state for movement recording
         try: 
             drone_state = self.get_drone_state(drone_instance)
-            start_yaw = drone_state.get('yaw', 0)  # Default to 0 if unavailable
+            start_yaw = drone_state.get('yaw', 0)  # Extract yaw for direction tracking
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error getting drone state: {e}')
             start_yaw = 0
@@ -129,7 +129,7 @@ class RealTimeDroneControllerWindows:
         # Send appropriate RC control commands to drone
         try:
             if movement_type == "move":
-                self.add_movement = True  # Linear movements are recorded
+                self.add_movement = True  # Linear movements are recorded for waypoint navigation
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for {direction}')
                 if direction == "forward":
@@ -143,7 +143,7 @@ class RealTimeDroneControllerWindows:
                 logger.log_debug('RealTimeDroneControllerWindows', f'RC control sent for {direction}')
 
             elif movement_type == "lift":
-                self.add_movement = True  # Vertical movements are recorded
+                self.add_movement = True  # Vertical movements are recorded for waypoint navigation
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for lift {direction}')
                 if direction == "up":
@@ -153,7 +153,7 @@ class RealTimeDroneControllerWindows:
                 logger.log_debug('RealTimeDroneControllerWindows', f'RC control sent for lift {direction}')
                     
             elif movement_type == "rotate":
-                self.add_movement = False  # Rotations are not recorded as waypoint movements
+                self.add_movement = False  # Rotations change orientation but don't create waypoint movements
 
                 logger.log_debug('RealTimeDroneControllerWindows', f'Sending RC control for rotate {direction}')
                 if direction == "anticlockwise":
@@ -192,19 +192,19 @@ class RealTimeDroneControllerWindows:
         
         # Calculate movement duration with halt delay compensation
         end_time = time.time()
-        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for halt delay
+        duration = end_time - self.current_movement['start_time'] + 0.5  # Add buffer for deceleration timing
         
         # Calculate distance moved based on speed and duration
-        distance = self.movement_speed * duration  # Distance in cm
+        distance = self.movement_speed * duration  # Distance calculated in cm
         
         # Create detailed movement record with unique ID and timestamp
         movement_event = {
             'id': str(uuid.uuid4()),  # Unique identifier for this movement
             'type': self.current_movement['type'],
             'direction': self.current_movement['direction'],
-            'distance': round(distance, 2),  # Round to 2 decimal places
-            'start_yaw': self.current_movement['start_yaw'],  # Drone orientation at start
-            'timestamp': datetime.now().isoformat()  # ISO format timestamp
+            'distance': round(distance, 2),  # Round to 2 decimal places for precision
+            'start_yaw': self.current_movement['start_yaw'],  # Drone orientation at movement start
+            'timestamp': datetime.now().isoformat()  # ISO format timestamp for consistency
         }
         
         # Add movement to current waypoint's movement cluster
@@ -220,10 +220,10 @@ class RealTimeDroneControllerWindows:
         if not auto_generated and not name:
             name = input("Enter waypoint name: ").strip()
             if not name:
-                name = f"Waypoint_{self.waypoint_counter + 1}"  # Auto-generate name
+                name = f"Waypoint_{self.waypoint_counter + 1}"  # Auto-generate fallback name
         
         self.waypoint_counter += 1  # Increment waypoint counter
-        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format with leading zeros
+        waypoint_id = f"WP_{self.waypoint_counter:03d}"  # Format as WP_001, WP_002, etc.
         
         # Create waypoint record with movement history
         waypoint = {
@@ -267,11 +267,11 @@ class RealTimeDroneControllerWindows:
                     elif yaw < -180:
                         yaw += 360
                     
-                    # Create processed movement record with processed yaw
+                    # Create processed movement record with calculated yaw
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
-                        'yaw': yaw,  # Yaw relative to the drone's start yaw
+                        'yaw': yaw,  # Yaw relative to drone's starting orientation
                         'distance': movement['distance'],
                         'timestamp': movement['timestamp']
                     }
@@ -279,7 +279,7 @@ class RealTimeDroneControllerWindows:
                     processed_movements.append(processed_movement)
                 
                 else:  # Handle 'lift' movements (vertical)
-                    # For vertical movements, record type, direction and distance
+                    # For vertical movements, preserve direction and distance (no yaw processing)
                     processed_movement = {
                         'id': movement['id'],
                         'type': movement['type'],
@@ -341,7 +341,7 @@ class RealTimeDroneControllerWindows:
                     if test_frame is not None and test_frame.size > 0:
                         break  # Stream is working
                 except:
-                    pass  # Ignore errors during initialization
+                    pass  # Ignore frame errors during initialization
                 retry_count += 1
                 time.sleep(0.5)
                 logger.log_debug('RealTimeDroneControllerWindows', f'Waiting for video stream... ({retry_count}/{max_retries})')
@@ -440,14 +440,14 @@ class RealTimeDroneControllerWindows:
     def get_key(self):
         """Get single keypress with timeout - Windows implementation using msvcrt."""
         start_time = time.time()
-        timeout = 0.2  # 200ms timeout to match Linux version
+        timeout = 0.2  # 200ms timeout for responsive input handling
         
         while time.time() - start_time < timeout:
             if msvcrt.kbhit():  # Check if key is available
                 key = msvcrt.getch()
                 
                 # Handle special keys with escape sequences
-                if key == b'\xe0':  # Windows special key prefix
+                if key == b'\xe0':  # Windows special key prefix for arrow keys
                     if msvcrt.kbhit():  # Check for following key code
                         key = msvcrt.getch()
                         # Map Windows arrow key codes to direction strings
@@ -460,7 +460,7 @@ class RealTimeDroneControllerWindows:
                         return arrow_map.get(key, 'unknown_key')
                     return 'incomplete'  # Incomplete escape sequence
                 elif key == b'[':
-                    # Ignore alphabet key that follows bracket (terminal escape)
+                    # Ignore stray bracket character that may follow
                     if msvcrt.kbhit():
                         msvcrt.getch()
                     return 'ignored_key'
@@ -470,15 +470,15 @@ class RealTimeDroneControllerWindows:
                         return key.decode('utf-8').lower()  # Convert to lowercase string
                     except UnicodeDecodeError:
                         return 'unknown_key'
-            time.sleep(0.01)  # Small delay to reduce CPU usage
+            time.sleep(0.01)  # Small delay to reduce CPU usage during polling
         return None  # No key pressed within timeout
 
     def handle_keypress(self, drone_instance=None):
         """Main keyboard input handler for Windows drone control using msvcrt."""
         
         try:
-            activeMovementKey = None  # Track currently pressed movement key
-            x_pressed = False  # Track emergency stop state
+            activeMovementKey = None  # Track currently active movement key
+            x_pressed = False  # Track waypoint marking state
             last_battery_check = 0  # Timestamp for battery monitoring
             
             print("🎮 Keyboard controls active!")  # User feedback
@@ -522,7 +522,7 @@ class RealTimeDroneControllerWindows:
                             logger.log_info('RealTimeDroneControllerWindows', 'Waypoint already marked')
                             continue
                     elif key in ['w', 'a', 's', 'd', 'up', 'down', 'left', 'right']:
-                        x_pressed = False  # Reset x_pressed flag
+                        x_pressed = False  # Reset waypoint flag on movement
                         if key != activeMovementKey:
                             # Stop current movement if any
                             if activeMovementKey:
@@ -550,7 +550,7 @@ class RealTimeDroneControllerWindows:
                             elif key == 'right':
                                 self.start_movement('clockwise', 'rotate', drone_instance)
                         else: 
-                            # Same movement continues
+                            # Same movement key held - continue current movement
                             logger.log_info('RealTimeDroneControllerWindows', f'Continuing movement: {activeMovementKey}')
                             continue
                     else:
@@ -569,7 +569,7 @@ class RealTimeDroneControllerWindows:
                         activeMovementKey = None
                     continue
                 
-                time.sleep(0.02)  # Fast responsive loop - same as Linux version
+                time.sleep(0.02)  # Fast response loop - optimized for Windows timing
                 
         except Exception as e:
             logger.log_error('RealTimeDroneControllerWindows', f'Error in keyboard handling: {e}')
@@ -586,7 +586,7 @@ class RealTimeDroneControllerWindows:
         self.mark_waypoint("START", auto_generated=True)
         logger.log_info('RealTimeDroneControllerWindows', 'First waypoint marked: START')
 
-        # Start video streaming
+        # Start video streaming for visual reference during mapping
         self.start_video_stream(drone_instance=drone_instance)
 
         try:

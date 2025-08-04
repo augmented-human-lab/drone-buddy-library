@@ -61,7 +61,7 @@ class TelloNavExtra:
         try:
             logger.log_info('TelloNavDirect', f'Starting 360-degree scan at waypoint: {current_waypoint}')
             
-            # Configuration
+            # Scan configuration parameters
             ROTATION_INTERVAL = 15  # degrees (24 images total for 360°)
             TOTAL_ROTATION = 360
             STABILIZATION_TIME = 0.5  # seconds to wait after rotation before capture
@@ -81,16 +81,16 @@ class TelloNavExtra:
                 logger.log_error('TelloNavDirect', 'Failed to get frame reader')
                 return []
             
-            # Perform rotation scan
+            # Execute 360-degree rotation scan
             images_captured = 0
             current_rotation = 0
             
             while current_rotation < TOTAL_ROTATION:
-                # Stabilize before capture
+                # Wait for drone stabilization at current angle
                 logger.log_debug('TelloNavDirect', f'Stabilizing at {current_rotation}° clockwise rotation relative to drones initial position at current waypoint {current_waypoint}')
                 time.sleep(STABILIZATION_TIME)
                 try:
-                    # Capture frame
+                    # Capture current frame
                     frame = frame_read.frame
                     if frame is not None and frame.size > 0:
                         images_captured += 1
@@ -116,7 +116,7 @@ class TelloNavExtra:
                     logger.log_error('TelloNavDirect', f'Error during scan at {current_rotation}°: {e}')
                     continue
                 finally: 
-                    # Move to next position
+                    # Advance to next rotation position
                     if current_rotation + ROTATION_INTERVAL <= TOTAL_ROTATION:
                         logger.log_debug('TelloNavDirect', f'Rotating {ROTATION_INTERVAL}° clockwise...')
                         self.tello.rotate_clockwise(ROTATION_INTERVAL)
@@ -158,10 +158,10 @@ class TelloNavExtra:
             str: Full path to the created directory
         """
         if self.image_dir is not None and os.path.exists(self.image_dir):
-            # Use provided image directory if it exists
+            # Use provided custom directory if valid
             base_scans_dir = self.image_dir
         else:
-            # Create base directory in user home
+            # Fall back to default home directory structure
             home_dir = os.path.expanduser("~")
             base_scans_dir = os.path.join(home_dir, "dronebuddylib", "scans")
             self.image_dir = base_scans_dir  # Update instance variable
@@ -193,19 +193,19 @@ class TelloNavExtra:
             dict: Image information with metadata
         """
         try:
-            # Generate filename
+            # Build unique filename with timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # Include milliseconds
             filename = f"{waypoint}_scan_{image_number:02d}_rotation_{rotation}_{timestamp}.jpg"
             image_path = os.path.join(base_dir, filename)
             
-            # Convert BGR to RGB for PIL
+            # Convert OpenCV BGR format to PIL RGB
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             pil_image = Image.fromarray(frame_rgb)
             
-            # Save as JPEG with high quality
+            # Save with high quality JPEG compression
             pil_image.save(image_path, 'JPEG', quality=95, optimize=True)
             
-            # Create metadata dictionary
+            # Build image metadata record
             image_info = {
                 'image_path': image_path,
                 'filename': filename,
@@ -267,7 +267,7 @@ class TelloNavExtra:
             logger.log_info('TelloWaypointNavCoordinator', 'Taking off...')
             self.tello.takeoff()
             self.is_flying = True
-            time.sleep(1)  # Wait for stabilization
+            time.sleep(1)  # Stabilization delay
             logger.log_success('TelloWaypointNavCoordinator', 'Drone is airborne!')
             return True
         

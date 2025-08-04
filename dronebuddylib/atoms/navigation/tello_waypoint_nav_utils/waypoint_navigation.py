@@ -115,8 +115,8 @@ class WaypointNavigationManager:
         """Initialize navigation manager with speed and vertical compensation settings."""
         logger.log_info('WaypointNavigationManager', 'Initializing waypoint navigation manager.')
         
-        self.waypoints: Dict[str, Waypoint] = {}      # Waypoint storage by ID
-        self.waypoint_order: List[str] = []           # Ordered sequence of waypoint IDs
+        self.waypoints: Dict[str, Waypoint] = {}      # Waypoint storage indexed by ID
+        self.waypoint_order: List[str] = []           # Ordered sequence of waypoint IDs for pathfinding
         self.current_waypoint_id: str = "WP_001"     # Always start at first waypoint
         self.session_info: Dict = {}                  # Metadata from waypoint file
         self.json_file_path: str = ""                # Path to loaded waypoint file
@@ -138,7 +138,7 @@ class WaypointNavigationManager:
             self.session_info = data.get('session_info', {})
             waypoints_data = data.get('waypoints', [])
             
-            # Clear existing waypoint data
+            # Clear existing waypoint data before loading new data
             self.waypoints.clear()
             self.waypoint_order.clear()
             
@@ -151,9 +151,9 @@ class WaypointNavigationManager:
                     movement = NavigationMovement(
                         id=mov_data['id'],
                         type=mov_data['type'],
-                        direction=mov_data.get('direction', None),  # For lift movements
+                        direction=mov_data.get('direction', None),  # For lift movements only
                         distance=mov_data['distance'],
-                        yaw=mov_data.get('yaw', None)              # For horizontal movements
+                        yaw=mov_data.get('yaw', None)              # For horizontal movements only
                     )
                     movements.append(movement)
                 
@@ -162,13 +162,13 @@ class WaypointNavigationManager:
                     id=wp_data['id'],
                     name=wp_data['name'],
                     movements_to_here=movements,
-                    index=index  # Sequence position for pathfinding
+                    index=index  # Sequence position for pathfinding algorithms
                 )
                 
                 self.waypoints[waypoint.id] = waypoint
                 self.waypoint_order.append(waypoint.id)
             
-            # Reset navigation to starting position
+            # Reset navigation to starting position after loading
             self.current_waypoint_id = "WP_001"
             
             logger.log_success('WaypointNavigationManager', f'Loaded {len(self.waypoints)} waypoints successfully.')
@@ -253,7 +253,7 @@ class WaypointNavigationManager:
                 logger.log_warning('WaypointNavigationManager', 'Emergency shutdown detected - aborting navigation')
                 return False
                 
-        # Validate target waypoint exists
+        # Validate target waypoint exists in loaded waypoint data
         if target_waypoint_id not in self.waypoints:
             logger.log_error('WaypointNavigationManager', f'Waypoint {target_waypoint_id} not found')
             return False
@@ -335,7 +335,7 @@ class WaypointNavigationManager:
                     yaw = movement.yaw if movement.yaw is not None else 0
                     current_yaw = self.get_yaw(drone_instance=drone_instance)
                     
-                    # Calculate required yaw adjustment
+                    # Calculate required yaw adjustment for shortest rotation path
                     turn_degree = abs(yaw - current_yaw)
                     if current_yaw > yaw:
                         logger.log_debug('WaypointNavigationManager', f'Adjusting yaw from {current_yaw} to {yaw} degrees')
