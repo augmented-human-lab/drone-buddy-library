@@ -130,3 +130,13 @@ Object Identification Module Installation
 
 
 
+Navigation Module Installation
+-------------------------------------
+
+.. toctree::
+   :maxdepth: 3
+
+   navigation_installation_guide
+
+
+

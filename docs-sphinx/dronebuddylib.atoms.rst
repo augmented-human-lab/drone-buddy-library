@@ -155,3 +155,18 @@ LLM integration module
    dronebuddylib.atoms.llmintegration
 
 
+Navigation module
+-------------------------------------------
+
+.. automodule:: dronebuddylib.atoms.navigation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 2
+
+   dronebuddylib.atoms.navigation
+
+

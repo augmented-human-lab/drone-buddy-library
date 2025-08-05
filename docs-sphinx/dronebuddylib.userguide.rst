@@ -281,3 +281,41 @@ By understanding these components, users can effectively utilize LLMs for a wide
    :maxdepth: 3
 
    dronebuddylib.userguide.llmintegration
+
+
+Navigation
+----------
+
+General
+~~~~~~~
+
+Waypoint navigation is a robotics technique that enables autonomous movement between predefined locations or waypoints. Unlike GPS-based navigation systems, waypoint navigation creates detailed movement maps through manual recording and enables precise autonomous navigation in indoor environments where GPS signals are unavailable.
+
+Here's a simplified explanation of how waypoint navigation works:
+
+#. **Manual Mapping Phase**: The navigation process begins with a manual mapping phase where a human operator controls the vehicle (in this case, a drone) through the desired environment. During this phase, the system records all movements including distance, direction, orientation changes, and timing data with high precision.
+
+#. **Movement Recording and Telemetry**: Each movement is tracked using the vehicle's onboard sensors and telemetry systems. The system captures positional data, orientation angles, altitude changes, and movement durations. Movement distances are calculated based on speed, duration, and acceleration/deceleration compensation to ensure accuracy.
+
+#. **Waypoint Creation and Graph Building**: At strategic locations during manual flight, operators can mark their current position as a waypoint. Each waypoint stores the complete sequence of movements required to reach it from the previous waypoint, creating a connected graph of navigable positions throughout the environment.
+
+#. **Data Persistence and Storage**: All waypoint data is stored in structured formats (typically JSON) containing movement sequences, waypoint metadata, timing information, and environmental conditions. This allows for persistent navigation maps that can be reused across multiple navigation sessions.
+
+#. **Pathfinding Algorithms**: The navigation engine calculates paths between any two waypoints using pathfinding algorithms. These include forward navigation (following recorded movements) and reverse navigation (automatically calculating inverse movements by reversing directions and adjusting orientations).
+
+#. **Autonomous Execution**: During autonomous navigation, the system executes the calculated movement sequence with precise timing and orientation control. Each movement is performed with the vehicle oriented to the correct heading before executing linear, rotational, or vertical movements.
+
+#. **Safety and Monitoring Integration**: The system includes comprehensive safety features including real-time monitoring of vehicle status (battery, sensors, connectivity), emergency shutdown capabilities, and graceful error handling to ensure safe operation throughout the navigation process.
+
+Waypoint navigation's key advantages lie in its precision and adaptability. By recording actual movement sequences rather than relying on external positioning systems, it maintains centimeter-level accuracy in challenging environments. The bidirectional pathfinding enables efficient navigation between any waypoints regardless of the original recording sequence.
+
+The algorithm supports multiple operational modes including real-time mapping, interactive waypoint selection, programmatic navigation to specific locations, sequential multi-waypoint missions, and environmental scanning operations. The system is designed for robustness with cross-platform compatibility and platform-specific optimizations.
+
+The navigation system requires initial training through manual exploration sessions where operators map their desired operational areas. The quality and coverage of the resulting navigation map depend on the thoroughness of the initial mapping session and the strategic placement of waypoints throughout the environment.
+
+Keep in mind that while waypoint navigation offers precise autonomous navigation capabilities, it requires an initial mapping phase and is optimized for relatively stable environments. The choice of navigation algorithm depends on the specific requirements of the application, balancing factors like precision, environmental constraints, and available vehicle capabilities.
+
+.. toctree::
+   :maxdepth: 3
+
+   dronebuddylib.userguide.navigation
