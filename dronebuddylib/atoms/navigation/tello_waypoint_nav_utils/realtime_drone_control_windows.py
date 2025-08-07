@@ -447,7 +447,7 @@ class RealTimeDroneControllerWindows:
                 key = msvcrt.getch()
                 
                 # Handle special keys with escape sequences
-                if key == b'\xe0':  # Windows special key prefix for arrow keys
+                if key == b'\xe0' or key == b'\x00':  # Windows special key prefix for arrow keys
                     if msvcrt.kbhit():  # Check for following key code
                         key = msvcrt.getch()
                         # Map Windows arrow key codes to direction strings

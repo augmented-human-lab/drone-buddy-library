@@ -4,9 +4,9 @@ from dronebuddylib.utils.logger import Logger
 import time
 import cv2
 import os
+from typing import Optional
 from datetime import datetime
 from PIL import Image
-from PIL.ExifTags import TAGS
 
 logger = Logger()
 
@@ -29,21 +29,21 @@ class TelloNavExtra:
             if self._connect_drone():
                 if self._takeoff():
                     if self._move_forward(distance): 
-                        logger.log_success('TelloNavDirect', f'Moved forward {distance} cm successfully.')
+                        logger.log_success('TelloNavExtra', f'Moved forward {distance} cm successfully.')
                         if self._land():
-                            logger.log_success('TelloNavDirect', 'Drone landed successfully after moving forward.')
+                            logger.log_success('TelloNavExtra', 'Drone landed successfully after moving forward.')
                             return True
                         else: 
-                            logger.log_error('TelloNavDirect', 'Landing failed after moving forward.')
+                            logger.log_error('TelloNavExtra', 'Landing failed after moving forward.')
                             return False
                     else:
-                        logger.log_error('TelloNavDirect', 'Moving forward failed.')
+                        logger.log_error('TelloNavExtra', 'Moving forward failed.')
                         return False
                 else:
-                    logger.log_error('TelloNavDirect', 'Takeoff failed, cannot move forward.')
+                    logger.log_error('TelloNavExtra', 'Takeoff failed, cannot move forward.')
                     return False
             else:
-                logger.log_error('TelloNavDirect', 'Failed to connect to Tello drone.')
+                logger.log_error('TelloNavExtra', 'Failed to connect to Tello drone.')
                 return False
 
     def scan(self, current_waypoint_file: str,current_waypoint: str) -> list:
@@ -59,8 +59,8 @@ class TelloNavExtra:
                   [{'image_path': str, 'filename': str, 'waypoint_file': str, 'waypoint': str, 'rotation_from_start': str, 'image_number': int, 'timestamp': str, 'format': str='JPEG'}, ...]
         """
         try:
-            logger.log_info('TelloNavDirect', f'Starting 360-degree scan at waypoint: {current_waypoint}')
-            
+            logger.log_info('TelloNavExtra', f'Starting 360-degree scan at waypoint: {current_waypoint}')
+
             # Scan configuration parameters
             ROTATION_INTERVAL = 15  # degrees (24 images total for 360°)
             TOTAL_ROTATION = 360
@@ -69,16 +69,16 @@ class TelloNavExtra:
             # Setup image storage
             scan_results = []
             base_dir = self._setup_image_storage_directory(current_waypoint_file, current_waypoint)
+            initial_yaw = self.get_yaw()
             
             # Start video stream
-            logger.log_info('TelloNavDirect', 'Starting video stream for image capture...')
+            logger.log_info('TelloNavExtra', 'Starting video stream for image capture...')
             self.tello.streamon()
-            time.sleep(1)  # Allow stream to stabilize
             
             # Get frame reader
             frame_read = self.tello.get_frame_read()
             if frame_read is None:
-                logger.log_error('TelloNavDirect', 'Failed to get frame reader')
+                logger.log_error('TelloNavExtra', 'Failed to get frame reader')
                 return []
             
             # Execute 360-degree rotation scan
@@ -87,8 +87,27 @@ class TelloNavExtra:
             
             while current_rotation < TOTAL_ROTATION:
                 # Wait for drone stabilization at current angle
-                logger.log_debug('TelloNavDirect', f'Stabilizing at {current_rotation}° clockwise rotation relative to drones initial position at current waypoint {current_waypoint}')
+                logger.log_debug('TelloNavExtra', f'Stabilizing at {current_rotation}° clockwise rotation relative to drones initial position at current waypoint {current_waypoint}')
                 time.sleep(STABILIZATION_TIME)
+
+                # check battery level before capturing image
+                try: 
+                    battery_str = self.tello.send_command_with_return("battery?", timeout=3)
+                    logger.log_debug('TelloNavExtra', 'checking battery status')
+                    battery = int(battery_str)
+                    if battery < 20:
+                        logger.log_warning('TelloNavExtra', f'Low battery detected: {battery}%')
+                        if battery < 10:
+                            logger.log_error('TelloNavExtra', f'CRITICAL: Battery too low ({battery}%), stopping scan.')
+                            try:
+                                self.tello.streamoff()
+                            except:
+                                logger.log_error('TelloNavExtra', 'Failed to stop video stream after scan failure')
+                            return scan_results  # Exit scan if battery is critically low
+                except Exception as e:
+                    logger.log_error('TelloNavExtra', f'Failed to check battery status: {e}')
+                    pass  # Continue scan even if battery check fails
+                    
                 try:
                     # Capture current frame
                     frame = frame_read.frame
@@ -106,43 +125,56 @@ class TelloNavExtra:
                         
                         if image_info:
                             scan_results.append(image_info)
-                            logger.log_success('TelloNavDirect', f'Captured image {images_captured}/24 at clockwise rotation {current_rotation}° relative to drones initial position at current waypoint {current_waypoint}')
+                            logger.log_success('TelloNavExtra', f'Captured image {images_captured}/24 at clockwise rotation {current_rotation}° relative to drones initial position at current waypoint {current_waypoint}')
                         else: 
-                            logger.log_error('TelloNavDirect', f'Failed to save image at rotation {current_rotation}°')
+                            logger.log_error('TelloNavExtra', f'Failed to save image at rotation {current_rotation}°')
                     else:
-                        logger.log_warning('TelloNavDirect', f'No frame available at rotation {current_rotation}°')
-                    
+                        logger.log_warning('TelloNavExtra', f'No frame available at rotation {current_rotation}°')
+
                 except Exception as e:
-                    logger.log_error('TelloNavDirect', f'Error during scan at {current_rotation}°: {e}')
+                    logger.log_error('TelloNavExtra', f'Error during scan at {current_rotation}°: {e}')
                     continue
                 finally: 
-                    # Advance to next rotation position
-                    if current_rotation + ROTATION_INTERVAL <= TOTAL_ROTATION:
-                        logger.log_debug('TelloNavDirect', f'Rotating {ROTATION_INTERVAL}° clockwise...')
-                        self.tello.rotate_clockwise(ROTATION_INTERVAL)
-                    
+                    try: 
+                        # Advance to next rotation position
+                        if current_rotation + ROTATION_INTERVAL <= TOTAL_ROTATION:
+                            logger.log_debug('TelloNavExtra', f'Rotating {ROTATION_INTERVAL}° clockwise...')
+                            self.tello.rotate_clockwise(ROTATION_INTERVAL + 1) # Compensation factor - drone always rotate < 15 degrees 
+                    except Exception as e:
+                        logger.log_error('TelloNavExtra', f'Failed to rotate clockwise: {e}')
+                        pass # Continue to next scan
+
                     current_rotation += ROTATION_INTERVAL
             
             # Stop video stream
             try: 
                 self.tello.streamoff()
             except: 
-                logger.log_error('TelloNavDirect', 'Failed to stop video stream')
+                logger.log_error('TelloNavExtra', 'Failed to stop video stream')
             
             
-            logger.log_success('TelloNavDirect', f'Scan completed! Captured {images_captured} images at waypoint: {current_waypoint} of file: {current_waypoint_file}')
-            logger.log_info('TelloNavDirect', f'Images saved in: {base_dir}')
+            logger.log_success('TelloNavExtra', f'Scan completed! Captured {images_captured} images at waypoint: {current_waypoint} of file: {current_waypoint_file}')
+            logger.log_info('TelloNavExtra', f'Images saved in: {base_dir}')
+
+            current_yaw = self.get_yaw()
+            if initial_yaw is not None and current_yaw is not None and initial_yaw != current_yaw: 
+                success = self.return_initial_yaw(current_yaw, initial_yaw)
+
+                if success:
+                    logger.log_success('TelloNavExtra', f'Returned to initial yaw {initial_yaw}° successfully after scan.')
+                else:
+                    logger.log_error('TelloNavExtra', f'Failed to return to initial yaw {initial_yaw}° after scan. Continuing with current yaw {current_yaw}°.')
             
             return scan_results
             
         except Exception as e:
-            logger.log_error('TelloNavDirect', f'Scan failed: {e}')
+            logger.log_error('TelloNavExtra', f'Scan failed: {e}')
             # Ensure video stream is stopped on error
             try:
                 self.tello.streamoff()
             except:
-                logger.log_error('TelloNavDirect', 'Failed to stop video stream after scan failure')
-            return []
+                logger.log_error('TelloNavExtra', 'Failed to stop video stream after scan failure')
+            return scan_results
     
     def _setup_image_storage_directory(self, waypoint_file: str, waypoint: str) -> str:
         """
@@ -173,8 +205,8 @@ class TelloNavExtra:
         
         # Ensure directory exists
         os.makedirs(scan_dir, exist_ok=True)
-        
-        logger.log_info('TelloNavDirect', f'Created scan directory: {scan_dir}')
+
+        logger.log_info('TelloNavExtra', f'Created scan directory: {scan_dir}')
         return scan_dir
     
     def _save_scan_image(self, frame, waypoint_file: str, waypoint: str, rotation: int, image_number: int, base_dir: str) -> dict:
@@ -216,13 +248,81 @@ class TelloNavExtra:
                 'timestamp': timestamp,
                 'format': 'JPEG'
             }
-            
-            logger.log_debug('TelloNavDirect', f'Saved image: {filename}')
+
+            logger.log_debug('TelloNavExtra', f'Saved image: {filename}')
             return image_info
             
         except Exception as e:
-            logger.log_error('TelloNavDirect', f'Failed to save image: {e}')
+            logger.log_error('TelloNavExtra', f'Failed to save image: {e}')
             return None
+    
+    def get_yaw(self) -> Optional[int]:
+        """
+        Get current drone yaw angle from attitude telemetry.
+        
+        Returns: 
+            int: Yaw angle in degrees, or None if unable to retrieve.
+        """
+        try:
+            attitude_str = self.tello.send_command_with_return("attitude?", timeout=3)
+            logger.log_debug('TelloNavExtra', f'Raw attitude response: {attitude_str}')
+            
+            # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
+            yaw = None  # Default fallback value
+            if attitude_str and ':' in attitude_str:
+                attitude_parts = attitude_str.split(';')
+                for part in attitude_parts:
+                    if part.strip() and 'yaw:' in part:
+                        try:
+                            yaw_value = part.split(':')[1].strip()
+                            if yaw_value:
+                                yaw = int(yaw_value)
+                        except (ValueError, IndexError) as e:
+                            logger.log_warning('TelloNavExtra', f'Failed to parse yaw from "{part}": {e}')
+                            continue
+            return yaw
+        except Exception as e:
+            logger.log_warning('TelloNavExtra', f'Attitude query failed: {e}')
+            return None  # Return error yaw indication on communication error
+    
+    def return_initial_yaw(self, current_yaw: int, initial_yaw: int) -> bool: 
+        """ 
+        Adjust the drone's yaw to return to the initial yaw angle.
+        This method calculates the shortest rotation path to return to the initial yaw angle.
+
+        Args:
+            current_yaw (int): The current yaw angle of the drone.
+            initial_yaw (int): The initial yaw angle to return to.
+
+        Returns:
+            bool: True if the yaw adjustment was successful, False otherwise.
+        """
+        logger.log_info('TelloNavExtra', f'Adjusting yaw from {current_yaw} back to initial yaw {initial_yaw}')
+        turn_degree = abs(initial_yaw - current_yaw)
+
+        try: 
+            # Calculate required yaw adjustment for shortest rotation path and execute it
+            if current_yaw > initial_yaw:
+                if turn_degree > 180 and turn_degree < 360:
+                    self.tello.rotate_clockwise(360 - turn_degree)  # Shorter rotation path
+                elif turn_degree <= 180 and turn_degree > 0: 
+                    self.tello.rotate_counter_clockwise(turn_degree)
+                else: 
+                    logger.log_debug('TelloNavExtra', 'No yaw adjustment needed')
+                self.tello.send_rc_control(0, 0, 0, 0)  # Stop rotation
+            else: 
+                if turn_degree > 180 and turn_degree < 360: 
+                    self.tello.rotate_counter_clockwise(360 - turn_degree)  # Shorter rotation path
+                elif turn_degree <= 180 and turn_degree > 0: 
+                    self.tello.rotate_clockwise(turn_degree)
+                else: 
+                    logger.log_debug('TelloNavExtra', 'No yaw adjustment needed')
+                self.tello.send_rc_control(0, 0, 0, 0)  # Stop rotation
+            
+            return True
+        except Exception as e:
+            logger.log_error('TelloNavExtra', f'Failed to adjust yaw: {e}')
+            return False
     
     def _move_forward(self, distance: float) -> bool:
         """
@@ -243,20 +343,20 @@ class TelloNavExtra:
         Establish connection to DJI Tello drone with configuration and status validation.
         """
         try:
-            logger.log_info('TelloWaypointNavCoordinator', 'Connecting to Tello drone...')
+            logger.log_info('TelloNavExtra', 'Connecting to Tello drone...')
             self.tello.RESPONSE_TIMEOUT = 7
             self.tello.connect(wait_for_state=False)
-            logger.log_success('TelloWaypointNavCoordinator', 'Drone connected successfully!')
+            logger.log_success('TelloNavExtra', 'Drone connected successfully!')
 
             try:
                 battery_response = self.tello.send_command_with_return("battery?", timeout=5)
-                logger.log_info('TelloWaypointNavCoordinator', f'Battery: {battery_response}%')
+                logger.log_info('TelloNavExtra', f'Battery: {battery_response}%')
             except Exception as e:
-                logger.log_error('TelloWaypointNavCoordinator', f'Battery command failed: {e}')
-            
+                logger.log_error('TelloNavExtra', f'Battery command failed: {e}')
+
             return True
         except Exception as e:
-            logger.log_error('TelloWaypointNavCoordinator', f'Failed to connect to drone: {e}')
+            logger.log_error('TelloNavExtra', f'Failed to connect to drone: {e}')
             return False
     
     def _takeoff(self):
@@ -264,15 +364,15 @@ class TelloNavExtra:
         Execute drone takeoff sequence with safety validation and stabilization.
        """
         try:
-            logger.log_info('TelloWaypointNavCoordinator', 'Taking off...')
+            logger.log_info('TelloNavExtra', 'Taking off...')
             self.tello.takeoff()
             self.is_flying = True
             time.sleep(1)  # Stabilization delay
-            logger.log_success('TelloWaypointNavCoordinator', 'Drone is airborne!')
+            logger.log_success('TelloNavExtra', 'Drone is airborne!')
             return True
         
         except Exception as e:
-            logger.log_error('TelloWaypointNavCoordinator', f'Takeoff failed: {e}')
+            logger.log_error('TelloNavExtra', f'Takeoff failed: {e}')
             return False
     
     def _land(self):
@@ -280,9 +380,9 @@ class TelloNavExtra:
         Execute safe drone landing sequence with status management.
         """
         try:
-            logger.log_info('TelloWaypointNavCoordinator', 'Landing drone...')
+            logger.log_info('TelloNavExtra', 'Landing drone...')
             self.tello.land()
             self.is_flying = False
-            logger.log_success('TelloWaypointNavCoordinator', 'Drone landed successfully!')
+            logger.log_success('TelloNavExtra', 'Drone landed successfully!')
         except Exception as e:
-            logger.log_error('TelloWaypointNavCoordinator', f'Landing failed: {e}')
+            logger.log_error('TelloNavExtra', f'Landing failed: {e}')

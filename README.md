@@ -555,6 +555,7 @@ pip install dronebuddylib[NAVIGATION_TELLO]
 
 This will install the necessary dependencies:
 - `djitellopy` - DJI Tello drone SDK (includes `opencv-python`, `pillow`, `av`, and `numpy` as dependencies)
+- `setuptools`
 
 ## Usage
 

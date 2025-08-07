@@ -1,4 +1,5 @@
 import os
+import time
 from dronebuddylib.atoms.navigation.i_navigation import INavigation
 from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.utils.logger import Logger
@@ -198,12 +199,19 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), 'Starting surrounding scan operation.')
         current_waypoint_file = coordinator_instance.waypoint_file  # Get current waypoint file from coordinator
         current_waypoint = coordinator_instance.current_waypoint  # Get current waypoint from coordinator
+        coordinator_instance._pause_battery_monitoring()  # Pause battery monitoring during scan to prevent conflicts
+
+        time.sleep(0.25)  # Small delay to ensure battery monitoring is paused before scan
+        if coordinator_instance._emergency_shutdown: 
+            Logger.log_error(self.get_class_name(), 'Emergency shutdown detected - stopping surrounding scan.')
+            return []
         
         from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import TelloNavExtra
         tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)  # Use existing drone instance from coordinator
 
         result = tello_manouver.scan(current_waypoint_file, current_waypoint)
         logger.log_info(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
+        coordinator_instance._resume_battery_monitoring()  # Resume battery monitoring after scan
         return result
 
     def get_required_params(self) -> list:
