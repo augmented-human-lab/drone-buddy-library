@@ -67,8 +67,10 @@ class TelloNavExtra:
             STABILIZATION_TIME = 0.5  # seconds to wait after rotation before capture
             
             # Setup image storage
-            scan_results = []
             base_dir = self._setup_image_storage_directory(current_waypoint_file, current_waypoint)
+
+            # Initialize scan results list and initial drone yaw
+            scan_results = []
             initial_yaw = self.get_yaw()
             
             # Start video stream
@@ -97,13 +99,15 @@ class TelloNavExtra:
                     battery = int(battery_str)
                     if battery < 20:
                         logger.log_warning('TelloNavExtra', f'Low battery detected: {battery}%')
+
+                        # Exit scan if battery is critically low
                         if battery < 10:
                             logger.log_error('TelloNavExtra', f'CRITICAL: Battery too low ({battery}%), stopping scan.')
                             try:
                                 self.tello.streamoff()
                             except:
                                 logger.log_error('TelloNavExtra', 'Failed to stop video stream after scan failure')
-                            return scan_results  # Exit scan if battery is critically low
+                            return scan_results  
                 except Exception as e:
                     logger.log_error('TelloNavExtra', f'Failed to check battery status: {e}')
                     pass  # Continue scan even if battery check fails
@@ -113,6 +117,7 @@ class TelloNavExtra:
                     frame = frame_read.frame
                     if frame is not None and frame.size > 0:
                         images_captured += 1
+
                         # Save image with metadata
                         image_info = self._save_scan_image(
                             frame, 
@@ -123,15 +128,18 @@ class TelloNavExtra:
                             base_dir
                         )
                         
+                        # If image was saved successfully, add to results and log success, else log error
                         if image_info:
                             scan_results.append(image_info)
                             logger.log_success('TelloNavExtra', f'Captured image {images_captured}/24 at clockwise rotation {current_rotation}° relative to drones initial position at current waypoint {current_waypoint}')
                         else: 
                             logger.log_error('TelloNavExtra', f'Failed to save image at rotation {current_rotation}°')
                     else:
+                        # Log warning if frame is not available and continue scan
                         logger.log_warning('TelloNavExtra', f'No frame available at rotation {current_rotation}°')
 
                 except Exception as e:
+                    # Log error if image capture fails and continue scan
                     logger.log_error('TelloNavExtra', f'Error during scan at {current_rotation}°: {e}')
                     continue
                 finally: 
@@ -143,7 +151,8 @@ class TelloNavExtra:
                     except Exception as e:
                         logger.log_error('TelloNavExtra', f'Failed to rotate clockwise: {e}')
                         pass # Continue to next scan
-
+                    
+                    # Increment rotation accumulator regardless of success
                     current_rotation += ROTATION_INTERVAL
             
             # Stop video stream
@@ -156,8 +165,10 @@ class TelloNavExtra:
             logger.log_success('TelloNavExtra', f'Scan completed! Captured {images_captured} images at waypoint: {current_waypoint} of file: {current_waypoint_file}')
             logger.log_info('TelloNavExtra', f'Images saved in: {base_dir}')
 
+            # Check if we need to return to initial drone yaw after scan completion
             current_yaw = self.get_yaw()
             if initial_yaw is not None and current_yaw is not None and initial_yaw != current_yaw: 
+                # Attempt to return to initial drone yaw
                 success = self.return_initial_yaw(current_yaw, initial_yaw)
 
                 if success:
@@ -165,11 +176,11 @@ class TelloNavExtra:
                 else:
                     logger.log_error('TelloNavExtra', f'Failed to return to initial yaw {initial_yaw}° after scan. Continuing with current yaw {current_yaw}°.')
             
-            return scan_results
+            return scan_results # Return list of captured images with metadata
             
         except Exception as e:
             logger.log_error('TelloNavExtra', f'Scan failed: {e}')
-            # Ensure video stream is stopped on error
+            # Ensure video stream is stopped on error and return any accumulated scan results
             try:
                 self.tello.streamoff()
             except:
@@ -264,10 +275,11 @@ class TelloNavExtra:
             int: Yaw angle in degrees, or None if unable to retrieve.
         """
         try:
+            # Query Tello for attitude data
             attitude_str = self.tello.send_command_with_return("attitude?", timeout=3)
             logger.log_debug('TelloNavExtra', f'Raw attitude response: {attitude_str}')
             
-            # Parse attitude string format: "pitch:0;roll:0;yaw:45;"
+            # Parse attitude string format: "pitch:0;roll:0;yaw:45; to extract yaw"
             yaw = None  # Default fallback value
             if attitude_str and ':' in attitude_str:
                 attitude_parts = attitude_str.split(';')
@@ -280,7 +292,7 @@ class TelloNavExtra:
                         except (ValueError, IndexError) as e:
                             logger.log_warning('TelloNavExtra', f'Failed to parse yaw from "{part}": {e}')
                             continue
-            return yaw
+            return yaw # Return extracted yaw angle or None if parsing failed
         except Exception as e:
             logger.log_warning('TelloNavExtra', f'Attitude query failed: {e}')
             return None  # Return error yaw indication on communication error
@@ -298,6 +310,8 @@ class TelloNavExtra:
             bool: True if the yaw adjustment was successful, False otherwise.
         """
         logger.log_info('TelloNavExtra', f'Adjusting yaw from {current_yaw} back to initial yaw {initial_yaw}')
+
+        # Calculate the absolute difference in yaw
         turn_degree = abs(initial_yaw - current_yaw)
 
         try: 
@@ -319,10 +333,10 @@ class TelloNavExtra:
                     logger.log_debug('TelloNavExtra', 'No yaw adjustment needed')
                 self.tello.send_rc_control(0, 0, 0, 0)  # Stop rotation
             
-            return True
+            return True # Return True if yaw adjustment was successful
         except Exception as e:
             logger.log_error('TelloNavExtra', f'Failed to adjust yaw: {e}')
-            return False
+            return False # Return False if yaw adjustment failed
     
     def _move_forward(self, distance: float) -> bool:
         """

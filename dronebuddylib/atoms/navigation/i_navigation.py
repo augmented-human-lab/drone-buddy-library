@@ -1,8 +1,9 @@
 from abc import abstractmethod
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.i_dbl_function import IDBLFunction
+from djitellopy import Tello
 
 if TYPE_CHECKING:
     from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_waypoint_nav_coordinator import NavigationInstruction
@@ -81,5 +82,15 @@ class INavigation(IDBLFunction):
         
         Returns:
             list: A list of images captured during the scan.
+        """
+        pass
+
+    @abstractmethod
+    def get_drone_instance(self) -> Optional[Tello]:
+        """
+        Returns the Tello drone instance.
+
+        Returns:
+            Optional[Tello]: The Tello drone instance if available, otherwise None.
         """
         pass

@@ -38,6 +38,15 @@ class DroneCommands(enum.Enum):
     LOCATE_OBJECTS_AND_RECOGNIZE = "find the objects and recognize them",
     MOVE_AROUND = "move around the room",
     TAKE_A_PHOTO = "take a photo",
+    MAP_LOCATION = "map location",
+    NAVIGATION_INTERFACE = "open navigation interface",
+    NAVIGATE_TO_WAYPOINT_CONTINUE = "navigate to waypoint and then continue",
+    NAVIGATE_TO_WAYPOINT_HALT = "navigate to waypoint and then halt",
+    NAVIGATE_TO_CONTINUE = "navigate to waypoints and then continue",
+    NAVIGATE_TO_HALT = "navigate to waypoints and then halt",
+    SCAN_SURROUNDING = "scan surrounding area",
+
+
 
 
 class LoggerColors(enum.Enum):

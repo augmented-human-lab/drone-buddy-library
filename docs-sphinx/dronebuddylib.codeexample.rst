@@ -21,10 +21,11 @@ the recognized intent and the results of the face, object, and text recognition.
         import speech_recognition
         from djitellopy import Tello
         from dronebuddylib import SpeechRecognitionEngine, IntentRecognitionEngine, FaceRecognitionEngine, \
-            ObjectDetectionEngine, TextRecognitionEngine, SpeechGenerationEngine
+            ObjectDetectionEngine, TextRecognitionEngine, SpeechGenerationEngine, NavigationEngine
         from dronebuddylib.models import EngineConfigurations
         from dronebuddylib.models.enums import AtomicEngineConfigurations, IntentRecognitionAlgorithm, DroneCommands, \
-            FaceRecognitionAlgorithm, VisionAlgorithm, TextRecognitionAlgorithm, SpeechGenerationAlgorithm
+            FaceRecognitionAlgorithm, VisionAlgorithm, TextRecognitionAlgorithm, SpeechGenerationAlgorithm, NavigationAlgorithm
+        from dronebuddylib.atoms.navigation import NavigationInstruction
         from dronebuddylib.utils.enums import SpeechRecognitionAlgorithm, SpeechRecognitionMultiAlgoAlgorithmSupportedAlgorithms
         from dronebuddylib.utils.utils import Logger
 
@@ -35,7 +36,7 @@ the recognized intent and the results of the face, object, and text recognition.
         is_drone_in_air = False
 
 
-        def open_mic_operations(drone_instance, on_recognized_callback):
+        def open_mic_operations(on_recognized_callback):
             speech_microphone = speech_recognition.Microphone()
 
             engine_configs.add_configuration(AtomicEngineConfigurations.SPEECH_RECOGNITION_MULTI_ALGO_ALGORITHM_NAME,
@@ -47,6 +48,7 @@ the recognized intent and the results of the face, object, and text recognition.
             object_recognition_engine = init_object_rec_engine()
             text_recognition_engine = init_text_rec_engine()
             voice_engine = init_voice_generation_engine()
+            navigation_engine = init_navigation_engine()
 
             while True:
                 with speech_microphone as source:
@@ -66,9 +68,10 @@ the recognized intent and the results of the face, object, and text recognition.
                         if result.recognized_speech is not None:
                             logger.log_info("TEST", "Recognized: " + result.recognized_speech)
                             intent = recognize_intent_gpt(intent_engine, result.recognized_speech)
+                            drone_instance = get_drone_instance(navigation_engine)
                             read_aloud_text = execute_drone_functions(intent, drone_instance, face_recognition_engine,
                                                                       object_recognition_engine,
-                                                                      text_recognition_engine, voice_engine)
+                                                                      text_recognition_engine, voice_engine, navigation_engine)
                             on_recognized_callback(read_aloud_text, voice_engine)
 
                         else:
@@ -124,6 +127,19 @@ the recognized intent and the results of the face, object, and text recognition.
             return engine
 
 
+        def init_navigation_engine():
+            # Configure navigation engine for waypoint-based navigation
+            nav_configs = EngineConfigurations({})
+            # Optional: Set specific waypoint directory
+            # nav_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, 
+            #                              "C:\\Users\\YourUser\\dronebuddylib\\tellowaypoints")
+            # Optional: Set specific waypoint file to use
+            # nav_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 
+            #                              "drone_movements_20250717_143431.json")
+            engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, nav_configs)
+            return engine
+
+
         def recognize_intent_gpt(engine, recognized_text):
             try:
                 recognized_intent = engine.recognize_intent(recognized_text)
@@ -134,17 +150,23 @@ the recognized intent and the results of the face, object, and text recognition.
                 return "NONE"
 
 
-        def execute_drone_functions(intent: str, drone_instance, face_engine, object_engine, text_engine, voice_engine):
+        def execute_drone_functions(intent: str, drone_instance, face_engine, object_engine, text_engine, voice_engine, navigation_engine):
             global is_drone_in_air
 
-            if intent == DroneCommands.TAKE_OFF.name:
-                is_drone_in_air = True
-                take_off(drone_instance)
-                return "I'm taking off"
-            elif intent == DroneCommands.LAND.name:
-                is_drone_in_air = False
-                land(drone_instance)
-                return "I'm landing"
+            if intent == DroneCommands.MAP_LOCATION.name:
+                return map_current_location(navigation_engine)
+            elif intent == DroneCommands.NAVIGATION_INTERFACE.name: 
+                return start_navigation_mode(navigation_engine)
+            elif intent == DroneCommands.NAVIGATE_TO_WAYPOINT_CONTINUE.name: 
+                return navigate_to_specific_waypoint(navigation_engine, NavigationInstruction.CONTINUE)
+            elif intent == DroneCommands.NAVIGATE_TO_WAYPOINT_HALT.name: 
+                return navigate_to_specific_waypoint(navigation_engine, NavigationInstruction.HALT)
+            elif intent == DroneCommands.NAVIGATE_TO_CONTINUE.name:
+                return navigate_to_waypoints(navigation_engine, NavigationInstruction.CONTINUE)
+            elif intent == DroneCommands.NAVIGATE_TO_HALT.name: 
+                return navigate_to_waypoints(navigation_engine, NavigationInstruction.HALT)
+            elif intent == DroneCommands.SCAN_SURROUNDING.name: 
+                return perform_area_scan(navigation_engine)
             elif intent == DroneCommands.ROTATE_CLOCKWISE.name:
                 rotate_clockwise(drone_instance)
                 return "I'm rotating clockwise"
@@ -181,29 +203,6 @@ the recognized intent and the results of the face, object, and text recognition.
             elif intent == DroneCommands.RECOGNIZE_OBJECTS.name:
                 detected = recognize_objects(object_engine, drone_instance)
                 return detected
-            elif intent == DroneCommands.STOP.name:
-                land(drone_instance)
-                is_drone_in_air = False
-                return "I'm stopping"
-
-
-        def init_drone():
-            drone_instance = Tello()
-            drone_instance.connect()
-            drone_instance.streamon()
-            return drone_instance
-
-
-        def take_off(drone_instance):
-            logger.log_info("Executing functions: ", "Drone is taking off")
-            if drone_instance is not None:
-                drone_instance.takeoff()
-
-
-        def land(drone_instance):
-            logger.log_info("Executing functions: ", "Drone is landing")
-            if drone_instance is not None:
-                drone_instance.land()
 
 
         def rotate_clockwise(drone_instance):
@@ -379,27 +378,6 @@ the recognized intent and the results of the face, object, and text recognition.
             return output_path
 
 
-        def keep_drone_in_air(drone_instance):
-            moving_dir = -1
-            voice = init_voice_generation_engine()
-            global is_drone_in_air
-            while True:
-                logger.log_info("Executing functions: ", "Drone is in the air")
-                if drone_instance is not None and is_drone_in_air:
-                    print("battery: ", drone_instance.get_battery())
-                    if drone_instance.get_battery() < 20:
-                        land(drone_instance)
-                        voice.read_phrase("I'm running out of battery, I'm landing")
-                    if drone_instance.get_temperature() > 90:
-                        land(drone_instance)
-                        voice.read_phrase("I'm getting overheated, I'm landing")
-
-                    drone_instance.send_rc_control(0, 0, moving_dir, 0)
-                    moving_dir = moving_dir * -1
-                    # break
-                time.sleep(4)  # Sleep to simulate work and prevent a tight loop
-
-
         def find_person(face_engine, drone_instance):
             logger.log_info("Executing functions: ", "Drone is recognizing people")
             current_resized_image = get_image_with_cv2(drone_instance)
@@ -412,17 +390,76 @@ the recognized intent and the results of the face, object, and text recognition.
             # Call the voice generation function with the recognized text
             generate_voice_response(voice_engine, recognized_text)
 
+        def get_drone_instance(navigation_engine): 
+            logger.log_info("Retrieving drone instance")
+            return navigation_engine.get_drone_instance()
+
+        # ====== NAVIGATION FUNCTIONS ======
+
+        def map_current_location(navigation_engine):
+            """Voice-controlled mapping session."""
+            try:
+                logger.log_info("Navigation", "Starting location mapping session")
+                waypoints = navigation_engine.map_location()
+                return f"Location mapping completed! I mapped {len(waypoints)} waypoints. You can now navigate between them."
+            except Exception as e:
+                logger.log_error("Navigation", f"Mapping failed: {e}")
+                return "Sorry, location mapping failed. Please try again."
+
+        def navigate_to_specific_waypoint(navigation_engine, navigation_instruction):
+            """Navigate to a specific waypoint with voice feedback."""
+            try:
+                logger.log_info("Navigation", "Navigating to waypoint: WP_002")
+                result = navigation_engine.navigate_to_waypoint("WP_002", navigation_instruction)
+
+                return f"Navigation process completed, I am currently at waypoint: {result[1]}. "
+                    
+            except Exception as e:
+                logger.log_error("Navigation", f"Navigation process failed: {e}")
+                return f"Sorry, I couldn't complete the navigation process. "
+        
+        def navigate_to_waypoints(navigation_engine, navigation_instruction):
+            """Navigate to a specific waypoint with voice feedback."""
+            try:
+                logger.log_info("Navigation", "Navigating to waypoints: WP_002, WP_001, WP_003")
+                waypoints = ["WP_002", "WP_001", "WP_003"]
+                result = navigation_engine.navigate_to(waypoints, navigation_instruction)
+
+                return f"Navigation process completed, I am currently at waypoint: {result[-1] if len(result) > 0 else 'unknown'}. "
+                    
+            except Exception as e:
+                logger.log_error("Navigation", f"Navigation to waypoints failed: {e}")
+                return f"Sorry, I couldn't complete the navigation process. "
+
+        def start_navigation_mode(navigation_engine):
+            """Start interactive navigation mode."""
+            try:
+                logger.log_info("Navigation", "Starting interactive navigation mode")
+                result = navigation_engine.navigate()
+                return f"Navigation session completed. I visited {len(result)} waypoints."
+            except Exception as e:
+                logger.log_error("Navigation", f"Navigation mode failed: {e}")
+                return "Sorry, navigation mode failed. "
+
+        def perform_area_scan(navigation_engine):
+            """Perform 360-degree area scan with voice feedback."""
+            try:
+                logger.log_info("Navigation", "Starting area scan")
+                images = navigation_engine.scan_surrounding()
+                return f"Area scan completed! I captured {len(images)} images of the surrounding area."
+            except Exception as e:
+                logger.log_error("Navigation", f"Area scan failed: {e}")
+                return "Sorry, area scan failed. "
+
+        # ====== END NAVIGATION FUNCTIONS ======
+
 
         if __name__ == '__main__':
-            # drone_instance = None
-            drone_instance = init_drone()
-            # Create threads
-            thread1 = threading.Thread(target=open_mic_operations, args=(drone_instance, on_voice_recognized,))
-            thread2 = threading.Thread(target=keep_drone_in_air, args=(drone_instance,))
+            
+            # Create thread(s)
+            thread1 = threading.Thread(target=open_mic_operations, args=(on_voice_recognized,))
 
-            # Start threads
+            # Start thread(s)
             thread1.start()
-            thread2.start()
 
             thread1.join()
-            thread2.join()

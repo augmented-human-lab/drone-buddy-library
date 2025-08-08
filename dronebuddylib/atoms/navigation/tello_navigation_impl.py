@@ -1,5 +1,9 @@
 import os
 import time
+from typing import Optional
+
+from djitellopy import Tello
+
 from dronebuddylib.atoms.navigation.i_navigation import INavigation
 from dronebuddylib.models.enums import AtomicEngineConfigurations
 from dronebuddylib.utils.logger import Logger
@@ -144,11 +148,11 @@ class NavigationWaypointImpl(INavigation):
                 coordinator_instance.cleanup()             # Clean up resources
             raise TypeError(error_msg)
         
-        # Validate waypoints list is not empty
+        # Validate waypoints list is not empty, return empty list and exit function if it is
         if not waypoints:
             error_msg = "waypoints list cannot be empty"
             logger.log_error(self.get_class_name(), error_msg)
-            raise ValueError(error_msg)
+            return []
 
         accumulated_results = []  # Store waypoints that drone successfully navigated to
 
@@ -202,17 +206,39 @@ class NavigationWaypointImpl(INavigation):
         coordinator_instance._pause_battery_monitoring()  # Pause battery monitoring during scan to prevent conflicts
 
         time.sleep(0.25)  # Small delay to ensure battery monitoring is paused before scan
+
+        # Check if emergency shutdown is triggered before proceeding with scan
         if coordinator_instance._emergency_shutdown: 
             Logger.log_error(self.get_class_name(), 'Emergency shutdown detected - stopping surrounding scan.')
             return []
         
         from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import TelloNavExtra
         tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)  # Use existing drone instance from coordinator
-
+        
+        # Perform surrounding scan operation using TelloNavExtra utility
         result = tello_manouver.scan(current_waypoint_file, current_waypoint)
         logger.log_info(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
+
         coordinator_instance._resume_battery_monitoring()  # Resume battery monitoring after scan
         return result
+    
+    def get_drone_instance(self) -> Optional[Tello]:
+        """
+        Returns the Tello drone instance.
+
+        Returns:
+            Optional[Tello]: The Tello drone instance if available, otherwise None.
+        """
+        # Get the active coordinator instance to access the Tello drone
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
+
+        # If no active coordinator instance, return None
+        if coordinator_instance is None:
+            logger.log_warning(self.get_class_name(), 'No active drone instance available.')
+            return None
+        
+        # Return the Tello drone instance from the coordinator
+        return coordinator_instance.tello
 
     def get_required_params(self) -> list:
         """

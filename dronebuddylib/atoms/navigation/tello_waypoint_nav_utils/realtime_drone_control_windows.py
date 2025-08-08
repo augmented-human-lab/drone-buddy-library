@@ -10,12 +10,11 @@ import json
 import os
 import time
 import uuid
-import sys
 import threading
-import traceback
 import cv2
 import msvcrt
-import platform
+import win32gui
+import win32con
 from datetime import datetime
 
 from dronebuddylib.utils.logger import Logger
@@ -390,6 +389,11 @@ class RealTimeDroneControllerWindows:
     def _video_display_loop(self):
         """Background thread for continuous video display with overlay information."""
         try:
+            # Create OpenCV window for video display
+            window_name = 'Drone Camera - Mapping Mode (Windows)'
+            cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+
+            first_time = True  # Flag to handle first frame display
             logger.log_debug('RealTimeDroneControllerWindows', 'Video display thread started.')
             
             while self.video_running and self.frame_read:
@@ -420,10 +424,17 @@ class RealTimeDroneControllerWindows:
                                   (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                         
                         # Display frame in OpenCV window
-                        cv2.imshow('Drone Camera - Mapping Mode (Windows)', frame)
+                        cv2.imshow(window_name, frame)
                         
                         # Process window events without waiting for key presses
                         cv2.waitKey(1)
+
+                        # Pin window to topmost on first display only, subsequent frame displays will use this same window
+                        if first_time:
+                            hwnd = win32gui.FindWindow(None, window_name)
+                            win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+                                                win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+                            first_time = False # Subsequent frames will not re-pin the window and use the same window handle for display
                     
                     # Control frame rate to prevent excessive CPU usage
                     time.sleep(0.033)  # Approximately 30 FPS

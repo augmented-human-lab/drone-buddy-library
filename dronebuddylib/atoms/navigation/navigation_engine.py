@@ -119,3 +119,19 @@ class NavigationEngine:
 
         logger.log_debug(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
         return result
+    
+    def get_drone_instance(self):
+        """
+        Returns the Tello drone instance.
+
+        Returns:
+            Optional[Tello]: The Tello drone instance if available, otherwise None.
+        """
+        
+        logger.log_info(self.get_class_name(), 'Retrieving Tello drone instance.')
+        
+        drone = self.navigation_engine.get_drone_instance()
+
+        logger.log_debug(self.get_class_name(), f'Drone instance retrieved: {drone is not None}.')
+        
+        return drone
