@@ -130,12 +130,7 @@ the recognized intent and the results of the face, object, and text recognition.
         def init_navigation_engine():
             # Configure navigation engine for waypoint-based navigation
             nav_configs = EngineConfigurations({})
-            # Optional: Set specific waypoint directory
-            # nav_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, 
-            #                              "C:\\Users\\YourUser\\dronebuddylib\\tellowaypoints")
-            # Optional: Set specific waypoint file to use
-            # nav_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 
-            #                              "drone_movements_20250717_143431.json")
+            # Optional: set navigation engine configurations here before assembling the final engine with the defined configuration
             engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, nav_configs)
             return engine
 
