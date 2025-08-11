@@ -557,14 +557,19 @@ This will install the necessary dependencies:
 - `djitellopy` - DJI Tello drone SDK (includes `opencv-python`, `pillow`, `av`, and `numpy` as dependencies)
 - `setuptools`
 
-## Usage
+## Usage and main operatons examples 
 
-The navigation module uses the standard DroneBuddy engine pattern with `NavigationEngine` and supports five operations:
+The navigation module uses the standard DroneBuddy engine pattern with `NavigationEngine` and supports five main operations:
 1. Waypoint Mapping
 2. Interactive Navigation
 3. Direct Waypoint Navigation
 4. Sequential Waypoint Navigation
 5. 360-Degree Surrounding Scan
+
+as well as 3 basic operations: 
+1. Return drone instance that is currently in use by Navigation Engine 
+2. Drone take off
+3. Drone landing
 
 ### Basic Navigation Engine Setup
 

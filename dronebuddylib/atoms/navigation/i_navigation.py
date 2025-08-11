@@ -94,3 +94,23 @@ class INavigation(IDBLFunction):
             Optional[Tello]: The Tello drone instance if available, otherwise None.
         """
         pass
+
+    @abstractmethod
+    def takeoff(self) -> bool:
+        """
+        Initiates the takeoff sequence for the drone.
+
+        Returns:
+            bool: True if the takeoff was successful, False otherwise.
+        """
+        pass
+
+    @abstractmethod
+    def land(self) -> bool:
+        """
+        Initiates the landing sequence for the drone.
+
+        Returns:
+            bool: True if the landing was successful, False otherwise.
+        """
+        pass

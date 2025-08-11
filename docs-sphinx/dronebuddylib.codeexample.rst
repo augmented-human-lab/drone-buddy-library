@@ -148,7 +148,13 @@ the recognized intent and the results of the face, object, and text recognition.
         def execute_drone_functions(intent: str, drone_instance, face_engine, object_engine, text_engine, voice_engine, navigation_engine):
             global is_drone_in_air
 
-            if intent == DroneCommands.MAP_LOCATION.name:
+            if intent == DroneCommands.TAKE_OFF.name:
+                is_drone_in_air = True
+                return take_off(navigation_engine)
+            elif intent == DroneCommands.LAND.name:
+                is_drone_in_air = False
+                return land(navigation_engine)
+            elif intent == DroneCommands.MAP_LOCATION.name:
                 return map_current_location(navigation_engine)
             elif intent == DroneCommands.NAVIGATION_INTERFACE.name: 
                 return start_navigation_mode(navigation_engine)
@@ -198,7 +204,33 @@ the recognized intent and the results of the face, object, and text recognition.
             elif intent == DroneCommands.RECOGNIZE_OBJECTS.name:
                 detected = recognize_objects(object_engine, drone_instance)
                 return detected
+            elif intent == DroneCommands.STOP.name:
+                is_drone_in_air = False
+                return land(navigation_engine)
 
+
+        def take_off(navigation_engine):
+            logger.log_info("Executing functions: ", "Attempting to take off")
+            result = navigation_engine.takeoff()
+            
+            if result: 
+                logger.log_info("Executing functions: ", "Drone has taken off successfully")
+                return "I have taken off and currently hovering at the starting waypoint"
+            else:
+                logger.log_error("Executing functions: ", "Drone failed to take off")
+                return "I have not taken off or I am already initially in the air"
+
+
+        def land(navigation_engine):
+            logger.log_info("Executing functions: ", "attempting to land")
+            result = navigation_engine.land()
+
+            if result:
+                logger.log_info("Executing functions: ", "Drone has landed successfully")
+                return "I have landed and currently at my last traveled waypoint "
+            else:
+                logger.log_error("Executing functions: ", "Drone failed to land")
+                return "I have not landed or I am already initially on the ground"
 
         def rotate_clockwise(drone_instance):
             logger.log_info("Executing functions: ", "Drone is rotating clockwise")

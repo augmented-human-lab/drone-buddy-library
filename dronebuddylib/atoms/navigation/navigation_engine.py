@@ -135,3 +135,31 @@ class NavigationEngine:
         logger.log_debug(self.get_class_name(), f'Drone instance retrieved: {drone is not None}.')
         
         return drone
+
+    def takeoff(self) -> bool:
+        """
+        Initiates the takeoff sequence for the drone.
+
+        Returns:
+            bool: True if the takeoff was successful, False otherwise.
+        """
+        logger.log_info(self.get_class_name(), 'Starting takeoff operation.')
+
+        result = self.navigation_engine.takeoff()
+
+        logger.log_debug(self.get_class_name(), f'Takeoff operation completed with success: {result}.')
+        return result
+
+    def land(self) -> bool:
+        """
+        Initiates the landing sequence for the drone.
+
+        Returns:
+            bool: True if the landing was successful, False otherwise.
+        """
+        logger.log_info(self.get_class_name(), 'Starting landing operation.')
+
+        result = self.navigation_engine.land()
+
+        logger.log_debug(self.get_class_name(), f'Landing operation completed with success: {result}.')
+        return result

@@ -240,6 +240,49 @@ class NavigationWaypointImpl(INavigation):
         # Return the Tello drone instance from the coordinator
         return coordinator_instance.tello
 
+    def takeoff(self) -> bool:
+        """
+        Initiates the takeoff sequence for the drone.
+
+        Returns:
+            bool: True if the takeoff was successful, False otherwise.
+        """
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+
+        if coordinator_instance is not None: 
+            logger.log_info(self.get_class_name(), 'Drone is already flying. ')
+            return False  # Drone is already flying, cannot take off again
+
+        # Drone must always be placed at starting waypoint: WP_001 for takeoff
+        # Calling navigate_to_waypoint at WP_001 and NavigationInstruction.CONTINUE when the drone was uninitialized will cause the drone to simply takeoff and hover at its current position which is assumed to be WP_001
+        result = self.navigate_to_waypoint("WP_001", NavigationInstruction.CONTINUE)
+
+        if result[0]:
+            return False # Drone landed instead of having completed the takeoff operation 
+        else: 
+            return True  # Takeoff operation completed successfully: drone is still hovering at WP_001
+    
+    def land(self) -> bool: 
+        """
+        Initiates the landing sequence for the drone.
+
+        Returns:
+            bool: True if the landing was successful, False otherwise.
+        """
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+
+        if coordinator_instance is None: 
+            logger.log_warning(self.get_class_name(), 'No active drone instance available for landing. Drone already landed.')
+            return False  # Drone already landed, cannot land again
+
+        # Call navigate_to_waypoint at current position and NavigationInstruction.LAND to initiate landing at current position/waypoint
+        result = self.navigate_to_waypoint(coordinator_instance.current_waypoint, NavigationInstruction.HALT)
+
+        if result[0]:
+            return True  # Drone landed successfully
+        else: 
+            return False # Drone still not landed
+
     def get_required_params(self) -> list:
         """
         Returns a list of required parameters for this navigation engine.

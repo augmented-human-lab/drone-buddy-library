@@ -15,37 +15,6 @@ class TelloNavExtra:
         self.tello = tello
         self.image_dir = image_dir
 
-    def forward(self, distance: float) -> bool:
-        """
-        Moves the Tello drone forward by a specified distance.
-
-        Args:
-            distance (float): The distance to move forward in centimeters.
-        """
-        if self.tello is not None: 
-            return self._move_forward(distance)
-        else:
-            self.tello = Tello()
-            if self._connect_drone():
-                if self._takeoff():
-                    if self._move_forward(distance): 
-                        logger.log_success('TelloNavExtra', f'Moved forward {distance} cm successfully.')
-                        if self._land():
-                            logger.log_success('TelloNavExtra', 'Drone landed successfully after moving forward.')
-                            return True
-                        else: 
-                            logger.log_error('TelloNavExtra', 'Landing failed after moving forward.')
-                            return False
-                    else:
-                        logger.log_error('TelloNavExtra', 'Moving forward failed.')
-                        return False
-                else:
-                    logger.log_error('TelloNavExtra', 'Takeoff failed, cannot move forward.')
-                    return False
-            else:
-                logger.log_error('TelloNavExtra', 'Failed to connect to Tello drone.')
-                return False
-
     def scan(self, current_waypoint_file: str,current_waypoint: str) -> list:
         """
         Scans the surrounding of the drone while doing a 360 degree rotation.
@@ -337,66 +306,3 @@ class TelloNavExtra:
         except Exception as e:
             logger.log_error('TelloNavExtra', f'Failed to adjust yaw: {e}')
             return False # Return False if yaw adjustment failed
-    
-    def _move_forward(self, distance: float) -> bool:
-        """
-        Moves the Tello drone forward by a specified distance in a blocking manner.
-
-        Args:
-            distance (float): The distance to move forward in centimeters.
-        """ 
-        try: 
-            self.tello.move_forward(distance)
-            return True
-        except Exception as e:
-            print(f"Error occurred while moving forward: {e}")
-            return False
-    
-    def _connect_drone(self):
-        """
-        Establish connection to DJI Tello drone with configuration and status validation.
-        """
-        try:
-            logger.log_info('TelloNavExtra', 'Connecting to Tello drone...')
-            self.tello.RESPONSE_TIMEOUT = 7
-            self.tello.connect(wait_for_state=False)
-            logger.log_success('TelloNavExtra', 'Drone connected successfully!')
-
-            try:
-                battery_response = self.tello.send_command_with_return("battery?", timeout=5)
-                logger.log_info('TelloNavExtra', f'Battery: {battery_response}%')
-            except Exception as e:
-                logger.log_error('TelloNavExtra', f'Battery command failed: {e}')
-
-            return True
-        except Exception as e:
-            logger.log_error('TelloNavExtra', f'Failed to connect to drone: {e}')
-            return False
-    
-    def _takeoff(self):
-        """
-        Execute drone takeoff sequence with safety validation and stabilization.
-       """
-        try:
-            logger.log_info('TelloNavExtra', 'Taking off...')
-            self.tello.takeoff()
-            self.is_flying = True
-            time.sleep(1)  # Stabilization delay
-            logger.log_success('TelloNavExtra', 'Drone is airborne!')
-            return True
-        
-        except Exception as e:
-            logger.log_error('TelloNavExtra', f'Takeoff failed: {e}')
-            return False
-    
-    def _land(self):
-        """
-        Execute safe drone landing sequence with status management.
-        """
-        try:
-            logger.log_info('TelloNavExtra', 'Landing drone...')
-            self.tello.land()
-            self.is_flying = False
-            logger.log_success('TelloNavExtra', 'Drone landed successfully!')
-        except Exception as e:
-            logger.log_error('TelloNavExtra', f'Landing failed: {e}')

@@ -1,7 +1,7 @@
 Tello Waypoint Navigation
 ==========================
 
-The Tello Waypoint Navigation provides waypoint-based navigation for DJI Tello drones with waypoint mapping, interactive navigation, direct waypoint navigation, sequential waypoint navigation and 360-degree surrounding scan capabilities.
+The Tello Waypoint Navigation provides waypoint-based navigation for DJI Tello drones with waypoint mapping, interactive navigation, direct waypoint navigation, sequential waypoint navigation and 360-degree surrounding scan as its main capabilities. Its basic capabilities include returning the drone instance that is currently in use by the Navigation Engine, drone take off and drone landing. 
 
 Installation
 -------------
@@ -15,7 +15,7 @@ To install Tello Waypoint Navigation run the following snippet, which will insta
 Usage
 -------------
 
-The Tello Waypoint Navigation module requires the following optional configurations to function:
+The Tello Waypoint Navigation module can have the following optional configurations to function:
 
 #. NAVIGATION_TELLO_WAYPOINT_DIR - Directory path for storing waypoint files (default: default directory in user home folder)
 #. NAVIGATION_TELLO_WAYPOINT_FILE - Specific waypoint file to use for navigation (default: None, decided later by the user or system)
