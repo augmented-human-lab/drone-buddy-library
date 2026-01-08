@@ -38,6 +38,15 @@ class DroneCommands(enum.Enum):
     LOCATE_OBJECTS_AND_RECOGNIZE = "find the objects and recognize them",
     MOVE_AROUND = "move around the room",
     TAKE_A_PHOTO = "take a photo",
+    MAP_LOCATION = "map location",
+    NAVIGATION_INTERFACE = "open navigation interface",
+    NAVIGATE_TO_WAYPOINT_CONTINUE = "navigate to waypoint and then continue",
+    NAVIGATE_TO_WAYPOINT_HALT = "navigate to waypoint and then halt",
+    NAVIGATE_TO_CONTINUE = "navigate to waypoints and then continue",
+    NAVIGATE_TO_HALT = "navigate to waypoints and then halt",
+    SCAN_SURROUNDING = "scan surrounding area",
+
+
 
 
 class LoggerColors(enum.Enum):
@@ -87,6 +96,8 @@ class PlaceRecognitionAlgorithm(enum.Enum):
 class TextRecognitionAlgorithm(enum.Enum):
     GOOGLE_VISION = 'GOOGLE_VISION',
 
+class NavigationAlgorithm(enum.Enum):
+    NAVIGATION_TELLO_WAYPOINT = "NAVIGATION_TELLO_WAYPOINT"  
 
 class AtomicEngineConfigurations(enum.Enum):
     # The configuration for the object detection algorithm.
@@ -195,3 +206,12 @@ class AtomicEngineConfigurations(enum.Enum):
     OBJECT_IDENTIFICATION_GPT_MODEL = "OBJECT_IDENTIFICATION_GPT_MODEL"
 
     OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION = "OBJECT_IDENTIFICATION_SIAMESE_YOLO_VERSION"
+
+    # The configuration for navigation algorithm.
+    NAVIGATION_TELLO_WAYPOINT_DIR = "NAVIGATION_TELLO_WAYPOINT_DIR"
+    NAVIGATION_TELLO_VERTICAL_FACTOR = "NAVIGATION_TELLO_VERTICAL_FACTOR"
+    NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED = "NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED"
+    NAVIGATION_TELLO_MAPPING_ROTATION_SPEED = "NAVIGATION_TELLO_MAPPING_ROTATION_SPEED"
+    NAVIGATION_TELLO_NAVIGATION_SPEED = "NAVIGATION_TELLO_NAVIGATION_SPEED"
+    NAVIGATION_TELLO_WAYPOINT_FILE = "NAVIGATION_TELLO_WAYPOINT_FILE"
+    NAVIGATION_TELLO_IMAGE_DIR = "NAVIGATION_TELLO_IMAGE_DIR"

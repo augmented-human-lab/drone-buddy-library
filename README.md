@@ -541,6 +541,248 @@ Currently, DroneBuddy supports several algorithms for text recognition:
 
 To use each of these, you can customize the installation according to your needs.
 
+# Navigation
+
+The navigation module provides waypoint-based navigation for DJI Tello drones with mapping, autonomous navigation, and direct waypoint navigation capabilities.
+
+## Installation
+
+To install DroneBuddy with navigation support:
+
+```bash
+pip install dronebuddylib[NAVIGATION_TELLO]
+```
+
+This will install the necessary dependencies:
+- `djitellopy` - DJI Tello drone SDK (includes `opencv-python`, `pillow`, `av`, and `numpy` as dependencies)
+- `setuptools`
+
+## Usage and main operatons examples 
+
+The navigation module uses the standard DroneBuddy engine pattern with `NavigationEngine` and supports five main operations:
+1. Waypoint Mapping
+2. Interactive Navigation
+3. Direct Waypoint Navigation
+4. Sequential Waypoint Navigation
+5. 360-Degree Surrounding Scan
+
+as well as 3 basic operations: 
+1. Return drone instance that is currently in use by Navigation Engine 
+2. Drone take off
+3. Drone landing
+
+### Basic Navigation Engine Setup
+
+```python
+from dronebuddylib import EngineConfigurations, NavigationAlgorithm, NavigationEngine, AtomicEngineConfigurations
+
+# Initialize navigation engine
+engine_configs = EngineConfigurations({})
+engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, engine_configs)
+```
+
+### Optional Engine Configurations
+
+```python
+engine_configs = EngineConfigurations({})
+
+# Specify waypoint directory (default: current directory)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, "/path/to/waypoints/directory")
+
+# Specify specific waypoint file for navigation
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, "my_waypoints.json")
+
+# Mapping movement and rotation speed configuration (cm/s)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 50)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 90)
+
+# Waypoint navigation movement and rotation speed configuration (cm/s)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 70)
+
+# Vertical movement scaling factor
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR, 1.5)
+
+# Image directory for scan operations
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, "/path/to/images/directory")
+
+engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, engine_configs)
+```
+
+### Navigation Instructions (For Direct Waypoint Navigation and Sequential Waypoint Navigation use cases)
+
+Use `NavigationInstruction` enum for waypoint navigation behavior:
+
+- `NavigationInstruction.CONTINUE` - Keep drone flying after reaching waypoint
+- `NavigationInstruction.HALT` - Land drone after reaching waypoint
+
+### Waypoint Mapping
+
+Create waypoint maps through manual drone control:
+
+```python
+# Start mapping mode - provides real-time manual control interface
+result = engine.map_location()
+print(f"Mapping completed. Created {len(result)} waypoints.")
+```
+
+The mapping interface provides keyboard controls for manual flight and waypoint recording.
+
+### Interactive Navigation
+
+Navigate between existing waypoints with interactive user selection:
+
+```python
+# Start interactive navigation mode - displays waypoint menu
+result = engine.navigate()
+print(f"Navigation completed. Visited {len(result)} waypoints.")
+```
+
+### Direct Waypoint Navigation
+
+Navigate directly to specific waypoints:
+
+```python
+# Import NavigationInstruction
+from dronebuddylib.atoms.navigation import NavigationInstruction
+
+# Navigate to a specific waypoint
+results = []
+
+results.append(engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE))
+
+# Navigate and land at destination
+results.append(engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT))
+
+print(f"Navigated to {len(results)} waypoints.")
+```
+
+### Sequential Waypoint Navigation
+
+Navigate through multiple waypoints in sequence:
+
+```python
+# Import NavigationInstruction
+from dronebuddylib.atoms.navigation import NavigationInstruction
+
+# Specify waypoint(s) for the drone to navigate to in a list 
+waypoints = ["WP_002", "WP_003", "Kitchen", "WP_001"]
+
+# Navigate to the specified waypoint(s) and land at final waypoint in the list
+result = engine.navigate_to(waypoints, NavigationInstruction.HALT)
+
+print(f"Navigated to waypoints: {results}.")
+```
+
+### 360-Degree Surrounding Scan
+
+Capture images while performing 360-degree rotation:
+
+```python
+# Perform surrounding scan at current position
+images = engine.scan_surrounding()
+print(f"Scan completed. Captured {len(images)} images.")
+```
+
+## Output Format
+
+### Mapping Results
+```python
+[
+    {"id": "WP_001", "name": "START"},
+    {"id": "WP_002", "name": "Kitchen"},
+    {"id": "WP_003", "name": "END"}
+]
+```
+
+### Navigation Results
+```python
+["WP_002", "WP_003", "WP_001", ...]  # List of waypoint IDs visited
+```
+
+### Direct Navigation Results
+```python
+[False, "WP_002"]  # [landed_status, current_waypoint_id]
+[True, "WP_001"]   # [landed_status, current_waypoint_id]
+```
+
+### Sequential Navigation Results
+```python
+["WP_002", "WP_003", "WP_001", ...]  # List of waypoint IDs reached in sequence
+```
+
+### Scan Results
+```python
+[
+    {
+        "image_path": "/path/to/image0.jpg",
+        "filename": "image0.jpg",
+        "waypoint_file": "waypoint_file.json",
+        "waypoint": "WP_002",
+        "rotation_from_start": 0,
+        "image_number": 1,
+        "timestamp": "20250805_143022_123",
+        "format": "JPEG"
+    },
+    {
+        "image_path": "/path/to/image1.jpg",
+        "filename": "image1.jpg",
+        "waypoint_file": "waypoint_file.json",
+        "waypoint": "WP_002",
+        "rotation_from_start": 15,
+        "image_number": 2,
+        "timestamp": "20250805_143023_456",
+        "format": "JPEG"
+    }, 
+    ...
+]
+```
+
+## Waypoint File Format
+
+Generated waypoint files use JSON format:
+
+```json
+{   "session_info":{
+      "total_waypoints": 3, 
+      "total_movements": 5
+  }, 
+  "waypoints": [
+      {
+        "id": "WP_001",
+        "name": "START",
+        "movements_to_here":[]
+      }, 
+      {
+        "id": "WP_002",
+        "name": "Kitchen",
+        "movements_to_here": [
+          {
+            "id": "1fae8501-6625-487b-8562-25b43f387a91",
+            "type": "lift",
+            "direction": "up",
+            "distance": 52.295,
+            "timestamp": "2025-07-03T13:51:55.907127"
+          },
+          {
+            "id": "4a019fcf-e595-482f-b3dc-aa129e5fc32d",
+            "type": "move",
+            "yaw": 91,
+            "distance": 191.17,
+            "timestamp": "2025-07-03T13:52:06.824271"
+          },
+          {
+            "id": "76cdf44c-37a5-4661-bdd7-07f87112b182",
+            "type": "move",
+            "yaw": 0,
+            "distance": 92.63,
+            "timestamp": "2025-07-03T13:52:12.232930"
+          }
+        ]
+      },
+      ...
+  ]
+}
+
 ## Submodules
 
 ### Google Vision Integration

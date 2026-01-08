@@ -33,6 +33,7 @@ setup(
         'OBJECT_IDENTIFICATION': ['openai', 'tiktoken'],
         'LLM_INTEGRATION': ['openai', 'tiktoken'],
         'PLACE_RECOGNITION': ['scikit-learn', 'numpy', 'torch', 'torchvision', 'Pillow', 'tqdm', 'opencv-python'],
+        'NAVIGATION_TELLO': ['djitellopy', 'setuptools'],
     },
     python_requires='>=3.9',
     description='Everything to control and customize Tello',
