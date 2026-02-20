@@ -21,6 +21,7 @@ else:
 
 
 from dronebuddylib import EngineConfigurations, NavigationAlgorithm, NavigationEngine, AtomicEngineConfigurations
+from dronebuddylib.models.enums import ObstacleDetectionMode
 from dronebuddylib.atoms.navigation import NavigationInstruction
 from dronebuddylib.utils.logger import Logger
 
@@ -85,15 +86,35 @@ def test_navigate_to_waypoint():
     """Test the navigate_to_waypoint function with proper NavigationInstruction enum usage."""
     # Configure navigation engine
     config = EngineConfigurations({})
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, ObstacleDetectionMode.MEDIUM)
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, 'C:\\Users\\zheng\\FYP\\models\\midas_small_384x288.onnx')
+    config.add_configuration(
+        AtomicEngineConfigurations.PLANNER_YOLO_ONNX_MODEL_PATH, 
+        "C:/Users/zheng/FYP/yolo-onnx-models/yolo11m_320x320.onnx"  # Full path to YOLO model
+    )
+
     engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, config)
     
     logger.log_info("Main", "Navigation engine initialized successfully")
 
     # Using proper NavigationInstruction enum values
-    result1 = engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE)
-    result2 = engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT)
+    result1 = engine.navigate_to_waypoint("living room", NavigationInstruction.CONTINUE)
 
-    return result1, result2
+    images1 = engine.scan_with_detection(
+        target_object="cup",
+        yolo_model_path="C:/Users/zheng/FYP/yolo-onnx-models/yolo11m_320x320.onnx"
+    )
+    print(f"Scan 1 detections: {images1}")
+
+    result2 = engine.navigate_to_waypoint("bathroom", NavigationInstruction.CONTINUE)
+    images2 = engine.scan_with_detection(
+        target_object="bottle",
+        yolo_model_path="C:/Users/zheng/FYP/yolo-onnx-models/yolo11m_320x320.onnx"
+    )
+    print(f"Scan 2 detections: {images2}")
+    result3 = engine.navigate_to_waypoint("kitchen", NavigationInstruction.HALT)
+
+    return result1, result2, result3
 
 def test_navigate_to():
     """Test the navigate_to function with proper NavigationInstruction enum usage."""
@@ -111,12 +132,12 @@ def test_navigate_to_with_waypoint_file():
     """Test the navigate_to function with a waypoint file."""
     # Configure navigation engine
     config = EngineConfigurations({})
-    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 'drone_movements_20250717_143431.json')
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 'drone_movements_20260109_140759.json')
     engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, config)
     
     logger.log_info("Main", "Navigation engine initialized successfully")
 
-    result = engine.navigate_to(["WP_002", "WP_003", "Kitchen", "WP_001", "WP_002"], NavigationInstruction.HALT)
+    result = engine.navigate_to(["WP_003", "WP_001"], NavigationInstruction.HALT)
 
     return result
 
@@ -124,22 +145,44 @@ def test_navigate_to_waypoint_with_scan():
     """Test the navigate_to_waypoint function with scan functionality."""
     # Configure navigation engine
     config = EngineConfigurations({})
+    config.add_configuration(
+        AtomicEngineConfigurations.PLANNER_YOLO_ONNX_MODEL_PATH, 
+        "C:/Users/zheng/FYP/yolo-onnx-models/yolo11m_320x320.onnx"  # Full path to YOLO model
+    )
     engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, config)
     
     logger.log_info("Main", "Navigation engine initialized successfully")
 
     # Using proper NavigationInstruction enum values
-    engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE)
-    images1 = engine.scan_surrounding()
+    engine.navigate_to_waypoint("WP_001", NavigationInstruction.CONTINUE)
+    images1 = engine.scan_with_detection(
+        target_object="cup",
+        yolo_model_path="C:/Users/zheng/FYP/yolo-onnx-models/yolo11m_320x320.onnx"
+    )
+    print(f"Scan 1 detections: {images1}")
+    # images1 = engine.scan_surrounding()
     engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT)
-    images2 = engine.scan_surrounding()
-    return images1, images2
+    # images2 = engine.scan_surrounding()
+    # engine.navigate_to_waypoint("WP_003", NavigationInstruction.CONTINUE)
+    # images2 = engine.scan_surrounding()
+    # engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT)
+    return
 
 def main():
     """This is the main function we call when running the python file."""
     
     logger.log_info("Main", "Starting Tello Navigation Tests")
-    print(test_navigate_to_with_waypoint_file())
+    print(test_navigate_to_waypoint())
+    # tello = Tello()
+    # tello.connect()
+    # tello.streamon()
+    # while True:
+    #     frame = tello.get_frame_read().frame
+    #     cv2.imshow("Tello Stream", frame)
+    #     if cv2.waitKey(1) & 0xFF == ord('q'):
+    #         break
+    # tello.streamoff()
+    # tello.end()
 
 if __name__ == "__main__":
     main()

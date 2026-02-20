@@ -1,16 +1,17 @@
 """
-Main coordinator for DJI Tello drone waypoint navigation system.
+Main coordinator for DJI Tello drone 2D hierarchical waypoint navigation system.
 
 This module serves as the central orchestrator for all drone navigation operations, managing
-three distinct operational modes and providing comprehensive safety features. It handles
-cross-platform compatibility, drone lifecycle management, and emergency safety protocols.
+Super Waypoints and Inner Waypoints with smart routing capabilities.
 
 Operational Modes:
-- MAPPING: Manual flight control to create waypoint maps through real-time recording
-- NAVIGATION: Interactive waypoint selection and autonomous navigation between recorded points
-- GOTO: Direct navigation to specific waypoints with instruction-based control flow
+- MAPPING: Manual flight control to create 2D hierarchical waypoint maps
+- NAVIGATION: Interactive waypoint selection with smart routing through Super Waypoint hubs
+- GOTO: Direct navigation to specific waypoints with automatic hub traversal
 
 Key Features:
+- 2D hierarchical waypoint structure (Super Waypoints + Inner Waypoints)
+- Smart routing through Super Waypoint hubs
 - Cross-platform support (Windows/Linux) with platform-specific controllers
 - Background battery monitoring with automatic emergency landing
 - Emergency shutdown system for critical safety situations
@@ -40,10 +41,15 @@ if platform.system() == 'Linux':
 if platform.system() == 'Windows':
     from .realtime_drone_control_windows import RealTimeDroneControllerWindows
     from .navigation_interface_windows import NavigationInterfaceWindows
+    from .waypoint_navigation import WaypointNavigationManager
+    from .tello_nav_extra import MiDaSObstacleDetector
+    
+from dronebuddylib.models.enums import ObstacleDetectionMode
     
 from dronebuddylib.utils.logger import Logger
 
 logger = Logger()
+
 
 class NavigationInstruction(Enum):
     """
@@ -55,19 +61,19 @@ class NavigationInstruction(Enum):
     CONTINUE = "continue"  # Keep drone flying and maintain session after reaching waypoint
     HALT = "halt"         # Land drone and terminate session after reaching waypoint
 
+
 class TelloWaypointNavCoordinator: 
     """
-    Central coordinator for DJI Tello drone waypoint navigation system.
+    Central coordinator for DJI Tello drone 2D hierarchical waypoint navigation system.
     
-    This class orchestrates all aspects of drone navigation operations, from initial mapping
-    through autonomous navigation execution. It implements a comprehensive safety framework
-    with battery monitoring, emergency shutdown, and graceful resource management.
+    This class orchestrates all aspects of 2D drone navigation operations with
+    Super Waypoint hubs and Inner Waypoint branches. It implements smart routing
+    that automatically navigates through hub points.
     
     The coordinator operates in three distinct modes:
-    - MAPPING: Real-time manual control for waypoint creation and map building
-    - NAVIGATION: Interactive waypoint navigation with user selection interface
-    - GOTO: Direct autonomous navigation to specific waypoints with instruction control
-    
+    - MAPPING: Real-time manual control for 2D waypoint creation with Super/Inner waypoints
+    - NAVIGATION: Interactive waypoint navigation with user selection interface and smart hub routing
+    - GOTO: Direct autonomous navigation to specific waypoints with automatic hub traversal
     """
 
     # Class-level variables for singleton pattern and safety monitoring
@@ -76,9 +82,18 @@ class TelloWaypointNavCoordinator:
     _battery_thread_running = False      # Control flag for battery monitoring loop
     _battery_monitoring_paused = False   # Pause flag for navigation operations
     _emergency_shutdown = False          # Emergency shutdown trigger for critical situations
+    _disable_cv2_video_window = False    # Set True to disable OpenCV window (for GUI integration)
+    _external_nav_manager_callback = None # Callback to receive nav_manager for GUI video integration
+    _session_terminated = False          # Set True when session ends (obstacle timeout, keyboard interrupt) - prevents further navigation
+    _obstacle_timeout_occurred = False   # Set True specifically when obstacle timeout (30s) caused termination
 
     @classmethod
-    def get_instance(cls, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None, waypoint_file: str = None, create_new: bool = False):
+    def get_instance(cls, waypoint_dir: str, vertical_factor: float, movement_speed: int, 
+                     rotation_speed: int, navigation_speed: int, mode: str, 
+                     waypoint_dest: str = None, instruction: NavigationInstruction = None, 
+                     waypoint_file: str = None, create_new: bool = False,
+                     obstacle_detection_mode: 'ObstacleDetectionMode' = None,
+                     midas_model_path: str = None):
         """
         Factory method for singleton instance management with parameter-driven configuration.
         
@@ -97,6 +112,8 @@ class TelloWaypointNavCoordinator:
             instruction (NavigationInstruction, optional): Navigation control instruction for goto mode
             waypoint_file (str, optional): Specific waypoint file for navigation operations
             create_new (bool): Force creation of new instance, replacing existing singleton
+            obstacle_detection_mode (ObstacleDetectionMode, optional): Depth-based obstacle detection threshold
+            midas_model_path (str, optional): Path to MiDaS ONNX model file
         
         Returns:
             TelloWaypointNavCoordinator: Configured singleton coordinator instance
@@ -105,7 +122,9 @@ class TelloWaypointNavCoordinator:
             ValueError: For invalid mode specifications or parameter combinations
         """
         if create_new: 
-            instance = cls(waypoint_dir, vertical_factor, movement_speed, rotation_speed, navigation_speed, mode, waypoint_dest, instruction, waypoint_file)
+            instance = cls(waypoint_dir, vertical_factor, movement_speed, rotation_speed, 
+                          navigation_speed, mode, waypoint_dest, instruction, waypoint_file,
+                          obstacle_detection_mode, midas_model_path)
             cls._active_instance = instance
             return instance
         else: 
@@ -115,7 +134,11 @@ class TelloWaypointNavCoordinator:
             instance.instruction = instruction
             return instance 
 
-    def __init__(self, waypoint_dir: str, vertical_factor: float, movement_speed: int, rotation_speed: int, navigation_speed: int, mode: str, waypoint_dest: str = None, instruction: NavigationInstruction = None, waypoint_file: str = None):
+    def __init__(self, waypoint_dir: str, vertical_factor: float, movement_speed: int, 
+                 rotation_speed: int, navigation_speed: int, mode: str, 
+                 waypoint_dest: str = None, instruction: NavigationInstruction = None, 
+                 waypoint_file: str = None, obstacle_detection_mode: 'ObstacleDetectionMode' = None,
+                 midas_model_path: str = None):
         """
         Initialize coordinator with operational parameters and mode-specific configuration.
         
@@ -133,6 +156,8 @@ class TelloWaypointNavCoordinator:
             waypoint_dest (str, optional): Target waypoint for goto mode operations
             instruction (NavigationInstruction, optional): Control instruction for goto navigation
             waypoint_file (str, optional): Specific waypoint file for navigation operations
+            obstacle_detection_mode (ObstacleDetectionMode, optional): Depth-based obstacle detection threshold
+            midas_model_path (str, optional): Path to MiDaS ONNX model file for depth estimation
             
         Raises:
             ValueError: For invalid operational mode or incompatible parameter combinations
@@ -153,6 +178,12 @@ class TelloWaypointNavCoordinator:
         self.waypoint_dest = waypoint_dest
         self.instruction = instruction
         self.waypoint_file = waypoint_file
+        
+        # Obstacle detection configuration
+        self.obstacle_detection_mode = obstacle_detection_mode
+        self.midas_model_path = midas_model_path
+        self.obstacle_detector = None  # Created when video stream is started
+        self.frame_read = None         # Drone camera frame reader
 
         # Initialize Tello drone
         logger.log_debug('TelloWaypointNavCoordinator', 'Initializing Tello drone.')
@@ -165,7 +196,8 @@ class TelloWaypointNavCoordinator:
         self.is_navigation_mode = False
         self.is_goto_mode = False
         self.is_running = False
-        self.current_waypoint = "WP_001"
+        self.current_waypoint = "SWP_001"  # Start at first Super Waypoint
+        self._video_stream_active = False  # Track video stream state
 
         # Always reset the class-level variables when new instance is created
         TelloWaypointNavCoordinator._emergency_shutdown = False
@@ -173,8 +205,11 @@ class TelloWaypointNavCoordinator:
         TelloWaypointNavCoordinator._battery_monitoring_paused = False
         TelloWaypointNavCoordinator._active_instance = None
         TelloWaypointNavCoordinator._battery_thread = None
+        # NOTE: Do NOT reset _disable_cv2_video_window here - it's set by GUI before navigation starts
         
-        logger.log_debug('TelloWaypointNavCoordinator', f'Coordinator initialized with params: waypoint_dir={waypoint_dir}, mode={mode}, vertical_factor={vertical_factor}')
+        logger.log_debug('TelloWaypointNavCoordinator', 
+            f'Coordinator initialized: mode={mode}, waypoint_dir={waypoint_dir}, '
+            f'obstacle_detection={obstacle_detection_mode}')
     
     def _start_battery_monitoring(self):
         """
@@ -185,7 +220,8 @@ class TelloWaypointNavCoordinator:
         """
         if not TelloWaypointNavCoordinator._battery_thread_running:
             TelloWaypointNavCoordinator._battery_thread_running = True
-            TelloWaypointNavCoordinator._battery_thread = threading.Thread(target=self._battery_monitor_loop, daemon=True)
+            TelloWaypointNavCoordinator._battery_thread = threading.Thread(
+                target=self._battery_monitor_loop, daemon=True)
             TelloWaypointNavCoordinator._battery_thread.start()
             logger.log_info('TelloWaypointNavCoordinator', 'Battery monitoring thread started.')
     
@@ -197,7 +233,8 @@ class TelloWaypointNavCoordinator:
         """
         if TelloWaypointNavCoordinator._battery_thread_running:
             TelloWaypointNavCoordinator._battery_thread_running = False
-            if TelloWaypointNavCoordinator._battery_thread and TelloWaypointNavCoordinator._battery_thread.is_alive():
+            if (TelloWaypointNavCoordinator._battery_thread and 
+                TelloWaypointNavCoordinator._battery_thread.is_alive()):
                 TelloWaypointNavCoordinator._battery_thread.join(timeout=2)
             logger.log_info('TelloWaypointNavCoordinator', 'Battery monitoring thread stopped.')
     
@@ -249,7 +286,8 @@ class TelloWaypointNavCoordinator:
                 if battery < 20:
                     logger.log_warning('TelloWaypointNavCoordinator', f'Low battery detected: {battery}%')
                     if battery < 10:
-                        logger.log_error('TelloWaypointNavCoordinator', f'CRITICAL: Battery too low ({battery}%), initiating emergency landing.')
+                        logger.log_error('TelloWaypointNavCoordinator', 
+                            f'CRITICAL: Battery too low ({battery}%), initiating emergency landing.')
                         # Trigger emergency shutdown sequence
                         TelloWaypointNavCoordinator._emergency_shutdown = True
                         # Stop all ongoing operations
@@ -262,7 +300,8 @@ class TelloWaypointNavCoordinator:
                             time.sleep(0.5)  # Brief pause to ensure stop command is processed
 
                             if instance.is_flying:
-                                logger.log_info('TelloWaypointNavCoordinator', 'Landing drone due to critical battery level.')
+                                logger.log_info('TelloWaypointNavCoordinator', 
+                                    'Landing drone due to critical battery level.')
                                 instance.land()
                         except Exception as e:
                             logger.log_error('TelloWaypointNavCoordinator', f'Error sending stop command: {e}')
@@ -280,7 +319,8 @@ class TelloWaypointNavCoordinator:
                             TelloWaypointNavCoordinator._active_instance = None
                         # Stop battery monitoring
                         TelloWaypointNavCoordinator._battery_thread_running = False
-                        logger.log_error('TelloWaypointNavCoordinator', 'EMERGENCY SHUTDOWN: Program terminating due to critical battery level')
+                        logger.log_error('TelloWaypointNavCoordinator', 
+                            'EMERGENCY SHUTDOWN: Program terminating due to critical battery level')
                         # Force exit the entire program
                         sys.exit(1)
                         break
@@ -302,11 +342,15 @@ class TelloWaypointNavCoordinator:
         
         Returns:
             list: Mode-specific execution summary
+            
+        Raises:
+            KeyboardInterrupt: Re-raised after cleanup to allow calling code to handle it
         """
         logger.log_info('TelloWaypointNavCoordinator', f'Starting navigation run in {self.mode} mode.')
         
         summary = []
         land = True  # Default to landing on completion
+        interrupted = False  # Track if user interrupted
         try:
             if self.mode == "mapping":
                 summary = self._run_mapping_mode()
@@ -319,9 +363,16 @@ class TelloWaypointNavCoordinator:
         except KeyboardInterrupt:
             logger.log_warning('TelloWaypointNavCoordinator', 'Application interrupted by user.')
             land = True  # Force landing on user interrupt
+            interrupted = True  # Mark as interrupted
+            TelloWaypointNavCoordinator._session_terminated = True  # Prevent further navigation
+            summary = [True, self.current_waypoint]  # Return proper result format
         except Exception as e:
             logger.log_error('TelloWaypointNavCoordinator', f'Application error: {e}')
+            import traceback
+            traceback.print_exc()
             land = True  # Force landing on error
+            TelloWaypointNavCoordinator._session_terminated = True  # Prevent further navigation
+            summary = [True, self.current_waypoint]  # Return proper result format
         finally:
             if land: 
                 self.is_running = False
@@ -330,24 +381,39 @@ class TelloWaypointNavCoordinator:
                 self._stop_battery_monitoring()  # Safe cleanup - only stops if running
                 TelloWaypointNavCoordinator._active_instance = None
                 self.cleanup()
+            
+            # Re-raise KeyboardInterrupt AFTER cleanup so calling code stops
+            if interrupted:
+                raise KeyboardInterrupt("User interrupted navigation - drone landed safely")
 
             return summary
 
     def _run_mapping_mode(self) -> list:
         """
-        Executes mapping mode for waypoint creation through manual drone control.
+        Executes 2D mapping mode for hierarchical waypoint creation.
         
         Provides real-time manual control interface allowing users to fly the drone 
-        and create waypoint maps. Uses platform-specific controllers for Windows/Linux.
+        and create 2D hierarchical waypoint maps with Super Waypoints and Inner Waypoints.
+        Uses platform-specific controllers for Windows/Linux.
         
         Returns:
             list: Summary of waypoints created during mapping session
         """
-        logger.log_info('TelloWaypointNavCoordinator', 'MAPPING MODE ACTIVATED')
-        print("You will create waypoints by manually controlling the drone.")
+        logger.log_info('TelloWaypointNavCoordinator', '2D MAPPING MODE ACTIVATED')
+        
+        print("\n" + "=" * 60)
+        print("🗺️  2D HIERARCHICAL WAYPOINT MAPPING MODE")
+        print("=" * 60)
+        print("\nYou will create a web of interconnected waypoints:")
+        print("- ⭐ Super Waypoints: Hub points connecting different areas")
+        print("- 📍 Inner Waypoints: Local points branching off hubs")
+        print("\nThe drone automatically returns to Super Waypoints after")
+        print("marking inner waypoints, creating a navigable network.")
+        print("=" * 60)
 
         if self.is_connected or self.is_flying:
-            logger.log_warning('TelloWaypointNavCoordinator', 'Drone is already connected or flying. Please land it first.')
+            logger.log_warning('TelloWaypointNavCoordinator', 
+                'Drone is already connected or flying. Please land it first.')
             return []
 
         self.display_controls()
@@ -363,8 +429,15 @@ class TelloWaypointNavCoordinator:
         # Initialize drone controller based on OS
         current_os = platform.system()
         if current_os == 'Windows':
-            logger.log_info('TelloWaypointNavCoordinator', 'Detected Windows OS - using Windows controller with video streaming')
-            self.drone_controller = RealTimeDroneControllerWindows(self.waypoint_dir, self.movement_speed, self.rotation_speed)
+            logger.log_info('TelloWaypointNavCoordinator', 
+                'Detected Windows OS - using Windows controller with video streaming')
+            self.drone_controller = RealTimeDroneControllerWindows(
+                self.waypoint_dir, 
+                self.movement_speed, 
+                self.rotation_speed,
+                self.navigation_speed,
+                self.vertical_factor
+            )
         else:
             logger.log_info('TelloWaypointNavCoordinator', f'Detected {current_os} OS - using Linux controller')
             self.drone_controller = RealTimeDroneController(self.waypoint_dir, self.movement_speed, self.rotation_speed)
@@ -379,6 +452,8 @@ class TelloWaypointNavCoordinator:
             summary = self.drone_controller.run(drone_instance=self.tello)
         except Exception as e:
             logger.log_error('TelloWaypointNavCoordinator', f'Error during execution: {e}')
+            import traceback
+            traceback.print_exc()
             summary = []
         finally:
             self.is_mapping_mode = False
@@ -388,23 +463,24 @@ class TelloWaypointNavCoordinator:
     
     def _run_navigation_mode(self) -> list:
         """
-        Executes interactive navigation mode for waypoint-based autonomous flight.
+        Executes 2D navigation mode with smart hub routing.
         
-        Provides user interface for selecting waypoints from existing maps and executing 
-        autonomous navigation between selected points.
+        Provides user interface for selecting waypoints from existing 2D maps and executing 
+        autonomous navigation between selected points with smart routing through Super Waypoint hubs.
         
         Returns:
             list: Navigation history including visited waypoints
         """
-        logger.log_info('TelloWaypointNavCoordinator', 'NAVIGATION MODE ACTIVATED')
+        logger.log_info('TelloWaypointNavCoordinator', '2D NAVIGATION MODE ACTIVATED')
         
         history = []
 
         if self.is_connected or self.is_flying:
-            logger.log_warning('TelloWaypointNavCoordinator', 'Drone is already connected or flying. Please land it first.')
+            logger.log_warning('TelloWaypointNavCoordinator', 
+                'Drone is already connected or flying. Please land it first.')
             return []
         
-         # Connect and takeoff
+        # Connect and takeoff
         if not self.connect_drone():
             logger.log_error('TelloWaypointNavCoordinator', 'Failed to connect to drone. Exiting...')
             return []
@@ -413,11 +489,24 @@ class TelloWaypointNavCoordinator:
             logger.log_error('TelloWaypointNavCoordinator', 'Failed to take off. Exiting...')
             return []
         
+        # Start video stream for obstacle detection and visual feedback
+        if not self.start_video_stream():
+            logger.log_warning('TelloWaypointNavCoordinator', 
+                'Video stream failed to start - continuing without obstacle detection')
+        
         # Select platform-specific navigation interface
         current_os = platform.system()
         if current_os == 'Windows':
-            logger.log_info('TelloWaypointNavCoordinator', 'Detected Windows OS - using Windows navigation interface')
-            self.nav_interface = NavigationInterfaceWindows(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
+            logger.log_info('TelloWaypointNavCoordinator', 
+                'Detected Windows OS - using Windows navigation interface')
+            self.nav_interface = NavigationInterfaceWindows(
+                self.waypoint_dir, 
+                self.vertical_factor, 
+                self.navigation_speed, 
+                self.waypoint_file,
+                obstacle_detector=self.obstacle_detector,
+                frame_read=self.frame_read
+            )
         else:
             logger.log_info('TelloWaypointNavCoordinator', f'Detected {current_os} OS - using Linux navigation interface')
             self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
@@ -425,28 +514,53 @@ class TelloWaypointNavCoordinator:
         self.is_navigation_mode = True
         self.is_running = True
         
+        # Start video display if frame_read is available
+        # The display loop handles GUI vs cv2 mode automatically via callback
+        if self.frame_read and hasattr(self.nav_interface, 'nav_manager'):
+            # Notify external callback if GUI integration is set up
+            if TelloWaypointNavCoordinator._external_nav_manager_callback:
+                try:
+                    TelloWaypointNavCoordinator._external_nav_manager_callback(self.nav_interface.nav_manager)
+                except Exception as e:
+                    logger.log_warning('TelloWaypointNavCoordinator', 
+                        f'External nav_manager callback failed: {e}')
+            self.nav_interface.nav_manager.start_video_display(window_name="Tello Navigation View")
+        
         try: 
             history = self.nav_interface.run(drone_instance=self.tello)
         except Exception as e:
             logger.log_error('TelloWaypointNavCoordinator', f'Error during navigation: {e}')
-        finally: 
+        finally:
+            # Stop video display if running
+            if hasattr(self, 'nav_interface') and hasattr(self.nav_interface, 'nav_manager'):
+                self.nav_interface.nav_manager.stop_video_display()
             self.is_navigation_mode = False
             self.is_running = False
             return history  # Return navigation history
     
     def run_goto_mode(self): 
         """
-        Executes goto mode for direct navigation to specific waypoint destinations.
+        Executes 2D goto mode with smart hub traversal.
         
         Performs autonomous navigation to a specified waypoint with configurable 
         post-arrival behavior. Includes emergency shutdown detection and battery monitoring.
+        Smart routing automatically navigates through Super Waypoint hubs.
         
         Returns:
             list: [land_flag, current_waypoint] indicating landing status and position
         """
-        logger.log_info('TelloWaypointNavCoordinator', 'GOTO MODE ACTIVATED')
+        logger.log_info('TelloWaypointNavCoordinator', '2D GOTO MODE ACTIVATED')
         
         try:
+            # Check if session was terminated (obstacle timeout, keyboard interrupt, etc.)
+            # This prevents the drone from taking off again after a safety landing
+            logger.log_debug('TelloWaypointNavCoordinator', 
+                f'Session terminated flag check: _session_terminated={TelloWaypointNavCoordinator._session_terminated}')
+            if TelloWaypointNavCoordinator._session_terminated:
+                logger.log_warning('TelloWaypointNavCoordinator', 
+                    'Session terminated - refusing to start new navigation (drone already landed for safety)')
+                return [True, self.current_waypoint]  # Return landed status
+            
             # Check for emergency shutdown at the start
             if TelloWaypointNavCoordinator._emergency_shutdown:
                 return self._goto_mode_emergency_shutdown()
@@ -464,6 +578,11 @@ class TelloWaypointNavCoordinator:
             # Start battery monitoring if not already running
             if not TelloWaypointNavCoordinator._battery_thread_running:
                 self._start_battery_monitoring()
+            
+            # Start video stream for obstacle detection and visual feedback
+            if not self.start_video_stream():
+                logger.log_warning('TelloWaypointNavCoordinator', 
+                    'Video stream failed to start - continuing without obstacle detection')
 
             self.is_goto_mode = True
             self.is_running = True
@@ -473,9 +592,26 @@ class TelloWaypointNavCoordinator:
                 return self._goto_mode_emergency_shutdown()
             
             if not hasattr(self, 'nav_manager'):
-                from .waypoint_navigation import WaypointNavigationManager
-                self.nav_manager = WaypointNavigationManager(nav_speed=self.navigation_speed, vertical_factor=self.vertical_factor)
+                self.nav_manager = WaypointNavigationManager(
+                    nav_speed=self.navigation_speed, 
+                    vertical_factor=self.vertical_factor,
+                    obstacle_detector=self.obstacle_detector,
+                    frame_read=self.frame_read
+                )
                 self.nav_manager.coordinator = self  # Enable emergency shutdown callbacks
+                
+                # Notify external callback if GUI integration is set up
+                if TelloWaypointNavCoordinator._external_nav_manager_callback:
+                    try:
+                        TelloWaypointNavCoordinator._external_nav_manager_callback(self.nav_manager)
+                    except Exception as e:
+                        logger.log_warning('TelloWaypointNavCoordinator', 
+                            f'External nav_manager callback failed: {e}')
+                
+                # Start video display for visual feedback during navigation
+                # The display loop handles GUI vs cv2 mode automatically via callback
+                if self.frame_read:
+                    self.nav_manager.start_video_display(window_name="Tello Navigation View")
 
                 # Check if specific waypoint_file is specified
                 selected_file = None
@@ -485,17 +621,20 @@ class TelloWaypointNavCoordinator:
                     
                     # Check if the specified file exists
                     if os.path.exists(specified_file_path):
-                        logger.log_info('TelloWaypointNavCoordinator', f'Found specified waypoint file: {specified_file_path}')
+                        logger.log_info('TelloWaypointNavCoordinator', 
+                            f'Found specified waypoint file: {specified_file_path}')
                         selected_file = specified_file_path
                     else:
-                        logger.log_warning('TelloWaypointNavCoordinator', f'Specified waypoint file not found: {specified_file_path}, using latest file.')
+                        logger.log_warning('TelloWaypointNavCoordinator', 
+                            f'Specified waypoint file not found: {specified_file_path}, using latest file.')
                         self.waypoint_file = None  # Reset for fallback
 
                 # Fallback to latest available file
                 if selected_file is None:
                     waypoint_files = self._find_waypoint_files()
                     if not waypoint_files:
-                        logger.log_error('TelloWaypointNavCoordinator', 'No waypoint files found. Please run mapping mode first.')
+                        logger.log_error('TelloWaypointNavCoordinator', 
+                            'No waypoint files found. Please run mapping mode first.')
                         return self._stop_goto_mode()
                     
                     selected_file = waypoint_files[0]  # Latest file
@@ -506,42 +645,70 @@ class TelloWaypointNavCoordinator:
                     logger.log_error('TelloWaypointNavCoordinator', f'Failed to load waypoint file: {selected_file}')
                     return self._stop_goto_mode()
                 
-                self.current_waypoint = "WP_001"  
-                self.nav_manager.current_waypoint_id = self.current_waypoint
+                self.current_waypoint = self.nav_manager.current_waypoint_id
             
-            if not self.waypoint_dest.startswith("WP_"):
-                # Convert name to waypoint ID if needed
-                for wp_id, waypoint in self.nav_manager.waypoints.items():
-                    if waypoint.name.lower() == self.waypoint_dest.lower():
-                        self.waypoint_dest = wp_id
-                        break
+            # Resolve waypoint destination (handle names and IDs)
+            target_id = self._resolve_waypoint_id(self.waypoint_dest)
             
-            if self.waypoint_dest not in self.nav_manager.waypoints:
-                logger.log_error('TelloWaypointNavCoordinator', f'Waypoint "{self.waypoint_dest}" not found')
+            if target_id is None:
+                logger.log_error('TelloWaypointNavCoordinator', 
+                    f'Waypoint "{self.waypoint_dest}" not found')
                 return self._execute_instruction()
 
-            logger.log_info('TelloWaypointNavCoordinator', f'Navigating to waypoint: {self.waypoint_dest}')
+            logger.log_info('TelloWaypointNavCoordinator', f'Navigating to waypoint: {target_id}')
+            
             # Final emergency check before movement
             if TelloWaypointNavCoordinator._emergency_shutdown:
                 return self._goto_mode_emergency_shutdown()
 
-            success = self.nav_manager.navigate_to_waypoint(self.waypoint_dest, self.tello)
+            success = self.nav_manager.navigate_to_waypoint(target_id, self.tello)
         
             if success:
                 # Update position after successful navigation
-                self.current_waypoint = self.waypoint_dest
+                self.current_waypoint = target_id
                 logger.log_success('TelloWaypointNavCoordinator', f'Reached waypoint "{self.current_waypoint}"')
                 return self._execute_instruction()
             else:
-                logger.log_error('TelloWaypointNavCoordinator', f'Failed to reach waypoint "{self.waypoint_dest}"')
+                logger.log_error('TelloWaypointNavCoordinator', f'Failed to reach waypoint "{target_id}"')
                 return self._stop_goto_mode()
                 
         except Exception as e:
             logger.log_error('TelloWaypointNavCoordinator', f'Error in goto mode: {e}')
+            import traceback
+            traceback.print_exc()
             return self._stop_goto_mode()
-        finally: 
+        finally:
+            # Only stop video display if we're landing (HALT instruction)
+            # Video display should persist across multiple CONTINUE waypoints
+            if self.instruction == NavigationInstruction.HALT:
+                if hasattr(self, 'nav_manager') and self.nav_manager:
+                    self.nav_manager.stop_video_display()
             self.is_goto_mode = False
             self.is_running = False
+    
+    def _resolve_waypoint_id(self, waypoint_name_or_id: str) -> str:
+        """
+        Resolve waypoint name or ID to actual waypoint ID.
+        
+        Handles both Super Waypoints (SWP_XXX) and Inner Waypoints (SWP_XXX_IWP_XXX)
+        by searching through all_waypoints dictionary.
+        
+        Args:
+            waypoint_name_or_id (str): Waypoint name or ID to resolve
+            
+        Returns:
+            str: Resolved waypoint ID or None if not found
+        """
+        # Check if it's already a valid ID
+        if waypoint_name_or_id in self.nav_manager.all_waypoints:
+            return waypoint_name_or_id
+        
+        # Search by name (case-insensitive)
+        for wp_id, waypoint in self.nav_manager.all_waypoints.items():
+            if waypoint.name.lower() == waypoint_name_or_id.lower():
+                return wp_id
+        
+        return None
     
     def _execute_instruction(self): 
         """
@@ -570,12 +737,16 @@ class TelloWaypointNavCoordinator:
         
         Stops battery monitoring, clears singleton instance, and returns 
         landing instruction with current waypoint information.
+        Sets _session_terminated to prevent any further navigation attempts.
         
         Returns:
             list: [True, current_waypoint] indicating landing required
         """
         self._stop_battery_monitoring()
         TelloWaypointNavCoordinator._active_instance = None
+        TelloWaypointNavCoordinator._session_terminated = True  # Prevent further navigation
+        logger.log_warning('TelloWaypointNavCoordinator', 
+            f'Session terminated flag SET TO TRUE - no further navigation allowed (current_waypoint={self.current_waypoint})')
         return [True, self.current_waypoint]
     
     def _continue_goto_mode(self):
@@ -620,15 +791,15 @@ class TelloWaypointNavCoordinator:
         
     def display_controls(self):
         """
-        Displays comprehensive control instructions for mapping mode.
+        Displays comprehensive control instructions for 2D mapping mode.
         
-        Shows formatted console output with movement controls, waypoint controls, 
+        Shows formatted console output with movement controls, 2D waypoint controls, 
         video streaming info, and operational guidelines.
         """
         logger.log_info('TelloWaypointNavCoordinator', 'Displaying control instructions to user.')
-        print("\n" + "="*50)
-        print("REAL-TIME DRONE CONTROL")
-        print("="*50)
+        print("\n" + "=" * 60)
+        print("2D HIERARCHICAL WAYPOINT MAPPING CONTROLS")
+        print("=" * 60)
         print("MOVEMENT CONTROLS:")
         print("  W Key          - Move Forward")
         print("  S Key          - Move Backward")
@@ -639,8 +810,13 @@ class TelloWaypointNavCoordinator:
         print("  ← Arrow Key    - Rotate Left (Anticlockwise)")
         print("  → Arrow Key    - Rotate Right (Clockwise)")
         print("\nWAYPOINT CONTROLS:")
-        print("  X Key          - Mark Waypoint")
-        print("  q Key        - Finish & Land")
+        print("  X Key          - Mark Waypoint (choose Super or Inner)")
+        print("  Q Key          - Finish & Land")
+        print("\n2D WAYPOINT SYSTEM:")
+        print("  ⭐ Super Waypoints - Hub points that connect areas")
+        print("     Drone stays at Super Waypoints after marking")
+        print("  📍 Inner Waypoints - Branch points off Super Waypoints")
+        print("     Drone returns to Super Waypoint after marking")
         print("\nVIDEO STREAM:")
         print("  📹 Camera view will open in separate window")
         print("  - Live video feed from drone camera")
@@ -650,7 +826,7 @@ class TelloWaypointNavCoordinator:
         print("- Only one movement/action at a time")
         print("- All movements are recorded automatically")
         print("- Keep video window visible to see drone's perspective")
-        print("="*50)
+        print("=" * 60)
         print()
 
     def connect_drone(self):
@@ -721,14 +897,112 @@ class TelloWaypointNavCoordinator:
             except Exception as e:
                 logger.log_error('TelloWaypointNavCoordinator', f'Landing failed: {e}')
     
+    # ==================== VIDEO STREAMING MANAGEMENT ====================
+    
+    def start_video_stream(self):
+        """
+        Start drone video streaming and initialize obstacle detector if configured.
+        
+        Initiates video stream from drone, gets frame reader, and creates
+        MiDaS obstacle detector if obstacle detection mode is enabled.
+        
+        Returns:
+            bool: True if video stream started successfully, False otherwise
+        """
+        if self._video_stream_active:
+            logger.log_debug('TelloWaypointNavCoordinator', 'Video stream already active')
+            return True
+        
+        try:
+            logger.log_info('TelloWaypointNavCoordinator', 'Starting video stream...')
+            self.tello.streamon()
+            time.sleep(1)  # Allow stream to initialize
+            
+            self.frame_read = self.tello.get_frame_read()
+            self._video_stream_active = True
+            
+            logger.log_success('TelloWaypointNavCoordinator', 'Video stream started')
+            
+            # Initialize obstacle detector if mode is enabled
+            if self.obstacle_detection_mode and self.obstacle_detection_mode != ObstacleDetectionMode.OFF:
+                self._init_obstacle_detector()
+            
+            return True
+            
+        except Exception as e:
+            logger.log_error('TelloWaypointNavCoordinator', f'Failed to start video stream: {e}')
+            return False
+    
+    def stop_video_stream(self):
+        """
+        Stop drone video streaming and cleanup obstacle detector.
+        
+        Turns off video stream and releases associated resources.
+        Only call this when ending the navigation session.
+        """
+        if not self._video_stream_active:
+            return
+        
+        try:
+            logger.log_info('TelloWaypointNavCoordinator', 'Stopping video stream...')
+            self.tello.streamoff()
+            self._video_stream_active = False
+            self.frame_read = None
+            self.obstacle_detector = None
+            logger.log_success('TelloWaypointNavCoordinator', 'Video stream stopped')
+        except Exception as e:
+            logger.log_error('TelloWaypointNavCoordinator', f'Error stopping video stream: {e}')
+    
+    def _init_obstacle_detector(self):
+        """
+        Initialize MiDaS obstacle detector with configured parameters.
+        
+        Creates MiDaSObstacleDetector instance with the configured detection mode
+        and model path. Logs warning if model path not provided or loading fails.
+        """
+        try:
+            if not self.midas_model_path:
+                logger.log_warning('TelloWaypointNavCoordinator', 
+                    'MiDaS model path not provided - obstacle detection disabled')
+                return
+            
+            logger.log_info('TelloWaypointNavCoordinator', 
+                f'Initializing MiDaS obstacle detector (mode: {self.obstacle_detection_mode.name})...')
+            
+            self.obstacle_detector = MiDaSObstacleDetector(
+                model_path=self.midas_model_path,
+                detection_mode=self.obstacle_detection_mode
+            )
+            
+            # Initialize the model (load ONNX)
+            if not self.obstacle_detector.initialize():
+                logger.log_error('TelloWaypointNavCoordinator', 'Failed to initialize MiDaS model')
+                self.obstacle_detector = None
+                return
+            
+            logger.log_success('TelloWaypointNavCoordinator', 
+                f'Obstacle detector initialized with threshold: {self.obstacle_detection_mode.value}')
+                
+        except Exception as e:
+            logger.log_error('TelloWaypointNavCoordinator', f'Failed to initialize obstacle detector: {e}')
+            self.obstacle_detector = None
+    
     def cleanup(self):
         """
         Performs comprehensive resource cleanup and safe application shutdown.
         
-        Orchestrates complete system shutdown including battery monitoring termination, 
-        drone landing, connection cleanup, and singleton instance management.
+        Orchestrates complete system shutdown including video stream termination,
+        battery monitoring termination, drone landing, connection cleanup, 
+        and singleton instance management.
         """
         logger.log_info('TelloWaypointNavCoordinator', 'Cleaning up resources...')
+
+        # Stop video stream if running
+        self.stop_video_stream()
+        
+        # Stop video display if nav_manager has it running
+        if hasattr(self, 'nav_manager') and self.nav_manager:
+            self.nav_manager.stop_video_display()
 
         # Stop battery monitoring if running
         self._stop_battery_monitoring()

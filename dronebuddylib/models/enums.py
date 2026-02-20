@@ -99,6 +99,28 @@ class TextRecognitionAlgorithm(enum.Enum):
 class NavigationAlgorithm(enum.Enum):
     NAVIGATION_TELLO_WAYPOINT = "NAVIGATION_TELLO_WAYPOINT"  
 
+
+class ObstacleDetectionMode(enum.Enum):
+    """
+    Obstacle detection sensitivity modes for MiDaS depth-based obstacle avoidance.
+    
+    Higher values mean the drone will stop for objects that are further away.
+    The value represents the normalized depth threshold (0-255) where higher
+    values indicate closer proximity detection.
+    
+    Usage:
+        - OFF: No obstacle detection
+        - LOW: Only very close obstacles trigger stopping
+        - MEDIUM: Balanced detection for typical indoor navigation
+        - HIGH: More cautious, stops for medium-distance obstacles
+        - VERY_HIGH: Most cautious, stops for distant obstacles
+    """
+    OFF = 0           # Obstacle detection disabled
+    LOW = 180          # Low sensitivity - only very close obstacles
+    MEDIUM = 160      # Medium sensitivity - balanced detection
+    HIGH = 80        # High sensitivity - more cautious
+    VERY_HIGH = 30   # Very high sensitivity - maximum caution  
+
 class AtomicEngineConfigurations(enum.Enum):
     # The configuration for the object detection algorithm.
     OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH = "OBJECT_DETECTION_YOLO_V3_WEIGHTS_PATH"
@@ -215,3 +237,20 @@ class AtomicEngineConfigurations(enum.Enum):
     NAVIGATION_TELLO_NAVIGATION_SPEED = "NAVIGATION_TELLO_NAVIGATION_SPEED"
     NAVIGATION_TELLO_WAYPOINT_FILE = "NAVIGATION_TELLO_WAYPOINT_FILE"
     NAVIGATION_TELLO_IMAGE_DIR = "NAVIGATION_TELLO_IMAGE_DIR"
+    NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE = "NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE"  # ObstacleDetectionMode enum value
+    NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH = "NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH"  # Path to MiDaS ONNX model file
+    NAVIGATION_TELLO_DISABLE_CV2_VIDEO_WINDOW = "NAVIGATION_TELLO_DISABLE_CV2_VIDEO_WINDOW"  # Disable OpenCV video window (for GUI integration)
+
+    # Configuration for VLM Planner (multi-provider support)
+    PLANNER_VLM_PROVIDER = "PLANNER_VLM_PROVIDER"  # openai, anthropic, google
+    PLANNER_VLM_API_KEY = "PLANNER_VLM_API_KEY"
+    PLANNER_VLM_MODEL = "PLANNER_VLM_MODEL"
+    PLANNER_VLM_TEMPERATURE = "PLANNER_VLM_TEMPERATURE"
+    PLANNER_YOLO_ONNX_MODEL_PATH = "PLANNER_YOLO_ONNX_MODEL_PATH"
+    PLANNER_YOLO_CONF_THRESHOLD = "PLANNER_YOLO_CONF_THRESHOLD"
+    PLANNER_YOLO_IOU_THRESHOLD = "PLANNER_YOLO_IOU_THRESHOLD"
+    PLANNER_MAX_REPLAN_ATTEMPTS = "PLANNER_MAX_REPLAN_ATTEMPTS"
+    
+    # Configuration for YOLO-World (open-vocabulary detection for non-COCO objects)
+    PLANNER_YOLO_WORLD_MODEL_PATH = "PLANNER_YOLO_WORLD_MODEL_PATH"  # Path to yolov8-worldv2.pt (required)
+    PLANNER_YOLO_WORLD_CONF_THRESHOLD = "PLANNER_YOLO_WORLD_CONF_THRESHOLD"  # Default: 0.025

@@ -1,6 +1,6 @@
 import os
 import time
-from typing import Optional
+from typing import Optional, List, TYPE_CHECKING
 
 from djitellopy import Tello
 
@@ -10,6 +10,9 @@ from dronebuddylib.utils.logger import Logger
 from dronebuddylib.utils.utils import config_validity_check
 from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_waypoint_nav_coordinator import TelloWaypointNavCoordinator, NavigationInstruction
+
+if TYPE_CHECKING:
+    from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import ScanResult
 
 logger = Logger()
 
@@ -56,7 +59,9 @@ class NavigationWaypointImpl(INavigation):
             self.mapping_rotation_speed,    # Rotation speed configuration for navigation
             self.nav_speed,                 # Primary navigation speed for autonomous movement
             "navigation",                   # Set operational mode to navigation for interactive selection
-            waypoint_file=self.waypoint_file  # Optional specific waypoint file to use
+            waypoint_file=self.waypoint_file,  # Optional specific waypoint file to use
+            obstacle_detection_mode=self.obstacle_detection_mode,  # MiDaS obstacle detection sensitivity
+            midas_model_path=self.midas_model_path  # Path to MiDaS ONNX model
         )
         result = coordinator.run()  # Execute navigation mode with interactive waypoint selection
         
@@ -110,11 +115,19 @@ class NavigationWaypointImpl(INavigation):
             destination_waypoint,           # Target waypoint identifier
             instruction,                    # Post-arrival behavior instruction
             self.waypoint_file,             # Specific waypoint file to use
-            create_new                      # Whether to force new instance creation
+            create_new,                     # Whether to force new instance creation
+            self.obstacle_detection_mode,   # MiDaS obstacle detection sensitivity
+            self.midas_model_path           # Path to MiDaS ONNX model
         )
         result = coordinator.run()  # Execute goto mode navigation operation
         
-        logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[1]}.')
+        # Handle result safely - ensure it has expected format [land_flag, current_waypoint]
+        if result and len(result) >= 2:
+            logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[1]}.')
+        else:
+            logger.log_warning(self.get_class_name(), f'Navigation session ended with incomplete result: {result}')
+            # Return a safe default if result is malformed
+            result = [True, destination_waypoint]
         return result
 
     def navigate_to(self, waypoints: list, final_instruction: NavigationInstruction) -> list:
@@ -216,10 +229,240 @@ class NavigationWaypointImpl(INavigation):
         tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)  # Use existing drone instance from coordinator
         
         # Perform surrounding scan operation using TelloNavExtra utility
-        result = tello_manouver.scan(current_waypoint_file, current_waypoint)
+        # Pass frame_read from coordinator if available to reuse existing video stream
+        frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
+        result = tello_manouver.scan(current_waypoint_file, current_waypoint, frame_read=frame_read)
         logger.log_info(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
 
         coordinator_instance._resume_battery_monitoring()  # Resume battery monitoring after scan
+        return result
+    
+    def scan_with_detection(
+        self,
+        target_object: Optional[str] = None,
+        yolo_model_path: Optional[str] = None,
+        yolo_conf_threshold: float = 0.25,
+        yolo_iou_threshold: float = 0.45
+    ) -> 'ScanResult':
+        """
+        Advanced scan with YOLO object detection integrated.
+        
+        Performs 360-degree scan and runs YOLO detection on each captured frame.
+        Returns structured results with frame-by-frame detections.
+        
+        Args:
+            target_object: Specific object to search for (e.g., "cup", "bottle")
+            yolo_model_path: Path to ONNX YOLO model file
+            yolo_conf_threshold: YOLO confidence threshold (default: 0.25)
+            yolo_iou_threshold: YOLO IOU threshold for NMS (default: 0.45)
+            
+        Returns:
+            ScanResult: Structured result with detections per frame
+        """
+        from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import (
+            TelloNavExtra, ScanResult
+        )
+        
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
+        if coordinator_instance is None:
+            logger.log_error(self.get_class_name(), 'No active drone or drone is not flying to perform scan.')
+            # Return empty result
+            return ScanResult(
+                waypoint_name="unknown",
+                frame_detections=[],
+                target_object_found=False,
+                frames_with_target=[],
+                all_unique_objects=[],
+                image_results=[],
+                target_objects=[target_object] if target_object else []
+            )
+        
+        logger.log_info(self.get_class_name(), f'Starting advanced scan with detection. Target: {target_object or "all"}')
+        
+        current_waypoint_file = coordinator_instance.waypoint_file
+        current_waypoint = coordinator_instance.current_waypoint
+        coordinator_instance._pause_battery_monitoring()
+        
+        # Note: MiDaS is paused by default (only runs before forward movements)
+        # No need to explicitly pause here - it's already not running
+        
+        time.sleep(0.25)
+        
+        if coordinator_instance._emergency_shutdown:
+            logger.log_error(self.get_class_name(), 'Emergency shutdown detected - stopping scan.')
+            return ScanResult(
+                waypoint_name=current_waypoint,
+                frame_detections=[],
+                target_object_found=False,
+                frames_with_target=[],
+                all_unique_objects=[],
+                image_results=[],
+                target_objects=[target_object] if target_object else []
+            )
+        
+        # Create TelloNavExtra with YOLO detector
+        frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
+        tello_manouver = TelloNavExtra(
+            tello=coordinator_instance.tello,
+            image_dir=self.image_dir,
+            yolo_model_path=yolo_model_path,
+            yolo_conf_threshold=yolo_conf_threshold,
+            yolo_iou_threshold=yolo_iou_threshold,
+            frame_read=frame_read
+        )
+        
+        # Perform scan with detection
+        result = tello_manouver.scan_with_detection(
+            current_waypoint_file=current_waypoint_file,
+            current_waypoint=current_waypoint,
+            target_object=target_object
+        )
+        
+        # Note: MiDaS stays paused - it will only run when next forward movement is needed
+        coordinator_instance._resume_battery_monitoring()
+        
+        logger.log_info(self.get_class_name(), 
+            f'Advanced scan completed. Found {len(result.all_unique_objects)} unique objects. '
+            f'Target found: {result.target_object_found}')
+        
+        return result
+    
+    def scan_with_any_detection(
+        self,
+        target_objects: List[str],
+        yolo_world_model_path: Optional[str] = None,
+        yolo_conf_threshold: float = 0.025
+    ) -> 'ScanResult':
+        """
+        Advanced scan with YOLO-World for open-vocabulary object detection.
+        
+        Unlike scan_with_detection() which uses standard YOLO with 80 fixed COCO classes,
+        this method uses YOLO-World which can detect ANY specified objects.
+        
+        Args:
+            target_objects: List of object names to search for (e.g., ["keys", "key", "keychain"])
+            yolo_world_model_path: Path to YOLO-World PyTorch model file (e.g., yolov8m-worldv2.pt)
+            yolo_conf_threshold: Confidence threshold (default: 0.025)
+            
+        Returns:
+            ScanResult: Structured result with detections per frame
+        """
+        from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import (
+            TelloNavExtra, ScanResult
+        )
+        
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
+        if coordinator_instance is None:
+            logger.log_error(self.get_class_name(), 'No active drone or drone is not flying to perform scan.')
+            return ScanResult(
+                waypoint_name="unknown",
+                frame_detections=[],
+                target_object_found=False,
+                frames_with_target=[],
+                all_unique_objects=[],
+                image_results=[],
+                target_objects=list(target_objects)
+            )
+        
+        logger.log_info(self.get_class_name(), f'Starting YOLO-World scan. Looking for: {target_objects}')
+        
+        current_waypoint_file = coordinator_instance.waypoint_file
+        current_waypoint = coordinator_instance.current_waypoint
+        coordinator_instance._pause_battery_monitoring()
+        
+        # Note: MiDaS is paused by default (only runs before forward movements)
+        # No need to explicitly pause here - it's already not running
+        
+        time.sleep(0.25)
+        
+        if coordinator_instance._emergency_shutdown:
+            logger.log_error(self.get_class_name(), 'Emergency shutdown detected - stopping scan.')
+            return ScanResult(
+                waypoint_name=current_waypoint,
+                frame_detections=[],
+                target_object_found=False,
+                frames_with_target=[],
+                all_unique_objects=[],
+                image_results=[],
+                target_objects=list(target_objects)
+            )
+        
+        # Check if we have a pre-warmed YOLO-World model from prewarm_yolo_world()
+        # This avoids the slow set_classes() operation during flight
+        frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
+        if hasattr(self, '_prewarmed_yolo_world_nav_extra') and self._prewarmed_yolo_world_nav_extra is not None:
+            logger.log_info(self.get_class_name(), 'Using pre-warmed YOLO-World model')
+            tello_manouver = self._prewarmed_yolo_world_nav_extra
+            tello_manouver.tello = coordinator_instance.tello  # Attach the drone
+            tello_manouver.image_dir = self.image_dir
+            tello_manouver.frame_read = frame_read  # Attach frame_read
+        else:
+            # Create TelloNavExtra with YOLO-World model (may be slow first time)
+            logger.log_warning(self.get_class_name(), 
+                'No pre-warmed YOLO-World model found. Model loading may cause drone timeout.')
+            tello_manouver = TelloNavExtra(
+                tello=coordinator_instance.tello,
+                image_dir=self.image_dir,
+                yolo_world_model_path=yolo_world_model_path,
+                yolo_world_conf_threshold=yolo_conf_threshold,
+                frame_read=frame_read
+            )
+        
+        # Perform scan with YOLO-World detection
+        result = tello_manouver.scan_with_any_detection(
+            current_waypoint_file=current_waypoint_file,
+            current_waypoint=current_waypoint,
+            target_objects=target_objects
+        )
+        
+        # Note: MiDaS stays paused - it will only run when next forward movement is needed
+        coordinator_instance._resume_battery_monitoring()
+        
+        logger.log_info(self.get_class_name(), 
+            f'YOLO-World scan completed. Found {len(result.all_unique_objects)} unique objects. '
+            f'Target found: {result.target_object_found}')
+        
+        return result
+    
+    def prewarm_yolo_world(
+        self,
+        target_objects: List[str],
+        yolo_world_model_path: Optional[str] = None
+    ) -> bool:
+        """
+        Pre-warm the YOLO-World model BEFORE the drone takes off.
+        
+        YOLO-World's set_classes() operation computes text embeddings which can take 10-20+ seconds
+        on first use. If this happens while the drone is flying, the Tello's built-in safety 
+        timeout (no commands for ~15 seconds) may cause an automatic landing.
+        
+        Call this method BEFORE takeoff when you know YOLO-World will be used (i.e., when
+        searching for non-COCO objects).
+        
+        Args:
+            target_objects: List of object names that will be searched for. This should include
+                           the target object and all related objects from the VLM plan.
+            yolo_world_model_path: Path to YOLO-World PyTorch model file
+        
+        Returns:
+            bool: True if model was successfully pre-warmed, False otherwise
+        """
+        from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import TelloNavExtra
+        
+        logger.log_info(self.get_class_name(), f'Pre-warming YOLO-World model for targets: {target_objects}')
+        
+        # Create a TelloNavExtra instance just for pre-warming (no tello needed)
+        nav_extra = TelloNavExtra(
+            tello=None,
+            image_dir=self.image_dir,
+            yolo_world_model_path=yolo_world_model_path
+        )
+        
+        result = nav_extra.prewarm_yolo_world(target_objects)
+        
+        # Store the pre-warmed instance for later use
+        self._prewarmed_yolo_world_nav_extra = nav_extra if result else None
+        
         return result
     
     def get_drone_instance(self) -> Optional[Tello]:
@@ -253,9 +496,9 @@ class NavigationWaypointImpl(INavigation):
             logger.log_info(self.get_class_name(), 'Drone is already flying. ')
             return False  # Drone is already flying, cannot take off again
 
-        # Drone must always be placed at starting waypoint: WP_001 for takeoff
-        # Calling navigate_to_waypoint at WP_001 and NavigationInstruction.CONTINUE when the drone was uninitialized will cause the drone to simply takeoff and hover at its current position which is assumed to be WP_001
-        result = self.navigate_to_waypoint("WP_001", NavigationInstruction.CONTINUE)
+        # Drone must always be placed at starting waypoint: SWP_001 (first Super Waypoint) for takeoff
+        # Calling navigate_to_waypoint at SWP_001 and NavigationInstruction.CONTINUE when the drone was uninitialized will cause the drone to simply takeoff and hover at its current position which is assumed to be SWP_001
+        result = self.navigate_to_waypoint("SWP_001", NavigationInstruction.CONTINUE)
 
         if result[0]:
             return False # Drone landed instead of having completed the takeoff operation 
@@ -301,7 +544,9 @@ class NavigationWaypointImpl(INavigation):
         """
         return [AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR,
                 AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED,
-                AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR]
+                AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 
+                AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE,
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH]
 
     def get_class_name(self) -> str:
         """
@@ -321,7 +566,7 @@ class NavigationWaypointImpl(INavigation):
             str: The algorithm name.
         """
         # Return human-readable algorithm name for logging and identification
-        return 'Tello Waypoint Navigation'
+        return 'Tello 2D Hierarchical Waypoint Navigation'
 
     def __init__(self, engine_configurations: EngineConfigurations):
         """
@@ -358,6 +603,13 @@ class NavigationWaypointImpl(INavigation):
         self.nav_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 55)  # Navigation speed (cm/s)
         self.waypoint_file = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, None)  # Optional specific waypoint file
         self.image_dir = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, None)  # Directory for captured images
+        
+        # Obstacle detection configuration
+        self.obstacle_detection_mode = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, None)  # ObstacleDetectionMode enum
+        self.midas_model_path = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, None)  # Path to MiDaS ONNX model
+        
+        # Pre-warmed YOLO-World model instance (set by prewarm_yolo_world())
+        self._prewarmed_yolo_world_nav_extra = None
         
         logger.log_info(self.get_class_name(), 'Tello navigation engine initialized successfully.')
         logger.log_debug(self.get_class_name(), f'Configuration: vertical_factor={self.vertical_factor}, mapping_movement_speed={self.mapping_movement_speed}, mapping_rotation_speed={self.mapping_rotation_speed}, nav_speed={self.nav_speed}')
