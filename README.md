@@ -543,7 +543,7 @@ To use each of these, you can customize the installation according to your needs
 
 # Navigation
 
-The navigation module provides waypoint-based navigation for DJI Tello drones with mapping, autonomous navigation, and direct waypoint navigation capabilities.
+The navigation module provides waypoint-based navigation for DJI Tello drones with mapping, autonomous navigation, direct waypoint navigation, and YOLO-powered scan capabilities.
 
 ## Installation
 
@@ -557,18 +557,34 @@ This will install the necessary dependencies:
 - `djitellopy` - DJI Tello drone SDK (includes `opencv-python`, `pillow`, `av`, and `numpy` as dependencies)
 - `setuptools`
 
-## Usage and main operatons examples 
+> **Optional dependencies for advanced features:**
+> - `onnxruntime` - Required for MiDaS obstacle detection and YOLO ONNX scan detection
+> - `ultralytics` - Required for YOLO-World open-vocabulary scan detection
 
-The navigation module uses the standard DroneBuddy engine pattern with `NavigationEngine` and supports five main operations:
-1. Waypoint Mapping
+## 2D Hierarchical Waypoint System
+
+The navigation module uses a **two-tier hierarchical waypoint architecture** (format version 2.0):
+
+- **Super Waypoints (SWP)**: Major hub points forming the backbone of the navigation network. Connected sequentially, each holding a human-readable name (e.g. "Kitchen", "Living Room").
+- **Inner Waypoints (IWP)**: Local exploration points that branch off from a parent Super Waypoint. The drone automatically returns to the parent Super Waypoint after visiting an Inner Waypoint, enabling smart routing to any other waypoint.
+
+This architecture allows the system to navigate between any two waypoints in the map via the shortest Super Waypoint chain, even reversing movement sequences where necessary.
+
+## Usage and Main Operations
+
+The navigation module uses the standard DroneBuddy engine pattern with `NavigationEngine` and supports the following operations:
+
+1. Waypoint Mapping (2D hierarchical)
 2. Interactive Navigation
 3. Direct Waypoint Navigation
 4. Sequential Waypoint Navigation
-5. 360-Degree Surrounding Scan
+5. 360-Degree Surrounding Scan (basic)
+6. 360-Degree Scan with YOLO Detection (COCO classes)
+7. 360-Degree Scan with YOLO-World Detection (open vocabulary)
 
-as well as 3 basic operations: 
-1. Return drone instance that is currently in use by Navigation Engine 
-2. Drone take off
+as well as 3 basic operations:
+1. Return drone instance currently in use by Navigation Engine
+2. Drone takeoff
 3. Drone landing
 
 ### Basic Navigation Engine Setup
@@ -589,199 +605,417 @@ engine_configs = EngineConfigurations({})
 # Specify waypoint directory (default: current directory)
 engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR, "/path/to/waypoints/directory")
 
-# Specify specific waypoint file for navigation
+# Specify a specific waypoint file for navigation
 engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, "my_waypoints.json")
 
-# Mapping movement and rotation speed configuration (cm/s)
-engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 50)
-engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 90)
+# Mapping movement speed (cm/s, default: 30)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 30)
 
-# Waypoint navigation movement and rotation speed configuration (cm/s)
-engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 70)
-
-# Vertical movement scaling factor
+# Vertical movement scaling factor (default: 1.5)
 engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR, 1.5)
 
 # Image directory for scan operations
 engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, "/path/to/images/directory")
 
+# MiDaS depth model for obstacle detection (optional)
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, "/path/to/midas.onnx")
+
+# Obstacle detection sensitivity: OFF, LOW, MEDIUM, HIGH, VERY_HIGH (default: OFF)
+from dronebuddylib.models.enums import ObstacleDetectionMode
+engine_configs.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, ObstacleDetectionMode.MEDIUM)
+
 engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, engine_configs)
 ```
 
-### Navigation Instructions (For Direct Waypoint Navigation and Sequential Waypoint Navigation use cases)
+### Obstacle Detection Modes
 
-Use `NavigationInstruction` enum for waypoint navigation behavior:
+| Mode | Threshold | Behaviour |
+|------|-----------|----------|
+| `OFF` | — | Disabled (default) |
+| `LOW` | 180 | Only very close obstacles |
+| `MEDIUM` | 160 | Balanced indoor navigation |
+| `HIGH` | 80 | Cautious, stops for medium-distance obstacles |
+| `VERY_HIGH` | 30 | Maximum caution |
 
-- `NavigationInstruction.CONTINUE` - Keep drone flying after reaching waypoint
-- `NavigationInstruction.HALT` - Land drone after reaching waypoint
+When enabled, the drone checks the depth map of its forward path before every forward movement. If an obstacle is detected, the drone waits up to 30 seconds for the path to clear before proceeding.
+
+### Navigation Instructions (For Direct and Sequential Navigation)
+
+Use the `NavigationInstruction` enum for waypoint navigation behaviour:
+
+- `NavigationInstruction.CONTINUE` - Keep the drone flying after reaching the waypoint
+- `NavigationInstruction.HALT` - Land the drone after reaching the waypoint
 
 ### Waypoint Mapping
 
-Create waypoint maps through manual drone control:
+Create 2D hierarchical waypoint maps through manual drone control:
 
 ```python
-# Start mapping mode - provides real-time manual control interface
+# Start mapping mode - provides real-time keyboard control interface
 result = engine.map_location()
 print(f"Mapping completed. Created {len(result)} waypoints.")
 ```
 
-The mapping interface provides keyboard controls for manual flight and waypoint recording.
+The mapping interface guides you to create **Super Waypoints** (major hub areas) and **Inner Waypoints** (local exploration points). Controls:
+
+| Key | Action |
+|-----|--------|
+| `W / A / S / D` | Move forward / left / backward / right |
+| `↑ / ↓` | Move up / down |
+| `← / →` | Rotate counter-clockwise / clockwise |
+| `X` | Mark a waypoint (prompts for Super or Inner, and name) |
+| `Q` | Finish mapping and save |
 
 ### Interactive Navigation
 
-Navigate between existing waypoints with interactive user selection:
+Navigate between existing waypoints with an interactive menu:
 
 ```python
-# Start interactive navigation mode - displays waypoint menu
+# Start interactive navigation mode - displays a waypoint selection menu
 result = engine.navigate()
 print(f"Navigation completed. Visited {len(result)} waypoints.")
 ```
 
 ### Direct Waypoint Navigation
 
-Navigate directly to specific waypoints:
+Navigate directly to a specific waypoint by name or ID:
 
 ```python
-# Import NavigationInstruction
 from dronebuddylib.atoms.navigation import NavigationInstruction
 
-# Navigate to a specific waypoint
-results = []
+# Navigate to a named waypoint and keep flying
+result = engine.navigate_to_waypoint("Kitchen", NavigationInstruction.CONTINUE)
 
-results.append(engine.navigate_to_waypoint("WP_002", NavigationInstruction.CONTINUE))
+# Navigate to a waypoint and land
+result = engine.navigate_to_waypoint("START", NavigationInstruction.HALT)
 
-# Navigate and land at destination
-results.append(engine.navigate_to_waypoint("WP_001", NavigationInstruction.HALT))
-
-print(f"Navigated to {len(results)} waypoints.")
+print(f"Landed: {result[0]}, Currently at: {result[1]}")
 ```
 
 ### Sequential Waypoint Navigation
 
-Navigate through multiple waypoints in sequence:
+Navigate through a list of waypoints in order:
 
 ```python
-# Import NavigationInstruction
 from dronebuddylib.atoms.navigation import NavigationInstruction
 
-# Specify waypoint(s) for the drone to navigate to in a list 
-waypoints = ["WP_002", "WP_003", "Kitchen", "WP_001"]
-
-# Navigate to the specified waypoint(s) and land at final waypoint in the list
+waypoints = ["Kitchen", "Living Room", "Bedroom", "START"]
 result = engine.navigate_to(waypoints, NavigationInstruction.HALT)
 
-print(f"Navigated to waypoints: {results}.")
+print(f"Visited waypoints: {result}")
 ```
 
-### 360-Degree Surrounding Scan
+### 360-Degree Surrounding Scan (Basic)
 
-Capture images while performing 360-degree rotation:
+Capture images while performing a full 360-degree rotation:
 
 ```python
-# Perform surrounding scan at current position
 images = engine.scan_surrounding()
 print(f"Scan completed. Captured {len(images)} images.")
 ```
+
+### 360-Degree Scan with YOLO Detection (COCO Classes)
+
+Perform a full scan and run YOLO detection on every captured frame. Use this when searching for objects from the standard [COCO 80-class list](https://cocodataset.org/) (person, cup, laptop, bottle, etc.):
+
+```python
+result = engine.scan_with_detection(
+    target_object="cup",
+    yolo_model_path="models/yolov8n_640x640.onnx",
+    yolo_conf_threshold=0.25,
+    yolo_iou_threshold=0.45
+)
+
+if result.target_object_found:
+    image_paths = result.get_image_paths_with_target()
+    print(f"Found cup in {len(result.frames_with_target)} frames")
+else:
+    print(f"Cup not found. Detected: {result.all_unique_objects}")
+```
+
+### 360-Degree Scan with YOLO-World Detection (Open Vocabulary)
+
+Use YOLO-World for objects **not** in the COCO 80-class list (glasses, keys, wallet, etc.). Provide the object name and synonyms to improve detection reliability:
+
+```python
+# Pre-warm YOLO-World BEFORE takeoff to avoid timeout during flight
+engine.prewarm_yolo_world(
+    target_objects=["glasses", "spectacles", "eyeglasses"],
+    yolo_world_model_path="models/yolov8m-worldv2.pt"
+)
+
+engine.takeoff()
+
+result = engine.scan_with_any_detection(
+    target_objects=["glasses", "spectacles", "eyeglasses", "eyewear"],
+    yolo_world_model_path="models/yolov8m-worldv2.pt",
+    yolo_conf_threshold=0.025
+)
+
+if result.target_object_found:
+    print(f"Found in {len(result.frames_with_target)} frames")
+```
+
+> **Important:** Always call `prewarm_yolo_world()` **before** `takeoff()` when using YOLO-World. Computing text embeddings on first use can take 10–20 seconds, which may trigger the Tello's automatic landing safety timeout.
 
 ## Output Format
 
 ### Mapping Results
 ```python
 [
-    {"id": "WP_001", "name": "START"},
-    {"id": "WP_002", "name": "Kitchen"},
-    {"id": "WP_003", "name": "END"}
+    {"id": "SWP_001", "name": "START"},
+    {"id": "SWP_002", "name": "Kitchen"},
+    {"id": "SWP_002_IWP_Counter", "name": "Counter"}
 ]
 ```
 
 ### Navigation Results
 ```python
-["WP_002", "WP_003", "WP_001", ...]  # List of waypoint IDs visited
+["SWP_002", "SWP_003", "SWP_001", ...]  # List of waypoint IDs visited in order
 ```
 
 ### Direct Navigation Results
 ```python
-[False, "WP_002"]  # [landed_status, current_waypoint_id]
-[True, "WP_001"]   # [landed_status, current_waypoint_id]
+[False, "SWP_002"]  # [landed_status, current_waypoint_id]
+[True,  "SWP_001"]  # drone has landed
 ```
 
 ### Sequential Navigation Results
 ```python
-["WP_002", "WP_003", "WP_001", ...]  # List of waypoint IDs reached in sequence
+["SWP_002", "SWP_003", "SWP_001", ...]  # List of waypoint IDs reached in sequence
 ```
 
-### Scan Results
+### Basic Scan Results
 ```python
 [
     {
         "image_path": "/path/to/image0.jpg",
         "filename": "image0.jpg",
-        "waypoint_file": "waypoint_file.json",
-        "waypoint": "WP_002",
+        "waypoint": "SWP_002",
         "rotation_from_start": 0,
         "image_number": 1,
-        "timestamp": "20250805_143022_123",
+        "timestamp": "20260131_143022_123",
         "format": "JPEG"
     },
-    {
-        "image_path": "/path/to/image1.jpg",
-        "filename": "image1.jpg",
-        "waypoint_file": "waypoint_file.json",
-        "waypoint": "WP_002",
-        "rotation_from_start": 15,
-        "image_number": 2,
-        "timestamp": "20250805_143023_456",
-        "format": "JPEG"
-    }, 
     ...
 ]
 ```
 
-## Waypoint File Format
+### YOLO Scan Results (`ScanResult`)
 
-Generated waypoint files use JSON format:
+```python
+result.target_object_found    # bool: True if target detected in any frame
+result.frames_with_target     # List[int]: frame numbers containing the target
+result.all_unique_objects     # List[str]: all unique class names detected across all frames
+result.frame_detections       # List[FrameDetection]: per-frame detection detail
+result.get_image_paths_with_target()  # List[str]: image file paths containing the target
+
+# Each FrameDetection contains:
+#   frame_number    int     (1–24 for a full 360° scan)
+#   rotation_angle  int     (0°, 15°, 30°, … 345°)
+#   detected_objects List[DetectionResult]  (class_name, confidence, bbox)
+#   image_path      str
+```
+
+## Waypoint File Format (v2.0)
+
+Waypoint files generated by the 2D hierarchical mapping system use format version 2.0:
 
 ```json
-{   "session_info":{
-      "total_waypoints": 3, 
-      "total_movements": 5
-  }, 
-  "waypoints": [
-      {
-        "id": "WP_001",
-        "name": "START",
-        "movements_to_here":[]
-      }, 
-      {
-        "id": "WP_002",
-        "name": "Kitchen",
-        "movements_to_here": [
-          {
-            "id": "1fae8501-6625-487b-8562-25b43f387a91",
-            "type": "lift",
-            "direction": "up",
-            "distance": 52.295,
-            "timestamp": "2025-07-03T13:51:55.907127"
-          },
-          {
-            "id": "4a019fcf-e595-482f-b3dc-aa129e5fc32d",
-            "type": "move",
-            "yaw": 91,
-            "distance": 191.17,
-            "timestamp": "2025-07-03T13:52:06.824271"
-          },
-          {
-            "id": "76cdf44c-37a5-4661-bdd7-07f87112b182",
-            "type": "move",
-            "yaw": 0,
-            "distance": 92.63,
-            "timestamp": "2025-07-03T13:52:12.232930"
-          }
-        ]
-      },
-      ...
+{
+  "session_info": {
+    "format_version": "2.0",
+    "created": "2026-01-31T16:32:25"
+  },
+  "super_waypoints": [
+    {
+      "id": "SWP_001",
+      "name": "START",
+      "index": 0,
+      "is_super_waypoint": true,
+      "movements_to_here": [],
+      "inner_waypoints": []
+    },
+    {
+      "id": "SWP_002",
+      "name": "Kitchen",
+      "index": 1,
+      "is_super_waypoint": true,
+      "movements_to_here": [
+        {
+          "id": "4a019fcf-e595-482f-b3dc-aa129e5fc32d",
+          "type": "move",
+          "yaw": 91,
+          "start_yaw": 0,
+          "distance": 191.17
+        },
+        {
+          "id": "1fae8501-6625-487b-8562-25b43f387a91",
+          "type": "lift",
+          "direction": "up",
+          "distance": 52.3
+        }
+      ],
+      "inner_waypoints": [
+        {
+          "id": "SWP_002_IWP_Counter",
+          "name": "Counter",
+          "movements_to_here": [
+            {
+              "id": "76cdf44c-37a5-4661-bdd7-07f87112b182",
+              "type": "move",
+              "yaw": 0,
+              "start_yaw": 91,
+              "distance": 92.63
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
+```
+
+**Movement types:**
+- `"move"` — Horizontal movement. Fields: `yaw` (target heading °), `start_yaw` (heading at start of movement), `distance` (cm).
+- `"lift"` — Vertical movement. Fields: `direction` (`"up"` or `"down"`), `distance` (cm).
+
+---
+
+# VLM-Based Object Finder (Planner)
+
+The Planner module provides a fully autonomous object-finding pipeline that combines a Vision-Language Model (VLM) for intelligent planning, dual YOLO detection, and 2D hierarchical navigation. Given a natural-language request such as *"Find my coffee cup"*, the system plans a search route, flies the drone to each candidate location, runs object detection, and asks the user to confirm before reporting success.
+
+## Installation
+
+Install the navigation dependencies first, then the VLM SDK for your chosen provider:
+
+```bash
+pip install dronebuddylib[NAVIGATION_TELLO]
+pip install onnxruntime          # for YOLO ONNX and MiDaS
+pip install ultralytics          # for YOLO-World (non-COCO objects)
+
+# Install your VLM provider SDK:
+pip install openai               # OpenAI (GPT-4o, GPT-5, …)
+pip install anthropic            # Anthropic (Claude)
+pip install google-generativeai  # Google (Gemini)
+```
+
+## Supported VLM Providers
+
+| Provider | Models | Parameter value |
+|----------|--------|-----------------|
+| OpenAI | gpt-4o, gpt-4-turbo, gpt-5 | `"openai"` |
+| Anthropic | claude-3-5-sonnet-20241022, claude-3-opus | `"anthropic"` |
+| Google | gemini-1.5-pro, gemini-1.5-flash | `"google"` |
+
+## Basic Usage
+
+```python
+from dronebuddylib.atoms.planning import PlannerEngine, PlannerConfigs
+from dronebuddylib.models.enums import ObstacleDetectionMode
+
+config = PlannerConfigs(
+    vlm_provider="openai",
+    vlm_api_key="sk-...",
+    vlm_model="gpt-4o",              # optional – uses provider default if omitted
+    yolo_model_path="models/yolo11m_320x320.onnx",
+    yolo_world_model_path="models/yolov8m-worldv2.pt",
+    midas_model_path="models/midas_small_384x288.onnx",
+    obstacle_detection_mode="MEDIUM",
+    waypoint_file_path="drone_movements_20260131.json",
+    max_replan_attempts=2
+)
+
+engine = PlannerEngine.from_config(config)
+result = engine.find_object("Find my coffee cup")
+
+if result.success:
+    print(f"Found '{result.target_object}' at {result.found_at_waypoint}")
+else:
+    print(f"Could not find '{result.target_object}'")
+```
+
+## Configuration Reference (`PlannerConfigs`)
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `vlm_provider` | str | `"openai"` | VLM provider: `"openai"`, `"anthropic"`, `"google"` |
+| `vlm_api_key` | str | `""` | API key for the VLM provider |
+| `vlm_model` | str | provider default | Model name (e.g. `"gpt-4o"`) |
+| `vlm_temperature` | float | `0.3` | Response randomness (lower = more deterministic) |
+| `yolo_model_path` | str | `""` | Path to YOLO ONNX model for COCO 80-class detection |
+| `yolo_confidence_threshold` | float | `0.25` | Minimum confidence for standard YOLO detections |
+| `yolo_iou_threshold` | float | `0.45` | NMS IOU threshold for standard YOLO |
+| `yolo_world_model_path` | str | `""` | Path to YOLO-World `.pt` model (required for non-COCO objects) |
+| `yolo_world_confidence_threshold` | float | `0.025` | Confidence threshold for YOLO-World |
+| `midas_model_path` | str | `""` | Path to MiDaS ONNX model for obstacle detection |
+| `obstacle_detection_mode` | str | `"OFF"` | `OFF`, `LOW`, `MEDIUM`, `HIGH`, `VERY_HIGH` |
+| `waypoint_file_path` | str | `""` | Path to the 2D waypoint JSON file |
+| `waypoint_directory` | str | `""` | Directory containing waypoint files |
+| `scan_image_directory` | str | `None` | Directory for saving scan frame images |
+| `max_replan_attempts` | int | `2` | Maximum VLM re-planning attempts if object not found |
+
+## How It Works
+
+### 1. VLM Planning
+The user's request is sent to the configured VLM alongside the list of available waypoint names. The VLM:
+- Determines whether the target object is one of the **80 COCO classes** (e.g. `cup`, `laptop`) or a **custom object** (e.g. `glasses`, `keys`).
+- Generates 3–5 synonym/related terms for custom objects to increase YOLO-World hit rate.
+- Produces an ordered `navigate → scan` action plan, prioritising the most semantically likely locations first.
+
+### 2. Navigation & Detection
+For each `navigate → scan` pair:
+- The drone navigates to the target waypoint via the 2D hierarchical pathfinding engine.
+- Optional MiDaS obstacle detection pauses forward movement if the path is blocked.
+- A full 360° scan is performed (24 frames × 15° rotation).
+- **Standard YOLO ONNX** is used for COCO-class objects; **YOLO-World PyTorch** is used for custom objects.
+
+### 3. Confirmation
+When a match is detected the VLM analyses the best detection frame and generates a human-readable description. The user confirms or rejects the detected object.
+
+### 4. Re-planning
+If the object is not found or the user rejects the detection, the VLM generates a new plan prioritising unvisited waypoints, up to `max_replan_attempts` times.
+
+## Session Result (`PlannerSessionResult`)
+
+```python
+result.success              # bool   – True if object was found and confirmed
+result.target_object        # str    – Object that was searched for
+result.found_at_waypoint    # str    – Waypoint name where object was found
+result.waypoints_visited    # List[str] – All waypoints visited during the session
+result.scans_performed      # int    – Number of 360° scans executed
+result.object_description   # str    – VLM description of the detected object
+result.session_duration     # float  – Total session time in seconds
+result.final_state          # PlannerState enum value
+result.error_message        # str    – Set if an error occurred
+```
+
+## GUI Mode
+
+The planner ships with a Tkinter-based graphical interface providing a chat-like interaction panel, live video feed, and a separate log viewer:
+
+```python
+from dronebuddylib.atoms.planning.planner_gui import PlannerGUIApp
+from dronebuddylib.atoms.planning import PlannerConfigs
+
+config = PlannerConfigs(
+    vlm_provider="openai",
+    vlm_api_key="sk-...",
+    yolo_model_path="models/yolo11m_320x320.onnx",
+    waypoint_file_path="my_waypoints.json"
+)
+
+app = PlannerGUIApp(config=config)
+app.run()
+```
+
+Alternatively, run the bundled example directly:
+
+```bash
+python examples/planner_example.py          # GUI mode (default)
+python examples/planner_example.py --cli    # terminal mode
+```
 
 ## Submodules
 
