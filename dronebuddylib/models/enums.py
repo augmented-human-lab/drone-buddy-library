@@ -240,6 +240,8 @@ class AtomicEngineConfigurations(enum.Enum):
     NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE = "NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE"  # ObstacleDetectionMode enum value
     NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH = "NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH"  # Path to MiDaS ONNX model file
     NAVIGATION_TELLO_DISABLE_CV2_VIDEO_WINDOW = "NAVIGATION_TELLO_DISABLE_CV2_VIDEO_WINDOW"  # Disable OpenCV video window (for GUI integration)
+    NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM = "NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM"  # Target altitude (cm) to reach immediately after standard takeoff (0 = no adjustment, valid range 20-500)
+    NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED = "NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED"  # Enable mission pad alignment after each waypoint arrival (True/False)
 
     # Configuration for VLM Planner (multi-provider support)
     PLANNER_VLM_PROVIDER = "PLANNER_VLM_PROVIDER"  # openai, anthropic, google

@@ -34,6 +34,7 @@ from dronebuddylib.atoms.planning.planner_models import (
     PlannerSessionResult
 )
 from dronebuddylib.atoms.planning.planner_configs import PlannerConfigs
+from dronebuddylib.atoms.planning.session_logger import SessionLogger
 from dronebuddylib.utils.logger import Logger
 
 logger = Logger()
@@ -112,6 +113,8 @@ class PlannerExecutor:
         model: Optional[str] = None,
         temperature: float = 0.3,
         max_replan_attempts: int = 2,
+        takeoff_altitude_cm: int = 0,
+        mission_pad_enabled: bool = False,
         nav_config: Optional[EngineConfigurations] = None,
         user_input_callback: Optional[Callable[[str], str]] = None
     ):
@@ -134,6 +137,8 @@ class PlannerExecutor:
             model: VLM model name (uses provider default if not specified)
             temperature: VLM temperature (0.0-1.0)
             max_replan_attempts: Maximum replanning attempts
+            takeoff_altitude_cm: Target altitude in cm after takeoff (0 = no adjustment, valid range 20-500)
+            mission_pad_enabled: Enable mission pad alignment after each waypoint arrival
             nav_config: Navigation engine configuration (optional)
             user_input_callback: Callback function for getting user input
                                  If None, uses input() for console interaction
@@ -207,6 +212,22 @@ class PlannerExecutor:
             except KeyError:
                 logger.log_warning('PlannerExecutor', f'Invalid obstacle detection mode: {obstacle_detection_mode}')
         
+        # Add takeoff altitude configuration
+        if takeoff_altitude_cm > 0:
+            nav_config.add_configuration(
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
+                takeoff_altitude_cm
+            )
+            logger.log_info('PlannerExecutor', f'Takeoff altitude set to: {takeoff_altitude_cm} cm')
+        
+        # Add mission pad alignment configuration
+        if mission_pad_enabled:
+            nav_config.add_configuration(
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED,
+                True
+            )
+            logger.log_info('PlannerExecutor', 'Mission pad alignment enabled')
+        
         self.nav_config = nav_config
         self.nav_engine: Optional[NavigationEngine] = None
         
@@ -219,6 +240,9 @@ class PlannerExecutor:
         self.scans_performed: int = 0
         self.replan_count: int = 0
         self.session_start_time: float = 0
+        
+        # Session logger (freshly created at the start of each execute() call)
+        self.session_logger: Optional[SessionLogger] = None
         
         # Available waypoints (loaded from file)
         self.available_waypoints: List[str] = []
@@ -260,6 +284,8 @@ class PlannerExecutor:
             model=config.vlm_model,
             temperature=config.vlm_temperature,
             max_replan_attempts=config.max_replan_attempts,
+            takeoff_altitude_cm=config.takeoff_altitude_cm,
+            mission_pad_enabled=config.mission_pad_enabled,
             user_input_callback=user_input_callback
         )
     
@@ -310,6 +336,14 @@ class PlannerExecutor:
         self.scans_performed = 0
         self.replan_count = 0
         
+        # Create a fresh SessionLogger for this session
+        self.session_logger = SessionLogger(
+            target_object=user_request,
+            session_start_time=self.session_start_time
+        )
+        # Inject the logger into the agent so all VLM calls are recorded automatically
+        self.planner_agent.session_logger = self.session_logger
+        
         # Reset session termination flags for new session
         TelloWaypointNavCoordinator._session_terminated = False
         TelloWaypointNavCoordinator._obstacle_timeout_occurred = False
@@ -341,7 +375,9 @@ class PlannerExecutor:
             
             self.target_object = self.current_plan.target_object
             
-            # Log detection mode based on VLM classification
+            # Update session logger with the VLM-determined target object name
+            if self.session_logger:
+                self.session_logger.target_object = self.target_object
             if self.current_plan.is_coco_class:
                 logger.log_info('PlannerExecutor', 
                     f'Target object (COCO class): {self.target_object} - using YOLO ONNX')
@@ -564,8 +600,9 @@ class PlannerExecutor:
             if result == "OBJECT_FOUND":
                 # Object found and confirmed - end session successfully
                 self.state = PlannerState.OBJECT_FOUND
+                found_at = self.current_waypoint
                 self._safe_return_to_start()
-                return self._create_success_result()
+                return self._create_success_result(found_at_waypoint=found_at)
             
             elif result == "OBJECT_REJECTED":
                 # User rejected the found object - need to replan
@@ -763,6 +800,19 @@ class PlannerExecutor:
         """Handle when target object is detected during scan."""
         self.state = PlannerState.AWAITING_CONFIRMATION
         
+        # Record the YOLO detection confidence for the flagged item in the session log.
+        # Uses the best frame (highest target confidence) — the same frame sent to the VLM.
+        if self.session_logger:
+            best_frame = scan_result.get_best_detection_frame()
+            if best_frame:
+                yolo_conf = scan_result._get_target_confidence(best_frame)
+                self.session_logger.record_yolo_detection(
+                    search_round=self.replan_count + 1,
+                    waypoint=self._get_waypoint_display_name(self.current_waypoint),
+                    target_object=self.target_object,
+                    confidence=yolo_conf,
+                )
+        
         # Use display name for user-friendly message
         display_name = self._get_waypoint_display_name(self.current_waypoint)
         self._send_message_to_user(
@@ -872,6 +922,10 @@ class PlannerExecutor:
             
             self._send_message_to_user('Generating a new search plan...')
             
+            # Round 1 ends here — user has accepted re-planning, round 2 is about to begin
+            if self.session_logger:
+                self.session_logger.record_round_transition(time.time())
+            
             # Regenerate plan with detection mode context
             new_plan = self.planner_agent.regenerate_plan(
                 target_object=self.target_object,
@@ -923,6 +977,10 @@ class PlannerExecutor:
         
         if response in ['yes', 'y']:
             self._send_message_to_user('Generating a new search plan...')
+            
+            # Round 1 ends here — user has accepted re-planning, round 2 is about to begin
+            if self.session_logger:
+                self.session_logger.record_round_transition(time.time())
             
             # Regenerate plan with detection mode context
             new_plan = self.planner_agent.regenerate_plan(
@@ -1036,28 +1094,71 @@ class PlannerExecutor:
                 pass
             return "ERROR"
     
-    def _create_success_result(self) -> PlannerSessionResult:
+    def _get_round_durations(self, total_duration: float) -> List[float]:
+        """
+        Compute per-round elapsed times.
+
+        If the session had only one round, returns [total_duration].
+        If there were two rounds, returns [round1_duration, round2_duration]
+        where round1 + round2 == total_duration.
+        """
+        if self.session_logger and self.session_logger.round_1_end_time is not None:
+            r1 = self.session_logger.round_1_end_time - self.session_start_time
+            r2 = total_duration - r1
+            return [max(0.0, r1), max(0.0, r2)]
+        return [total_duration]
+    
+    def _save_session_log(
+        self, success: bool, reason: str, duration: float,
+        found_at_waypoint: Optional[str] = None,
+        round_durations: Optional[List[float]] = None
+    ):
+        """Write the accumulated session data to a .txt log file."""
+        if self.session_logger:
+            self.session_logger.save(
+                success=success,
+                reason=reason,
+                session_duration=duration,
+                waypoints_visited=self.waypoints_visited,
+                scans_performed=self.scans_performed,
+                found_at_waypoint=found_at_waypoint,
+                round_durations=round_durations,
+            )
+    
+    def _create_success_result(self, found_at_waypoint: Optional[str] = None) -> PlannerSessionResult:
         """Create a successful session result."""
+        waypoint = found_at_waypoint or self.current_waypoint
         duration = time.time() - self.session_start_time
+        round_durations = self._get_round_durations(duration)
+        self._save_session_log(
+            success=True, reason="Object found and confirmed by user",
+            duration=duration, found_at_waypoint=waypoint,
+            round_durations=round_durations
+        )
         return PlannerSessionResult(
             success=True,
             target_object=self.target_object,
-            found_at_waypoint=self.current_waypoint,
+            found_at_waypoint=waypoint,
             waypoints_visited=self.waypoints_visited,
             scans_performed=self.scans_performed,
             session_duration=duration,
+            round_durations=round_durations,
             final_state=PlannerState.OBJECT_FOUND
         )
     
     def _create_failure_result(self, message: str) -> PlannerSessionResult:
         """Create a failed session result."""
         duration = time.time() - self.session_start_time
+        round_durations = self._get_round_durations(duration)
+        self._save_session_log(success=False, reason=message, duration=duration,
+                               round_durations=round_durations)
         return PlannerSessionResult(
             success=False,
             target_object=self.target_object,
             waypoints_visited=self.waypoints_visited,
             scans_performed=self.scans_performed,
             session_duration=duration,
+            round_durations=round_durations,
             final_state=PlannerState.OBJECT_NOT_FOUND,
             error_message=message
         )
@@ -1065,12 +1166,16 @@ class PlannerExecutor:
     def _create_partial_result(self, message: str) -> PlannerSessionResult:
         """Create a partial completion result."""
         duration = time.time() - self.session_start_time
+        round_durations = self._get_round_durations(duration)
+        self._save_session_log(success=False, reason=message, duration=duration,
+                               round_durations=round_durations)
         return PlannerSessionResult(
             success=False,
             target_object=self.target_object,
             waypoints_visited=self.waypoints_visited,
             scans_performed=self.scans_performed,
             session_duration=duration,
+            round_durations=round_durations,
             final_state=PlannerState.COMPLETED,
             error_message=message
         )
@@ -1078,12 +1183,16 @@ class PlannerExecutor:
     def _create_error_result(self, error_message: str) -> PlannerSessionResult:
         """Create an error session result."""
         duration = time.time() - self.session_start_time
+        round_durations = self._get_round_durations(duration)
+        self._save_session_log(success=False, reason=error_message, duration=duration,
+                               round_durations=round_durations)
         return PlannerSessionResult(
             success=False,
             target_object=self.target_object,
             waypoints_visited=self.waypoints_visited,
             scans_performed=self.scans_performed,
             session_duration=duration,
+            round_durations=round_durations,
             final_state=PlannerState.ERROR,
             error_message=error_message
         )

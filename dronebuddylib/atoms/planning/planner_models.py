@@ -156,6 +156,7 @@ class PlannerSessionResult:
         scans_performed: Number of scan operations performed
         object_description: VLM description of the found object (if confirmed)
         session_duration: Total session duration in seconds
+        round_durations: Per-round durations in seconds (1 or 2 elements)
         final_state: The final state of the planner
         error_message: Error message if session ended in error state
     """
@@ -166,6 +167,7 @@ class PlannerSessionResult:
     scans_performed: int = 0
     object_description: Optional[str] = None
     session_duration: float = 0.0
+    round_durations: List[float] = field(default_factory=list)
     final_state: PlannerState = PlannerState.COMPLETED
     error_message: Optional[str] = None
     

@@ -73,6 +73,7 @@ class PlannerEngine:
         - NAVIGATION_TELLO_IMAGE_DIR: Directory for scan images
         - NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH: Path to MiDaS ONNX model
         - NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE: ObstacleDetectionMode enum
+        - NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM: Target altitude in cm after takeoff (0 = no adjustment)
     
     Example:
         from dronebuddylib.models.enums import ObstacleDetectionMode
@@ -264,6 +265,18 @@ class PlannerEngine:
         else:
             self.obstacle_detection_mode = "OFF"
         
+        # Takeoff altitude configuration
+        self.takeoff_altitude_cm = configs.get(
+            AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
+            0  # 0 = no adjustment, drone stays at default ~80 cm
+        )
+        
+        # Mission pad alignment configuration
+        self.mission_pad_enabled = configs.get(
+            AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED,
+            False
+        )
+        
         # Store config for navigation
         self.nav_config = config
         self.user_input_callback = user_input_callback
@@ -285,6 +298,8 @@ class PlannerEngine:
             model=self.vlm_model,
             temperature=self.vlm_temperature,
             max_replan_attempts=self.max_replan_attempts,
+            takeoff_altitude_cm=self.takeoff_altitude_cm,
+            mission_pad_enabled=self.mission_pad_enabled,
             nav_config=self.nav_config,
             user_input_callback=self.user_input_callback
         )
@@ -361,5 +376,7 @@ class PlannerEngine:
             AtomicEngineConfigurations.PLANNER_MAX_REPLAN_ATTEMPTS,
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE,
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR,
-            AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR
+            AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR,
+            AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
+            AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED
         ]

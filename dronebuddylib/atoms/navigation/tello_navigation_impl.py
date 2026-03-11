@@ -34,9 +34,12 @@ class NavigationWaypointImpl(INavigation):
             self.mapping_movement_speed,    # Speed for manual mapping movements (cm/s)
             self.mapping_rotation_speed,    # Rotation speed for directional changes during mapping
             self.nav_speed,                 # Speed for potential navigation operations
-            "mapping"                       # Set operational mode to mapping for manual control
+            "mapping",                      # Set operational mode to mapping for manual control
+            takeoff_altitude_cm=self.takeoff_altitude_cm  # Target altitude to reach after standard takeoff
         )
-        result = coordinator.run()  # Execute mapping mode with real-time manual controls
+        # NOTE: mission_pad_enabled is intentionally NOT set for mapping mode.
+        # Mission pad alignment is only for navigation playback modes (navigation/goto).
+        result = coordinator.run()  # Execute mapping mode with manual drone control
         
         logger.log_info(self.get_class_name(), f'Location mapping session closed with {len(result)} waypoints.')
         return result
@@ -61,8 +64,10 @@ class NavigationWaypointImpl(INavigation):
             "navigation",                   # Set operational mode to navigation for interactive selection
             waypoint_file=self.waypoint_file,  # Optional specific waypoint file to use
             obstacle_detection_mode=self.obstacle_detection_mode,  # MiDaS obstacle detection sensitivity
-            midas_model_path=self.midas_model_path  # Path to MiDaS ONNX model
+            midas_model_path=self.midas_model_path,  # Path to MiDaS ONNX model
+            takeoff_altitude_cm=self.takeoff_altitude_cm  # Target altitude to reach after standard takeoff
         )
+        coordinator.mission_pad_enabled = self.mission_pad_enabled
         result = coordinator.run()  # Execute navigation mode with interactive waypoint selection
         
         logger.log_info(self.get_class_name(), f'Navigation session closed with drone travelled to {len(result)} waypoints.')
@@ -117,8 +122,10 @@ class NavigationWaypointImpl(INavigation):
             self.waypoint_file,             # Specific waypoint file to use
             create_new,                     # Whether to force new instance creation
             self.obstacle_detection_mode,   # MiDaS obstacle detection sensitivity
-            self.midas_model_path           # Path to MiDaS ONNX model
+            self.midas_model_path,          # Path to MiDaS ONNX model
+            self.takeoff_altitude_cm    # Target altitude to reach after standard takeoff
         )
+        coordinator.mission_pad_enabled = self.mission_pad_enabled
         result = coordinator.run()  # Execute goto mode navigation operation
         
         # Handle result safely - ensure it has expected format [land_flag, current_waypoint]
@@ -546,7 +553,9 @@ class NavigationWaypointImpl(INavigation):
                 AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED,
                 AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, 
                 AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE,
-                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH]
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH,
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
+                AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED]
 
     def get_class_name(self) -> str:
         """
@@ -607,6 +616,12 @@ class NavigationWaypointImpl(INavigation):
         # Obstacle detection configuration
         self.obstacle_detection_mode = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, None)  # ObstacleDetectionMode enum
         self.midas_model_path = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, None)  # Path to MiDaS ONNX model
+        
+        # Takeoff altitude configuration
+        self.takeoff_altitude_cm = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM, 0)  # Target altitude in cm after standard takeoff (0 = no adjustment)
+        
+        # Mission pad alignment configuration
+        self.mission_pad_enabled = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED, False)  # Enable mission pad alignment after each waypoint
         
         # Pre-warmed YOLO-World model instance (set by prewarm_yolo_world())
         self._prewarmed_yolo_world_nav_extra = None

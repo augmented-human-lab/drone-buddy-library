@@ -56,7 +56,7 @@ def get_default_config() -> EngineConfigurations:
     # VLM Configuration
     # Options: "openai", "anthropic", "google"
     config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_PROVIDER, "openai")
-    config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_API_KEY, "YOUR_OPENAI_API_KEY_HERE")
+    config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_API_KEY, os.environ.get("OPENAI_API_KEY", "your-api-key-here"))
     config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_MODEL, "gpt-5.2")
     
     # YOLO Configuration - Standard YOLO for COCO 80-class objects
@@ -84,8 +84,11 @@ def get_default_config() -> EngineConfigurations:
     )
     config.add_configuration(
         AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE,
-        ObstacleDetectionMode.MEDIUM  # Options: OFF, LOW, MEDIUM, HIGH, VERY_HIGH
+        ObstacleDetectionMode.OFF  # Options: OFF, LOW, MEDIUM, HIGH, VERY_HIGH
     )
+    
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM, -1)
+    config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED, False)
     
     # Waypoint Configuration
     config.add_configuration(

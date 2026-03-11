@@ -190,7 +190,7 @@ class MiDaSObstacleDetector:
         # Focus on center 40% vertically (ignore floor/ceiling more aggressively)
         # This creates a tighter vertical band in the middle of the frame
         y_start = int(h * 0.25)  # Start at 25% from top (was 20%)
-        y_end = int(h * 0.75)    # End at 75% from top (was 80%)
+        y_end = int(h * 0.5)    # End at 75% from top (was 80%)
         
         # Define center ROI for checking (center X% of width) - smaller for focused detection
         roi_half_width = int(w * center_roi_ratio / 2)
@@ -275,7 +275,7 @@ class FrameDetection:
     Represents detections for a single frame during scan.
     
     Attributes:
-        frame_number: The sequential frame number during the scan (1-24 for 360° scan)
+        frame_number: The sequential frame number during the scan (1-12 for 360° scan)
         rotation_angle: The rotation angle from start position when frame was captured
         detected_objects: List of objects detected in this frame
         image_path: Path to the saved image file
@@ -724,7 +724,7 @@ class TelloNavExtra:
                         # If image was saved successfully, add to results and log success, else log error
                         if image_info:
                             scan_results.append(image_info)
-                            logger.log_success('TelloNavExtra', f'Captured image {images_captured}/24 at clockwise rotation {current_rotation}° relative to drones initial position at current waypoint {current_waypoint}')
+                            logger.log_success('TelloNavExtra', f'Captured image {images_captured}/12 at clockwise rotation {current_rotation}° relative to drones initial position at current waypoint {current_waypoint}')
                         else: 
                             logger.log_error('TelloNavExtra', f'Failed to save image at rotation {current_rotation}°')
                     else:

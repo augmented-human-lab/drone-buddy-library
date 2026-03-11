@@ -31,6 +31,7 @@ def test_mapping():
     """Test the mapping functionality of the NavigationEngine."""
     # Configure navigation engine
     config = EngineConfigurations({})
+    # config.add_configuration(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM, 20)
     engine = NavigationEngine(NavigationAlgorithm.NAVIGATION_TELLO_WAYPOINT, config)
     
     logger.log_info("Main", "Navigation engine initialized successfully")
@@ -172,7 +173,7 @@ def main():
     """This is the main function we call when running the python file."""
     
     logger.log_info("Main", "Starting Tello Navigation Tests")
-    print(test_navigate_to_waypoint())
+    print(test_navigate())
     # tello = Tello()
     # tello.connect()
     # tello.streamon()

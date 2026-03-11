@@ -122,7 +122,7 @@ class WaypointNavigationManager:
     
     # Rotation compensation factor (degrees) - adjust if drone under/over-rotates
     # Positive value = rotate more, Negative value = rotate less
-    ROTATION_COMPENSATION = 2  # Default: no compensation. Try 1-3 if drone under-rotates
+    ROTATION_COMPENSATION = 0  # Default: no compensation. Try 1-3 if drone under-rotates
     
     # Obstacle check retry settings
     OBSTACLE_CHECK_INTERVAL = 0.5  # Seconds between obstacle checks when blocked
@@ -173,6 +173,17 @@ class WaypointNavigationManager:
         # Paused by default - only runs during forward movement obstacle checks
         # This saves CPU/GPU resources when drone is hovering or waiting for commands
         self._obstacle_detection_paused = True
+        
+        # Mission pad alignment configuration
+        # When enabled, drone aligns to mission pad after reaching each waypoint
+        self.mission_pad_enabled = False
+        
+        # Mission pad alignment constants
+        self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM = 100  # Altitude to reach before alignment
+        self.MISSION_PAD_GO_SPEED = 40                # Speed for go_xyz_speed_mid command
+        self.MISSION_PAD_TARGET_Z_CM = 40             # Target Z above mission pad after alignment
+        self.TOF_MIN_CLAMP_CM = 20                    # Minimum safe TOF reading
+        self.TOF_MAX_CLAMP_CM = 300                   # Maximum safe TOF reading
         
         logger.log_debug('WaypointNavigationManager', 
             f'Initialized with nav_speed={nav_speed}, vertical_factor={vertical_factor}, '
@@ -430,6 +441,252 @@ class WaypointNavigationManager:
         
         return segments
     
+    # ─── Mission Pad Alignment ────────────────────────────────────────────
+    
+    def _read_tof_altitude(self, drone_instance) -> int:
+        """
+        Read the drone's current relative altitude via the ToF (Time-of-Flight) sensor.
+        
+        Pauses battery monitoring to avoid command interference, reads the ToF distance,
+        and clamps the result to a safe range [TOF_MIN_CLAMP_CM .. TOF_MAX_CLAMP_CM].
+        
+        Args:
+            drone_instance: The Tello drone instance.
+            
+        Returns:
+            int: Clamped altitude in cm, or -1 if reading failed.
+        """
+        # Pause battery monitoring to prevent command interference on the Tello command channel
+        if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_pause_battery_monitoring'):
+            self.coordinator._pause_battery_monitoring()
+        
+        try:
+            time.sleep(0.3)  # Brief pause to let any in-flight commands finish
+            tof_value = drone_instance.get_distance_tof()
+            
+            # Validate reading
+            if tof_value is None or not isinstance(tof_value, (int, float)):
+                logger.log_warning('WaypointNavigationManager', 
+                    f'Invalid ToF reading: {tof_value}, returning -1')
+                return -1
+            
+            tof_value = int(tof_value)
+            
+            # Clamp to safe range
+            if tof_value < self.TOF_MIN_CLAMP_CM or tof_value > self.TOF_MAX_CLAMP_CM:
+                clamped = max(self.TOF_MIN_CLAMP_CM, min(tof_value, self.TOF_MAX_CLAMP_CM))
+                logger.log_warning('WaypointNavigationManager', 
+                    f'ToF reading {tof_value} cm outside safe range, clamped to {clamped} cm')
+                tof_value = clamped
+            
+            logger.log_info('WaypointNavigationManager', f'ToF altitude reading: {tof_value} cm')
+            return tof_value
+            
+        except Exception as e:
+            logger.log_error('WaypointNavigationManager', f'Failed to read ToF altitude: {e}')
+            return -1
+        finally:
+            # Always resume battery monitoring
+            if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_resume_battery_monitoring'):
+                self.coordinator._resume_battery_monitoring()
+    
+    def perform_mission_pad_alignment(self, drone_instance, override_initial_altitude: int = None) -> bool:
+        """
+        Perform mission pad alignment after reaching a waypoint.
+        
+        Sequence:
+        1. Read current altitude via ToF sensor and store it (or use override if provided)
+        2. Move drone to MISSION_PAD_ALIGNMENT_ALTITUDE_CM (100 cm) for reliable pad detection
+        3. Enable downward-facing mission pad detection
+        4. Execute go_xyz_speed_mid(0, 0, MISSION_PAD_TARGET_Z_CM, speed, -1) to align to pad
+        5. After alignment, drone is at MISSION_PAD_TARGET_Z_CM (40 cm) from ground
+        6. Move drone back to the initial altitude stored in step 1
+        
+        If mission pad detection fails (pad not visible or only partially visible),
+        the error is caught and the drone returns to its original altitude.
+        
+        Args:
+            drone_instance: The Tello drone instance.
+            override_initial_altitude: If provided, use this altitude (cm) as the stored
+                initial altitude instead of reading from ToF. Used for initial takeoff
+                alignment where the takeoff altitude config is the source of truth.
+            
+        Returns:
+            bool: True if alignment succeeded, False if it failed (drone still returns to
+                  original altitude on failure).
+        """
+        logger.log_info('WaypointNavigationManager', 
+            '📐 Starting mission pad alignment sequence...')
+        
+        # Pause battery monitoring for the entire alignment operation
+        if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_pause_battery_monitoring'):
+            self.coordinator._pause_battery_monitoring()
+        
+        alignment_success = False
+        initial_altitude = -1
+        
+        try:
+            # STEP 1: Read and store current altitude
+            if override_initial_altitude is not None:
+                # Use provided altitude (e.g., takeoff altitude config) instead of ToF
+                initial_altitude = override_initial_altitude
+                logger.log_info('WaypointNavigationManager', 
+                    f'Using override initial altitude: {initial_altitude} cm (skipping ToF read)')
+            else:
+                initial_altitude = self._read_tof_altitude(drone_instance)
+                # Note: battery monitoring is already paused above, _read_tof_altitude 
+                # will pause/resume internally but that's safe (idempotent)
+                
+                if initial_altitude == -1:
+                    logger.log_error('WaypointNavigationManager', 
+                        'Failed to read initial altitude - aborting mission pad alignment')
+                    return False
+            
+            logger.log_info('WaypointNavigationManager', 
+                f'Initial altitude stored: {initial_altitude} cm')
+            
+            # STEP 2: Move to alignment altitude (100 cm)
+            delta_to_alignment = self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM - initial_altitude
+            
+            if delta_to_alignment > 0:
+                logger.log_info('WaypointNavigationManager', 
+                    f'Ascending {delta_to_alignment} cm to reach alignment altitude '
+                    f'{self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM} cm...')
+                drone_instance.move_up(delta_to_alignment)
+            elif delta_to_alignment < 0:
+                logger.log_info('WaypointNavigationManager', 
+                    f'Descending {abs(delta_to_alignment)} cm to reach alignment altitude '
+                    f'{self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM} cm...')
+                drone_instance.move_down(abs(delta_to_alignment))
+            else:
+                logger.log_info('WaypointNavigationManager', 
+                    'Already at alignment altitude - no vertical adjustment needed')
+            
+            drone_instance.send_rc_control(0, 0, 0, 0)
+            time.sleep(1)  # Stabilization after vertical movement
+            
+            # STEP 3: Enable mission pad detection (downward-facing sensor)
+            logger.log_info('WaypointNavigationManager', 
+                'Enabling downward-facing mission pad detection...')
+            drone_instance.enable_mission_pads()
+            time.sleep(0.3)
+            drone_instance.set_mission_pad_detection_direction(0)  # 0 = downward only
+            time.sleep(0.3)
+            
+            # STEP 4: Align to mission pad using go_xyz_speed_mid with wildcard pad ID (-1)
+            logger.log_info('WaypointNavigationManager', 
+                f'Aligning to mission pad: go(0, 0, {self.MISSION_PAD_TARGET_Z_CM}, '
+                f'{self.MISSION_PAD_GO_SPEED}, -1)...')
+            
+            try:
+                drone_instance.go_xyz_speed_mid(
+                    0, 0, self.MISSION_PAD_TARGET_Z_CM, 
+                    self.MISSION_PAD_GO_SPEED, -1
+                )
+                
+                drone_instance.send_rc_control(0, 0, 0, 0)
+                time.sleep(1)  # Stabilization after alignment
+                
+                logger.log_success('WaypointNavigationManager', 
+                    f'✅ Mission pad alignment successful! '
+                    f'Drone is now at {self.MISSION_PAD_TARGET_Z_CM} cm above mission pad.')
+                alignment_success = True
+                
+            except Exception as align_error:
+                # Mission pad not detected or alignment command failed
+                # This catches: pad not visible, partially visible, drone SDK errors
+                logger.log_warning('WaypointNavigationManager', 
+                    f'⚠️ Mission pad alignment failed: {align_error}')
+                logger.log_info('WaypointNavigationManager', 
+                    'Mission pad may not be present or visible at this waypoint. '
+                    'Returning drone to original altitude.')
+                alignment_success = False
+            
+            # STEP 5: Disable mission pads (cleanup)
+            try:
+                drone_instance.disable_mission_pads()
+            except Exception:
+                pass  # Non-critical cleanup
+            
+            # STEP 6: Return to initial altitude
+            if alignment_success:
+                # After successful alignment, drone is at MISSION_PAD_TARGET_Z_CM (40 cm) from ground
+                current_alt_after_align = self.MISSION_PAD_TARGET_Z_CM
+                delta_to_restore = initial_altitude - current_alt_after_align
+                
+                if delta_to_restore > 0:
+                    logger.log_info('WaypointNavigationManager', 
+                        f'Restoring altitude: ascending {delta_to_restore} cm '
+                        f'({current_alt_after_align} cm → {initial_altitude} cm)...')
+                    drone_instance.move_up(delta_to_restore)
+                elif delta_to_restore < 0:
+                    logger.log_info('WaypointNavigationManager', 
+                        f'Restoring altitude: descending {abs(delta_to_restore)} cm '
+                        f'({current_alt_after_align} cm → {initial_altitude} cm)...')
+                    drone_instance.move_down(abs(delta_to_restore))
+                
+            else:
+                # Alignment failed - drone is still at alignment altitude (100 cm)
+                # Move back from 100 cm to initial_altitude
+                delta_to_restore = initial_altitude - self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM
+                
+                if delta_to_restore > 0:
+                    logger.log_info('WaypointNavigationManager', 
+                        f'Restoring altitude after failed alignment: ascending {delta_to_restore} cm '
+                        f'({self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM} cm → {initial_altitude} cm)...')
+                    drone_instance.move_up(delta_to_restore)
+                elif delta_to_restore < 0:
+                    logger.log_info('WaypointNavigationManager', 
+                        f'Restoring altitude after failed alignment: descending {abs(delta_to_restore)} cm '
+                        f'({self.MISSION_PAD_ALIGNMENT_ALTITUDE_CM} cm → {initial_altitude} cm)...')
+                    drone_instance.move_down(abs(delta_to_restore))
+            
+            drone_instance.send_rc_control(0, 0, 0, 0)
+            time.sleep(0.5)  # Final stabilization
+            
+            logger.log_info('WaypointNavigationManager', 
+                f'Altitude restored to {initial_altitude} cm. '
+                f'Mission pad alignment {"completed successfully" if alignment_success else "skipped (pad not detected)"}.')
+            
+            return alignment_success
+            
+        except Exception as e:
+            logger.log_error('WaypointNavigationManager', 
+                f'Critical error during mission pad alignment: {e}')
+            import traceback
+            traceback.print_exc()
+            
+            # Emergency altitude restoration attempt
+            if initial_altitude > 0:
+                try:
+                    logger.log_info('WaypointNavigationManager', 
+                        'Attempting emergency altitude restoration...')
+                    # We don't know exactly where the drone is, read ToF again
+                    current_alt = self._read_tof_altitude(drone_instance)
+                    if current_alt > 0:
+                        delta = initial_altitude - current_alt
+                        if delta > 0:
+                            drone_instance.move_up(delta)
+                        elif delta < 0:
+                            drone_instance.move_down(abs(delta))
+                        drone_instance.send_rc_control(0, 0, 0, 0)
+                except Exception as restore_err:
+                    logger.log_error('WaypointNavigationManager', 
+                        f'Emergency altitude restoration failed: {restore_err}')
+            
+            # Ensure mission pads are disabled on error
+            try:
+                drone_instance.disable_mission_pads()
+            except Exception:
+                pass
+            
+            return False
+            
+        finally:
+            # Always resume battery monitoring
+            if hasattr(self, 'coordinator') and hasattr(self.coordinator, '_resume_battery_monitoring'):
+                self.coordinator._resume_battery_monitoring()
+
     def navigate_to_waypoint(self, target_waypoint_id: str, drone_instance=None) -> bool:
         """Execute complete navigation sequence to target waypoint."""
         # Safety check for emergency shutdown
@@ -493,6 +750,18 @@ class WaypointNavigationManager:
                 
                 logger.log_success('WaypointNavigationManager', 
                     f'Successfully navigated to {target_waypoint_id} ("{target_name}")')
+                
+                # Perform mission pad alignment if enabled
+                if self.mission_pad_enabled:
+                    pad_result = self.perform_mission_pad_alignment(drone_instance)
+                    if pad_result:
+                        logger.log_success('WaypointNavigationManager', 
+                            f'Mission pad alignment completed at {target_waypoint_id}')
+                    else:
+                        logger.log_warning('WaypointNavigationManager', 
+                            f'Mission pad alignment skipped/failed at {target_waypoint_id} '
+                            f'- continuing navigation')
+                
                 return True
             else:
                 logger.log_error('WaypointNavigationManager', 

@@ -114,6 +114,8 @@ class PlannerConfigs:
     # Operational Settings
     scan_image_directory: Optional[str] = None
     max_replan_attempts: int = 2
+    takeoff_altitude_cm: int = 0  # Target altitude (cm) after takeoff (0 = no adjustment, 20-500 valid range)
+    mission_pad_enabled: bool = False  # Enable mission pad alignment after each waypoint arrival
     
     # Logging Settings
     logger_location: str = ""
@@ -264,6 +266,8 @@ class PlannerConfigs:
             'available_waypoints': self.available_waypoints,
             'scan_image_directory': self.scan_image_directory,
             'max_replan_attempts': self.max_replan_attempts,
+            'takeoff_altitude_cm': self.takeoff_altitude_cm,
+            'mission_pad_enabled': self.mission_pad_enabled,
         }
     
     @classmethod
@@ -288,7 +292,8 @@ class PlannerConfigs:
             'yolo_model_path', 'yolo_confidence_threshold', 'yolo_iou_threshold',
             'yolo_world_model_path', 'yolo_world_confidence_threshold',
             'waypoint_file_path', 'waypoint_directory', 'available_waypoints',
-            'scan_image_directory', 'max_replan_attempts', 'logger_location'
+            'scan_image_directory', 'max_replan_attempts', 'logger_location',
+            'takeoff_altitude_cm', 'mission_pad_enabled'
         }
         filtered_dict = {k: v for k, v in config_dict.items() if k in known_fields}
         

@@ -773,11 +773,15 @@ class PlannerGUI:
                 self._append_message(f"Reason: {result.error_message}", MessageType.SYSTEM)
                 
         # Statistics
+        duration_str = f"{result.session_duration:.1f} seconds"
+        if result.round_durations and len(result.round_durations) > 1:
+            round_strs = [f"Round {i+1}: {d:.1f}s" for i, d in enumerate(result.round_durations)]
+            duration_str += f"  ({', '.join(round_strs)})"
         stats = (
             f"Session Statistics:\n"
             f"  • Waypoints visited: {', '.join(result.waypoints_visited) or 'None'}\n"
             f"  • Scans performed: {result.scans_performed}\n"
-            f"  • Duration: {result.session_duration:.1f} seconds"
+            f"  • Duration: {duration_str}"
         )
         self._append_message(stats, MessageType.SYSTEM)
         

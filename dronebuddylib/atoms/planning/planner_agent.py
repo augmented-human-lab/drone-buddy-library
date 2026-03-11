@@ -12,6 +12,7 @@ Supports:
 
 import os
 import json
+import time
 from typing import List, Optional, Dict, Any, TYPE_CHECKING
 
 from dronebuddylib.utils.logger import Logger
@@ -30,6 +31,7 @@ from dronebuddylib.atoms.planning.vlm_client import (
 
 if TYPE_CHECKING:
     from dronebuddylib.atoms.planning.planner_configs import PlannerConfigs
+    from dronebuddylib.atoms.planning.session_logger import SessionLogger
 
 logger = Logger()
 
@@ -105,6 +107,9 @@ class PlannerAgent:
         # Set initial system prompt
         self.vlm_client.set_system_prompt(self.system_prompt)
         
+        # Session logger (injected by PlannerExecutor at the start of each session)
+        self.session_logger: Optional['SessionLogger'] = None
+        
         logger.log_info('PlannerAgent', 
             f'Initialized with provider: {provider}, model: {self.vlm_client.model}')
     
@@ -154,8 +159,30 @@ class PlannerAgent:
         user_message = self._build_planning_message(user_request, waypoint_names, current_waypoint)
         
         try:
-            # Send to VLM and get response
+            # Snapshot conversation history before the call (history is cleared above, so empty)
+            _history_snapshot = [
+                {"role": msg.role, "content": msg.content}
+                for msg in self.vlm_client.conversation_history
+                if msg.role != "system"
+            ]
+            _active_system_prompt = self.vlm_client.system_prompt or self.system_prompt
+            
+            # Send to VLM and get response — measure latency
+            _t0 = time.time()
             response: VLMResponse = self.vlm_client.send_message(user_message)
+            _latency = time.time() - _t0
+            
+            # Record the call in the session logger
+            if self.session_logger and response:
+                from dronebuddylib.atoms.planning.session_logger import SessionLogger
+                self.session_logger.record_vlm_call(
+                    call_type="Plan Generation",
+                    system_prompt=_active_system_prompt,
+                    conversation_history=_history_snapshot,
+                    user_message=user_message,
+                    response_content=response.content,
+                    latency_seconds=_latency,
+                )
             
             if response and response.content:
                 # Parse the JSON response
@@ -233,7 +260,27 @@ Please generate a new search plan. Keep the same is_coco_class value and related
 """
         
         try:
+            _history_snapshot = [
+                {"role": msg.role, "content": msg.content}
+                for msg in self.vlm_client.conversation_history
+                if msg.role != "system"
+            ]
+            _active_system_prompt = self.vlm_client.system_prompt or self.replanning_prompt
+            
+            _t0 = time.time()
             response: VLMResponse = self.vlm_client.send_message(user_message)
+            _latency = time.time() - _t0
+            
+            if self.session_logger and response:
+                from dronebuddylib.atoms.planning.session_logger import SessionLogger
+                self.session_logger.record_vlm_call(
+                    call_type="Plan Regeneration",
+                    system_prompt=_active_system_prompt,
+                    conversation_history=_history_snapshot,
+                    user_message=user_message,
+                    response_content=response.content,
+                    latency_seconds=_latency,
+                )
             
             if response and response.content:
                 plan = self._parse_plan_response(response.content)
@@ -301,7 +348,28 @@ The user was searching for this object. Describe:
                 return None
             
             logger.log_info('PlannerAgent', f'Sending image to VLM for description: {valid_image}')
+            _history_snapshot = [
+                {"role": msg.role, "content": msg.content}
+                for msg in self.vlm_client.conversation_history
+                if msg.role != "system"
+            ]
+            _active_system_prompt = self.vlm_client.system_prompt or self.object_describer_prompt
+            
+            _t0 = time.time()
             response: VLMResponse = self.vlm_client.send_message(user_message, valid_image)
+            _latency = time.time() - _t0
+            
+            if self.session_logger and response:
+                from dronebuddylib.atoms.planning.session_logger import SessionLogger
+                self.session_logger.record_vlm_call(
+                    call_type="Object Description",
+                    system_prompt=_active_system_prompt,
+                    conversation_history=_history_snapshot,
+                    user_message=user_message,
+                    response_content=response.content,
+                    latency_seconds=_latency,
+                    image_path=valid_image,
+                )
             
             if response and response.content:
                 # Try to parse as JSON

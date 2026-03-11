@@ -93,7 +93,8 @@ class TelloWaypointNavCoordinator:
                      waypoint_dest: str = None, instruction: NavigationInstruction = None, 
                      waypoint_file: str = None, create_new: bool = False,
                      obstacle_detection_mode: 'ObstacleDetectionMode' = None,
-                     midas_model_path: str = None):
+                     midas_model_path: str = None,
+                     takeoff_altitude_cm: int = 0):
         """
         Factory method for singleton instance management with parameter-driven configuration.
         
@@ -114,6 +115,7 @@ class TelloWaypointNavCoordinator:
             create_new (bool): Force creation of new instance, replacing existing singleton
             obstacle_detection_mode (ObstacleDetectionMode, optional): Depth-based obstacle detection threshold
             midas_model_path (str, optional): Path to MiDaS ONNX model file
+            takeoff_altitude_cm (int): Target altitude in cm to reach after standard takeoff (0 = no adjustment, valid range 30-500)
         
         Returns:
             TelloWaypointNavCoordinator: Configured singleton coordinator instance
@@ -124,7 +126,7 @@ class TelloWaypointNavCoordinator:
         if create_new: 
             instance = cls(waypoint_dir, vertical_factor, movement_speed, rotation_speed, 
                           navigation_speed, mode, waypoint_dest, instruction, waypoint_file,
-                          obstacle_detection_mode, midas_model_path)
+                          obstacle_detection_mode, midas_model_path, takeoff_altitude_cm)
             cls._active_instance = instance
             return instance
         else: 
@@ -138,7 +140,7 @@ class TelloWaypointNavCoordinator:
                  rotation_speed: int, navigation_speed: int, mode: str, 
                  waypoint_dest: str = None, instruction: NavigationInstruction = None, 
                  waypoint_file: str = None, obstacle_detection_mode: 'ObstacleDetectionMode' = None,
-                 midas_model_path: str = None):
+                 midas_model_path: str = None, takeoff_altitude_cm: int = 0):
         """
         Initialize coordinator with operational parameters and mode-specific configuration.
         
@@ -158,6 +160,8 @@ class TelloWaypointNavCoordinator:
             waypoint_file (str, optional): Specific waypoint file for navigation operations
             obstacle_detection_mode (ObstacleDetectionMode, optional): Depth-based obstacle detection threshold
             midas_model_path (str, optional): Path to MiDaS ONNX model file for depth estimation
+            takeoff_altitude_cm (int): Target altitude in cm to reach after standard takeoff (0 = no adjustment, valid range 20-500)
+                                       Tello takes off to ~80 cm by default. Values below 80 cause a descent, above 80 an ascent.
             
         Raises:
             ValueError: For invalid operational mode or incompatible parameter combinations
@@ -184,6 +188,13 @@ class TelloWaypointNavCoordinator:
         self.midas_model_path = midas_model_path
         self.obstacle_detector = None  # Created when video stream is started
         self.frame_read = None         # Drone camera frame reader
+        
+        # Takeoff altitude configuration
+        self.takeoff_altitude_cm = takeoff_altitude_cm  # Target altitude (cm) to reach immediately after standard takeoff
+
+        # Mission pad alignment configuration
+        self.mission_pad_enabled = False  # Set True to enable mission pad alignment after each waypoint arrival
+        self._pending_takeoff_alignment = False  # Flag: perform alignment right after nav_manager is created
 
         # Initialize Tello drone
         logger.log_debug('TelloWaypointNavCoordinator', 'Initializing Tello drone.')
@@ -511,6 +522,19 @@ class TelloWaypointNavCoordinator:
             logger.log_info('TelloWaypointNavCoordinator', f'Detected {current_os} OS - using Linux navigation interface')
             self.nav_interface = NavigationInterface(self.waypoint_dir, self.vertical_factor, self.navigation_speed, self.waypoint_file)
         
+        # Propagate mission pad config to nav_manager inside the interface
+        if hasattr(self.nav_interface, 'nav_manager'):
+            self.nav_interface.nav_manager.mission_pad_enabled = self.mission_pad_enabled
+            self.nav_interface.nav_manager.coordinator = self
+            
+            # Perform deferred takeoff alignment if pending
+            if self._pending_takeoff_alignment:
+                logger.log_info('TelloWaypointNavCoordinator',
+                    f'Performing deferred takeoff alignment (target return altitude: {self.takeoff_altitude_cm} cm)...')
+                self.nav_interface.nav_manager.perform_mission_pad_alignment(
+                    self.tello, override_initial_altitude=self.takeoff_altitude_cm)
+                self._pending_takeoff_alignment = False
+        
         self.is_navigation_mode = True
         self.is_running = True
         
@@ -599,6 +623,17 @@ class TelloWaypointNavCoordinator:
                     frame_read=self.frame_read
                 )
                 self.nav_manager.coordinator = self  # Enable emergency shutdown callbacks
+                self.nav_manager.mission_pad_enabled = self.mission_pad_enabled  # Propagate mission pad config
+                
+                # Perform deferred takeoff alignment if pending
+                # This happens on the very first takeoff when mission_pad is enabled and takeoff_altitude > 0.
+                # The drone is at ~80cm (default takeoff), we align and then descend to takeoff_altitude_cm.
+                if self._pending_takeoff_alignment:
+                    logger.log_info('TelloWaypointNavCoordinator',
+                        f'Performing deferred takeoff alignment (target return altitude: {self.takeoff_altitude_cm} cm)...')
+                    self.nav_manager.perform_mission_pad_alignment(
+                        self.tello, override_initial_altitude=self.takeoff_altitude_cm)
+                    self._pending_takeoff_alignment = False
                 
                 # Notify external callback if GUI integration is set up
                 if TelloWaypointNavCoordinator._external_nav_manager_callback:
@@ -876,6 +911,53 @@ class TelloWaypointNavCoordinator:
             self.is_flying = True
             time.sleep(1)  # Stabilization delay
             logger.log_success('TelloWaypointNavCoordinator', 'Drone is airborne!')
+            
+            # Adjust to target altitude if configured
+            # The Tello always takes off to ~80 cm regardless of environment.
+            # TELLO_DEFAULT_TAKEOFF_HEIGHT_CM is used only to calculate the delta;
+            TELLO_DEFAULT_TAKEOFF_HEIGHT_CM = 80  # Tello firmware fixed takeoff altitude
+            TELLO_MIN_SAFE_ALTITUDE_CM = 20       # Safe minimum (Tello VPS stops descent at ~20 cm)
+            
+            if self.takeoff_altitude_cm > 0:
+                target = max(self.takeoff_altitude_cm, TELLO_MIN_SAFE_ALTITUDE_CM)  # Clamp to safe minimum
+                target = min(target, 500)                                            # Clamp to Tello SDK maximum
+                if target != self.takeoff_altitude_cm:
+                    logger.log_warning('TelloWaypointNavCoordinator',
+                        f'takeoff_altitude_cm={self.takeoff_altitude_cm} clamped to {target} cm '
+                        f'(valid range: {TELLO_MIN_SAFE_ALTITUDE_CM}-500 cm).')
+                
+                # If mission pad alignment is enabled, skip the altitude adjustment here.
+                # Instead, defer to post-takeoff alignment which will use the takeoff altitude
+                # as the target return altitude. This avoids wasteful: 80 -> target -> 100 -> 40 -> target
+                # and instead does: 80 -> 100 -> 40 -> target (efficient).
+                if self.mission_pad_enabled:
+                    logger.log_info('TelloWaypointNavCoordinator',
+                        f'Mission pad alignment enabled - skipping altitude adjustment to {target} cm. '
+                        f'Will align first, then descend to {target} cm after alignment.')
+                    self._pending_takeoff_alignment = True
+                    self.takeoff_altitude_cm = target  # Store clamped value for alignment
+                else:
+                    delta = target - TELLO_DEFAULT_TAKEOFF_HEIGHT_CM
+                    
+                    if delta == 0:
+                        logger.log_info('TelloWaypointNavCoordinator',
+                            f'Target altitude {target} cm equals default takeoff height - no adjustment needed.')
+                    elif delta > 0:
+                        logger.log_info('TelloWaypointNavCoordinator',
+                            f'Ascending {delta} cm to reach target altitude of {target} cm...')
+                        self.tello.move_up(delta)
+                        time.sleep(1)  # Stabilization
+                        logger.log_success('TelloWaypointNavCoordinator',
+                            f'Reached target altitude: {target} cm.')
+                    else:  # delta < 0 - descend
+                        descent = abs(delta)
+                        logger.log_info('TelloWaypointNavCoordinator',
+                            f'Descending {descent} cm to reach target altitude of {target} cm...')
+                        self.tello.move_down(descent)
+                        time.sleep(1)  # Stabilization
+                        logger.log_success('TelloWaypointNavCoordinator',
+                            f'Reached target altitude: {target} cm.')
+            
             return True
         
         except Exception as e:
