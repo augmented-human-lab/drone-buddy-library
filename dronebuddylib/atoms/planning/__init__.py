@@ -1,36 +1,9 @@
-"""
-VLM-based Planning Module for Drone Buddy Library.
+"""Planning API exports.
 
-This module provides a high-level planner that uses a Vision-Language Model (VLM) 
-to plan and execute sequences of actions for the drone to find specific items.
-
-Supports multiple VLM providers:
-- OpenAI (GPT-4, GPT-4o, GPT-5)
-- Anthropic (Claude-3.5-Sonnet, Claude-3-Opus)
-- Google (Gemini-1.5-Pro, Gemini-1.5-Flash)
-
-Components:
-- PlannerEngine: High-level API for VLM-based object finding
-- PlannerAgent: VLM-based agent for generating action plans  
-- PlannerExecutor: Control flow executor for executing planned actions
-- VLM Client: Provider-agnostic abstraction for different VLM providers
-
-The YOLO detection is integrated into the navigation module's TelloNavExtra class
-via the scan_with_detection() method.
-
-Example Usage (EngineConfigurations - Standard Pattern):
-    from dronebuddylib import EngineConfigurations, AtomicEngineConfigurations
-    from dronebuddylib.atoms.planning import PlannerEngine
-    
-    # Configure like other atoms in the library
-    config = EngineConfigurations({})
-    config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_PROVIDER, "openai")
-    config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_API_KEY, "your-key")
-    config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_MODEL, "gpt-4o")
-    config.add_configuration(AtomicEngineConfigurations.PLANNER_YOLO_ONNX_MODEL_PATH, "models/yolo.onnx")
-    
-    engine = PlannerEngine(config)
-    result = engine.find_object("Find my coffee cup")
+This package wires together:
+- plan generation via VLM providers,
+- execution via the navigation engine,
+- optional GUI/session tooling.
 """
 
 from dronebuddylib.atoms.planning.planner_engine import PlannerEngine

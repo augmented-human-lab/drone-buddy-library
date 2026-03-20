@@ -1,14 +1,7 @@
-"""
-Planner Executor - Control flow executor for VLM-planned drone actions.
+"""Planner execution loop.
 
-This module provides the PlannerExecutor class that orchestrates the execution
-of VLM-generated action plans, handling the complete workflow from user request
-to object finding, confirmation, and session completion.
-
-This executor uses:
-- PlannerAgent: For VLM-based plan generation
-- NavigationEngine: For drone navigation AND 360° scan with YOLO detection
-  (unified interface via scan_with_detection wrapper)
+`PlannerExecutor` runs a full search session: plan, navigate, scan, confirm,
+and safely end the flight.
 """
 
 import os
@@ -93,7 +86,7 @@ class PlannerExecutor:
         result = executor.execute("Find my coffee cup")
     """
     
-    # Maximum number of re-planning attempts
+    # Default retry count for replanning.
     MAX_REPLAN_ATTEMPTS = 2
     
     def __init__(
@@ -193,14 +186,14 @@ class PlannerExecutor:
                 image_dir
             )
         
-        # Add MiDaS obstacle detection configuration
+        # Optional MiDaS obstacle detection.
         if midas_model_path:
             nav_config.add_configuration(
                 AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH,
                 midas_model_path
             )
         if obstacle_detection_mode and obstacle_detection_mode != "OFF":
-            # Import ObstacleDetectionMode here to convert string to enum
+            # Normalize string mode to enum.
             from dronebuddylib.models.enums import ObstacleDetectionMode
             try:
                 mode = ObstacleDetectionMode[obstacle_detection_mode.upper()]
@@ -212,7 +205,7 @@ class PlannerExecutor:
             except KeyError:
                 logger.log_warning('PlannerExecutor', f'Invalid obstacle detection mode: {obstacle_detection_mode}')
         
-        # Add takeoff altitude configuration
+        # Optional takeoff altitude override.
         if takeoff_altitude_cm > 0:
             nav_config.add_configuration(
                 AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
@@ -220,7 +213,7 @@ class PlannerExecutor:
             )
             logger.log_info('PlannerExecutor', f'Takeoff altitude set to: {takeoff_altitude_cm} cm')
         
-        # Add mission pad alignment configuration
+        # Optional mission-pad alignment.
         if mission_pad_enabled:
             nav_config.add_configuration(
                 AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED,
@@ -241,12 +234,12 @@ class PlannerExecutor:
         self.replan_count: int = 0
         self.session_start_time: float = 0
         
-        # Session logger (freshly created at the start of each execute() call)
+        # Fresh logger per execute() call.
         self.session_logger: Optional[SessionLogger] = None
         
-        # Available waypoints (loaded from file)
+        # Loaded from waypoint file/nav manager.
         self.available_waypoints: List[str] = []
-        # Mapping from waypoint ID to English name (for user-friendly display)
+        # ID/name lookup tables used by UI messaging.
         self.waypoint_id_to_name: Dict[str, str] = {}
         self.waypoint_name_to_id: Dict[str, str] = {}
         
@@ -692,7 +685,7 @@ class PlannerExecutor:
             logger.log_warning('PlannerExecutor', 'No waypoint specified for navigation')
             return "CONTINUE"
         
-        # Display user-friendly name
+        # Use human-friendly waypoint names in chat messages.
         display_name = self._get_waypoint_display_name(waypoint_name)
         self._send_message_to_user(f'Flying to {display_name}...')
         
@@ -706,13 +699,11 @@ class PlannerExecutor:
                 landed = result[0]  # True = drone has landed, False = still flying
                 self.current_waypoint = result[1]
                 
-                # Check if drone landed unexpectedly (obstacle timeout, emergency, etc.)
                 if landed:
                     logger.log_error('PlannerExecutor', 
                         f'Navigation failed: drone landed unexpectedly at {result[1]}')
                     return "DRONE_LANDED_EARLY"
                 
-                # Track visited with display name for user-friendly output
                 if display_name not in self.waypoints_visited:
                     self.waypoints_visited.append(display_name)
                     
@@ -744,9 +735,8 @@ class PlannerExecutor:
         self.scans_performed += 1
         
         try:
-            # Choose detection method based on VLM's classification
+            # Pick detector based on planner classification.
             if self.current_plan.is_coco_class:
-                # Use standard YOLO ONNX for COCO 80-class objects
                 logger.log_debug('PlannerExecutor', 
                     f'Using YOLO ONNX detection for COCO class: {self.target_object}')
                 
@@ -757,12 +747,10 @@ class PlannerExecutor:
                     yolo_iou_threshold=self.yolo_iou_threshold
                 )
             else:
-                # Use YOLO-World for open-vocabulary detection
                 detection_targets = self.current_plan.get_detection_targets()
                 logger.log_debug('PlannerExecutor', 
                     f'Using YOLO-World detection for targets: {detection_targets}')
                 
-                # Verify YOLO-World model path is set
                 if not self.yolo_world_model_path:
                     logger.log_error('PlannerExecutor', 
                         'YOLO-World model path not configured for non-COCO object detection')
@@ -777,7 +765,6 @@ class PlannerExecutor:
                     yolo_conf_threshold=self.yolo_world_conf_threshold
                 )
             
-            # Report what was found
             if scan_result.all_unique_objects:
                 self._send_message_to_user(
                     f'I detected these objects: {", ".join(scan_result.all_unique_objects)}'
@@ -785,7 +772,6 @@ class PlannerExecutor:
             else:
                 self._send_message_to_user('No objects detected at this location.')
             
-            # Check if target was found
             if scan_result.target_object_found:
                 return self._handle_object_found(scan_result)
             else:
@@ -800,8 +786,7 @@ class PlannerExecutor:
         """Handle when target object is detected during scan."""
         self.state = PlannerState.AWAITING_CONFIRMATION
         
-        # Record the YOLO detection confidence for the flagged item in the session log.
-        # Uses the best frame (highest target confidence) — the same frame sent to the VLM.
+        # Keep the detection confidence used for this confirmation step.
         if self.session_logger:
             best_frame = scan_result.get_best_detection_frame()
             if best_frame:
@@ -813,25 +798,21 @@ class PlannerExecutor:
                     confidence=yolo_conf,
                 )
         
-        # Use display name for user-friendly message
         display_name = self._get_waypoint_display_name(self.current_waypoint)
         self._send_message_to_user(
             f' I found "{self.target_object}" at {display_name}!'
         )
         
-        # Send prompt as message BEFORE calling callback (fixes ordering)
+        # Show prompt first so the chat ordering stays natural.
         self._send_message_to_user("Would you like me to describe this item for confirmation? (yes/no):")
         
-        # Ask if user wants confirmation
         response = self.user_input_callback(
             "Would you like me to describe this item for confirmation? (yes/no): "
         ).strip().lower()
         
         if response in ['yes', 'y']:
-            # Get VLM description of the object
             image_paths = scan_result.get_image_paths_with_target()
             
-            # Log which images are being sent to VLM
             logger.log_info('PlannerExecutor', 
                 f'Sending {len(image_paths)} image(s) to VLM for description:')
             for i, path in enumerate(image_paths):
@@ -857,10 +838,8 @@ class PlannerExecutor:
                     if description.get("location_context"):
                         self._send_message_to_user(f'Location: {description["location_context"]}')
             
-            # Send prompt as message BEFORE calling callback (fixes ordering)
             self._send_message_to_user("Is this the item you were looking for? (yes/no):")
             
-            # Ask for final confirmation
             confirm = self.user_input_callback(
                 "Is this the item you were looking for? (yes/no): "
             ).strip().lower()
@@ -872,13 +851,12 @@ class PlannerExecutor:
                 self._send_message_to_user('I understand. This is not the correct item.')
                 return "OBJECT_REJECTED"
         else:
-            # User doesn't want VLM description - ask for direct confirmation
+            # User skipped description; ask for direct confirmation.
             display_name = self._get_waypoint_display_name(self.current_waypoint)
             self._send_message_to_user(
                 f'I found a "{self.target_object}" at {display_name}.'
             )
             
-            # Send prompt as message BEFORE calling callback (fixes ordering)
             self._send_message_to_user("Is this the item you were looking for? (yes/no):")
             
             confirm = self.user_input_callback(
@@ -904,16 +882,13 @@ class PlannerExecutor:
             self._safe_return_to_start()
             return self._create_failure_result("Maximum replan attempts reached")
         
-        # Send prompt as message BEFORE calling callback (fixes ordering)
         self._send_message_to_user("Would you like me to continue searching? (yes/no):")
         
-        # Ask if user wants to continue
         response = self.user_input_callback(
             "Would you like me to continue searching? (yes/no): "
         ).strip().lower()
         
         if response in ['yes', 'y']:
-            # Send prompt as message BEFORE calling callback (fixes ordering)
             self._send_message_to_user("Any additional hints about what I should look for? (or press Enter to skip):")
             
             feedback = self.user_input_callback(
@@ -922,11 +897,10 @@ class PlannerExecutor:
             
             self._send_message_to_user('Generating a new search plan...')
             
-            # Round 1 ends here — user has accepted re-planning, round 2 is about to begin
+            # Mark the transition to round 2 in session logs.
             if self.session_logger:
                 self.session_logger.record_round_transition(time.time())
             
-            # Regenerate plan with detection mode context
             new_plan = self.planner_agent.regenerate_plan(
                 target_object=self.target_object,
                 waypoint_names=self.available_waypoints,
@@ -967,10 +941,8 @@ class PlannerExecutor:
             f'I have visited all planned locations but did not find "{self.target_object}".'
         )
         
-        # Send prompt as message BEFORE calling callback (fixes ordering)
         self._send_message_to_user("Would you like me to search again? (yes/no):")
         
-        # Ask if user wants to continue
         response = self.user_input_callback(
             "Would you like me to search again? (yes/no): "
         ).strip().lower()
@@ -978,11 +950,10 @@ class PlannerExecutor:
         if response in ['yes', 'y']:
             self._send_message_to_user('Generating a new search plan...')
             
-            # Round 1 ends here — user has accepted re-planning, round 2 is about to begin
+            # Mark the transition to round 2 in session logs.
             if self.session_logger:
                 self.session_logger.record_round_transition(time.time())
             
-            # Regenerate plan with detection mode context
             new_plan = self.planner_agent.regenerate_plan(
                 target_object=self.target_object,
                 waypoint_names=self.available_waypoints,
@@ -1025,12 +996,10 @@ class PlannerExecutor:
         self._send_message_to_user('Returning to start position...')
         
         try:
-            # Check if session was terminated (obstacle timeout, keyboard interrupt)
-            # If so, don't try to navigate - drone is already landed
+            # Skip return if a safety stop already landed the drone.
             if TelloWaypointNavCoordinator._session_terminated:
                 logger.log_info('PlannerExecutor', 
                     'Session terminated - skipping return to start (drone already landed)')
-                # Check if it was obstacle timeout
                 if TelloWaypointNavCoordinator._obstacle_timeout_occurred:
                     self._send_message_to_user(
                         'Path was blocked by obstacle for over 30 seconds. Drone has landed safely.'
@@ -1040,10 +1009,8 @@ class PlannerExecutor:
                     self._send_message_to_user('Drone has already landed safely.')
                 return "CONTINUE"
             
-            # Navigate to START (first Super Waypoint) with HALT instruction
             start_waypoint = "START"
             if self.available_waypoints and "START" not in self.available_waypoints:
-                # Fallback to first available waypoint if START not found
                 start_waypoint = self.available_waypoints[0]
             
             result = self.nav_engine.navigate_to_waypoint(
@@ -1051,22 +1018,17 @@ class PlannerExecutor:
                 NavigationInstruction.HALT
             )
             
-            # Check if navigation returned with landed=True (obstacle timeout or other issue)
             if result and len(result) >= 2:
                 landed_early = result[0]
                 actual_waypoint = result[1]
                 
-                # Only show "could not reach" if drone landed at a DIFFERENT waypoint
-                # Note: START maps to SWP_001, so check both
                 reached_start = (actual_waypoint == start_waypoint or 
                                 actual_waypoint == "SWP_001" or 
                                 actual_waypoint == "START")
                 
                 if landed_early and not reached_start:
-                    # Use display name for user-friendly message
                     display_name = self._get_waypoint_display_name(actual_waypoint)
                     
-                    # Drone landed before reaching START
                     if TelloWaypointNavCoordinator._obstacle_timeout_occurred:
                         self._send_message_to_user(
                             f'[STATUS]Path blocked by obstacle for over 30 seconds while returning. '

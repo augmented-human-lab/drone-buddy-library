@@ -1,14 +1,6 @@
-"""
-Planner Engine - High-level API for VLM-based drone task planning.
+"""High-level planner API.
 
-This module provides the PlannerEngine class which serves as the main entry point
-for the VLM-based planning functionality, similar to how NavigationEngine provides
-the interface for navigation.
-
-Supports multiple VLM providers:
-- OpenAI (GPT-4, GPT-4o, GPT-5)
-- Anthropic (Claude-3.5-Sonnet, Claude-3-Opus)
-- Google (Gemini-1.5-Pro, Gemini-1.5-Flash)
+`PlannerEngine` is the public entry point for VLM-driven search sessions.
 """
 
 from typing import Optional, Callable, List, Union
@@ -29,13 +21,7 @@ logger = Logger()
 
 class PlannerEngine:
     """
-    High-level engine for VLM-based drone task planning.
-    
-    This engine provides a simplified interface for using the VLM planner to
-    find objects using a Tello drone. It wraps the PlannerExecutor and provides
-    convenient methods for common operations.
-    
-    Supports multiple VLM providers (OpenAI, Anthropic, Google).
+    Public wrapper around `PlannerExecutor`.
     
     Detection System:
         The planner uses a dual detection system based on VLM classification:
@@ -47,48 +33,8 @@ class PlannerEngine:
         When enabled, the drone will pause before forward movements if obstacles
         are detected in the path, and wait until the path is clear.
     
-    Creating an Engine:
-        # Recommended: Use from_config() with PlannerConfigs
-        config = PlannerConfigs.from_json_file("config.json")
-        engine = PlannerEngine.from_config(config)
-        
-        # Alternative: Use EngineConfigurations
-        eng_config = EngineConfigurations({})
-        eng_config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_PROVIDER, "openai")
-        eng_config.add_configuration(AtomicEngineConfigurations.PLANNER_VLM_API_KEY, "your-key")
-        engine = PlannerEngine(eng_config)
-    
-    Configuration Options (via EngineConfigurations):
-        - PLANNER_VLM_PROVIDER: VLM provider (openai, anthropic, google) (default: openai)
-        - PLANNER_VLM_API_KEY: API key for VLM provider (required)
-        - PLANNER_VLM_MODEL: VLM model name (provider-specific default)
-        - PLANNER_YOLO_ONNX_MODEL_PATH: Path to ONNX YOLO model (required)
-        - PLANNER_YOLO_CONF_THRESHOLD: Detection confidence threshold (default: 0.3)
-        - PLANNER_YOLO_IOU_THRESHOLD: NMS IOU threshold (default: 0.45)
-        - PLANNER_YOLO_WORLD_MODEL_PATH: Path to YOLO-World model (for non-COCO objects)
-        - PLANNER_YOLO_WORLD_CONF_THRESHOLD: YOLO-World confidence (default: 0.025)
-        - PLANNER_MAX_REPLAN_ATTEMPTS: Max re-planning attempts (default: 2)
-        - NAVIGATION_TELLO_WAYPOINT_FILE: Waypoint file to use
-        - NAVIGATION_TELLO_WAYPOINT_DIR: Waypoint directory
-        - NAVIGATION_TELLO_IMAGE_DIR: Directory for scan images
-        - NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH: Path to MiDaS ONNX model
-        - NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE: ObstacleDetectionMode enum
-        - NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM: Target altitude in cm after takeoff (0 = no adjustment)
-    
-    Example:
-        from dronebuddylib.models.enums import ObstacleDetectionMode
-        
-        config = PlannerConfigs(
-            vlm_provider="anthropic",
-            vlm_api_key="your-anthropic-key",
-            vlm_model="claude-3-5-sonnet-20241022",
-            yolo_model_path="models/yolov8n.onnx",
-            yolo_world_model_path="models/yolov8m-worldv2.pt",
-            midas_model_path="models/midas_v21_small_256.onnx",
-            obstacle_detection_mode="MEDIUM"
-        )
-        engine = PlannerEngine.from_config(config)
-        result = engine.find_object("Find my coffee cup")
+    It supports OpenAI, Anthropic, and Google providers and delegates execution
+    to `PlannerExecutor`.
     """
     
     @classmethod
@@ -99,9 +45,6 @@ class PlannerEngine:
     ) -> 'PlannerEngine':
         """
         Create a PlannerEngine from a PlannerConfigs object.
-        
-        This is the recommended way to create a PlannerEngine as it supports
-        the full range of configuration options including multi-provider VLM.
         
         Args:
             config: PlannerConfigs with all settings
@@ -114,7 +57,7 @@ class PlannerEngine:
             config = PlannerConfigs.from_json_file("planner_config.json")
             engine = PlannerEngine.from_config(config)
         """
-        # Create an EngineConfigurations from PlannerConfigs
+        # Build the equivalent EngineConfigurations payload.
         eng_config = EngineConfigurations({})
         eng_config.add_configuration(
             AtomicEngineConfigurations.PLANNER_VLM_PROVIDER, 
@@ -138,7 +81,7 @@ class PlannerEngine:
                 config.waypoint_file_path
             )
         
-        # Create instance using the converted config
+        # Bypass __init__ so we can hydrate directly from PlannerConfigs.
         instance = cls.__new__(cls)
         instance._init_from_planner_config(config, user_input_callback)
         return instance
@@ -185,7 +128,7 @@ class PlannerEngine:
         """
         logger.log_info('PlannerEngine', 'Initializing Planner Engine...')
         
-        # Get all configurations (need both PLANNER_* and NAVIGATION_* configs)
+        # Read both planner and navigation keys.
         configs = config.get_configurations()
         
         # Required configurations
@@ -197,12 +140,12 @@ class PlannerEngine:
         if not self.yolo_model_path:
             raise ValueError("PLANNER_YOLO_ONNX_MODEL_PATH is required")
         
-        # Required: Waypoint file for navigation
+        # Waypoint file is required for planner navigation.
         self.waypoint_file = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE)
         if not self.waypoint_file:
             raise ValueError("NAVIGATION_TELLO_WAYPOINT_FILE is required for planner navigation")
         
-        # Provider configuration (new for multi-provider support)
+        # Provider selection.
         self.vlm_provider = configs.get(
             AtomicEngineConfigurations.PLANNER_VLM_PROVIDER,
             "openai"
@@ -211,11 +154,11 @@ class PlannerEngine:
         # Optional configurations
         self.vlm_model = configs.get(
             AtomicEngineConfigurations.PLANNER_VLM_MODEL, 
-            None  # Let the executor choose default based on provider
+            None
         )
         self.vlm_temperature = configs.get(
             AtomicEngineConfigurations.PLANNER_VLM_TEMPERATURE,
-            0.3  # Default temperature for more deterministic planning
+            0.3
         )
         self.waypoint_dir = configs.get(
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR
@@ -225,37 +168,37 @@ class PlannerEngine:
         )
         self.max_replan_attempts = configs.get(
             AtomicEngineConfigurations.PLANNER_MAX_REPLAN_ATTEMPTS,
-            2  # Default max replan attempts
+            2
         )
         self.yolo_conf_threshold = configs.get(
             AtomicEngineConfigurations.PLANNER_YOLO_CONF_THRESHOLD,
-            0.25  # Default confidence threshold
+            0.25
         )
         self.yolo_iou_threshold = configs.get(
             AtomicEngineConfigurations.PLANNER_YOLO_IOU_THRESHOLD,
-            0.45  # Default IOU threshold
+            0.45
         )
         
         # YOLO-World configuration for open-vocabulary detection
         self.yolo_world_model_path = configs.get(
             AtomicEngineConfigurations.PLANNER_YOLO_WORLD_MODEL_PATH,
-            ""  # Optional - only needed for non-COCO class detection
+            ""
         )
         self.yolo_world_conf_threshold = configs.get(
             AtomicEngineConfigurations.PLANNER_YOLO_WORLD_CONF_THRESHOLD,
-            0.025  # Default lower threshold for YOLO-World
+            0.025
         )
         
         # MiDaS obstacle detection configuration
         self.midas_model_path = configs.get(
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH,
-            ""  # Optional - obstacle detection disabled if not provided
+            ""
         )
         obstacle_mode = configs.get(
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE,
             None
         )
-        # Convert ObstacleDetectionMode enum to string if needed
+        # Normalize obstacle mode to string.
         if obstacle_mode is not None:
             from dronebuddylib.models.enums import ObstacleDetectionMode
             if isinstance(obstacle_mode, ObstacleDetectionMode):
@@ -265,10 +208,9 @@ class PlannerEngine:
         else:
             self.obstacle_detection_mode = "OFF"
         
-        # Takeoff altitude configuration
         self.takeoff_altitude_cm = configs.get(
             AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM,
-            0  # 0 = no adjustment, drone stays at default ~80 cm
+            0
         )
         
         # Mission pad alignment configuration

@@ -1,13 +1,4 @@
-"""
-Data models for the VLM-based Planner module.
-
-This module defines all the data structures used by the planner system including
-action types, action plans, and session state management.
-
-Note: Detection-related classes (DetectionResult, FrameDetection, ScanResult) are 
-defined in the navigation module's tello_nav_extra.py to keep detection functionality
-closely integrated with the scan operations.
-"""
+"""Data structures shared by planner components."""
 
 from enum import Enum
 from dataclasses import dataclass, field
@@ -37,7 +28,6 @@ class PlannerState(Enum):
     PLANNING = "planning"                          # VLM is generating action plan
     EXECUTING = "executing"                        # Executing planned actions
     AWAITING_CONFIRMATION = "awaiting_confirmation"  # Waiting for user to confirm detected object
-    REPLANNING = "replanning"                      # VLM is regenerating plan after rejection
     OBJECT_FOUND = "object_found"                  # Target object has been found and confirmed
     OBJECT_NOT_FOUND = "object_not_found"          # All waypoints exhausted, object not found
     RETURNING = "returning"                        # Drone is returning to start

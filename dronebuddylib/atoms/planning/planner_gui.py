@@ -1,29 +1,7 @@
-"""
-Planner GUI - Clean User Interface for VLM-based Drone Object Finding.
+"""Tkinter GUI for planner sessions.
 
-This module provides a tkinter-based graphical user interface for interacting
-with the PlannerEngine. It offers a clean, chat-like interface that separates
-user interaction from debugging logs.
-
-Features:
-- Clean chat-style message display
-- Live video feed from drone camera
-- Depth map visualization (when MiDaS is enabled)
-- Input field enabled only when user input is expected
-- Status indicators for drone operations
-- Session result summary
-- Non-cluttered interface (no debug logs in UI)
-
-Usage:
-    from dronebuddylib.atoms.planning.planner_gui import PlannerGUI
-    from dronebuddylib.atoms.planning import PlannerEngine
-    
-    # Create engine with your configuration
-    engine = PlannerEngine(config)
-    
-    # Launch GUI
-    gui = PlannerGUI(engine)
-    gui.run()
+The UI handles chat-style messaging, user prompts, and optional camera/depth
+preview panels during navigation.
 """
 
 import tkinter as tk
@@ -76,7 +54,7 @@ class PlannerGUI:
         input_queue: Queue for passing user input back to the executor
     """
     
-    # Apple-inspired color scheme with better contrast
+    # UI color palette.
     COLORS = {
         'bg': '#0d0d0d',               # Deep black background
         'bg_secondary': '#1c1c1e',     # Slightly lighter (iOS dark mode)
@@ -138,7 +116,7 @@ class PlannerGUI:
         self.engine = engine
         
     def _setup_window(self):
-        """Set up the main window with side-by-side layout (chat + video)."""
+        """Set up the main window with side-by-side chat/video layout."""
         self.root = tk.Tk()
         self.root.title("Drone Buddy - Object Finder")
         self.root.geometry("1400x900")  # Fallback size
@@ -153,7 +131,7 @@ class PlannerGUI:
         self.root.grid_columnconfigure(0, weight=1)  # Chat column (50%)
         self.root.grid_columnconfigure(1, weight=1)  # Video column (50%)
         
-        # Try to set dark title bar on Windows
+        # Try to set a dark title bar on Windows.
         try:
             from ctypes import windll, byref, sizeof, c_int
             HWND = windll.user32.GetParent(self.root.winfo_id())
@@ -163,7 +141,7 @@ class PlannerGUI:
                 byref(c_int(1)), sizeof(c_int)
             )
         except:
-            pass  # Not on Windows or failed
+            pass
         
         self._create_header()
         self._create_main_content()  # New: creates side-by-side layout
@@ -894,7 +872,7 @@ class PlannerGUI:
         return gui_message_callback
     
     def start_video_display(self):
-        """Start the video display (now just marks video as ready)."""
+        """Mark video display as ready."""
         if not PIL_AVAILABLE or not CV2_AVAILABLE:
             return
         self.video_running = True
@@ -1120,7 +1098,7 @@ class PlannerGUIApp:
             self.gui.set_engine(self.engine)
             
         except Exception as e:
-            # GUI can still run, but will show error when trying to search
+            # GUI can still run, but search will fail until engine init is fixed.
             print(f"Warning: Failed to initialize engine: {e}")
             
         # Run the GUI

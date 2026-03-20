@@ -1,43 +1,4 @@
-"""
-Planner Configuration Module
-
-This module provides configuration classes for the VLM-based Planner system.
-Users can modify API keys, model paths, and other settings here rather than
-typing them each time when using the planner.
-
-Supports multiple VLM providers:
-- OpenAI (GPT-4, GPT-4o, GPT-5)
-- Anthropic (Claude)
-- Google (Gemini)
-
-Usage:
-    from dronebuddylib.atoms.planning import PlannerConfigs
-    
-    # OpenAI example
-    config = PlannerConfigs(
-        vlm_provider="openai",
-        vlm_api_key="sk-...",
-        vlm_model="gpt-4o",
-        yolo_model_path="/path/to/yolo.onnx",
-        waypoint_file_path="/path/to/waypoints.json"
-    )
-    
-    # Anthropic example  
-    config = PlannerConfigs(
-        vlm_provider="anthropic",
-        vlm_api_key="sk-ant-...",
-        vlm_model="claude-3-5-sonnet-20241022",
-        yolo_model_path="/path/to/yolo.onnx"
-    )
-    
-    # Google example
-    config = PlannerConfigs(
-        vlm_provider="google",
-        vlm_api_key="AIza...",
-        vlm_model="gemini-1.5-pro",
-        yolo_model_path="/path/to/yolo.onnx"
-    )
-"""
+"""Dataclass configuration for the planner stack."""
 
 from dataclasses import dataclass, field
 from typing import Optional, List, Literal
@@ -125,7 +86,7 @@ class PlannerConfigs:
         # Set default model based on provider if not specified
         if not self.vlm_model:
             default_models = {
-                "openai": "gpt-4o",
+                "openai": "gpt-5.2",
                 "anthropic": "claude-3-5-sonnet-20241022",
                 "google": "gemini-1.5-pro"
             }

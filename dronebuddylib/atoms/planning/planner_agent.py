@@ -1,14 +1,4 @@
-"""
-VLM-based Planner Agent for intelligent drone task planning.
-
-This module provides the PlannerAgent class that interfaces with various VLM providers
-(OpenAI, Anthropic, Google) to generate action plans for drone object search operations.
-
-Supports:
-- OpenAI (GPT-4, GPT-4o, GPT-5)
-- Anthropic (Claude)
-- Google (Gemini)
-"""
+"""Planner agent that talks to VLM providers and returns executable plans."""
 
 import os
 import json
@@ -38,38 +28,7 @@ logger = Logger()
 
 class PlannerAgent:
     """
-    VLM-based Planner Agent for generating intelligent drone action plans.
-    
-    This agent uses a Vision-Language Model to analyze user requests
-    and generate optimal action sequences for the drone to find specific objects.
-    
-    Supports multiple VLM providers:
-    - OpenAI (GPT-4, GPT-4o, GPT-5)
-    - Anthropic (Claude models)
-    - Google (Gemini models)
-    
-    Features:
-    - Intelligent waypoint prioritization based on semantic understanding
-    - YOLO class name mapping for object detection compatibility
-    - Re-planning capability after failed searches
-    - Object description using vision capabilities
-    
-    Example:
-        # Using direct initialization
-        agent = PlannerAgent(
-            provider="openai",
-            api_key="your-api-key",
-            model="gpt-4o"
-        )
-        
-        # Using configuration object
-        config = PlannerConfigs(vlm_provider="anthropic", vlm_api_key="sk-ant-...")
-        agent = PlannerAgent.from_config(config)
-        
-        plan = agent.generate_plan(
-            user_request="Find my red coffee cup",
-            waypoint_names=["Kitchen", "Living Room", "Bedroom"]
-        )
+    Generates and regenerates search plans using a configured VLM backend.
     """
     
     def __init__(
@@ -99,15 +58,14 @@ class PlannerAgent:
             temperature=temperature
         )
         
-        # Use prompts from chat_prompts.py (standard library pattern)
+        # Prompts are defined centrally in chat_prompts.py.
         self.system_prompt = SYSTEM_PROMPT_PLANNER
         self.object_describer_prompt = SYSTEM_PROMPT_PLANNER_OBJECT_DESCRIBER
         self.replanning_prompt = SYSTEM_PROMPT_PLANNER_REPLAN
         
-        # Set initial system prompt
         self.vlm_client.set_system_prompt(self.system_prompt)
         
-        # Session logger (injected by PlannerExecutor at the start of each session)
+        # Injected by PlannerExecutor at the beginning of a session.
         self.session_logger: Optional['SessionLogger'] = None
         
         logger.log_info('PlannerAgent', 
@@ -159,7 +117,7 @@ class PlannerAgent:
         user_message = self._build_planning_message(user_request, waypoint_names, current_waypoint)
         
         try:
-            # Snapshot conversation history before the call (history is cleared above, so empty)
+            # Capture request context for session logs.
             _history_snapshot = [
                 {"role": msg.role, "content": msg.content}
                 for msg in self.vlm_client.conversation_history
@@ -167,12 +125,10 @@ class PlannerAgent:
             ]
             _active_system_prompt = self.vlm_client.system_prompt or self.system_prompt
             
-            # Send to VLM and get response — measure latency
             _t0 = time.time()
             response: VLMResponse = self.vlm_client.send_message(user_message)
             _latency = time.time() - _t0
             
-            # Record the call in the session logger
             if self.session_logger and response:
                 from dronebuddylib.atoms.planning.session_logger import SessionLogger
                 self.session_logger.record_vlm_call(
@@ -185,7 +141,6 @@ class PlannerAgent:
                 )
             
             if response and response.content:
-                # Parse the JSON response
                 plan = self._parse_plan_response(response.content)
                 if plan:
                     logger.log_success('PlannerAgent', f'Generated plan with {len(plan.actions)} actions')
@@ -239,7 +194,7 @@ class PlannerAgent:
         # Build replanning message
         unvisited = [wp for wp in waypoint_names if wp not in visited_waypoints]
         
-        # Include detection mode info in replanning context
+        # Include detection mode so replans stay consistent.
         detection_mode = "Standard YOLO (COCO class)" if is_coco_class else "YOLO-World (open-vocabulary)"
         related_info = f"\n- **Related Objects for Detection**: {', '.join(related_objects)}" if related_objects else ""
         
@@ -316,8 +271,7 @@ Please generate a new search plan. Keep the same is_coco_class value and related
             {
                 "object_description": "Detailed description of what the VLM sees",
                 "visual_characteristics": ["color", "shape", "condition", ...],
-                "location_context": "Where the object appears to be",
-                "confidence_assessment": "high/medium/low"
+                "location_context": "Where the object appears to be"
             }
         """
         logger.log_info('PlannerAgent', f'Describing detected {target_object} from {len(image_paths)} images')
@@ -336,7 +290,7 @@ The user was searching for this object. Describe:
 """
         
         try:
-            # Use the first valid image (images should already be sorted by confidence)
+            # Use the first available image path (top frames are already confidence-sorted).
             valid_image = None
             for image_path in image_paths[:3]:  # Try up to 3 images
                 if os.path.exists(image_path):
@@ -372,7 +326,6 @@ The user was searching for this object. Describe:
                 )
             
             if response and response.content:
-                # Try to parse as JSON
                 try:
                     content = response.content
                     if "```json" in content:
@@ -382,12 +335,10 @@ The user was searching for this object. Describe:
                     
                     return json.loads(content.strip())
                 except json.JSONDecodeError:
-                    # Return the raw description if not valid JSON
                     return {
                         "object_description": response.content,
                         "visual_characteristics": [],
-                        "location_context": "",
-                        "confidence_assessment": "unknown"
+                        "location_context": ""
                     }
             
             return None
@@ -420,37 +371,30 @@ Please generate an optimal action plan to find the requested object.
     def _parse_plan_response(self, response_content: str) -> Optional[ActionPlan]:
         """Parse the VLM response into an ActionPlan object."""
         try:
-            # Extract JSON from response
             content = response_content.strip()
             
-            # Handle markdown code blocks
             if "```json" in content:
                 content = content.split("```json")[1].split("```")[0]
             elif "```" in content:
                 content = content.split("```")[1].split("```")[0]
             
-            # Parse JSON
             data = json.loads(content.strip())
             
-            # Convert to ActionPlan
             actions = []
             for action_data in data.get('actions', []):
                 action_type_str = action_data.get('action_type', '')
                 
-                # Handle different action type formats
                 if action_type_str == 'navigate':
                     action_type_str = 'navigate_to_waypoint'
                 elif action_type_str == 'scan':
                     action_type_str = 'scan_area'
                 
-                # Map string to enum
                 try:
                     action_type = PlannerActionType(action_type_str)
                 except ValueError:
                     logger.log_warning('PlannerAgent', f'Unknown action type: {action_type_str}')
                     continue
                 
-                # Get waypoint name from various possible fields
                 waypoint_name = (
                     action_data.get('waypoint_name') or 
                     action_data.get('destination') or 
@@ -473,7 +417,6 @@ Please generate an optimal action plan to find the requested object.
                 reasoning=data.get('reasoning', '')
             )
             
-            # Log detection mode
             if plan.is_coco_class:
                 logger.log_debug('PlannerAgent', f'Using COCO detection for: {plan.target_object}')
             else:

@@ -1,4 +1,4 @@
-from dronebuddylib.models.engine_configurations import EngineConfigurations
+﻿from dronebuddylib.models.engine_configurations import EngineConfigurations
 from dronebuddylib.models.enums import NavigationAlgorithm
 from dronebuddylib.utils.logger import Logger
 from typing import Optional, TYPE_CHECKING
@@ -108,8 +108,7 @@ class NavigationEngine:
     
     def scan_surrounding(self) -> list:
         """
-        Performs a surrounding scan operation using the Tello drone.
-        This is the basic scan that just captures images.
+        Run a basic 360 scan and return captured images.
 
         Returns:
             list: A list of images captured during the scan.
@@ -130,15 +129,7 @@ class NavigationEngine:
         yolo_iou_threshold: float = 0.45
     ) -> 'ScanResult':
         """
-        Advanced scan with YOLO object detection.
-        
-        Performs a 360-degree scan at the current waypoint and runs YOLO detection 
-        on each captured frame. Returns a structured result containing:
-        - List of (frame_id, detected_objects) tuples for each frame
-        - Whether the target object was found
-        - References to frames containing the target object
-        
-        This is the enhanced scanning method used by the VLM Planning system.
+        Run a 360 scan and apply standard YOLO detection on each frame.
         
         Args:
             target_object: Specific object to search for (e.g., "cup", "bottle").
@@ -154,18 +145,6 @@ class NavigationEngine:
                 - frames_with_target: List of frame numbers containing the target
                 - get_image_paths_with_target(): Returns image paths for VLM processing
         
-        Example:
-            result = engine.scan_with_detection(
-                target_object="cup",
-                yolo_model_path="models/yolov8n.onnx"
-            )
-            
-            if result.target_object_found:
-                # Get image paths for VLM confirmation
-                image_paths = result.get_image_paths_with_target()
-                print(f"Found cup in {len(result.frames_with_target)} frames")
-            else:
-                print("Cup not found at this location")
         """
         logger.log_info(self.get_class_name(), 
             f'Starting advanced scan with detection. Target: {target_object or "all objects"}')
@@ -193,14 +172,7 @@ class NavigationEngine:
         yolo_conf_threshold: float = 0.025
     ) -> 'ScanResult':
         """
-        Advanced scan with YOLO-World for open-vocabulary object detection.
-        
-        Unlike scan_with_detection() which uses standard YOLO with 80 fixed COCO classes,
-        this method uses YOLO-World which can detect ANY specified objects. This is useful
-        when searching for objects not in the standard COCO class list (e.g., "keys", "wallet").
-        
-        YOLO-World only triggers detection when the specified objects are present, so any
-        detection automatically qualifies as a match (no filtering needed like in standard YOLO).
+        Run a 360 scan with YOLO-World for open-vocabulary targets.
         
         Args:
             target_objects: List of object names to search for (e.g., ["keys", "key", "keychain"]).
@@ -215,18 +187,6 @@ class NavigationEngine:
                 - frames_with_target: List of frame numbers containing target objects
                 - get_image_paths_with_target(): Returns image paths for VLM processing
         
-        Example:
-            # Search for keys (not in COCO classes) using YOLO-World
-            result = engine.scan_with_any_detection(
-                target_objects=["keys", "key", "keychain", "key ring"],
-                yolo_world_model_path="models/yolov8m-worldv2.pt"
-            )
-            
-            if result.target_object_found:
-                image_paths = result.get_image_paths_with_target()
-                print(f"Found keys in {len(result.frames_with_target)} frames")
-            else:
-                print("Keys not found at this location")
         """
         logger.log_info(self.get_class_name(), 
             f'Starting YOLO-World scan. Looking for: {target_objects}')
@@ -252,14 +212,7 @@ class NavigationEngine:
         yolo_world_model_path: Optional[str] = None
     ) -> bool:
         """
-        Pre-warm the YOLO-World model BEFORE the drone takes off.
-        
-        YOLO-World's set_classes() operation computes text embeddings which can take 10-20+ seconds
-        on first use. If this happens while the drone is flying, the Tello's built-in safety 
-        timeout (no commands for ~15 seconds) may cause an automatic landing.
-        
-        Call this method BEFORE takeoff when you know YOLO-World will be used (i.e., when
-        searching for non-COCO objects).
+        Load and prime YOLO-World before takeoff to avoid first-use lag in flight.
         
         Args:
             target_objects: List of object names that will be searched for
@@ -268,14 +221,6 @@ class NavigationEngine:
         Returns:
             bool: True if model was successfully pre-warmed, False otherwise
             
-        Example:
-            # Pre-warm before takeoff
-            engine.prewarm_yolo_world(
-                target_objects=["glasses", "spectacles", "eyeglasses"],
-                yolo_world_model_path="models/yolov8m-worldv2.pt"
-            )
-            engine.takeoff()
-            # Now scan_with_any_detection() will be fast
         """
         logger.log_info(self.get_class_name(), 
             f'Pre-warming YOLO-World model for targets: {target_objects}')

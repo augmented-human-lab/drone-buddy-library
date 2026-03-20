@@ -1,4 +1,4 @@
-import os
+﻿import os
 import time
 from typing import Optional, List, TYPE_CHECKING
 
@@ -27,19 +27,18 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), 'Starting location mapping operation.')
         logger.log_debug(self.get_class_name(), f'Using waypoint directory: {self.waypoint_dir}')
         
-        # Create coordinator instance specifically configured for mapping mode
+        # Run coordinator in mapping mode.
         coordinator = TelloWaypointNavCoordinator(
-            self.waypoint_dir,              # Directory where waypoint files will be saved
-            self.vertical_factor,           # Vertical movement scaling factor for altitude control
-            self.mapping_movement_speed,    # Speed for manual mapping movements (cm/s)
-            self.mapping_rotation_speed,    # Rotation speed for directional changes during mapping
-            self.nav_speed,                 # Speed for potential navigation operations
-            "mapping",                      # Set operational mode to mapping for manual control
-            takeoff_altitude_cm=self.takeoff_altitude_cm  # Target altitude to reach after standard takeoff
+            self.waypoint_dir,
+            self.vertical_factor,
+            self.mapping_movement_speed,
+            self.mapping_rotation_speed,
+            self.nav_speed,
+            "mapping",
+            takeoff_altitude_cm=self.takeoff_altitude_cm
         )
-        # NOTE: mission_pad_enabled is intentionally NOT set for mapping mode.
-        # Mission pad alignment is only for navigation playback modes (navigation/goto).
-        result = coordinator.run()  # Execute mapping mode with manual drone control
+        # Mission-pad alignment is for playback modes, not manual mapping.
+        result = coordinator.run()
         
         logger.log_info(self.get_class_name(), f'Location mapping session closed with {len(result)} waypoints.')
         return result
@@ -54,21 +53,21 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), 'Starting navigation between waypoints.')
         logger.log_debug(self.get_class_name(), f'Using waypoint directory: {self.waypoint_dir}')
         
-        # Create coordinator instance configured for interactive navigation mode
+        # Run coordinator in interactive navigation mode.
         coordinator = TelloWaypointNavCoordinator(
-            self.waypoint_dir,              # Directory containing waypoint files for navigation
-            self.vertical_factor,           # Vertical movement scaling factor for altitude adjustments
-            self.mapping_movement_speed,    # Speed configuration (inherited from mapping settings)
-            self.mapping_rotation_speed,    # Rotation speed configuration for navigation
-            self.nav_speed,                 # Primary navigation speed for autonomous movement
-            "navigation",                   # Set operational mode to navigation for interactive selection
-            waypoint_file=self.waypoint_file,  # Optional specific waypoint file to use
-            obstacle_detection_mode=self.obstacle_detection_mode,  # MiDaS obstacle detection sensitivity
-            midas_model_path=self.midas_model_path,  # Path to MiDaS ONNX model
-            takeoff_altitude_cm=self.takeoff_altitude_cm  # Target altitude to reach after standard takeoff
+            self.waypoint_dir,
+            self.vertical_factor,
+            self.mapping_movement_speed,
+            self.mapping_rotation_speed,
+            self.nav_speed,
+            "navigation",
+            waypoint_file=self.waypoint_file,
+            obstacle_detection_mode=self.obstacle_detection_mode,
+            midas_model_path=self.midas_model_path,
+            takeoff_altitude_cm=self.takeoff_altitude_cm
         )
         coordinator.mission_pad_enabled = self.mission_pad_enabled
-        result = coordinator.run()  # Execute navigation mode with interactive waypoint selection
+        result = coordinator.run()
         
         logger.log_info(self.get_class_name(), f'Navigation session closed with drone travelled to {len(result)} waypoints.')
         return result
@@ -91,49 +90,48 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoint: {destination_waypoint}')
         logger.log_debug(self.get_class_name(), f'Navigation instruction: {instruction}')
         
-        create_new = False  # Flag to determine if new coordinator instance needs to be created
-        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current active singleton instance
+        create_new = False
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
 
-        # Strict type enforcement for navigation instruction parameter
+        # Keep API strict: instruction must be the enum.
         if not isinstance(instruction, NavigationInstruction):
             error_msg = f"instruction must be a NavigationInstruction enum, got {type(instruction).__name__}: {instruction}"
             logger.log_error(self.get_class_name(), error_msg)
-            # Cleanup existing coordinator if present due to parameter error
+            # Clean up existing coordinator on bad input.
             if coordinator_instance is not None:
-                coordinator_instance.is_goto_mode = False  # Disable goto mode
-                coordinator_instance.is_running = False    # Stop coordinator operations
-                coordinator_instance.cleanup()             # Perform resource cleanup
+                coordinator_instance.is_goto_mode = False
+                coordinator_instance.is_running = False
+                coordinator_instance.cleanup()
             raise TypeError(error_msg)
         
-        # Check if coordinator instance exists - if not, create new one
+        # Build a new coordinator only when there is no active one.
         if coordinator_instance is None: 
             create_new = True
 
-        # Get or create coordinator instance with goto mode configuration
+        # Reuse/create coordinator in goto mode.
         coordinator = TelloWaypointNavCoordinator.get_instance(
-            self.waypoint_dir,              # Directory for waypoint file storage
-            self.vertical_factor,           # Vertical movement scaling factor
-            self.mapping_movement_speed,    # Speed for mapping operations
-            self.mapping_rotation_speed,    # Rotation speed for mapping
-            self.nav_speed,                 # Navigation movement speed
-            "goto",                         # Set mode to goto for direct waypoint navigation
-            destination_waypoint,           # Target waypoint identifier
-            instruction,                    # Post-arrival behavior instruction
-            self.waypoint_file,             # Specific waypoint file to use
-            create_new,                     # Whether to force new instance creation
-            self.obstacle_detection_mode,   # MiDaS obstacle detection sensitivity
-            self.midas_model_path,          # Path to MiDaS ONNX model
-            self.takeoff_altitude_cm    # Target altitude to reach after standard takeoff
+            self.waypoint_dir,
+            self.vertical_factor,
+            self.mapping_movement_speed,
+            self.mapping_rotation_speed,
+            self.nav_speed,
+            "goto",
+            destination_waypoint,
+            instruction,
+            self.waypoint_file,
+            create_new,
+            self.obstacle_detection_mode,
+            self.midas_model_path,
+            self.takeoff_altitude_cm
         )
         coordinator.mission_pad_enabled = self.mission_pad_enabled
-        result = coordinator.run()  # Execute goto mode navigation operation
+        result = coordinator.run()
         
-        # Handle result safely - ensure it has expected format [land_flag, current_waypoint]
+        # Guard against malformed coordinator return values.
         if result and len(result) >= 2:
             logger.log_info(self.get_class_name(), f'Navigation to waypoint session closed with drone at current waypoint: {result[1]}.')
         else:
             logger.log_warning(self.get_class_name(), f'Navigation session ended with incomplete result: {result}')
-            # Return a safe default if result is malformed
             result = [True, destination_waypoint]
         return result
 
@@ -155,55 +153,49 @@ class NavigationWaypointImpl(INavigation):
         logger.log_info(self.get_class_name(), f'Starting navigation to waypoints: {waypoints}')
         logger.log_debug(self.get_class_name(), f'Final navigation instruction: {final_instruction}')
         
-        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
 
-        # Strict type enforcement for final instruction parameter
+        # Keep API strict: final_instruction must be the enum.
         if not isinstance(final_instruction, NavigationInstruction):
             error_msg = f"final_instruction must be a NavigationInstruction enum, got {type(final_instruction).__name__}: {final_instruction}"
             logger.log_error(self.get_class_name(), error_msg)
-            # Cleanup coordinator if present due to parameter validation failure
+            # Clean up existing coordinator on bad input.
             if coordinator_instance is not None:
-                coordinator_instance.is_goto_mode = False  # Disable goto mode
-                coordinator_instance.is_running = False    # Stop all coordinator operations
-                coordinator_instance.cleanup()             # Clean up resources
+                coordinator_instance.is_goto_mode = False
+                coordinator_instance.is_running = False
+                coordinator_instance.cleanup()
             raise TypeError(error_msg)
         
-        # Validate waypoints list is not empty, return empty list and exit function if it is
+        # Empty input should fail fast.
         if not waypoints:
             error_msg = "waypoints list cannot be empty"
             logger.log_error(self.get_class_name(), error_msg)
             return []
 
-        accumulated_results = []  # Store waypoints that drone successfully navigated to
+        accumulated_results = []
 
-        # Iterate through each waypoint in the sequence
         for i, waypoint in enumerate(waypoints):
-            is_last_waypoint = (i == len(waypoints) - 1)  # Check if this is the final waypoint
+            is_last_waypoint = (i == len(waypoints) - 1)
             
-            # Determine instruction for current waypoint based on position in sequence
             if is_last_waypoint:
-                current_instruction = final_instruction  # Use final instruction for last waypoint
+                current_instruction = final_instruction
                 logger.log_debug(self.get_class_name(), f'Final waypoint {waypoint}: using {final_instruction}')
             else:
-                current_instruction = NavigationInstruction.CONTINUE  # Keep flying for intermediate waypoints
+                current_instruction = NavigationInstruction.CONTINUE
                 logger.log_debug(self.get_class_name(), f'Intermediate waypoint {waypoint}: using CONTINUE')
             
-            # Navigate to current waypoint using single waypoint navigation method
             logger.log_info(self.get_class_name(), f'Navigating to waypoint {i+1}/{len(waypoints)}: {waypoint}')
             
             try:
-                # Execute navigation to current waypoint with appropriate instruction
                 result = self.navigate_to_waypoint(waypoint, current_instruction)
-                # Check if drone landed unexpectedly when it should continue flying
                 if result[0] and current_instruction == NavigationInstruction.CONTINUE: 
                     logger.log_error(self.get_class_name(), f"Navigation to waypoint {waypoint} failed, drone landed unexpectedly.")
-                    break  # Stop sequence navigation on unexpected landing
-                accumulated_results.extend([result[1]])  # Add reached waypoint to results
+                    break
+                accumulated_results.extend([result[1]])
                 logger.log_info(self.get_class_name(), f'Drone currently at waypoint {result[1]}')
             except Exception as e:
                 logger.log_error(self.get_class_name(), f'Failed to reach waypoint {waypoint}: {e}')
-                # Stop navigation sequence on first failure to ensure safety
-                break  # Stop navigation on first failure
+                break
 
         logger.log_info(self.get_class_name(), f'Navigation to waypoints session closed with drone at current waypoint: {accumulated_results[len(accumulated_results) - 1]}.')
         return accumulated_results
@@ -215,33 +207,30 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             list: A list of images captured during the scan.
         """
-        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
         if coordinator_instance is None: 
             logger.log_error(self.get_class_name(), 'No active drone or drone is not flying to perform surrounding scan.')
             return []
         
         logger.log_info(self.get_class_name(), 'Starting surrounding scan operation.')
-        current_waypoint_file = coordinator_instance.waypoint_file  # Get current waypoint file from coordinator
-        current_waypoint = coordinator_instance.current_waypoint  # Get current waypoint from coordinator
-        coordinator_instance._pause_battery_monitoring()  # Pause battery monitoring during scan to prevent conflicts
+        current_waypoint_file = coordinator_instance.waypoint_file
+        current_waypoint = coordinator_instance.current_waypoint
+        coordinator_instance._pause_battery_monitoring()
 
-        time.sleep(0.25)  # Small delay to ensure battery monitoring is paused before scan
+        time.sleep(0.25)
 
-        # Check if emergency shutdown is triggered before proceeding with scan
         if coordinator_instance._emergency_shutdown: 
             Logger.log_error(self.get_class_name(), 'Emergency shutdown detected - stopping surrounding scan.')
             return []
         
         from dronebuddylib.atoms.navigation.tello_waypoint_nav_utils.tello_nav_extra import TelloNavExtra
-        tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)  # Use existing drone instance from coordinator
+        tello_manouver = TelloNavExtra(coordinator_instance.tello, self.image_dir)
         
-        # Perform surrounding scan operation using TelloNavExtra utility
-        # Pass frame_read from coordinator if available to reuse existing video stream
         frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
         result = tello_manouver.scan(current_waypoint_file, current_waypoint, frame_read=frame_read)
         logger.log_info(self.get_class_name(), f'Surrounding scan operation completed with {len(result)} images captured.')
 
-        coordinator_instance._resume_battery_monitoring()  # Resume battery monitoring after scan
+        coordinator_instance._resume_battery_monitoring()
         return result
     
     def scan_with_detection(
@@ -273,7 +262,6 @@ class NavigationWaypointImpl(INavigation):
         coordinator_instance = TelloWaypointNavCoordinator._active_instance
         if coordinator_instance is None:
             logger.log_error(self.get_class_name(), 'No active drone or drone is not flying to perform scan.')
-            # Return empty result
             return ScanResult(
                 waypoint_name="unknown",
                 frame_detections=[],
@@ -290,8 +278,7 @@ class NavigationWaypointImpl(INavigation):
         current_waypoint = coordinator_instance.current_waypoint
         coordinator_instance._pause_battery_monitoring()
         
-        # Note: MiDaS is paused by default (only runs before forward movements)
-        # No need to explicitly pause here - it's already not running
+        # MiDaS runs only before forward moves, so nothing to pause here.
         
         time.sleep(0.25)
         
@@ -307,7 +294,6 @@ class NavigationWaypointImpl(INavigation):
                 target_objects=[target_object] if target_object else []
             )
         
-        # Create TelloNavExtra with YOLO detector
         frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
         tello_manouver = TelloNavExtra(
             tello=coordinator_instance.tello,
@@ -318,14 +304,12 @@ class NavigationWaypointImpl(INavigation):
             frame_read=frame_read
         )
         
-        # Perform scan with detection
         result = tello_manouver.scan_with_detection(
             current_waypoint_file=current_waypoint_file,
             current_waypoint=current_waypoint,
             target_object=target_object
         )
         
-        # Note: MiDaS stays paused - it will only run when next forward movement is needed
         coordinator_instance._resume_battery_monitoring()
         
         logger.log_info(self.get_class_name(), 
@@ -377,8 +361,7 @@ class NavigationWaypointImpl(INavigation):
         current_waypoint = coordinator_instance.current_waypoint
         coordinator_instance._pause_battery_monitoring()
         
-        # Note: MiDaS is paused by default (only runs before forward movements)
-        # No need to explicitly pause here - it's already not running
+        # MiDaS runs only before forward moves, so nothing to pause here.
         
         time.sleep(0.25)
         
@@ -394,17 +377,15 @@ class NavigationWaypointImpl(INavigation):
                 target_objects=list(target_objects)
             )
         
-        # Check if we have a pre-warmed YOLO-World model from prewarm_yolo_world()
-        # This avoids the slow set_classes() operation during flight
+        # Reuse a pre-warmed model when available.
         frame_read = coordinator_instance.frame_read if hasattr(coordinator_instance, 'frame_read') else None
         if hasattr(self, '_prewarmed_yolo_world_nav_extra') and self._prewarmed_yolo_world_nav_extra is not None:
             logger.log_info(self.get_class_name(), 'Using pre-warmed YOLO-World model')
             tello_manouver = self._prewarmed_yolo_world_nav_extra
-            tello_manouver.tello = coordinator_instance.tello  # Attach the drone
+            tello_manouver.tello = coordinator_instance.tello
             tello_manouver.image_dir = self.image_dir
-            tello_manouver.frame_read = frame_read  # Attach frame_read
+            tello_manouver.frame_read = frame_read
         else:
-            # Create TelloNavExtra with YOLO-World model (may be slow first time)
             logger.log_warning(self.get_class_name(), 
                 'No pre-warmed YOLO-World model found. Model loading may cause drone timeout.')
             tello_manouver = TelloNavExtra(
@@ -415,14 +396,12 @@ class NavigationWaypointImpl(INavigation):
                 frame_read=frame_read
             )
         
-        # Perform scan with YOLO-World detection
         result = tello_manouver.scan_with_any_detection(
             current_waypoint_file=current_waypoint_file,
             current_waypoint=current_waypoint,
             target_objects=target_objects
         )
         
-        # Note: MiDaS stays paused - it will only run when next forward movement is needed
         coordinator_instance._resume_battery_monitoring()
         
         logger.log_info(self.get_class_name(), 
@@ -458,7 +437,7 @@ class NavigationWaypointImpl(INavigation):
         
         logger.log_info(self.get_class_name(), f'Pre-warming YOLO-World model for targets: {target_objects}')
         
-        # Create a TelloNavExtra instance just for pre-warming (no tello needed)
+        # Preload classes once so the first in-flight call is fast.
         nav_extra = TelloNavExtra(
             tello=None,
             image_dir=self.image_dir,
@@ -467,7 +446,6 @@ class NavigationWaypointImpl(INavigation):
         
         result = nav_extra.prewarm_yolo_world(target_objects)
         
-        # Store the pre-warmed instance for later use
         self._prewarmed_yolo_world_nav_extra = nav_extra if result else None
         
         return result
@@ -479,15 +457,12 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             Optional[Tello]: The Tello drone instance if available, otherwise None.
         """
-        # Get the active coordinator instance to access the Tello drone
         coordinator_instance = TelloWaypointNavCoordinator._active_instance
 
-        # If no active coordinator instance, return None
         if coordinator_instance is None:
             logger.log_warning(self.get_class_name(), 'No active drone instance available.')
             return None
         
-        # Return the Tello drone instance from the coordinator
         return coordinator_instance.tello
 
     def takeoff(self) -> bool:
@@ -497,20 +472,19 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             bool: True if the takeoff was successful, False otherwise.
         """
-        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
 
         if coordinator_instance is not None: 
             logger.log_info(self.get_class_name(), 'Drone is already flying. ')
             return False  # Drone is already flying, cannot take off again
 
-        # Drone must always be placed at starting waypoint: SWP_001 (first Super Waypoint) for takeoff
-        # Calling navigate_to_waypoint at SWP_001 and NavigationInstruction.CONTINUE when the drone was uninitialized will cause the drone to simply takeoff and hover at its current position which is assumed to be SWP_001
+        # First takeoff is modeled as "go to SWP_001 and keep flying".
         result = self.navigate_to_waypoint("SWP_001", NavigationInstruction.CONTINUE)
 
         if result[0]:
-            return False # Drone landed instead of having completed the takeoff operation 
+            return False
         else: 
-            return True  # Takeoff operation completed successfully: drone is still hovering at WP_001
+            return True
     
     def land(self) -> bool: 
         """
@@ -519,19 +493,19 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             bool: True if the landing was successful, False otherwise.
         """
-        coordinator_instance = TelloWaypointNavCoordinator._active_instance  # Get current singleton instance
+        coordinator_instance = TelloWaypointNavCoordinator._active_instance
 
         if coordinator_instance is None: 
             logger.log_warning(self.get_class_name(), 'No active drone instance available for landing. Drone already landed.')
             return False  # Drone already landed, cannot land again
 
-        # Call navigate_to_waypoint at current position and NavigationInstruction.LAND to initiate landing at current position/waypoint
+        # Land at the current waypoint.
         result = self.navigate_to_waypoint(coordinator_instance.current_waypoint, NavigationInstruction.HALT)
 
         if result[0]:
-            return True  # Drone landed successfully
+            return True
         else: 
-            return False # Drone still not landed
+            return False
 
     def get_required_params(self) -> list:
         """
@@ -564,7 +538,6 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             str: The class name.
         """
-        # Return unique identifier for this navigation implementation
         return 'NAVIGATION_TELLO_WAYPOINT'
 
     def get_algorithm_name(self) -> str:
@@ -574,7 +547,6 @@ class NavigationWaypointImpl(INavigation):
         Returns:
             str: The algorithm name.
         """
-        # Return human-readable algorithm name for logging and identification
         return 'Tello 2D Hierarchical Waypoint Navigation'
 
     def __init__(self, engine_configurations: EngineConfigurations):
@@ -586,44 +558,36 @@ class NavigationWaypointImpl(INavigation):
         """
         logger.log_info(self.get_class_name(), 'Initializing Tello navigation engine.')
         
-        super().__init__(engine_configurations)  # Initialize parent INavigation interface
-        # Validate required configuration parameters are present
+        super().__init__(engine_configurations)
+        # Validate required configuration parameters.
         config_validity_check(self.get_required_params(),
                               engine_configurations.get_configurations_for_engine(self.get_class_name()),
                               self.get_algorithm_name())
         
-        # Extract configuration parameters for this navigation engine
         configs = engine_configurations.get_configurations_for_engine(self.get_class_name())
         
-        # Configure waypoint directory with default fallback to user home directory
         self.waypoint_dir = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_DIR)
         if self.waypoint_dir is None: 
-            # Use default directory in user home folder if not specified
             self.waypoint_dir = os.path.join(os.path.expanduser("~"), "dronebuddylib", "tellowaypoints")
         
-        # Ensure waypoint directory exists, create if necessary
         os.makedirs(self.waypoint_dir, exist_ok=True)
         logger.log_debug(self.get_class_name(), f"Waypoint directory set to: {self.waypoint_dir}")
         
-        # Configure movement and navigation parameters with default values
-        self.vertical_factor = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR, 1.0)  # Vertical movement scaling
-        self.mapping_movement_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 38)  # Mapping speed (cm/s)
-        self.mapping_rotation_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 70)  # Rotation speed (deg/s)
-        self.nav_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 55)  # Navigation speed (cm/s)
-        self.waypoint_file = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, None)  # Optional specific waypoint file
-        self.image_dir = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, None)  # Directory for captured images
+        self.vertical_factor = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_VERTICAL_FACTOR, 1.0)
+        self.mapping_movement_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_MOVEMENT_SPEED, 38)
+        self.mapping_rotation_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_MAPPING_ROTATION_SPEED, 70)
+        self.nav_speed = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_NAVIGATION_SPEED, 55)
+        self.waypoint_file = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_FILE, None)
+        self.image_dir = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_IMAGE_DIR, None)
         
-        # Obstacle detection configuration
-        self.obstacle_detection_mode = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, None)  # ObstacleDetectionMode enum
-        self.midas_model_path = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, None)  # Path to MiDaS ONNX model
+        self.obstacle_detection_mode = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_OBSTACLE_DETECTION_MODE, None)
+        self.midas_model_path = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MIDAS_MODEL_PATH, None)
         
-        # Takeoff altitude configuration
-        self.takeoff_altitude_cm = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM, 0)  # Target altitude in cm after standard takeoff (0 = no adjustment)
+        self.takeoff_altitude_cm = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_TAKEOFF_ALTITUDE_CM, 0)
         
-        # Mission pad alignment configuration
-        self.mission_pad_enabled = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED, False)  # Enable mission pad alignment after each waypoint
+        self.mission_pad_enabled = configs.get(AtomicEngineConfigurations.NAVIGATION_TELLO_WAYPOINT_MISSION_PAD_ENABLED, False)
         
-        # Pre-warmed YOLO-World model instance (set by prewarm_yolo_world())
+        # Cached pre-warmed YOLO-World helper.
         self._prewarmed_yolo_world_nav_extra = None
         
         logger.log_info(self.get_class_name(), 'Tello navigation engine initialized successfully.')

@@ -160,8 +160,7 @@ Describe the detected object in detail to help the user confirm if this is what 
 {
     "object_description": "A detailed description of what you see in the image",
     "visual_characteristics": ["color", "size", "shape", "condition", "distinguishing features"],
-    "location_context": "Description of where the object appears to be (on a table, shelf, floor, etc.)",
-    "confidence_assessment": "high/medium/low - how confident are you this matches what the user was looking for"
+    "location_context": "Description of where the object appears to be (on a table, shelf, floor, etc.)"
 }
 ```
 

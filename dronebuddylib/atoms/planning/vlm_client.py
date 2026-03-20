@@ -1,15 +1,4 @@
-"""
-Multi-Provider VLM Client for the Planner Module.
-
-This module provides a provider-agnostic interface for interacting with 
-various Vision-Language Models (VLMs) including:
-- OpenAI (GPT-4, GPT-4o, GPT-5)
-- Anthropic (Claude)
-- Google (Gemini)
-
-This abstraction allows the planner to work with any supported VLM provider
-by simply changing the configuration.
-"""
+"""Provider-agnostic VLM clients used by the planner."""
 
 import os
 import json
@@ -207,10 +196,10 @@ class AnthropicClient(BaseVLMClient):
         """Send message to Anthropic API."""
         messages = []
         
-        # Add conversation history (Anthropic doesn't have system in messages)
+        # Anthropic receives the system prompt separately.
         for msg in self.conversation_history:
             if msg.role == "system":
-                continue  # System prompt handled separately
+                continue
             
             if msg.image_path:
                 content = [
@@ -317,8 +306,7 @@ class GoogleClient(BaseVLMClient):
         """Send message to Google Gemini API."""
         import google.generativeai as genai
         
-        # ALWAYS include system prompt for consistent behavior across providers
-        # This ensures the model gets the full context on every message
+        # Prefix system prompt for provider consistency.
         full_message = message
         if self.system_prompt:
             full_message = f"{self.system_prompt}\n\n---\n\n{message}"
@@ -386,7 +374,7 @@ def create_vlm_client(
     """
     provider_lower = provider.lower()
     
-    # Default models for each provider
+    # Provider defaults.
     default_models = {
         "openai": "gpt-4o",
         "anthropic": "claude-3-5-sonnet-20241022",

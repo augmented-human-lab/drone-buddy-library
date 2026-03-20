@@ -1,13 +1,4 @@
-"""
-Session Logger for VLM-based Planning Sessions.
-
-Records VLM API request/response pairs, YOLO detection confidence scores,
-and session outcome to a .txt file in the session_detail directory at the
-root of the workspace.
-
-File naming format: DD_MM_YYYY_HHMMSS.txt
-Output directory:   <workspace_root>/session_detail/
-"""
+"""Session logging utilities for planner runs."""
 
 import os
 import time
@@ -19,8 +10,7 @@ from dronebuddylib.utils.logger import Logger
 
 logger = Logger()
 
-# Root directory of the workspace (two levels up from this file:
-#   this file => atoms/planning/ => atoms/ => dronebuddylib/ => root)
+# Workspace root relative to this file.
 _THIS_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 _WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_THIS_FILE_DIR)))
 SESSION_DETAIL_DIR = os.path.join(_WORKSPACE_ROOT, "session_detail")
@@ -50,15 +40,7 @@ class YOLODetectionRecord:
 
 class SessionLogger:
     """
-    Accumulates data throughout a single planning search session and writes
-    the full log to a .txt file when save() is called.
-
-    Usage
-    -----
-    logger = SessionLogger(target_object="cup", session_start_time=time.time())
-    logger.record_vlm_call(...)          # called by PlannerAgent
-    logger.record_yolo_detection(...)    # called by PlannerExecutor
-    logger.save(success=True, reason="", duration=42.1, ...)
+    Collects per-session VLM and detection events and writes a text report.
     """
 
     def __init__(self, target_object: str = "", session_start_time: float = 0.0):
@@ -70,9 +52,7 @@ class SessionLogger:
         # None when the session had only one search round.
         self.round_1_end_time: Optional[float] = None
 
-    # ------------------------------------------------------------------
     # Recording API
-    # ------------------------------------------------------------------
 
     def record_vlm_call(
         self,
@@ -126,9 +106,7 @@ class SessionLogger:
         self.round_1_end_time = transition_time
         logger.log_debug('SessionLogger', 'Round 1 ended — transitioning to round 2')
 
-    # ------------------------------------------------------------------
     # Save API
-    # ------------------------------------------------------------------
 
     def save(
         self,
@@ -173,9 +151,7 @@ class SessionLogger:
         except Exception as exc:
             logger.log_error('SessionLogger', f'Failed to write session log: {exc}')
 
-    # ------------------------------------------------------------------
     # Internal formatting
-    # ------------------------------------------------------------------
 
     def _build_report(
         self,
@@ -193,7 +169,7 @@ class SessionLogger:
         sep_heavy = "=" * 70
         sep_light = "-" * 70
 
-        # ── Header ────────────────────────────────────────────────────────
+        # Header
         lines.append(sep_heavy)
         lines.append("  DRONE BUDDY — PLANNING SESSION LOG")
         lines.append(sep_heavy)
@@ -208,7 +184,7 @@ class SessionLogger:
         lines.append(sep_heavy)
         lines.append("")
 
-        # ── VLM API Call Records ──────────────────────────────────────────
+        # VLM calls
         if self.vlm_calls:
             lines.append(f"{'VLM API CALLS':^70}")
             lines.append(sep_heavy)
@@ -226,13 +202,13 @@ class SessionLogger:
                 lines.append(call.system_prompt.strip())
                 lines.append("")
 
-                # Prior conversation history (if any)
+                # Prior conversation history
                 if call.conversation_history:
                     lines.append("[PRIOR CONVERSATION HISTORY]")
                     for msg in call.conversation_history:
                         role = msg.get("role", "?").upper()
                         content = msg.get("content", "")
-                        # Trim extremely long messages (e.g. base64 images in history)
+                        # Trim very long messages for readability.
                         if len(content) > 4000:
                             content = content[:4000] + "\n... [truncated — content exceeds 4000 chars] ..."
                         lines.append(f"[{role}]")
@@ -252,7 +228,7 @@ class SessionLogger:
             lines.append("No VLM API calls were recorded for this session.")
             lines.append("")
 
-        # ── YOLO Detection Records ────────────────────────────────────────
+        # YOLO detections
         lines.append(f"{'YOLO DETECTION RECORDS':^70}")
         lines.append(sep_heavy)
         lines.append("")
@@ -268,14 +244,14 @@ class SessionLogger:
             lines.append("No YOLO detections were recorded (target object was not flagged in any scan).")
             lines.append("")
 
-        # ── Session Summary ────────────────────────────────────────────────
+        # Session summary
         lines.append(sep_heavy)
         lines.append(f"{'SESSION SUMMARY':^70}")
         lines.append(sep_heavy)
         lines.append(f"Outcome          : {outcome_str}")
         lines.append(f"Total Duration   : {session_duration:.1f} seconds")
         
-        # Per-round timing breakdown
+        # Per-round timing
         if round_durations and len(round_durations) >= 1:
             for i, rd in enumerate(round_durations):
                 lines.append(f"  Round {i + 1} Duration: {rd:.1f} seconds")
